@@ -103,7 +103,9 @@
   .tnums div{display:flex; flex-direction:column; line-height:1.1; text-align:center}
   .tnums b{font-family:var(--serif); font-weight:600; font-size:15px; color:#f0e7d6; font-variant-numeric:tabular-nums}
   .tnums span{font-size:8.5px; letter-spacing:.12em; color:var(--muted2); margin-top:3px}
-  .tprog{width:88px; display:flex; flex-direction:column; gap:5px}
+  .tprog{width:104px; display:flex; flex-direction:column; gap:6px}
+  .bar-row{display:flex; flex-direction:column; gap:3px}
+  .tbar.mini{height:2px}
   .tbar{height:3px; border-radius:2px; background:rgba(255,255,255,.1); overflow:hidden}
   .tbar i{display:block; height:100%; border-radius:2px; background:linear-gradient(90deg,#8d7648,#ecd9a8); transition:width .8s cubic-bezier(.2,.7,.2,1)}
   .tprog span{font-size:8.5px; letter-spacing:.03em; color:var(--muted2); white-space:nowrap}
@@ -714,6 +716,15 @@
   .rec-grid div{text-align:center; border:1px solid var(--line2); border-radius:11px; padding:10px 3px; background:rgba(255,255,255,.02)}
   .rec-grid b{display:block; font-family:var(--serif); font-size:19px; color:#f2e9d8; font-variant-numeric:tabular-nums; line-height:1.2}
   .rec-grid span{display:block; font-size:8.5px; letter-spacing:.1em; color:var(--muted2); margin-top:4px}
+  .prog-list{margin-top:16px; display:flex; flex-direction:column; gap:13px}
+  .prow{display:flex; flex-direction:column; gap:6px}
+  .plab{display:flex; align-items:baseline; justify-content:space-between; gap:10px; font-size:10.5px; color:var(--muted)}
+  .plab b{font-family:var(--serif); font-size:11px; color:#e8dfcd; font-weight:500; font-variant-numeric:tabular-nums}
+  .pbar{height:5px; border-radius:3px; background:rgba(255,255,255,.08); overflow:hidden}
+  .pbar i{display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,#4f7fbf,#8fd6bd); transition:width .8s cubic-bezier(.2,.7,.2,1)}
+  .pbar.gold i{background:linear-gradient(90deg,#8d7648,#ecd9a8)}
+  .pbar.blue i{background:linear-gradient(90deg,#3b82f6,#a855f7)}
+  .psub{font-size:9px; color:var(--muted2); letter-spacing:.02em}
   .rec-prog{margin-top:15px}
   .rec-prog .tbar{height:4px}
   .rec-prog .lab{display:flex; justify-content:space-between; font-size:9.5px; color:var(--muted2); margin-top:7px; letter-spacing:.02em}
@@ -864,7 +875,10 @@
         <div><b id="numChecks">0</b><span>체크</span></div>
         <div><b id="numDays">1</b><span>누적일</span></div>
       </span>
-      <span class="tprog"><span class="tbar"><i id="tierBar" style="width:0%"></i></span><span id="tierNext">다음 티어까지 10회</span></span>
+      <span class="tprog">
+        <span class="bar-row"><span class="tbar"><i id="tierBar" style="width:0%"></i></span><span id="tierNext">다음 티어까지 10회</span></span>
+        <span class="bar-row"><span class="tbar"><i id="colBar" style="width:0%"></i></span><span id="colNext">수집 0%</span></span>
+      </span>
     </button>
     <button class="icon-btn wide" id="archiveBtn" type="button" aria-label="완료한 인물 도감" title="내 도감">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h7v16H4zM13 4h7v16h-7z" opacity=".9"/><path d="M6.5 8h2M15.5 8h2" stroke-linecap="round"/></svg>
@@ -963,9 +977,20 @@
           <div><b id="recDays">1</b><span>누적 일수</span></div>
           <div><b id="recStreak">0</b><span>연속 기록</span></div>
         </div>
-        <div class="rec-prog">
-          <div class="tbar"><i id="recBar" style="width:0%"></i></div>
-          <div class="lab"><span id="recNext">다음 티어까지 10회</span><b id="recPct">0%</b></div>
+        <div class="prog-list">
+          <div class="prow">
+            <div class="plab"><span>📚 도감 수집</span><b id="pgCollectTxt">0 / 36 · 0%</b></div>
+            <div class="pbar"><i id="pgCollectBar" style="width:0%"></i></div>
+          </div>
+          <div class="prow">
+            <div class="plab"><span>🏅 다음 티어</span><b id="pgTierTxt">0%</b></div>
+            <div class="pbar gold"><i id="pgTierBar" style="width:0%"></i></div>
+            <div class="psub" id="pgTierSub">다음 티어까지 10회</div>
+          </div>
+          <div class="prow">
+            <div class="plab"><span>🃏 카드 · 진화</span><b id="pgCardTxt">0장 · ★5 0 · 전시 0</b></div>
+            <div class="pbar blue"><i id="pgCardBar" style="width:0%"></i></div>
+          </div>
         </div>
         <div class="rec-foot">
           <button class="link-btn" id="recArchive" type="button">내 도감 보기</button>
@@ -1776,9 +1801,36 @@ function portraitSVG(fig, fit, alt) {
   }
 
   /* ── render ── */
+  function learnedIds() {
+    var m = {};
+    S.log.forEach(function (x) { m[x.id] = 1; });
+    return Object.keys(m);
+  }
+
+  function progressSnapshot() {
+    var learned = learnedIds().length;
+    var p = progressOf(S.log.length, S.att.length);
+    var cards = ownedCount();
+    var five = fiveFigures().length;
+    return {
+      learned: learned,
+      learnedPct: Math.round(learned / N * 100),
+      tier: p,
+      tierPct: Math.round(p.pct * 100),
+      cards: cards,
+      cardsPct: Math.round(cards / N * 100),
+      five: five
+    };
+  }
+
   function renderStats() {
     var checks = S.log.length, days = S.att.length;
     var p = progressOf(checks, days);
+    var snap = progressSnapshot();
+    if ($('#colBar')) {
+      $('#colBar').style.width = snap.learnedPct + '%';
+      $('#colNext').textContent = '수집 ' + snap.learned + '/' + N + ' · ' + snap.learnedPct + '%';
+    }
     $('#tierLv').textContent = 'LV.' + p.cur.n;
     $('#tierNm').textContent = p.cur.name;
     paintColor($('#tierLv'), p.cur.color);
@@ -2025,14 +2077,22 @@ function portraitSVG(fig, fit, alt) {
   function renderRecord() {
     var checks = S.log.length, days = S.att.length;
     var p = progressOf(checks, days);
+    var snap = progressSnapshot();
+    if ($('#pgCollectTxt')) {
+      $('#pgCollectTxt').textContent = snap.learned + ' / ' + N + ' · ' + snap.learnedPct + '%';
+      $('#pgCollectBar').style.width = snap.learnedPct + '%';
+      $('#pgTierTxt').textContent = 'LV.' + p.cur.n + ' ' + p.cur.name + ' · ' + snap.tierPct + '%';
+      $('#pgTierBar').style.width = snap.tierPct + '%';
+      $('#pgTierSub').textContent = p.next ? (p.cur.name + ' → ' + p.next.name + ' · ' + p.label) : '최고 티어 달성';
+      $('#pgCardTxt').textContent = snap.cards + '장 · ★5 ' + snap.five + ' · 전시 ' + snap.five;
+      $('#pgCardBar').style.width = snap.cardsPct + '%';
+    }
     $('#recTier').textContent = 'LV.' + p.cur.n + ' ' + p.cur.name;
     paintColor($('#recTier'), p.cur.color);
     $('#recChecks').textContent = checks;
     $('#recDays').textContent = days;
     $('#recStreak').textContent = streak();
-    $('#recBar').style.width = Math.round(p.pct * 100) + '%';
-    $('#recNext').textContent = p.label;
-    $('#recPct').textContent = Math.round(p.pct * 100) + '%';
+
   }
 
   /* ── reader ── */
