@@ -1268,6 +1268,28 @@
     filter:drop-shadow(0 0 5px rgba(255,255,255,.8)); font-weight:700;
   }
 
+
+  /* 난이도 선택 */
+  .bdiff{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:0 0 14px}
+  .bdif{
+    text-align:left; cursor:pointer; font-family:inherit; color:#a9a496;
+    border:1px solid rgba(255,255,255,.1); border-radius:11px; padding:9px 11px;
+    background:rgba(255,255,255,.02); transition:.16s; display:flex; flex-direction:column; gap:2px;
+  }
+  .bdif:hover{border-color:color-mix(in srgb, var(--dc) 55%, transparent); color:#e9e0cd}
+  .bdif.on{border-color:var(--dc); background:color-mix(in srgb, var(--dc) 16%, transparent); box-shadow:0 0 24px -14px var(--dc)}
+  .bd-ico{font-size:13px; line-height:1}
+  .bdif b{font-size:12.5px; color:#f0e7d6; font-weight:600}
+  .bdif.on b{color:var(--dc)}
+  .bd-x{font-size:8.5px; letter-spacing:.02em; color:#7f8798}
+  .adiff{display:inline-block; margin-top:5px; font-size:9px; letter-spacing:.08em; padding:3px 8px; border-radius:999px;
+    border:1px solid color-mix(in srgb, var(--dc) 55%, transparent); color:var(--dc); background:color-mix(in srgb, var(--dc) 12%, transparent)}
+  .bs-clear{white-space:nowrap}
+  @media (max-width:640px){
+    .bdiff{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .bd-x{font-size:8px}
+  }
+
   /* ───── fx ───── */
   #fx{position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden}
   .confetti{
@@ -2440,6 +2462,18 @@ function portraitSVG(fig, fit, alt) {
   { no: 50, id: 's50', name: "21세기 AI 전쟁 & 우주 개척", years: "현재", flag: "🛰️", ec: "#6ac8ff", g: "now", desc: "알고리즘과 위성이 지배하는 마지막 전장", pt: [680, 140], terr: ['asia','africa','samerica','australia','oceania'], units: ["자율 드론","양자 AI 코어","궤도 위성"], boss: ["오비탈 총사령 ARES-9", "🤖"] }
 ];
 
+  var DIFFS = [
+    { id: 'easy', n: '쉬움', ico: '🟢', hp: 0.75, atk: 0.75, rew: 1.0, color: '#6fd39a' },
+    { id: 'normal', n: '보통', ico: '🟡', hp: 1.0, atk: 1.0, rew: 1.4, color: '#e6c877' },
+    { id: 'hard', n: '어려움', ico: '🔴', hp: 1.55, atk: 1.55, rew: 2.0, color: '#ef6a6a' },
+    { id: 'impossible', n: '불가능', ico: '💀', hp: 2.4, atk: 2.4, rew: 3.2, color: '#c084fc' }
+  ];
+  function diffOf(id) {
+    for (var i = 0; i < DIFFS.length; i++) if (DIFFS[i].id === id) return DIFFS[i];
+    return DIFFS[1];
+  }
+  function curDiff() { return diffOf(ensureState().diff || 'normal'); }
+
   var GROUPS = [
     { id: 'all', n: '전체' },
     { id: 'anc', n: '고대·기원전' },
@@ -2739,7 +2773,11 @@ function portraitSVG(fig, fit, alt) {
         '<span class="bs-year">' + esc(s.years) + '</span>' +
         '<span class="bs-desc">' + esc(s.desc) + '</span>' +
         '<span class="bs-star">' + (locked ? '🔒 잠김' : ('★'.repeat(stars) + '☆'.repeat(3 - stars))) + '</span>' +
-        (c.cleared ? '<span class="bs-clear">정복 완료</span>' : '') +
+        (c.cleared ? '<span class="bs-clear">정복 완료' + (function () {
+          var order = ['easy', 'normal', 'hard', 'impossible'], top = null;
+          order.forEach(function (k) { if (c.diffs && c.diffs[k]) top = k; });
+          return top && top !== 'normal' ? ' · ' + diffOf(top).ico : '';
+        })() + '</span>' : '') +
         '</button>';
     }).join('') + '</div>';
 
@@ -2825,6 +2863,12 @@ function portraitSVG(fig, fit, alt) {
       '<p>' + esc(stage.years) + ' · ' + esc(stage.desc) + '</p></div>' +
       '<button type="button" class="bghost sm" data-map="1">← 지도</button></div>';
 
+    var D = curDiff();
+    var diffBar = '<div class="bdiff">' + DIFFS.map(function (d) {
+      return '<button type="button" class="bdif' + (D.id === d.id ? ' on' : '') + '" data-diff="' + d.id + '" style="--dc:' + d.color + '">' +
+        '<span class="bd-ico">' + d.ico + '</span><b>' + d.n + '</b>' +
+        '<span class="bd-x">적 HP ×' + d.hp + ' · 보상 ×' + d.rew + '</span></button>';
+    }).join('') + '</div>';
     var bossName = stage.waves[stage.waves.length - 1].boss[0];
     var prep = '<div class="bprep">' +
       '<div class="bprep-row"><span>출격 인원</span><b id="bDeckCount">' + deck.length + ' / 6</b></div>' +
@@ -2835,7 +2879,7 @@ function portraitSVG(fig, fit, alt) {
       '<p class="bprep-note">' + (deck.length ? '10번 공격하면 궁극기가 자동 발동합니다.' : '인물을 1명 이상 선택하세요.') + '</p>' +
       '</div>';
 
-    $('#bView').innerHTML = stageBar +
+    $('#bView').innerHTML = stageBar + diffBar +
       '<div class="bdeck-wrap"><div class="bdeck-left">' +
       '<div class="bsec-h"><span class="kicker">MY DECK</span><b>' + deck.length + '/6</b><button type="button" class="bghost sm" data-clear-deck="1">비우기</button></div>' +
       '<div class="bslots">' + slots + '</div>' + prep + '</div>' +
@@ -2913,10 +2957,11 @@ function portraitSVG(fig, fit, alt) {
 
   function makeEnemy(wave, stage, deckSize) {
     var scale = 0.5 + 0.5 * (Math.max(1, Math.min(6, deckSize)) / 6);
+    var D = curDiff();
     var out = [];
     function mk(arr, isBoss, idx) {
-      var hp = Math.round(stage.hp * arr[2] * scale);
-      var atk = Math.round(stage.atk * arr[3] * (0.62 + 0.38 * (Math.max(1, Math.min(6, deckSize)) / 6)));
+      var hp = Math.round(stage.hp * arr[2] * scale * D.hp);
+      var atk = Math.round(stage.atk * arr[3] * (0.62 + 0.38 * (Math.max(1, Math.min(6, deckSize)) / 6)) * D.atk);
       if (isBoss) { hp = Math.round(hp); }
       out.push({
         side: 'e', uid: 'e' + idx + (isBoss ? 'b' : ''), name: arr[0], icon: arr[1],
@@ -3058,7 +3103,8 @@ function portraitSVG(fig, fit, alt) {
     }).join('');
     var html = '<div class="arena" id="arena" style="--ec:' + s.ec + '">' +
       '<div class="a-top">' +
-      '<div class="a-stage"><span class="kicker">STAGE ' + pad2(s.no) + ' · ' + esc(s.era) + '</span><h4>' + s.flag + ' ' + esc(s.name) + '</h4></div>' +
+      '<div class="a-stage"><span class="kicker">STAGE ' + pad2(s.no) + ' · ' + esc(s.era) + '</span><h4>' + s.flag + ' ' + esc(s.name) +
+      '</h4><span class="adiff" style="--dc:' + curDiff().color + '">' + curDiff().ico + ' ' + curDiff().n + '</span></div>' +
       '<div class="a-wave"><b id="bWaveTxt">WAVE 1 / ' + s.waves.length + '</b><span class="wavedots" id="bWaveDots">' + waveDots + '</span></div>' +
       '<div class="a-ctrl">' +
       '<button type="button" class="actrl" id="bSpeed" data-speed="1">×1</button>' +
@@ -3475,12 +3521,16 @@ function portraitSVG(fig, fit, alt) {
     var stage = B.stage;
     var stars = B.dead === 0 ? 3 : (B.dead <= 2 ? 2 : 1);
     var prev = b.clear[stage.id] || {};
-    var coins = 320 + stage.no * 110;
-    var xp = 160 + stage.no * 60;
+    var D = curDiff();
+    var coins = Math.round((320 + stage.no * 110) * D.rew);
+    var xp = Math.round((160 + stage.no * 60) * D.rew);
+    var prevDiffs = prev.diffs || {};
+    prevDiffs[D.id] = true;
     b.clear[stage.id] = {
       cleared: true,
       stars: Math.max(prev.stars || 0, stars),
       best: Math.max(prev.best || 0, stars),
+      diffs: prevDiffs,
       at: Date.now()
     };
     S.coins += coins;
@@ -3502,7 +3552,7 @@ function portraitSVG(fig, fit, alt) {
     ov.innerHTML = '<div class="br-box">' +
       '<span class="br-k">VICTORY</span>' +
       '<h3>' + esc(stage.era) + ' 정복 완료</h3>' +
-      '<p class="br-sub">' + stage.flag + ' ' + esc(stage.name) + ' 함락</p>' +
+      '<p class="br-sub">' + stage.flag + ' ' + esc(stage.name) + ' 함락 · ' + D.ico + ' ' + D.n + ' (보상 ×' + D.rew + ')</p>' +
       '<div class="br-stars">' + '★'.repeat(stars) + '<i>' + '★'.repeat(3 - stars) + '</i></div>' +
       '<div class="br-rewards">' +
       '<div><span>🪙 코인</span><b>+' + coins + '</b></div>' +
@@ -3587,6 +3637,13 @@ function portraitSVG(fig, fit, alt) {
         return;
       }
       if (t.closest && t.closest('[data-retry]')) { var sg = B_STAGE; stopBattle(); renderDeck(sg.id); return; }
+      var df = t.closest && t.closest('[data-diff]');
+      if (df) {
+        ensureState().diff = df.getAttribute('data-diff');
+        saveAll(); sfx('tap');
+        if (VIEW === 'deck' && B_STAGE) renderDeck(B_STAGE.id);
+        return;
+      }
       if (t.closest && t.closest('[data-gift]')) { grantGift(); return; }
       if (t.closest && t.closest('[data-clear-deck]')) {
         ensureState().deck = []; saveAll(); sfx('tap'); renderDeck(B_STAGE.id); renderBanner(); return;
