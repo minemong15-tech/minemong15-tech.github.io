@@ -1836,16 +1836,15 @@ function portraitSVG(fig, fit, alt) {
 
   function startTick() {
     if (watchTick) return;
-    lastYTTime = 0;
     watchTick = setInterval(function () {
-      if (!player || typeof player.getCurrentTime !== 'function') return;
-      var t = 0;
-      try { t = player.getCurrentTime() || 0; } catch (e) { return; }
-      var d = t - lastYTTime;
-      if (d > 0 && d < 2.5) watchAcc += d;
-      lastYTTime = t;
+      if (!player || typeof player.getPlayerState !== 'function') return;
+      if (document.visibilityState && document.visibilityState !== 'visible') return;
+      var st = -1;
+      try { st = player.getPlayerState(); } catch (e) { return; }
+      if (st === 1) watchAcc += 0.5;          // PLAYING (광고 재생 포함)
       renderWatch();
       if (watchAcc >= WATCH_NEED) unlockWatch('time');
+      if (st === 0) unlockWatch('ended');
     }, 500);
   }
 
@@ -1863,9 +1862,6 @@ function portraitSVG(fig, fit, alt) {
   function onPlayerState(e) {
     var PS = window.YT && window.YT.PlayerState;
     if (!PS) return;
-    if (e.data === PS.PLAYING) startTick();
-    else if (e.data === PS.PAUSED || e.data === PS.BUFFERING) stopTick();
-    else stopTick();
     if (e.data === PS.ENDED) unlockWatch('ended');
   }
 
@@ -1880,7 +1876,7 @@ function portraitSVG(fig, fit, alt) {
     if (player || !document.getElementById('ytPlayer') || watchedToday()) return;
     try {
       player = new window.YT.Player('ytPlayer', {
-        events: { onReady: function () { ytReady = true; renderWatch(); },
+        events: { onReady: function () { ytReady = true; startTick(); renderWatch(); },
                   onStateChange: onPlayerState, onError: onPlayerError }
       });
     } catch (e) { ytBlocked = true; renderWatch(); }
