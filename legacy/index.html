@@ -1063,7 +1063,7 @@
     padding:4px 12px; border-radius:999px; background:rgba(6,8,12,.7); border:1px solid color-mix(in srgb, var(--ec,#c8a86a) 45%, transparent);
     font-size:9.5px; letter-spacing:.1em; color:color-mix(in srgb, var(--ec,#c8a86a) 85%, #fff); white-space:nowrap; z-index:3}
   .fb-flag{font-size:12px}
-  .erow{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; max-width:640px; margin:26px auto 0; position:relative; z-index:2}
+  .erow{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; max-width:580px; margin:26px auto 0; position:relative; z-index:2}
   .vsline{display:flex; align-items:center; justify-content:center; gap:12px; margin:10px 0; opacity:.55}
   .vsline::before,.vsline::after{content:""; height:1px; flex:1; background:linear-gradient(90deg,transparent,rgba(200,168,106,.4),transparent)}
   .vsline span{font-family:var(--serif); font-size:11px; letter-spacing:.3em; color:var(--gold-dim)}
@@ -1283,7 +1283,7 @@
   /* 전장 배경 세계지도 · 영토 잠식 (시인성 강화) */
   .fmap{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#0c2531}
   .fmap .wmsvg{width:100%; height:100%; display:block}
-  .fmap .wm-c{fill:rgba(118,158,176,.95); stroke:rgba(198,238,248,.55); stroke-width:.4; vector-effect:non-scaling-stroke}
+  .fmap .wm-c{fill:rgba(74,112,132,.95); stroke:rgba(158,208,228,.55); stroke-width:.4; vector-effect:non-scaling-stroke}
   .fmap .wm-grat path{fill:none; stroke:rgba(150,215,235,.17); stroke-width:.5; vector-effect:non-scaling-stroke}
   .fmap .wm-tgtlayer .wm-c{fill:none; stroke:none}
   .fmap .wm-tgtlayer .wm-c.tgt{fill:rgba(255,198,78,.72); stroke:#fff3c4; stroke-width:2.2; stroke-opacity:1;
@@ -1298,7 +1298,7 @@
   .fmap .wm-mark{font-size:13px}
 
   /* 영토 잠식 링 · 파동 · 스캔 라인 */
-  .terr-fill{fill:rgba(46,224,148,.13); stroke:none}
+  .terr-fill{fill:rgba(46,224,148,.16); stroke:none}
   .terr-ring{fill:none; stroke:#8effc8; stroke-width:2.2; stroke-dasharray:7 9; vector-effect:non-scaling-stroke;
     filter:drop-shadow(0 0 7px rgba(120,255,200,.95)); animation:terrspin 9s linear infinite}
   .terr-ring.alt{stroke:#ffe9b0; stroke-width:1.5; stroke-dasharray:3 14; opacity:.9; animation:terrspin 5s linear infinite reverse}
@@ -1340,7 +1340,7 @@
     overflow:hidden; background:#0c2531; box-shadow:inset 0 0 46px -14px rgba(0,0,0,.9)}
   .btarget-map .wmsvg{position:absolute; inset:0; width:100%; height:100%; display:block}
   .btarget-map .wm-grat path{fill:none; stroke:rgba(150,215,235,.15); stroke-width:.5; vector-effect:non-scaling-stroke}
-  .bm-base .wm-c{fill:rgba(118,158,176,.97); stroke:rgba(198,238,248,.46); stroke-width:.4; vector-effect:non-scaling-stroke}
+  .bm-base .wm-c{fill:rgba(74,112,132,.97); stroke:rgba(158,208,228,.46); stroke-width:.4; vector-effect:non-scaling-stroke}
   .bm-own .wm-c{fill:none; stroke:none}
   .bm-own .wm-c.own{fill:rgba(46,224,148,.78); stroke:#d8ffe9; stroke-width:.9; stroke-opacity:.95;
     vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 5px rgba(46,224,148,.9))}
@@ -4275,8 +4275,8 @@ function portraitSVG(fig, fit, alt) {
   function fieldDefs(p) {
     return '<defs>' +
       '<radialGradient id="' + p + 'Sea" cx="50%" cy="38%" r="80%">' +
-      '<stop offset="0" stop-color="#1f5876"/><stop offset=".42" stop-color="#143a4e"/>' +
-      '<stop offset=".78" stop-color="#0d2836"/><stop offset="1" stop-color="#081c27"/></radialGradient>' +
+      '<stop offset="0" stop-color="#143d4f"/><stop offset=".42" stop-color="#0d2a37"/>' +
+      '<stop offset=".78" stop-color="#081b25"/><stop offset="1" stop-color="#06121a"/></radialGradient>' +
       '<radialGradient id="' + p + 'Glow" cx="50%" cy="42%" r="52%">' +
       '<stop offset="0" stop-color="#7fe8ff" stop-opacity=".16"/><stop offset="1" stop-color="#7fe8ff" stop-opacity="0"/></radialGradient>' +
       '<filter id="' + p + 'TGlow" x="-40%" y="-40%" width="180%" height="180%">' +
