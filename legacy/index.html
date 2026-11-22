@@ -954,14 +954,14 @@
     position:relative; border:1px solid var(--line2); border-radius:16px; overflow:hidden;
     padding:14px 14px 16px; min-height:400px;
     background:
-      radial-gradient(600px 220px at 50% -10%, color-mix(in srgb, var(--ec,#c8a86a) 20%, transparent), transparent 70%),
-      linear-gradient(180deg,#11151d 0%, #0b0e14 60%, #080a0e 100%);
+      radial-gradient(620px 240px at 50% -12%, color-mix(in srgb, var(--ec,#c8a86a) 16%, transparent), transparent 72%),
+      linear-gradient(180deg,#0c1a26 0%, #091420 60%, #071019 100%);
   }
   .f-bg{position:absolute; inset:0; pointer-events:none; opacity:.35;
     background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 64px)}
-  .f-ground{position:absolute; left:0; right:0; bottom:0; height:42%; pointer-events:none;
-    background:linear-gradient(180deg, transparent, rgba(0,0,0,.5));
-    border-top:1px solid color-mix(in srgb, var(--ec,#c8a86a) 30%, transparent)}
+  .f-ground{position:absolute; left:0; right:0; bottom:0; height:38%; pointer-events:none;
+    background:linear-gradient(180deg, transparent, rgba(2,8,12,.26));
+    border-top:1px solid color-mix(in srgb, var(--ec,#c8a86a) 22%, transparent)}
   .f-banner{position:absolute; left:50%; top:10px; transform:translateX(-50%); display:flex; align-items:center; gap:7px;
     padding:4px 12px; border-radius:999px; background:rgba(6,8,12,.7); border:1px solid color-mix(in srgb, var(--ec,#c8a86a) 45%, transparent);
     font-size:9.5px; letter-spacing:.1em; color:color-mix(in srgb, var(--ec,#c8a86a) 85%, #fff); white-space:nowrap; z-index:3}
@@ -973,10 +973,10 @@
   .arow{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:7px; position:relative; z-index:2}
   .bu{
     position:relative; border:1px solid rgba(255,255,255,.09); border-radius:10px; padding:5px;
-    background:rgba(10,14,20,.72); transition:border-color .18s, box-shadow .18s, transform .18s;
+    background:rgba(8,14,20,.62); backdrop-filter:blur(2px); transition:border-color .18s, box-shadow .18s, transform .18s;
     display:flex; flex-direction:column; gap:3px; overflow:hidden;
   }
-  .bu.enemy{background:linear-gradient(180deg, rgba(40,16,18,.8), rgba(10,12,16,.85))}
+  .bu.enemy{background:linear-gradient(180deg, rgba(38,15,17,.7), rgba(8,12,16,.66))}
   .bu.boss{border-color:rgba(239,68,68,.5); box-shadow:0 0 22px -10px rgba(239,68,68,.8)}
   .bu.ally{border-color:color-mix(in srgb, var(--rc,#9ca3af) 35%, transparent)}
   .bu.ally.turn{border-color:var(--gold-hi); box-shadow:0 0 0 1px var(--gold-hi) inset, 0 0 26px -8px var(--gold-hi)}
@@ -1183,23 +1183,108 @@
     .wmap-hud p{margin:0}
   }
 
-  /* 전장 배경 세계지도 · 영토 잠식 */
-  .fmap{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+  /* 전장 배경 세계지도 · 영토 잠식 (시인성 강화) */
+  .fmap{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#0c2531}
   .fmap .wmsvg{width:100%; height:100%; display:block}
-  .fmap .wm-c{fill:rgba(38,62,76,.72); stroke:rgba(150,200,215,.2)}
-  .fmap .wm-ownlayer .wm-c{fill:rgba(47,158,120,.85); stroke:rgba(168,240,196,.9)}
-  .fmap .wm-ownlayer .wm-c.tgt{fill:rgba(176,138,74,.85); stroke:rgba(246,230,189,.9)}
+  .fmap .wm-c{fill:rgba(97,139,158,.94); stroke:rgba(188,234,246,.5); stroke-width:.4; vector-effect:non-scaling-stroke}
+  .fmap .wm-grat path{fill:none; stroke:rgba(150,215,235,.17); stroke-width:.5; vector-effect:non-scaling-stroke}
+  .fmap .wm-tgtlayer .wm-c{fill:rgba(226,176,74,.62); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.92;
+    vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 6px rgba(255,214,120,.95))}
+  .fmap .wm-tgtlayer{animation:tgtbreath 2.4s ease-in-out infinite}
+  @keyframes tgtbreath{0%,100%{opacity:.6}50%{opacity:1}}
+  .fmap .wm-ownlayer .wm-c{fill:rgba(46,224,148,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.95;
+    vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 8px rgba(46,224,148,.95))}
   .fmap.fmap-solar, .fmap.fmap-space{background:#05060a}
-  .fmap.fmap-space .wmsvg, .fmap.fmap-solar .wmsvg{opacity:.85}
-  .terr-ring{fill:none; stroke:#7fe0b6; stroke-width:1.1; stroke-dasharray:4 6; opacity:.7}
-  .terr-hud{position:absolute; right:12px; top:44px; z-index:5; display:flex; align-items:center; gap:6px;
-    font-size:8px; letter-spacing:.1em; color:#9ae6c0; background:rgba(6,10,8,.62);
-    border:1px solid rgba(127,224,182,.3); border-radius:999px; padding:4px 10px; backdrop-filter:blur(4px)}
-  .terr-hud b{font-family:var(--serif); font-size:10px; color:#c7f5b0}
-  .terr-hud .tbar{width:48px; height:3px; border-radius:2px; background:rgba(255,255,255,.14); overflow:hidden; margin-left:2px}
-  .terr-hud .tbar i{display:block; height:100%; background:linear-gradient(90deg,#3fae83,#c7f5b0); transition:width .5s}
+  .fmap.fmap-space .wmsvg, .fmap.fmap-solar .wmsvg{opacity:1}
+  .fmap .wm-mark{font-size:13px}
+
+  /* 영토 잠식 링 · 파동 · 스캔 라인 */
+  .terr-fill{fill:rgba(46,224,148,.13); stroke:none}
+  .terr-ring{fill:none; stroke:#8effc8; stroke-width:2.2; stroke-dasharray:7 9; vector-effect:non-scaling-stroke;
+    filter:drop-shadow(0 0 7px rgba(120,255,200,.95)); animation:terrspin 9s linear infinite}
+  .terr-ring.alt{stroke:#ffe9b0; stroke-width:1.5; stroke-dasharray:3 14; opacity:.9; animation:terrspin 5s linear infinite reverse}
+  @keyframes terrspin{to{stroke-dashoffset:-160}}
+  .terr-scan{fill:none; stroke:rgba(200,255,230,.5); stroke-width:1; stroke-dasharray:1 22; vector-effect:non-scaling-stroke;
+    animation:terrspin 3.2s linear infinite}
+  .terr-fx{pointer-events:none}
+  .terr-wave{fill:none; stroke:#d6fff0; stroke-width:3; vector-effect:non-scaling-stroke;
+    transform-box:fill-box; transform-origin:center; animation:terrwave .95s ease-out forwards}
+  @keyframes terrwave{0%{transform:scale(1); opacity:.95}100%{transform:scale(1.6); opacity:0}}
+  .terr-pin{font-size:16px; text-anchor:middle; dominant-baseline:middle; filter:drop-shadow(0 0 6px rgba(0,0,0,.9))}
+  .terr-flash{position:absolute; inset:0; z-index:4; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 40%, rgba(46,224,148,.5), rgba(46,224,148,.12) 38%, transparent 66%)}
+  .terr-flash.go{animation:terrflash .62s ease-out}
+  @keyframes terrflash{0%{opacity:0}18%{opacity:.85}100%{opacity:0}}
+
+  .terr-hud{position:absolute; left:14px; top:12px; z-index:6; min-width:126px; max-width:190px;
+    padding:8px 12px 9px; border-radius:12px;
+    background:linear-gradient(180deg,rgba(6,28,23,.86),rgba(4,14,12,.74));
+    border:1px solid rgba(90,240,180,.5); backdrop-filter:blur(6px);
+    box-shadow:0 0 24px -8px rgba(46,224,148,.85), inset 0 0 20px -12px rgba(46,224,148,.95);
+    transition:transform .18s, box-shadow .18s}
+  .terr-hud.bump{transform:scale(1.06); box-shadow:0 0 30px -4px rgba(46,224,148,1)}
+  .terr-hud .th-top{display:flex; align-items:baseline; gap:6px}
+  .terr-hud .th-k{font-size:8px; letter-spacing:.16em; color:#8fe6bb}
+  .terr-hud b{font-family:var(--serif); font-size:19px; line-height:1; color:#c9ffe0;
+    text-shadow:0 0 14px rgba(46,224,148,.9); font-variant-numeric:tabular-nums}
+  .terr-hud .th-bar{height:4px; margin-top:6px; border-radius:3px; background:rgba(255,255,255,.16); overflow:hidden}
+  .terr-hud .th-bar i{display:block; height:100%; border-radius:3px;
+    background:linear-gradient(90deg,#2ee094,#ffe9b0); box-shadow:0 0 9px rgba(46,224,148,.95); transition:width .45s}
+  .terr-hud .th-tgt{margin-top:5px; font-size:8.5px; letter-spacing:.02em; color:#ffe9b0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
   .wm-flag{font-size:12px; text-anchor:middle; animation:flagpop .8s cubic-bezier(.2,1.4,.4,1)}
   @keyframes flagpop{0%{opacity:0; transform:translateY(8px) scale(.4)}60%{opacity:1; transform:translateY(0) scale(1.25)}100%{transform:scale(1)}}
+
+  /* 출격 준비 · 목표 영토 미리보기 */
+  .btarget-row{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:14px; margin:0 0 14px}
+  .btarget-map{position:relative; aspect-ratio:16/9; border:1px solid rgba(246,230,189,.28); border-radius:14px;
+    overflow:hidden; background:#0c2531; box-shadow:inset 0 0 46px -14px rgba(0,0,0,.9)}
+  .btarget-map .wmsvg{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .btarget-map .wm-grat path{fill:none; stroke:rgba(150,215,235,.15); stroke-width:.5; vector-effect:non-scaling-stroke}
+  .bm-base .wm-c{fill:rgba(97,139,158,.96); stroke:rgba(188,234,246,.42); stroke-width:.4; vector-effect:non-scaling-stroke}
+  .bm-own .wm-c{fill:rgba(46,224,148,.78); stroke:#d8ffe9; stroke-width:.9; stroke-opacity:.95;
+    vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 5px rgba(46,224,148,.9))}
+  .bm-tgt .wm-c{fill:rgba(232,182,78,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:1;
+    vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 9px rgba(255,214,120,1))}
+  .bm-tgt{animation:tgtbreath 2.2s ease-in-out infinite}
+  .tp-halo{fill:rgba(255,214,120,.2)}
+  .tp-ring{fill:none; stroke:#ffe9b0; stroke-width:2.2; vector-effect:non-scaling-stroke; opacity:.95;
+    filter:drop-shadow(0 0 7px rgba(255,214,120,1)); transform-box:fill-box; transform-origin:center;
+    animation:tpping 2s ease-out infinite}
+  .tp-r2{animation-delay:.55s}
+  @keyframes tpping{0%{transform:scale(.55); opacity:1}100%{transform:scale(1.6); opacity:0}}
+  .tp-flag{text-anchor:middle; dominant-baseline:middle; filter:drop-shadow(0 0 4px rgba(0,0,0,.7))}
+  .btm-badge{position:absolute; left:10px; top:10px; z-index:3; display:flex; align-items:baseline; gap:5px;
+    padding:5px 11px; border-radius:999px; font-size:10px; letter-spacing:.02em; color:#ffeec2;
+    background:rgba(8,14,12,.82); border:1px solid rgba(246,230,189,.55);
+    box-shadow:0 0 20px -6px rgba(246,230,189,.95)}
+  .btm-badge b{font-family:var(--serif); font-size:11.5px; color:#fff8e4}
+  .btm-legend{position:absolute; right:9px; bottom:9px; z-index:3; display:flex; gap:10px; align-items:center;
+    font-size:8.5px; letter-spacing:.02em; color:#d6ded6; background:rgba(6,10,12,.72); padding:4px 10px;
+    border-radius:999px; border:1px solid rgba(255,255,255,.12)}
+  .btm-legend span{display:inline-flex; align-items:center; white-space:nowrap}
+  .btm-legend i{display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px}
+  .btm-legend .l-own{background:#2ee094; box-shadow:0 0 7px rgba(46,224,148,.9)}
+  .btm-legend .l-tgt{background:#e8b64e; box-shadow:0 0 7px rgba(255,214,120,.95)}
+  .btm-side{border:1px solid var(--line2); border-radius:14px; padding:13px 15px; background:rgba(255,255,255,.02);
+    display:flex; flex-direction:column; gap:5px; min-width:0}
+  .btm-side h4{margin:2px 0 0; font-family:var(--serif); font-size:13px; font-weight:600; color:#f4ebd9}
+  .btm-goal{font-family:var(--serif); font-size:19px; line-height:1.25; color:#ffe9b0;
+    text-shadow:0 0 18px rgba(255,214,120,.5); overflow-wrap:anywhere}
+  .btm-desc{margin:2px 0 0; font-size:10.5px; line-height:1.6; color:#8d8778}
+  .btm-desc b{color:#e9e0cd}
+  .btm-chips{display:flex; flex-wrap:wrap; gap:4px; margin-top:4px}
+  .btm-chip{font-size:9px; padding:2px 8px; border-radius:999px; color:#ffeec2; background:rgba(232,182,78,.14);
+    border:1px solid rgba(246,230,189,.42); white-space:nowrap}
+  .btm-chip.own{color:#c9ffe0; background:rgba(46,224,148,.14); border-color:rgba(46,224,148,.5)}
+  .btm-meter{height:5px; border-radius:3px; background:rgba(255,255,255,.1); overflow:hidden; margin-top:auto}
+  .btm-meter i{display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,#2ee094,#ffe9b0)}
+  .btm-row{display:flex; justify-content:space-between; gap:8px; font-size:10.5px; color:#8e8a7d}
+  .btm-row b{color:#e9e0cd; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  @media (max-width:820px){
+    .btarget-row{grid-template-columns:1fr}
+    .btm-side{padding:11px 13px}
+  }
 
   /* ───── 궁극기 이펙트 ───── */
   .ultfx{position:absolute; inset:0; z-index:7; pointer-events:none}
@@ -1224,8 +1309,9 @@
   @keyframes glowhit{0%{box-shadow:0 0 0 2px #fff, 0 0 42px rgba(255,233,168,.95); filter:brightness(1.7)}100%{box-shadow:none; filter:none}}
   @media (max-width:640px){
     .cut-face{flex-basis:56px; width:56px; height:56px}
-    .terr-hud{top:40px; right:8px; font-size:7px; padding:3px 7px}
-    .terr-hud .tbar{width:34px}
+    .terr-hud{top:10px; right:auto; left:8px; font-size:7px; padding:6px 9px; min-width:104px}
+    .terr-hud b{font-size:15px}
+    .terr-hud .th-tgt{max-width:120px}
   }
 
 
@@ -1406,11 +1492,10 @@
   .ss-orb{fill:none; stroke:rgba(180,205,255,.16); stroke-width:.9; stroke-dasharray:2 6}
   .ss-sun circle{filter:blur(.2px)}
   .ss-planet{transition:transform .3s}
-  .fmap .ss-orb{stroke:rgba(255,255,255,.09)}
-  .fmap .ss-gal{opacity:.55}
-  .fmap .ss-hole{opacity:.7}
+  .fmap .ss-orb{stroke:rgba(255,255,255,.13)}
+  .fmap .ss-gal{opacity:.7}
+  .fmap .ss-hole{opacity:.85}
   .terr-over{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
-  .fmap .wm-mark{font-size:13px}
 
   /* ───── fx ───── */
   #fx{position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden}
@@ -2817,9 +2902,138 @@ function portraitSVG(fig, fit, alt) {
   });
   WARS2.forEach(function (w, i) {
     var k = i % 10;
-    var solarI = w.g === 'solar' ? SOLAR_IDX[k] : 0;
-    STAGE_MAP[w.id] = { pt: w.g === 'solar' ? solarPt(solarI) : SPACE_PTS[k], terr: [], label: w.name, chap: w.g };
+    var solarI = w.g === 'solar' ? SOLAR_IDX[k] : -1;
+    STAGE_MAP[w.id] = { pt: w.g === 'solar' ? solarPt(solarI) : SPACE_PTS[k], terr: [], label: w.name, chap: w.g, pIdx: solarI };
   });
+
+  /* ── 영토 경계 계산 · 카메라 크롭 ──
+     국가 path(M/l/z)로 실제 경계 상자를 구해, 목표 영토가 화면을 채우도록 지도를 잘라낸다. */
+  var C_BOX = null, REG_BOX = null;
+  function pathBox(d) {
+    var toks = d.match(/[Mlz]|-?\d*\.?\d+/g), i = 0, x = 0, y = 0, t;
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    if (!toks) return [0, 0, 0, 0];
+    while (i < toks.length) {
+      t = toks[i];
+      if (t === 'M' || t === 'l') {
+        if (t === 'M') { x = parseFloat(toks[i + 1]); y = parseFloat(toks[i + 2]); }
+        else { x += parseFloat(toks[i + 1]); y += parseFloat(toks[i + 2]); }
+        i += 3;
+        if (x < x0) x0 = x; if (x > x1) x1 = x;
+        if (y < y0) y0 = y; if (y > y1) y1 = y;
+      } else i++;
+    }
+    if (x0 > x1) return [0, 0, 0, 0];
+    return [x0, y0, x1, y1];
+  }
+  function countryBoxes() {
+    if (C_BOX) return C_BOX;
+    C_BOX = [];
+    if (!GEO) return C_BOX;
+    for (var i = 0; i < GEO.countries.length; i++) {
+      var c = GEO.countries[i], b = pathBox(c.d), s = GEO_SC || 1;
+      C_BOX.push({ r: c.r, b: [b[0] / s, b[1] / s, b[2] / s, b[3] / s] });
+    }
+    return C_BOX;
+  }
+  function regionBoxes() {
+    if (REG_BOX) return REG_BOX;
+    var out = {}, list = countryBoxes();
+    for (var i = 0; i < list.length; i++) {
+      var it = list[i], b = out[it.r] || (out[it.r] = [1e9, 1e9, -1e9, -1e9]);
+      if (it.b[0] < b[0]) b[0] = it.b[0];
+      if (it.b[1] < b[1]) b[1] = it.b[1];
+      if (it.b[2] > b[2]) b[2] = it.b[2];
+      if (it.b[3] > b[3]) b[3] = it.b[3];
+    }
+    REG_BOX = out;
+    return out;
+  }
+  function terrBox(ids) {
+    var rb = regionBoxes(), b = null, i, r;
+    for (i = 0; i < (ids || []).length; i++) {
+      r = rb[ids[i]];
+      if (!r) continue;
+      if (!b) b = [r[0], r[1], r[2], r[3]];
+      else {
+        if (r[0] < b[0]) b[0] = r[0];
+        if (r[1] < b[1]) b[1] = r[1];
+        if (r[2] > b[2]) b[2] = r[2];
+        if (r[3] > b[3]) b[3] = r[3];
+      }
+    }
+    return b;
+  }
+  function clampNum(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+  /* 경계 상자 → viewBox. ax/ay: 화면에서 목표가 놓일 위치(0~1) */
+  function cropView(box, aspect, opt) {
+    opt = opt || {};
+    var minW = opt.minW || 90, maxW = opt.maxW || MAP_W;
+    var pad = opt.pad == null ? 0.2 : opt.pad;
+    var bw = Math.max(1, box[2] - box[0]), bh = Math.max(1, box[3] - box[1]);
+    var w = bw * (1 + pad * 2), h = bh * (1 + pad * 2);
+    if (w / h < aspect) w = h * aspect; else h = w / aspect;
+    w = clampNum(w, minW, maxW);
+    h = w / aspect;
+    if (h > MAP_H) { h = MAP_H; w = h * aspect; }
+    if (w > MAP_W) { w = MAP_W; h = w / aspect; }
+    var ax = opt.ax == null ? 0.5 : opt.ax, ay = opt.ay == null ? 0.5 : opt.ay;
+    var cx = box[0] + bw / 2, cy = box[1] + bh / 2;
+    return [
+      clampNum(cx - w * ax, 0, Math.max(0, MAP_W - w)),
+      clampNum(cy - h * ay, 0, Math.max(0, MAP_H - h)),
+      w, h
+    ];
+  }
+  /* 한 점 중심 크롭 (태양계·우주: 1000×500 캔버스) */
+  function cropAt(pt, w, aspect, ax, ay, WW, WH) {
+    WW = WW || 1000; WH = WH || 500;
+    var h = w / aspect;
+    if (h > WH) { h = WH; w = h * aspect; }
+    if (w > WW) { w = WW; h = w / aspect; }
+    ax = ax == null ? 0.5 : ax; ay = ay == null ? 0.5 : ay;
+    return [
+      clampNum(pt[0] - w * ax, 0, Math.max(0, WW - w)),
+      clampNum(pt[1] - h * ay, 0, Math.max(0, WH - h)),
+      w, h
+    ];
+  }
+  function vbStr(vb) {
+    return vb[0].toFixed(1) + ' ' + vb[1].toFixed(1) + ' ' + vb[2].toFixed(1) + ' ' + vb[3].toFixed(1);
+  }
+
+  /* ── 이 전쟁의 목표 영토 ── */
+  function stageGoal(stage) {
+    var m = STAGE_MAP[stage.id] || { terr: [] }, chap = chapterOf(stage);
+    var names = [], i, r;
+    if (chap === 'earth') {
+      for (i = 0; i < (m.terr || []).length; i++) {
+        r = regionById(m.terr[i]);
+        if (r) names.push(r.n);
+      }
+      var short = names.length > 2 ? (names[0] + ' 외 ' + (names.length - 1) + '지역') : names.join(' · ');
+      return {
+        verb: '점령', chap: chap, names: names,
+        name: short || stage.name, full: names.join(' · ') || stage.name
+      };
+    }
+    if (chap === 'solar') {
+      var pi = m.pIdx == null ? -1 : m.pIdx;
+      return { verb: '정복', chap: chap, names: [], name: (pi >= 0 && PLANET_NM[pi]) ? PLANET_NM[pi] : stage.name, full: stage.name };
+    }
+    return { verb: '정복', chap: chap, names: [], name: stage.name, full: stage.name };
+  }
+
+  /* 목표 지점 핀 (반경은 크롭 폭에 맞춰 계산해 화면상 크기를 일정하게) */
+  function targetPin(pt, flag, unit) {
+    var r = Math.max(0.6, unit);
+    return '<g class="tpng" transform="translate(' + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1) + ')">' +
+      '<circle class="tp-halo" r="' + (r * 2.1).toFixed(2) + '"/>' +
+      '<circle class="tp-ring" r="' + r.toFixed(2) + '"/>' +
+      '<circle class="tp-ring tp-r2" r="' + (r * 1.45).toFixed(2) + '"/>' +
+      '<text class="tp-flag" y="' + (r * 0.36).toFixed(2) + '" style="font-size:' + (r * 1.35).toFixed(2) + 'px">' +
+      (flag || '🎯') + '</text></g>';
+  }
 
   var WORLD_REGIONS = (GEO ? GEO.regions : []).map(function (r) {
     return { id: r.id, n: r.n, c: r.c };
@@ -3595,6 +3809,74 @@ function portraitSVG(fig, fit, alt) {
     $('#bView').innerHTML = head + chapTabs + wmap + tabs + map + foot;
   }
 
+  /* ── 출격 준비 · 이번 전쟁에서 점령할 영토 미리보기 ── */
+  function earthPreviewSvg(stage, m, vb) {
+    var own = ownedRegions(), tgt = {}, i;
+    for (i = 0; i < (m.terr || []).length; i++) tgt[m.terr[i]] = 1;
+    var sc = 1 / (GEO_SC || 1);
+    return '<svg class="wmsvg" viewBox="' + vbStr(vb) + '" preserveAspectRatio="xMidYMid slice">' +
+      fieldDefs('bmp') + fieldOcean('bmp') +
+      '<g class="wm-grat"><path d="' + (GEO ? GEO.grat : '') + '"/></g>' +
+      '<g class="bm-base" transform="scale(' + sc + ')">' + landMarkup(null, null, false) + '</g>' +
+      '<g class="bm-own" transform="scale(' + sc + ')">' + landMarkup(own, null, false) + '</g>' +
+      '<g class="bm-tgt" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false) + '</g>' +
+      targetPin(m.pt, stage.flag, vb[2] * 0.04) +
+      '</svg>';
+  }
+
+  function targetPanel(stage) {
+    var goal = stageGoal(stage);
+    var m = STAGE_MAP[stage.id] || { pt: [MAP_W / 2, MAP_H / 2], terr: [] };
+    var vb, art;
+    if (goal.chap === 'earth') {
+      var box = terrBox(m.terr);
+      if (!box) box = [m.pt[0] - 20, m.pt[1] - 14, m.pt[0] + 20, m.pt[1] + 14];
+      vb = cropView(box, 1.78, { pad: 0.3, minW: 62, maxW: 620 });
+      art = earthPreviewSvg(stage, m, vb);
+    } else {
+      vb = cropAt(m.pt, goal.chap === 'solar' ? 300 : 340, 1.78, 0.5, 0.5, 1000, 500);
+      art = (goal.chap === 'solar' ? solarSvg('', true) : spaceSvg('', true))
+        .replace('viewBox="0 0 1000 500"', 'viewBox="' + vbStr(vb) + '"')
+        .replace('preserveAspectRatio="xMidYMid meet"', 'preserveAspectRatio="xMidYMid slice"')
+        .replace('</svg>', targetPin(m.pt, stage.flag, vb[2] * 0.05) + '</svg>');
+    }
+
+    var own = ownedRegions(), ownN = Object.keys(own).length, regN = WORLD_REGIONS.length;
+    var chips = '', i;
+    if (goal.chap === 'earth') {
+      for (i = 0; i < (m.terr || []).length; i++) {
+        var rid = m.terr[i], rinfo = regionById(rid);
+        if (!rinfo) continue;
+        var mine = !!own[rid];
+        chips += '<span class="btm-chip' + (mine ? ' own' : '') + '">' + (mine ? '✓ ' : '') + esc(rinfo.n) + '</span>';
+      }
+    } else {
+      chips = '<span class="btm-chip">' + esc(goal.name) + '</span>';
+    }
+    if (!chips) chips = '<span class="btm-chip">' + esc(goal.name) + '</span>';
+
+    var desc = goal.chap === 'earth'
+      ? '이 전쟁에서 이기면 <b>' + esc(goal.name) + '</b>가 지도에 내 색으로 남습니다.'
+      : '이 전쟁에서 이기면 <b>' + esc(goal.name) + '</b>이(가) 내 영토가 됩니다.';
+    var pctNow = regN ? Math.round(ownN / regN * 100) : 0;
+
+    return '<div class="btarget-row">' +
+      '<div class="btarget-map" data-chap="' + goal.chap + '">' + art +
+      '<div class="btm-badge">🎯 ' + goal.verb + ' 목표 <b>' + esc(goal.name) + '</b></div>' +
+      '<div class="btm-legend"><span><i class="l-own"></i>이미 점령</span><span><i class="l-tgt"></i>이번 목표</span></div>' +
+      '</div>' +
+      '<div class="btm-side">' +
+      '<span class="kicker">THIS WAR · TARGET TERRITORY</span>' +
+      '<h4>🎯 ' + goal.verb + ' 목표</h4>' +
+      '<div class="btm-goal">' + esc(goal.name) + '</div>' +
+      '<p class="btm-desc">' + desc + '</p>' +
+      '<div class="btm-chips">' + chips + '</div>' +
+      '<div class="btm-meter"><i style="width:' + pctNow + '%"></i></div>' +
+      '<div class="btm-row"><span>점령 영토</span><b>' + ownN + ' / ' + regN + ' 지역</b></div>' +
+      '<div class="btm-row"><span>전장</span><b>STAGE ' + pad2(stage.no) + ' · ' + esc(stage.name) + '</b></div>' +
+      '</div></div>';
+  }
+
   function renderDeck(stageId) {
     VIEW = 'deck';
     var b = ensureState();
@@ -3681,7 +3963,7 @@ function portraitSVG(fig, fit, alt) {
       '<p class="bprep-note">' + (deck.length ? '10번 공격하면 궁극기가 자동 발동합니다.' : '인물을 1명 이상 선택하세요.') + '</p>' +
       '</div>';
 
-    $('#bView').innerHTML = stageBar + bossCard(stage) + diffBar +
+    $('#bView').innerHTML = stageBar + targetPanel(stage) + bossCard(stage) + diffBar +
       '<div class="bdeck-wrap"><div class="bdeck-left">' +
       '<div class="bsec-h"><span class="kicker">MY DECK</span><b>' + deck.length + '/6</b><button type="button" class="bghost sm" data-clear-deck="1">비우기</button></div>' +
       '<div class="bslots">' + slots + '</div>' + prep + '</div>' +
@@ -3820,52 +4102,135 @@ function portraitSVG(fig, fit, alt) {
 
 
   /* 전투 배경 지도 + 영토 잠식 */
-  var TERR_HUD = '<div class="terr-hud"><span>영토 잠식</span><b id="bTerrPct">0%</b>' +
-    '<div class="tbar"><i id="bTerrBar" style="width:0%"></i></div></div>' +
-    '<div class="ultfx" id="bUltFx"></div>' +
-    '<div class="flash" id="bFlash"></div>';
+  function terrHud(goal) {
+    return '<div class="terr-hud" id="bTerrHud">' +
+      '<div class="th-top"><span class="th-k">영토 잠식</span><b id="bTerrPct">0%</b></div>' +
+      '<div class="th-bar"><i id="bTerrBar" style="width:0%"></i></div>' +
+      '<div class="th-tgt">🎯 ' + esc(goal.name) + '</div></div>' +
+      '<div class="ultfx" id="bUltFx"></div>' +
+      '<div class="terr-flash" id="bTerrFlash"></div>' +
+      '<div class="flash" id="bFlash"></div>';
+  }
 
+  /* 전장 지도 전용 바다·글로우 (캠페인 지도보다 밝게) */
+  function fieldDefs(p) {
+    return '<defs>' +
+      '<radialGradient id="' + p + 'Sea" cx="50%" cy="38%" r="80%">' +
+      '<stop offset="0" stop-color="#2f7391"/><stop offset=".42" stop-color="#1d5068"/>' +
+      '<stop offset=".78" stop-color="#123544"/><stop offset="1" stop-color="#0b2430"/></radialGradient>' +
+      '<radialGradient id="' + p + 'Glow" cx="50%" cy="42%" r="52%">' +
+      '<stop offset="0" stop-color="#7fe8ff" stop-opacity=".16"/><stop offset="1" stop-color="#7fe8ff" stop-opacity="0"/></radialGradient>' +
+      '<filter id="' + p + 'TGlow" x="-40%" y="-40%" width="180%" height="180%">' +
+      '<feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+      '</defs>';
+  }
+  function fieldOcean(p) {
+    return '<rect x="0" y="0" width="' + MAP_W + '" height="' + Math.max(MAP_H, 500) + '" fill="url(#' + p + 'Sea)"/>' +
+      '<ellipse cx="' + (MAP_W * 0.5).toFixed(0) + '" cy="' + (MAP_H * 0.42).toFixed(0) + '" rx="' + (MAP_W * 0.46).toFixed(0) +
+      '" ry="' + (MAP_H * 0.55).toFixed(0) + '" fill="url(#' + p + 'Glow)"/>';
+  }
+
+  /* 영토 잠식 링(빛나는 파동 + 스캔 라인) */
+  function terrRings(cx, cy) {
+    return '<circle id="terrFill" class="terr-fill" cx="' + cx + '" cy="' + cy + '" r="0"/>' +
+      '<circle id="terrRing" class="terr-ring" cx="' + cx + '" cy="' + cy + '" r="0"/>' +
+      '<circle id="terrRing2" class="terr-ring alt" cx="' + cx + '" cy="' + cy + '" r="0"/>' +
+      '<circle id="terrScan" class="terr-scan" cx="' + cx + '" cy="' + cy + '" r="0"/>' +
+      '<g id="terrFx" class="terr-fx"></g>' +
+      '<text class="terr-pin" x="' + cx + '" y="' + cy + '">⚔️</text>';
+  }
+
+  /* 전장 카메라: 목표 영토가 카드 옆 빈 공간에 오도록 크롭 */
+  var FMAP_VIEW = null;
   function fieldMapSvg(stage) {
-    var m = STAGE_MAP[stage.id] || { pt: [MAP_W / 2, MAP_H / 2] };
-    var chap = chapterOf(stage);
+    var m = STAGE_MAP[stage.id] || { pt: [MAP_W / 2, MAP_H / 2], terr: [] };
+    var chap = chapterOf(stage), goal = stageGoal(stage);
+    var box = terrBox(m.terr);
+    if (!box) box = [m.pt[0] - 26, m.pt[1] - 18, m.pt[0] + 26, m.pt[1] + 18];
+    var fit = function (aspect) {
+      if (chap === 'earth') return cropView(box, aspect, { pad: 0.22, minW: 120, maxW: 620, ax: 0.86, ay: 0.32 });
+      return cropAt(m.pt, chap === 'solar' ? 360 : 420, aspect, 0.5, 0.5, 1000, 500);
+    };
+    var vb = fit(1.62);
+    FMAP_VIEW = { pt: m.pt, fit: fit, vb: vb };
+    var hud = terrHud(goal);
+
     if (chap !== 'earth') {
-      var art = chap === 'solar' ? solarSvg(terrMarkup(m), true) : spaceSvg(terrMarkup(m), true);
-      return '<div class="fmap fmap-' + chap + '">' + art + TERR_HUD + '</div>';
+      var art = chap === 'solar' ? solarSvg('', true) : spaceSvg('', true);
+      art = art.replace('viewBox="0 0 1000 500"', 'viewBox="' + vbStr(vb) + '"')
+        .replace('preserveAspectRatio="xMidYMid meet"', 'preserveAspectRatio="xMidYMid slice"')
+        .replace('</svg>', terrRings(m.pt[0].toFixed(1), m.pt[1].toFixed(1)) + '</svg>');
+      return '<div class="fmap fmap-' + chap + '">' + art + hud + '</div>';
     }
-    var own = ownedRegions();
-    var tgt = {};
-    (m.terr || []).forEach(function (id) { tgt[id] = 1; });
-    var sc = 1 / GEO_SC;
+
+    var own = ownedRegions(), tgt = {}, i;
+    for (i = 0; i < (m.terr || []).length; i++) tgt[m.terr[i]] = 1;
+    var sc = 1 / (GEO_SC || 1);
     var cx = m.pt[0].toFixed(1), cy = m.pt[1].toFixed(1);
-    var vw = 640, vh = 380;
-    var vx = Math.max(0, Math.min(MAP_W - vw, m.pt[0] - vw / 2));
-    var vy = Math.max(0, Math.min(MAP_H - vh, m.pt[1] - vh / 2));
     return '<div class="fmap">' +
-      '<svg class="wmsvg" viewBox="' + vx.toFixed(1) + ' ' + vy.toFixed(1) + ' ' + vw + ' ' + vh + '" preserveAspectRatio="xMidYMid slice">' +
-      mapDefs('wmf') + worldOcean('wmf', false) +
+      '<svg class="wmsvg" viewBox="' + vbStr(vb) + '" preserveAspectRatio="xMidYMid slice">' +
+      fieldDefs('wmv') + fieldOcean('wmv') +
       '<g class="wm-grat"><path d="' + (GEO ? GEO.grat : '') + '"/></g>' +
       '<g class="wm-base" transform="scale(' + sc + ')">' + landMarkup(null, null, false) + '</g>' +
+      '<g class="wm-tgtlayer" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false) + '</g>' +
       '<defs><clipPath id="terrClip"><circle id="terrC" cx="' + cx + '" cy="' + cy + '" r="0"/></clipPath></defs>' +
-      '<g class="wm-ownlayer" clip-path="url(#terrClip)"><g transform="scale(' + sc + ')">' + landMarkup(own, tgt, false) + '</g></g>' +
-      '<circle id="terrRing" class="terr-ring" cx="' + cx + '" cy="' + cy + '" r="0"/>' +
-      '<text class="wm-mark next wm-pulse" x="' + cx + '" y="' + cy + '">⚔️</text>' +
-      '</svg>' + TERR_HUD + '</div>';
+      '<g class="wm-ownlayer" clip-path="url(#terrClip)"><g transform="scale(' + sc + ')">' + landMarkup(own, null, false) + '</g></g>' +
+      terrRings(cx, cy) +
+      '</svg>' + hud + '</div>';
+  }
+
+  /* 실제 필드 크기에 맞춰 카메라 재조정 (카드 뒤가 아니라 옆 공간에 목표가 오도록) */
+  function layoutFieldMap() {
+    if (!FMAP_VIEW) return;
+    var field = document.getElementById('bField');
+    if (!field) return;
+    var svg = field.querySelector('.fmap .wmsvg');
+    if (!svg) return;
+    var w = field.clientWidth, h = field.clientHeight;
+    if (!w || !h) return;
+    var aspect = clampNum(w / h, 0.9, 2.4);
+    var vb = FMAP_VIEW.fit(aspect);
+    FMAP_VIEW.vb = vb;
+    svg.setAttribute('viewBox', vbStr(vb));
+    updateTerritory();
   }
 
   function updateTerritory() {
-    if (!B) return;
+    if (!B || !FMAP_VIEW) return;
     var total = B.totalEnemies || 1;
     var prog = Math.max(0, Math.min(1, (B.killed || 0) / total));
-    var m = STAGE_MAP[B.stage.id] || { pt: [500, 250] };
-    var r = 14 + prog * 190;
-    var c = document.getElementById('terrC');
-    if (c) c.setAttribute('r', r);
-    var ring = document.getElementById('terrRing');
-    if (ring) ring.setAttribute('r', r);
+    var D = FMAP_VIEW.vb[2];
+    var r = D * (0.045 + 0.9 * prog);
+    var ids = ['terrC', 'terrFill', 'terrRing', 'terrRing2', 'terrScan'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.getElementById(ids[i]);
+      if (el) el.setAttribute('r', r.toFixed(1));
+    }
     var pct = document.getElementById('bTerrPct');
     if (pct) pct.textContent = Math.round(prog * 100) + '%';
     var bar = document.getElementById('bTerrBar');
     if (bar) bar.style.width = (prog * 100) + '%';
+  }
+
+  /* 적 격파 순간: 영토 확장 펄스 플래시 */
+  function terrPulse() {
+    if (!FMAP_VIEW) return;
+    var ring = document.getElementById('terrRing');
+    var base = ring ? parseFloat(ring.getAttribute('r')) || 0 : 0;
+    var fx = document.getElementById('terrFx');
+    if (fx) {
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('class', 'terr-wave');
+      c.setAttribute('cx', FMAP_VIEW.pt[0].toFixed(1));
+      c.setAttribute('cy', FMAP_VIEW.pt[1].toFixed(1));
+      c.setAttribute('r', Math.max(base, FMAP_VIEW.vb[2] * 0.05).toFixed(1));
+      fx.appendChild(c);
+      later(function () { if (c.parentNode) c.parentNode.removeChild(c); }, 1100);
+    }
+    var fl = document.getElementById('bTerrFlash');
+    if (fl) { fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); }
+    var hud = document.getElementById('bTerrHud');
+    if (hud) { hud.classList.remove('bump'); void hud.offsetWidth; hud.classList.add('bump'); }
   }
 
   function plantFlag() {
@@ -3946,6 +4311,7 @@ function portraitSVG(fig, fit, alt) {
       '<div class="a-skill" id="bSkill"><p class="sk-idle">AUTO 모드 · 아군이 자동으로 싸웁니다. 「AUTO」를 끄면 스킬을 직접 고를 수 있습니다.</p></div>' +
       '</div>';
     $('#bView').innerHTML = html;
+    layoutFieldMap();
     paintSide('a');
     paintSide('e');
   }
@@ -4149,7 +4515,7 @@ function portraitSVG(fig, fit, alt) {
     if (tgt.hp <= 0) {
       tgt.alive = false;
       if (tgt.side === 'a') B.dead++;
-      if (tgt.side === 'e') { B.killed = (B.killed || 0) + 1; updateTerritory(); }
+      if (tgt.side === 'e') { B.killed = (B.killed || 0) + 1; updateTerritory(); terrPulse(); }
       logLine('<b>' + esc(tgt.name) + '</b> ' + (tgt.side === 'a' ? '전투불능' : '격파'), tgt.side === 'a' ? 'bad' : 'good');
     }
     paintUnit(tgt);
