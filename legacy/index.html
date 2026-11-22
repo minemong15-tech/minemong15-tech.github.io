@@ -2714,7 +2714,7 @@
       <span class="pill" id="arcStreak">연속 기록 —</span>
     </div>
     <div class="arc-search">
-      <input id="arcSearch" type="search" placeholder="🔍 인물 이름 검색..." autocomplete="off" spellcheck="false" aria-label="인물 이름 검색">
+      <input id="arcSearch" type="text" placeholder="🔍 인물 이름 검색..." autocomplete="off" spellcheck="false" aria-label="인물 이름 검색">
       <button type="button" class="arc-search-x" id="arcSearchClear" aria-label="검색 지우기" hidden>✕</button>
     </div>
     <div class="arc-filters" id="arcGrade"></div>
@@ -6636,7 +6636,7 @@ function portraitSVG(fig, fit, alt) {
     var byGrade = function (f) { return (gradeFilter === 'all' || f.grade === gradeFilter) && figMatches(f, q); };
     var mLearned = learnedFigs.filter(byGrade);
     var mLocked = lockedFigs.filter(byGrade);
-    if (q) learnedFigs = learnedFigs.filter(function (f) { return figMatches(f, q); });
+
 
     var learnedCard = function (f) {
       var m = map[f.id], d = isoToDate(m.last);
