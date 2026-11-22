@@ -1801,6 +1801,13 @@ function portraitSVG(fig, fit, alt) {
   }
 
   /* ── render ── */
+  function ownedFigures() {
+    var set = {};
+    S.log.forEach(function (x) { set[x.id] = 1; });
+    Object.keys(S.cards).forEach(function (id) { set[id] = 1; });
+    return FIGURES.filter(function (f) { return set[f.id]; });
+  }
+
   function learnedIds() {
     var m = {};
     S.log.forEach(function (x) { m[x.id] = 1; });
@@ -2360,17 +2367,26 @@ function portraitSVG(fig, fit, alt) {
     var sel = shelfOf(activeShelf);
     if (sel) {
       html += '<div class="shelf-head"><h3>' + esc(sel.name) + ' <span class="ct">' + sel.ids.length + '명</span></h3><div class="ops">' +
-        '<button class="link-btn primary" type="button" data-pick="1">' + (pickMode ? '편집 완료' : '인물 추가·편집') + '</button></div></div>';
+        '<button class="link-btn primary" type="button" data-pick="1">' + (pickMode ? '편집 완료' : '인물 추가·편집') + '</button></div></div>' +
+        (pickMode ? '<p class="arc-empty" style="padding:0 0 10px;text-align:left;font-size:10.5px">보유·학습한 인물만 담을 수 있습니다 · 카드 ' + ownedCount() + '장 / 배움 ' + learnedIds().length + '명</p>' : '');
     }
     p.innerHTML = html;
 
     var grid = $('#arcGrid');
     if (!sel) { grid.innerHTML = ''; return; }
     if (pickMode) {
-      grid.innerHTML = '<div class="picker">' + FIGURES.map(function (f) {
-        var on = sel.ids.indexOf(f.id) !== -1;
-        return '<button type="button" class="' + (on ? 'on' : '') + '" data-pick-id="' + f.id + '"><span class="mk">' + (on ? '✓' : '＋') + '</span>' + esc(f.name) + '</button>';
-      }).join('') + '</div>';
+      var owned = ownedFigures();
+      if (!owned.length) {
+        grid.innerHTML = '<div class="arc-empty" style="grid-column:1/-1">아직 보유한 인물이 없습니다.<br>오늘의 인물을 체크하거나 카드팩을 뽑으면 모음집에 담을 수 있습니다.</div>';
+      } else {
+        grid.innerHTML = '<div class="arc-empty" style="grid-column:1/-1;padding:0 0 10px;text-align:left">보유 인물 ' + owned.length + '명 중에서 고를 수 있습니다.</div>' +
+          '<div class="picker" style="grid-column:1/-1">' + owned.map(function (f) {
+            var on = sel.ids.indexOf(f.id) !== -1;
+            var learned = S.log.some(function (x) { return x.id === f.id; });
+            return '<button type="button" class="' + (on ? 'on' : '') + '" data-pick-id="' + f.id + '"><span class="mk">' + (on ? '✓' : '＋') + '</span>' + esc(f.name) +
+              '<span class="mk" style="margin-left:auto;font-size:8px">' + (learned ? '배움' : '카드') + '</span></button>';
+          }).join('') + '</div>';
+      }
     } else if (!sel.ids.length) {
       grid.innerHTML = '<div class="arc-empty" style="grid-column:1/-1">아직 담은 인물이 없습니다. 「인물 추가·편집」으로 인물을 골라보세요.</div>';
     } else {
