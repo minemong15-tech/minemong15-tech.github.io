@@ -6632,6 +6632,7 @@ function portraitSVG(fig, fit, alt) {
     var lockedFigs = FIGURES.filter(function (f) { return !seen[f.id]; });
 
     var q = arcQuery.toLowerCase();
+    var learnedTotal = learnedFigs.length;
     var byGrade = function (f) { return (gradeFilter === 'all' || f.grade === gradeFilter) && figMatches(f, q); };
     var mLearned = learnedFigs.filter(byGrade);
     var mLocked = lockedFigs.filter(byGrade);
@@ -6672,7 +6673,7 @@ function portraitSVG(fig, fit, alt) {
       ? '<div class="arc-empty" style="grid-column:1/-1">🔍 검색 결과가 없습니다.<br>인물 이름·시대·나라로 다시 찾아보세요.</div>'
       : '<div class="arc-empty" style="grid-column:1/-1">' + (GRADE_INFO[gradeFilter] || {}).name + ' 등급에서 아직 배운 인물이 없습니다.<br>인물을 체크하거나 카드팩에서 만나면 이곳에 기록됩니다.</div>';
 
-    var cardsHtml = (mLearned.length ? '' : emptyFiltered) + learnedHtml + lockedHtml;
+    var cardsHtml = ((mLearned.length + mLocked.length) ? '' : emptyFiltered) + learnedHtml + lockedHtml;
     if (shelfView === 'all') $('#arcGrid').innerHTML = cardsHtml;
     var pageGrid = $('#pageArcGrid');
     if (pageGrid) {
@@ -6681,7 +6682,7 @@ function portraitSVG(fig, fit, alt) {
         lockedFigs.slice(0, 6).map(lockCard).join('') +
         (rest > 0 ? '<button class="arc-card locked" type="button" data-more="1"><span class="body" style="text-align:center;padding:18px 8px"><b style="font-size:15px;color:#6f7885">+' + rest + '</b><p>잠긴 인물 더 보기</p></span></button>' : '');
     }
-    $('#arcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N +
+    $('#arcCount').textContent = '배운 인물 ' + learnedTotal + ' / ' + N +
       (q ? ' · 🔍 "' + arcQuery + '" ' + (mLearned.length + mLocked.length) + '명' : '');
     if ($('#pageArcCount')) $('#pageArcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N;
     renderPageShelves();
@@ -7202,6 +7203,7 @@ function portraitSVG(fig, fit, alt) {
   }
   /* 연출 확인용 수동 트리거 (상태를 바꾸지 않고 화면 연출만 재생) */
   window.LegacySummon = summonFig;
+  window.LegacyPullFx = playPullFx;
 
   function pullOne(forced) {
     var f = forced || pullFigure();
