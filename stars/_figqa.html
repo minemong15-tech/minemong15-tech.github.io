@@ -926,13 +926,13 @@ function d3BrawlerModel(charId, col) {
 
   // ---- 무기 마운트(오른손 앞)
   const wpn = new T.Group();
-  wpn.position.set(10, 4, 11);
+  wpn.position.set(10, 0, 13);
   torso.add(wpn);
   P.wpn = wpn;
-  P.wpnBase = { x: 10, y: 4, z: 11 };
+  P.wpnBase = { x: 10, y: 0, z: 13 };
   const tip = fgWeapon(wpn, charId, M);
   // 오른팔 팔꿈치를 굽혀 손을 총에 얹는다
-  if (P.foreR) P.foreR.rotation.z = charId === 'bouncer' ? -0.5 : -1.02;
+  if (P.foreR) P.foreR.rotation.z = charId === 'bouncer' ? -0.4 : -0.56;
 
   // ---- 총구 화염
   const muzzle = fgPart(wpn, new T.ConeGeometry(7.2, 17, 9), new T.MeshBasicMaterial({
@@ -1006,8 +1006,13 @@ if (one) {
   const a = ang == null ? 0 : parseFloat(ang);
   g.rotation.y = a;
   scene.add(g); groups.push(g);
-  cam.position.set(Math.sin(a + 0.62) * 250, 78, Math.cos(a + 0.62) * 250); cam.fov = 27;
-  cam.lookAt(0, 50, 0);
+  if (q.get('face')) {
+    cam.position.set(Math.sin(a + 0.3) * 78, 88, Math.cos(a + 0.3) * 78); cam.fov = 30;
+    cam.lookAt(0, 76, 0);
+  } else {
+    cam.position.set(Math.sin(a + 0.62) * 250, 78, Math.cos(a + 0.62) * 250); cam.fov = 27;
+    cam.lookAt(0, 50, 0);
+  }
   document.getElementById('hud').textContent = one;
   cam.updateProjectionMatrix();
 } else if (three) {
