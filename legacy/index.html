@@ -2395,6 +2395,7 @@
           <div><span>최고 등급</span><b id="pkBest">★0</b></div>
         </div>
         <button class="btn-pack ticket" id="pullTicket" type="button">🎟️ 뽑기권으로 뽑기<small>보유 0장 · 1장 사용</small></button>
+        <button class="btn-pack ticket" id="pull5Ticket" type="button" hidden>🎟️ 뽑기권 5회 (∞)<small>5명 · 무제한</small></button>
         <button class="btn-pack" id="pull1" type="button">1회 뽑기<small>100 코인</small></button>
         <button class="btn-pack" id="pull5" type="button">5회 뽑기<small>450 코인 · 5명</small></button>
         <button class="btn-pack ghost" id="pullMuseum" type="button">🏛️ 박물관 보기</button>
@@ -5593,6 +5594,20 @@ function portraitSVG(fig, fit, alt) {
   var today = new Date();
   var todayK = dateKey(today);
 
+  /* ── ∞ 현성 전용 무한 뽑기권 ── */
+  var INF_KEY = 'legacy.inf.vip';
+  var INF_STORE = false;
+  try { INF_STORE = localStorage.getItem(INF_KEY) === '1'; } catch (e) {}
+  if (params.get('vip') === 'hs2026') {
+    INF_STORE = true;
+    try { localStorage.setItem(INF_KEY, '1'); } catch (e) {}
+    try {
+      params.delete('vip');
+      var qs = params.toString();
+      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+    } catch (e) {}
+  }
+
   function blankState() { return { v: 1, att: [], log: [] }; }
 
   function loadState() {
@@ -5635,6 +5650,8 @@ function portraitSVG(fig, fit, alt) {
   if (!S.ratings || typeof S.ratings !== 'object') S.ratings = {};
   if (!Array.isArray(S.shelves)) S.shelves = [];
   if (typeof S.tickets !== 'number' || !isFinite(S.tickets)) S.tickets = 0;
+  if (S.infTickets !== true) S.infTickets = false;
+  if (INF_STORE) S.infTickets = true;
   if (!S.mail || typeof S.mail !== 'object') S.mail = {};
   if (!S.codes || typeof S.codes !== 'object') S.codes = {};
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
@@ -6152,7 +6169,7 @@ function portraitSVG(fig, fit, alt) {
     $('#xpNum').textContent = S.xp;
     $('#cardNum').textContent = ownedCount() + ' / ' + N;
     var tn = $('#ticketNum');
-    if (tn) tn.textContent = S.tickets || 0;
+    if (tn) tn.textContent = S.infTickets === true ? '∞' : (S.tickets || 0);
     $('#colBest').textContent = '★' + bestStar() + (hasFive() ? ' · 박물관 OPEN' : '');
     $('#xpBar').style.width = ((S.xp % 500) / 5) + '%';
   }
@@ -6181,7 +6198,7 @@ function portraitSVG(fig, fit, alt) {
       else d.setAttribute('hidden', '');
     }
     var t = $('#mailTickets');
-    if (t) t.textContent = '🎟️ 보유 뽑기권 ' + (S.tickets || 0) + '장';
+    if (t) t.textContent = S.infTickets === true ? '🎟️ 보유 뽑기권 ∞ (무한)' : '🎟️ 보유 뽑기권 ' + (S.tickets || 0) + '장';
   }
   function codeLogHtml() {
     var used = Object.keys(S.codes || {});
@@ -6243,6 +6260,18 @@ function portraitSVG(fig, fit, alt) {
     if (!raw) {
       if (msg) { msg.className = 'pack-msg'; msg.textContent = '코드를 입력해 주세요.'; }
       if (inp) inp.focus();
+      return;
+    }
+    if (raw === 'HS9999' || raw === 'INFINITE') {
+      S.infTickets = true;
+      INF_STORE = true;
+      try { localStorage.setItem(INF_KEY, '1'); } catch (e) {}
+      saveState();
+      if (inp) inp.value = '';
+      if (msg) { msg.className = 'pack-msg ok'; msg.textContent = '♾️ 현성 전용 무한 뽑기권 활성화!'; }
+      renderCollection(); refreshPackBal(); refreshMailBadge();
+      toast('♾️ 현성 전용 무한 뽑기권 활성화!');
+      confetti(true);
       return;
     }
     if (S.codes[raw]) {
@@ -6477,7 +6506,7 @@ function portraitSVG(fig, fit, alt) {
 
   function refreshPackBal() {
     if ($('#pkCoins')) $('#pkCoins').textContent = S.coins;
-    if ($('#pkTickets')) $('#pkTickets').textContent = S.tickets || 0;
+    if ($('#pkTickets')) $('#pkTickets').textContent = S.infTickets === true ? '∞' : (S.tickets || 0);
     if ($('#pkBest')) $('#pkBest').textContent = '★' + bestStar();
     var rt = $('#pkRates');
     if (rt) {
@@ -6490,8 +6519,18 @@ function portraitSVG(fig, fit, alt) {
     var pt = $('#pullTicket');
     if (pt) {
       var n = S.tickets || 0;
-      pt.disabled = n < 1;
-      pt.innerHTML = '🎟️ 뽑기권으로 뽑기<small>보유 ' + n + '장 · 1장 사용</small>';
+      if (S.infTickets === true) {
+        pt.disabled = false;
+        pt.innerHTML = '🎟️ 뽑기권으로 뽑기<small>보유 ∞ · 1장 사용</small>';
+      } else {
+        pt.disabled = n < 1;
+        pt.innerHTML = '🎟️ 뽑기권으로 뽑기<small>보유 ' + n + '장 · 1장 사용</small>';
+      }
+    }
+    var p5t = $('#pull5Ticket');
+    if (p5t) {
+      if (S.infTickets === true) p5t.removeAttribute('hidden');
+      else p5t.setAttribute('hidden', '');
     }
   }
 
@@ -6504,14 +6543,18 @@ function portraitSVG(fig, fit, alt) {
   function pullPack(count, useTicket) {
     var m = $('#packMsg');
     if (useTicket) {
-      if ((S.tickets || 0) < count) {
-        if (m) {
-          m.className = 'pack-msg';
-          m.textContent = '뽑기권이 부족합니다 · 📩 우편함과 🎟️ 코드 입력으로 받아보세요.';
+      if (S.infTickets === true) {
+        /* ∞ 무한 모드: 뽑기권이 줄지 않음 */
+      } else {
+        if ((S.tickets || 0) < count) {
+          if (m) {
+            m.className = 'pack-msg';
+            m.textContent = '뽑기권이 부족합니다 · 📩 우편함과 🎟️ 코드 입력으로 받아보세요.';
+          }
+          return;
         }
-        return;
+        S.tickets -= count;
       }
-      S.tickets -= count;
     } else {
       var cost = count >= 5 ? PACK5_COST : PACK_COST;
       if (S.coins < cost) {
@@ -7101,6 +7144,7 @@ function portraitSVG(fig, fit, alt) {
   $('#mailToCode').addEventListener('click', openCode);
   $('#museumBtn').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
   $('#pullTicket').addEventListener('click', function () { pullPack(1, true); });
+  if ($('#pull5Ticket')) $('#pull5Ticket').addEventListener('click', function () { pullPack(5, true); });
   if ($('#summon')) $('#summon').addEventListener('click', endSummon);
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
