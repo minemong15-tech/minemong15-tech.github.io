@@ -348,6 +348,118 @@
   .arc-head .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
   .archive-sec .arc-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 
+
+  /* ───── collection / cards ───── */
+  .collect{padding:20px 22px 21px}
+  .coin-row{display:flex; gap:9px; margin-top:14px}
+  .coin-box{flex:1; border:1px solid var(--line2); border-radius:11px; padding:9px 11px; background:rgba(255,255,255,.02)}
+  .coin-box span{display:block; font-size:8.5px; letter-spacing:.1em; color:var(--muted2)}
+  .coin-box b{display:block; font-family:var(--serif); font-size:17px; color:#f2e9d8; margin-top:3px; font-variant-numeric:tabular-nums}
+  .coin-box.gold b{color:var(--gold-hi)}
+  .collect-foot{display:flex; gap:8px; margin-top:12px}
+  .collect-foot .link-btn{flex:1; justify-content:center; cursor:pointer; padding:9px 8px}
+  .xpbar{height:3px; border-radius:2px; background:rgba(255,255,255,.09); margin-top:10px; overflow:hidden}
+  .xpbar i{display:block; height:100%; background:linear-gradient(90deg,#3b82f6,#a855f7); width:0%}
+
+  /* quote read-aloud */
+  .quote-tools{display:flex; align-items:center; justify-content:center; gap:12px; margin-top:15px}
+  .btn-speak{display:inline-flex; align-items:center; gap:8px; padding:8px 15px; border-radius:999px;
+    border:1px solid var(--line); background:rgba(200,168,106,.08); color:var(--gold-hi);
+    font-size:11.5px; letter-spacing:.02em; cursor:pointer; transition:background .2s, border-color .2s, color .2s}
+  .btn-speak:hover{background:rgba(200,168,106,.17); border-color:rgba(200,168,106,.5)}
+  .btn-speak.on{background:rgba(200,168,106,.22); border-color:var(--gold)}
+  .wave{display:none; align-items:flex-end; gap:2px; height:15px}
+  .wave.on{display:inline-flex}
+  .wave i{width:2px; height:4px; background:var(--gold-hi); border-radius:1px; animation:wave 1s infinite ease-in-out}
+  .wave i:nth-child(2n){animation-delay:.15s}
+  .wave i:nth-child(3n){animation-delay:.3s}
+  .wave i:nth-child(4n){animation-delay:.45s}
+  @keyframes wave{0%,100%{height:3px}50%{height:14px}}
+
+  /* tomorrow guess */
+  .guess{margin-top:16px; border-top:1px solid var(--line2); padding-top:14px}
+  .guess .glabel{display:flex; align-items:center; gap:8px; font-size:9px; letter-spacing:.18em; color:var(--gold-dim); margin-bottom:9px}
+  .guess-row{display:flex; gap:8px}
+  .guess input{flex:1; min-width:0; padding:10px 12px; border-radius:10px; border:1px solid var(--line2);
+    background:rgba(255,255,255,.03); color:var(--text); font-size:12.5px; outline:none; font-family:inherit}
+  .guess input:focus{border-color:rgba(200,168,106,.55)}
+  .guess button{padding:10px 15px; border-radius:10px; border:1px solid rgba(200,168,106,.45);
+    background:rgba(200,168,106,.12); color:var(--gold-hi); font-size:12px; cursor:pointer; white-space:nowrap}
+  .guess button:hover{background:rgba(200,168,106,.2)}
+  .guess .gmsg{font-size:10.5px; margin-top:9px; color:var(--muted2); line-height:1.5}
+  .guess.ok .gmsg{color:#7fe0a3}
+  .guess.bad .gmsg{color:#f0a9a9}
+  .guess input:disabled{opacity:.6}
+
+  /* pack modal */
+  .pack-bal{display:flex; align-items:center; justify-content:center; gap:18px; margin:2px 0 18px; flex-wrap:wrap}
+  .pack-bal div{text-align:center}
+  .pack-bal span{display:block; font-size:8.5px; letter-spacing:.14em; color:var(--muted2)}
+  .pack-bal b{display:block; font-family:var(--serif); font-size:19px; color:var(--gold-hi); margin-top:3px}
+  .pack-actions{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+  .btn-pack{
+    padding:14px 22px; border-radius:13px; cursor:pointer; font-size:13px; font-weight:700; letter-spacing:.01em;
+    border:1px solid rgba(236,217,168,.5);
+    background:linear-gradient(180deg,#ecd9a8 0%, #c8a86a 55%, #a8863f 100%); color:#1a1206;
+    box-shadow:0 12px 26px -14px rgba(200,168,106,.7); transition:transform .18s;
+  }
+  .btn-pack:hover{transform:translateY(-2px)}
+  .btn-pack.ghost{
+    background:rgba(255,255,255,.03); color:var(--gold-hi); border-color:rgba(200,168,106,.35);
+    box-shadow:none; font-weight:600;
+  }
+  .btn-pack small{display:block; font-size:10px; font-weight:500; opacity:.75; margin-top:3px}
+  .reveal{display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:12px; margin-top:18px}
+  .pcard{
+    position:relative; border-radius:12px; overflow:hidden; background:#0a0d12; text-align:left;
+    border:1px solid var(--rc,#9ca3af); animation:pop .55s cubic-bezier(.2,.9,.2,1) backwards;
+    box-shadow:0 12px 30px -18px var(--rc,#000);
+  }
+  @keyframes pop{from{opacity:0; transform:translateY(10px) scale(.94) rotate(-2deg)}to{opacity:1; transform:none}}
+  .pcard .ph{display:block; position:relative; aspect-ratio:4/5; overflow:hidden; background:#0b0e13}
+  .pcard .ph .ph-svg,.pcard .ph .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .pcard .ph .ph-img{object-fit:cover; object-position:top center}
+  .pcard .pbody{display:block; padding:8px 9px 10px}
+  .pcard .pbody b{display:block; font-family:var(--serif); font-size:12px; color:#f0e7d6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .pcard .pbody span{display:block; font-size:8.5px; color:var(--muted2); margin-top:3px}
+  .pcard .tagline{position:absolute; z-index:3; left:6px; top:6px; font-size:7.5px; letter-spacing:.12em; padding:3px 6px; border-radius:999px; border:1px solid var(--rc); color:var(--rc); background:rgba(6,8,12,.8)}
+  .pcard.new{box-shadow:0 0 0 1px var(--rc), 0 0 26px -6px var(--rc)}
+  .pcard .starline{color:var(--gold-hi); font-size:9px; letter-spacing:.08em; display:block; margin-top:4px}
+  .pack-msg{text-align:center; font-size:11px; color:var(--muted2); margin-top:16px; min-height:16px}
+  .pack-msg.ok{color:#7fe0a3}
+
+  /* museum */
+  .museum-body{position:relative; border-radius:16px; padding:24px 20px 26px; overflow:hidden;
+    background:radial-gradient(ellipse at 50% -10%, rgba(200,168,106,.18), transparent 62%), linear-gradient(180deg,#0a0e14,#06080c);
+    border:1px solid var(--line2);}
+  .museum-body::after{content:""; position:absolute; left:0; right:0; bottom:0; height:70px;
+    background:linear-gradient(180deg, transparent, rgba(200,168,106,.06)); pointer-events:none}
+  .museum-lock{text-align:center; padding:26px 10px 10px; position:relative; z-index:1}
+  .museum-lock .big{font-size:34px; line-height:1}
+  .museum-lock h4{font-family:var(--serif); font-size:18px; color:#f0e7d6; margin:14px 0 6px; font-weight:600}
+  .museum-lock p{font-size:11.5px; color:var(--muted2); line-height:1.7; margin:0 auto; max-width:420px; word-break:keep-all}
+  .museum-prog{margin:18px auto 0; max-width:300px}
+  .museum-prog .lab{display:flex; justify-content:space-between; font-size:9.5px; color:var(--muted2); margin-bottom:6px}
+  .museum-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:16px; position:relative; z-index:1}
+  .exhibit{cursor:pointer; text-align:center; background:none; border:0; padding:0; color:inherit}
+  .exhibit .case{position:relative; border-radius:10px 10px 4px 4px; padding:10px 10px 28px;
+    background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.015));
+    border:1px solid rgba(236,217,168,.28); box-shadow:inset 0 0 34px rgba(0,0,0,.6), 0 20px 40px -26px #000;
+    transition:transform .2s, border-color .2s}
+  .exhibit:hover .case{transform:translateY(-4px); border-color:rgba(236,217,168,.6)}
+  .exhibit .spot{position:absolute; left:50%; top:-6px; width:120%; height:70%; transform:translateX(-50%);
+    background:radial-gradient(ellipse at 50% 0%, rgba(236,217,168,.32), transparent 68%); pointer-events:none}
+  .exhibit .case .arch{aspect-ratio:1/1.18; border-radius:60px 60px 4px 4px; box-shadow:none}
+  .exhibit .pedestal{position:absolute; left:16%; right:16%; bottom:6px; height:16px; border-radius:3px;
+    background:linear-gradient(180deg,#6b5a3a,#2a2318); box-shadow:0 6px 12px rgba(0,0,0,.5)}
+  .exhibit .cap{margin-top:9px; font-size:11px; color:#efe6d4; letter-spacing:.02em}
+  .exhibit .cap em{display:block; font-style:normal; font-size:8.5px; color:var(--gold-dim); margin-top:3px; letter-spacing:.12em}
+  .plaque{border:1px solid rgba(200,168,106,.35); border-radius:12px; padding:18px 20px;
+    background:linear-gradient(160deg, rgba(200,168,106,.08), rgba(10,13,18,.9))}
+  .plaque h4{font-family:var(--serif); font-size:19px; margin:8px 0 0; color:#f4ecdd}
+  .plaque .q{font-family:var(--serif); font-size:14px; line-height:1.7; color:#e9dfcb; margin:10px 0 0; word-break:keep-all}
+  .plaque ul{margin:12px 0 0; padding-left:16px; font-size:11px; color:var(--muted2); line-height:1.7}
+
   /* ───── journey ───── */
   .journey{margin-top:22px; padding:26px 30px 30px}
   .j-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px}
@@ -665,6 +777,10 @@
     .arc-grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:9px}
     .archive-sec{padding:20px 16px 22px}
     .arc-head h2{font-size:18px}
+    .reveal{grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:9px}
+    .museum-grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:12px}
+    .pack-actions{flex-direction:column}
+    .btn-pack{width:100%}
     .arc-card .body{padding:8px 8px 9px}
     .arc-card .body b{font-size:11.5px}
     .arc-card .body p{font-size:9px; -webkit-line-clamp:2}
@@ -738,6 +854,12 @@
       <div class="quote-box">
         <blockquote class="quote" id="figQuote">—</blockquote>
         <div class="quote-src" id="figSrc">—</div>
+        <div class="quote-tools">
+          <button class="btn-speak" id="speakBtn" type="button" aria-label="명언 읽어주기">
+            <span id="speakIcon">🔊</span><span id="speakLabel">명언 듣기</span>
+          </button>
+          <span class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
       </div>
 
       <div class="check-row">
@@ -799,6 +921,24 @@
           <button class="link-btn" id="recRoadmap" type="button">티어 로드맵</button>
         </div>
       </section>
+
+      <section class="card collect" aria-labelledby="colTitle">
+        <div class="video-head">
+          <span class="kicker">COLLECTION</span>
+          <span class="chapter" id="colBest" style="font-size:9px;letter-spacing:.2em;color:var(--gold-hi)">★0</span>
+        </div>
+        <h3 id="colTitle" style="font-family:var(--serif);font-size:17px;font-weight:600;margin:0;color:#f2e9d8">인물 카드</h3>
+        <div class="coin-row">
+          <div class="coin-box gold"><span>🪙 코인</span><b id="coinNum">0</b></div>
+          <div class="coin-box"><span>XP</span><b id="xpNum">0</b></div>
+          <div class="coin-box"><span>보유 카드</span><b id="cardNum">0</b></div>
+        </div>
+        <div class="xpbar"><i id="xpBar"></i></div>
+        <div class="collect-foot">
+          <button class="link-btn primary" id="packBtn" type="button">카드팩 뽑기</button>
+          <button class="link-btn" id="museumBtn" type="button">나만의 박물관</button>
+        </div>
+      </section>
     </aside>
   </div>
 
@@ -843,6 +983,14 @@
         <span class="pill gold" id="tmrPill">내일 공개</span>
         <span class="pill" id="tmrEra">???</span>
         <span class="countdown" id="countdown">00:00:00</span>
+      </div>
+      <div class="guess" id="guessBox" hidden>
+        <div class="glabel">🔮 내일 인물 이름 맞추기 · 성공하면 경험치 2배</div>
+        <div class="guess-row">
+          <input id="guessInput" type="text" list="figNames" placeholder="내일 인물의 이름" autocomplete="off">
+          <button id="guessBtn" type="button">확인</button>
+        </div>
+        <div class="gmsg" id="guessMsg">블러 사진의 분위기와 시대를 힌트로 이름을 적어보세요.</div>
       </div>
     </div>
   </section>
@@ -919,6 +1067,59 @@
   </div>
 </div>
 
+<!-- card pack -->
+<div class="modal" id="mPack" role="dialog" aria-modal="true" aria-labelledby="pkTitle">
+  <div class="sheet wide">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">CARD PACK</span>
+        <h2 id="pkTitle">인물 카드팩</h2>
+        <p>같은 인물 카드를 5장 모으면 ★1 진화 · ★5가 되면 박물관이 열립니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="pack-bal">
+      <div><span>보유 코인</span><b id="pkCoins">0</b></div>
+      <div><span>보유 카드</span><b id="pkCards">0</b></div>
+      <div><span>최고 등급</span><b id="pkBest">★0</b></div>
+    </div>
+    <div class="pack-actions">
+      <button class="btn-pack" id="pull1" type="button">1팩 뽑기<small>100 코인</small></button>
+      <button class="btn-pack" id="pull5" type="button">5연속 뽑기<small>450 코인</small></button>
+      <button class="btn-pack ghost" id="pullMuseum" type="button">박물관 보기</button>
+    </div>
+    <div class="reveal" id="reveal"></div>
+    <div class="pack-msg" id="packMsg">첫 접속 보너스로 코인을 받았습니다. 카드를 모아 진화시켜 보세요.</div>
+  </div>
+</div>
+
+<!-- museum -->
+<div class="modal" id="mMuseum" role="dialog" aria-modal="true" aria-labelledby="muTitle">
+  <div class="sheet wide">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">MY MUSEUM</span>
+        <h2 id="muTitle">나만의 박물관</h2>
+        <p>★5까지 진화한 인물만 전시할 수 있습니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="museum-body" id="museumBody"></div>
+  </div>
+</div>
+
+<!-- plaque -->
+<div class="modal" id="mPlaque" role="dialog" aria-modal="true" aria-labelledby="pqTitle">
+  <div class="sheet">
+    <div class="sheet-head">
+      <span class="kicker">EXHIBIT · 명판</span>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div id="plaqueBody"></div>
+  </div>
+</div>
+
+<datalist id="figNames"></datalist>
 <div id="fx"></div>
 <div class="toast" id="toast"></div>
 
@@ -1422,6 +1623,12 @@ function portraitSVG(fig, fit, alt) {
           st.log.push({ d: dateKey(d), id: FIGURES[idx].id });
         }
       }
+      st.coins = 2400; st.xp = 1280; st.cards = {}; st.guess = {}; st.doubleXp = false;
+      st.cards['yi-sunsin'] = { n: 26, star: 5 };
+      st.cards['sejong'] = { n: 13, star: 2 };
+      st.cards['marie-curie'] = { n: 7, star: 1 };
+      st.cards['einstein'] = { n: 3, star: 0 };
+      st.cards['gandhi'] = { n: 1, star: 0 };
       return st;
     }
     try {
@@ -1435,6 +1642,11 @@ function portraitSVG(fig, fit, alt) {
   }
 
   var S = loadState();
+  if (typeof S.coins !== 'number') S.coins = 1200;
+  if (typeof S.xp !== 'number') S.xp = 0;
+  if (!S.cards || typeof S.cards !== 'object') S.cards = {};
+  if (!S.guess || typeof S.guess !== 'object') S.guess = {};
+  if (typeof S.doubleXp !== 'boolean') S.doubleXp = false;
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
   S.log = S.log.filter(function (v, i, arr) { return v && v.d && arr.map(function (x) { return x.d; }).indexOf(v.d) === i; })
     .sort(function (a, b) { return a.d < b.d ? -1 : 1; });
@@ -1561,6 +1773,8 @@ function portraitSVG(fig, fit, alt) {
     $('#wikiBtn').href = 'https://ko.wikipedia.org/w/index.php?search=' + encodeURIComponent(f.name);
     renderWatch();
     ensurePlayer();
+    renderCollection();
+    renderGuess();
 
     var fl = $('#featList');
     fl.innerHTML = f.feats.map(function (x, i) {
@@ -1791,8 +2005,294 @@ function portraitSVG(fig, fit, alt) {
     document.body.style.overflow = 'hidden';
   }
   function closeModals() {
+    stopSpeak();
     document.querySelectorAll('.modal.open').forEach(function (m) { m.classList.remove('open'); });
     document.body.style.overflow = '';
+  }
+
+  /* ── coins · cards · evolution ── */
+  var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 5;
+  var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
+
+  function cardOf(id) { return S.cards[id] || null; }
+  function ownedCount() { return Object.keys(S.cards).length; }
+  function bestStar() {
+    var m = 0;
+    Object.keys(S.cards).forEach(function (k) { m = Math.max(m, S.cards[k].star || 0); });
+    return m;
+  }
+  function hasFive() {
+    return Object.keys(S.cards).some(function (k) { return (S.cards[k].star || 0) >= MAX_STAR; });
+  }
+  function fiveFigures() {
+    return FIGURES.filter(function (f) { var c = S.cards[f.id]; return c && (c.star || 0) >= MAX_STAR; });
+  }
+  function fragOf(c) {
+    if (!c) return 0;
+    return Math.max(0, Math.min(FRAG_PER_STAR, (c.n - 1) - (c.star * FRAG_PER_STAR)));
+  }
+
+  function renderCollection() {
+    if (!$('#coinNum')) return;
+    $('#coinNum').textContent = S.coins;
+    $('#xpNum').textContent = S.xp;
+    $('#cardNum').textContent = ownedCount() + ' / ' + N;
+    $('#colBest').textContent = '★' + bestStar() + (hasFive() ? ' · 박물관 OPEN' : '');
+    $('#xpBar').style.width = ((S.xp % 500) / 5) + '%';
+  }
+
+  function pullOne() {
+    var f = FIGURES[Math.floor(Math.random() * FIGURES.length)];
+    var c = S.cards[f.id];
+    var isNew = !c;
+    if (!c) { c = S.cards[f.id] = { n: 0, star: 0 }; }
+    c.n++;
+    var frag = fragOf(c);
+    var evolved = false;
+    if (frag >= FRAG_PER_STAR && c.star < MAX_STAR) {
+      c.star++; evolved = true; frag = fragOf(c);
+    }
+    return { f: f, isNew: isNew, frag: frag, star: c.star, evolved: evolved };
+  }
+
+  function pcardHtml(r, i) {
+    var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    var rc = gi.color === 'rainbow' ? '#ecd9a8' : gi.color;
+    var stars = '★'.repeat(r.star) + '☆'.repeat(Math.max(0, MAX_STAR - r.star));
+    var label = r.isNew ? 'NEW' : (r.evolved ? '★' + r.star + ' 진화!' : '+' + r.frag + ' / ' + FRAG_PER_STAR);
+    return '<article class="pcard ' + gi.cls + (r.isNew ? ' new' : '') + '" style="--rc:' + rc + '; animation-delay:' + (i * 0.09).toFixed(2) + 's">' +
+      '<span class="tagline">' + (r.isNew ? 'NEW' : gi.name) + '</span>' +
+      '<span class="ph">' + photoHtml(r.f, { fit: 'slice' }) + '</span>' +
+      '<span class="pbody"><b class="' + (gi.color === 'rainbow' ? 'rainbow-text' : '') + '">' + esc(r.f.name) + '</b>' +
+      '<span class="starline">' + stars + '</span>' +
+      '<span>' + esc(label) + '</span></span></article>';
+  }
+
+  function openPackModal() {
+    $('#pkCoins').textContent = S.coins;
+    $('#pkCards').textContent = ownedCount() + ' / ' + N;
+    $('#pkBest').textContent = '★' + bestStar();
+    openModal('#mPack');
+  }
+
+  function pullPack(count) {
+    var cost = count >= 5 ? PACK5_COST : PACK_COST;
+    if (S.coins < cost) {
+      $('#packMsg').className = 'pack-msg';
+      $('#packMsg').textContent = '코인이 부족합니다 · 매일 체크(+' + COIN_CHECK + ')와 이름 맞추기(+' + COIN_GUESS + ')로 모아보세요.';
+      return;
+    }
+    S.coins -= cost;
+    var res = [], i;
+    for (i = 0; i < count; i++) res.push(pullOne());
+    saveState();
+    renderCollection(); renderGuess();
+    $('#reveal').innerHTML = res.map(pcardHtml).join('');
+    var news = res.filter(function (r) { return r.isNew; }).length;
+    var evos = res.filter(function (r) { return r.evolved; });
+    $('#pkCoins').textContent = S.coins;
+    $('#pkCards').textContent = ownedCount() + ' / ' + N;
+    $('#pkBest').textContent = '★' + bestStar();
+    var m = $('#packMsg');
+    if (evos.length) {
+      m.className = 'pack-msg ok';
+      m.textContent = '★ 진화! ' + evos.map(function (e) { return e.f.name + ' ★' + e.star; }).join(' · ');
+      stamp();
+      confetti();
+    } else if (news) {
+      m.className = 'pack-msg ok';
+      m.textContent = '새 카드 ' + news + '장을 얻었습니다.';
+    } else {
+      m.className = 'pack-msg';
+      m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.';
+    }
+    if (hasFive()) {
+      setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 900);
+    }
+  }
+
+  function renderMuseum() {
+    var body = $('#museumBody');
+    if (!body) return;
+    if (!hasFive()) {
+      var best = bestStar();
+      body.innerHTML = '<div class="museum-lock">' +
+        '<div class="big">🏛️</div>' +
+        '<h4>박물관은 아직 잠겨 있습니다</h4>' +
+        '<p>같은 인물 카드를 <b style="color:#ecd9a8">5장</b> 모으면 <b style="color:#ecd9a8">★1</b>로 진화합니다. ' +
+        '다시 5장씩 모아 <b style="color:#ecd9a8">★5</b>가 된 인물 한 명이 있으면 이 문이 열립니다.</p>' +
+        '<div class="museum-prog"><div class="lab"><span>현재 최고 진화</span><span>★' + best + ' / ★5</span></div>' +
+        '<div class="tbar"><i style="width:' + (best / MAX_STAR * 100) + '%"></i></div></div>' +
+        '<div style="margin-top:18px"><button class="btn-pack" type="button" id="muPack">카드팩 뽑으러 가기</button></div>' +
+        '</div>';
+      var mb = $('#muPack');
+      if (mb) mb.addEventListener('click', function () { openModal('#mPack'); openPackModal(); });
+      return;
+    }
+    var figs = fiveFigures();
+    body.innerHTML = '<div class="museum-grid">' + figs.map(function (f) {
+      var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+      return '<button class="exhibit" type="button" data-exhibit="' + f.id + '">' +
+        '<span class="case"><span class="spot"></span>' +
+        '<span class="arch">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
+        '<span class="pedestal"></span></span>' +
+        '<span class="cap">' + esc(f.name) + '<em>★5 · ' + gi.name + ' · ' + f.years + '</em></span></button>';
+    }).join('') + '</div>';
+  }
+
+  function openPlaque(id) {
+    var f = FIGURES.filter(function (x) { return x.id === id; })[0];
+    if (!f) return;
+    var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+    $('#plaqueBody').innerHTML = '<div class="plaque">' +
+      '<span class="rarity-chip' + (gi.color === 'rainbow' ? ' rb-fill' : '') + '" style="--rc:' + (gi.color === 'rainbow' ? '#ecd9a8' : gi.color) + '">★5 · ' + gi.name + '</span>' +
+      '<h4>' + esc(f.name) + '</h4>' +
+      '<div class="reader-origin" style="margin-top:8px"><span class="pin">📍</span><span class="fl">' + esc(f.flag) + '</span> ' + esc(f.birthplace) + '</div>' +
+      '<p class="q">“' + esc(f.quote) + '”</p>' +
+      '<div class="quote-src">' + esc(f.src) + '</div>' +
+      '<ul>' + f.feats.map(function (x) { return '<li><b>' + esc(x.t) + '</b> — ' + esc(x.d) + '</li>'; }).join('') + '</ul>' +
+      '<div class="video-actions" style="margin-top:14px"><button class="link-btn primary" type="button" id="plaqueReader">이 인물 다시 읽기</button></div>' +
+      '</div>';
+    openModal('#mPlaque');
+    $('#plaqueReader').addEventListener('click', function () { openReader(f.id); });
+  }
+
+  /* ── 명언 읽어주기 ── */
+  var speaking = false, audioCtx = null;
+
+  function audioCtxGet() {
+    if (!audioCtx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { audioCtx = new AC(); } catch (e) { return null; }
+    }
+    if (audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (e) {} }
+    return audioCtx;
+  }
+
+  function chime(freqs, dur, vol) {
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    var t0 = ctx.currentTime;
+    freqs.forEach(function (fr, i) {
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = fr;
+      g.gain.setValueAtTime(0.0001, t0 + i * 0.05);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + i * 0.05 + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0 + i * 0.05); o.stop(t0 + dur + 0.05);
+    });
+  }
+
+  function voiceTune(f) {
+    var female = { 'yu-gwansun': 1, 'nightingale': 1, 'helen-keller': 1, 'marie-curie': 1, 'chanel': 1 };
+    var isF = !!female[f.id];
+    var age = f.ageAtDeath || 45;
+    var pitch = isF ? 1.18 : (age >= 60 ? 0.74 : 0.88);
+    var rate = isF ? 0.98 : (age >= 60 ? 0.86 : 0.92);
+    var h = 0, i;
+    for (i = 0; i < f.id.length; i++) h = (h * 31 + f.id.charCodeAt(i)) % 997;
+    pitch += ((h % 7) - 3) * 0.012;
+    rate += ((h % 5) - 2) * 0.012;
+    return { pitch: Math.max(0.5, Math.min(1.6, pitch)), rate: Math.max(0.7, Math.min(1.2, rate)) };
+  }
+
+  function setSpeakUI(on) {
+    var b = $('#speakBtn'), w = $('#wave');
+    if (!b) return;
+    b.classList.toggle('on', on);
+    $('#speakLabel').textContent = on ? '정지' : '명언 듣기';
+    $('#speakIcon').textContent = on ? '■' : '🔊';
+    if (w) w.classList.toggle('on', on);
+  }
+
+  function stopSpeak() {
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+    speaking = false;
+    setSpeakUI(false);
+  }
+
+  function speakQuote() {
+    if (!('speechSynthesis' in window)) { toast('이 브라우저에서는 음성 낭독을 지원하지 않습니다'); return; }
+    if (speaking) {
+      stopSpeak();
+      chime([262], 0.8, 0.03);
+      return;
+    }
+    var f = currentFig;
+    if (!f) return;
+    var tune = voiceTune(f);
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+    var u = new SpeechSynthesisUtterance(f.quote);
+    u.lang = 'ko-KR';
+    u.pitch = tune.pitch;
+    u.rate = tune.rate;
+    u.volume = 1;
+    var voices = [];
+    try { voices = window.speechSynthesis.getVoices() || []; } catch (e) {}
+    var ko = voices.filter(function (v) { return /^ko/i.test(v.lang || ''); });
+    if (ko.length) u.voice = ko[0];
+    u.onend = function () { speaking = false; setSpeakUI(false); chime([392, 523], 1.4, 0.03); };
+    u.onerror = function () { speaking = false; setSpeakUI(false); };
+    speaking = true;
+    setSpeakUI(true);
+    chime([196, 262], 1.6, 0.045);
+    window.speechSynthesis.speak(u);
+  }
+
+  /* ── 내일 인물 이름 맞추기 ── */
+  function normName(v) {
+    return String(v || '').replace(/[\s.,·'"’”()\[\]]/g, '').toLowerCase();
+  }
+
+  function renderGuess() {
+    var box = $('#guessBox');
+    if (!box) return;
+    var open = isDone(todayK);
+    box.hidden = !open;
+    if (!open) return;
+    var future = FIGURES[(indexFor(today) + 1) % N];
+    var g = S.guess || {};
+    var input = $('#guessInput'), btn = $('#guessBtn');
+    if (g.date === todayK) {
+      input.disabled = true; btn.disabled = true;
+      input.value = g.input || '';
+      box.classList.toggle('ok', !!g.ok);
+      box.classList.toggle('bad', !g.ok);
+      $('#guessMsg').textContent = g.ok
+        ? '정답입니다! 내일 체크에서 경험치 2배 · 코인 +' + COIN_GUESS + ' 지급 완료.'
+        : '아쉽습니다. 내일 자정에 정답이 공개됩니다.';
+      return;
+    }
+    input.disabled = false; btn.disabled = false;
+    input.value = '';
+    box.classList.remove('ok', 'bad');
+    $('#guessMsg').textContent = '블러 사진의 분위기와 시대를 힌트로 이름을 적어보세요. 성공하면 코인 +' + COIN_GUESS + ', 다음 체크 경험치 2배.';
+  }
+
+  function submitGuess() {
+    var input = $('#guessInput');
+    if (!input || input.disabled) return;
+    var v = (input.value || '').trim();
+    if (!v) { toast('이름을 입력해 주세요'); return; }
+    var future = FIGURES[(indexFor(today) + 1) % N];
+    var a = normName(v), b = normName(future.name);
+    var ok = a === b || (a.length >= 2 && b.indexOf(a) === 0) || (b.length >= 2 && a.indexOf(b) === 0);
+    S.guess = { date: todayK, ok: ok, input: v };
+    if (ok) {
+      S.coins += COIN_GUESS;
+      S.doubleXp = true;
+      saveState();
+      renderCollection(); renderGuess();
+      toast('🔮 정답! <b>코인 +' + COIN_GUESS + '</b> · 다음 체크 경험치 2배');
+      confetti();
+    } else {
+      saveState();
+      renderGuess();
+      toast('아쉽지만 이름이 다릅니다 · 내일 공개됩니다');
+    }
   }
 
   /* ── video watch gate ── */
@@ -1954,9 +2454,15 @@ function portraitSVG(fig, fit, alt) {
     var before = levelFor(S.log.length, S.att.length);
     var f = FIGURES[indexFor(today)];
     S.log.push({ d: todayK, id: f.id });
+    var gain = XP_CHECK * (S.doubleXp ? 2 : 1);
+    S.xp += gain;
+    S.coins += COIN_CHECK;
+    var doubled = S.doubleXp;
+    S.doubleXp = false;
     saveState();
     var after = levelFor(S.log.length, S.att.length);
     renderStats(); renderRecord(); renderCheck(); renderTomorrow(indexFor(today)); renderArchive();
+    renderCollection(); renderGuess();
     stamp(); confetti();
     if (after.n > before.n) {
       setTimeout(function () {
@@ -1964,13 +2470,25 @@ function portraitSVG(fig, fit, alt) {
       }, 1200);
     } else {
       setTimeout(function () {
-        toast('<b>' + esc(f.name) + '</b> 기록 완료 · 내일의 인물이 열렸습니다');
+        toast('<b>' + esc(f.name) + '</b> 기록 완료 · +' + gain + ' XP' + (doubled ? ' (2X)' : '') + ' · 코인 +' + COIN_CHECK);
       }, 1400);
     }
   }
 
   /* ── events ── */
   $('#checkBtn').addEventListener('click', doCheck);
+  $('#speakBtn').addEventListener('click', speakQuote);
+  $('#packBtn').addEventListener('click', openPackModal);
+  $('#museumBtn').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
+  $('#pull1').addEventListener('click', function () { pullPack(1); });
+  $('#pull5').addEventListener('click', function () { pullPack(5); });
+  $('#pullMuseum').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
+  $('#guessBtn').addEventListener('click', submitGuess);
+  $('#guessInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitGuess(); });
+  document.addEventListener('click', function (e) {
+    var ex = e.target.closest('[data-exhibit]');
+    if (ex) openPlaque(ex.getAttribute('data-exhibit'));
+  });
   $('#ytBtn').addEventListener('click', function () { linkOpenedAt = Date.now(); });
   document.addEventListener('visibilitychange', function () {
     if (document.hidden || watchedToday()) return;
@@ -2002,8 +2520,12 @@ function portraitSVG(fig, fit, alt) {
     b.classList.add('on');
     b.innerHTML = '<b>미리보기 모드</b> · 최근 ' + PREVIEW + '일의 기록을 가정해 화면만 보여줍니다. 실제 기록은 저장되지 않습니다.';
   }
+  var dl = $('#figNames');
+  if (dl) dl.innerHTML = FIGURES.map(function (f) { return '<option value="' + esc(f.name) + '">'; }).join('');
   ensureAttendance();
   renderAll();
+  renderCollection();
+  renderGuess();
   renderClock();
   setInterval(renderClock, 1000);
 })();
