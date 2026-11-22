@@ -127,8 +127,10 @@ function fgTor(parent, r, tube, mat, x, y, z, o) {
 }
 function fgLathe(parent, pts, mat, x, y, z, o) {
   o = o || {};
+  const pp = pts.slice();
+  if (pp.length > 1 && pp[0][1] > pp[pp.length - 1][1]) pp.reverse();
   const v = [];
-  for (let i = 0; i < pts.length; i++) v.push(new D3.THREE.Vector2(pts[i][0], pts[i][1]));
+  for (let i = 0; i < pp.length; i++) v.push(new D3.THREE.Vector2(pp[i][0], pp[i][1]));
   return fgPart(parent, new D3.THREE.LatheGeometry(v, o.seg || 22), mat, x, y, z, o);
 }
 function fgStarGeo(r, depth, inner) {
@@ -297,7 +299,7 @@ function fgLegs(g, P, M, cfg) {
     P[sd < 0 ? 'shinL' : 'shinR'] = shin;
     fgCap(shin, shinR, 5.2, M.boot, 0, -4.4, 0, { ol: 1.11 });
     fgBox(shin, bootW, bootH, bootD, M.boot, 2.2, -11.7, 0, { ol: 1.06, shadow: true });
-    fgSph(shin, bootD * 0.5, M.boot, bootW * 0.46, -12.2, 0, { sx: 0.86, sy: 0.74, sz: 0.96, ol: 1.06 });
+    fgSph(shin, bootD * 0.42, M.boot, bootW * 0.44, -12.4, 0, { sx: 0.9, sy: 0.72, sz: 0.94, ol: 1.06 });
     fgBox(shin, bootW + 1.8, 2.6, bootD + 1.4, M.dark, 2.2, -16.0, 0, { ol: 1.05 });
     if (cfg.bootTrim !== false) fgBox(shin, S.trimW || 7.5, S.trimH || 3.0, bootD * 0.52, M.accent, 2.2, -7.6, 0, { ol: 1.1 });
   });
@@ -573,10 +575,10 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
   if (charId === 'tankers') {
     /* ---------- 탱커스: 쇠뿔 투구 + 거대 방패 ---------- */
     fgBox(head, 6, 9, 26, M.skin, 12.0, -13.5, 0, { ol: 1.08 });
-    fgDome(head, 21.2, M.metal, -1.0, 1.0, 0, { theta: 0.5, ol: 1.04 });
-    fgTor(head, 20.4, 2.4, M.metalD, 0, 0.8, 0, { rx: Math.PI / 2, ol: 1.04, seg: 22 });
+    fgDome(head, 21.2, M.metal, -1.0, 3.0, 0, { theta: 0.47, ol: 1.04 });
+    fgTor(head, 20.2, 2.2, M.metalD, 0, 3.0, 0, { rx: Math.PI / 2, ol: 1.04, seg: 22 });
     [-1, 1].forEach(function (sd) {
-      fgBox(head, 9, 13, 4.0, M.metal, 6, -6, sd * 17.6, { ol: 1.07 });
+      fgBox(head, 6.5, 11, 3.4, M.metal, 4, -7, sd * 18.2, { ol: 1.07 });
     });
     // 쇠뿔
     const hornM = fgToon('#f2f8ff');
@@ -587,11 +589,11 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       h2.rotation.x = sd * 1.25; h2.rotation.z = -0.4;
     });
     fgFace(head, {
-      fx: 16.6, eyeY: -1.2, eyeZ: 6.8, eyeR: 4.4, iris: '#0d3a2c', white: '#ffffff', skin: cfg.skin,
-      brow: true, browCol: '#2b3648', browTilt: 0.62, browY: 6.2, browH: 3.0,
-      mouth: 'flat', mouthY: -10.4, mouthCol: '#2b1d18', ears: false, nose: false
+      fx: 16.6, eyeY: -1.6, eyeZ: 6.6, eyeR: 4.4, iris: '#0d3a2c', white: '#ffffff', skin: cfg.skin,
+      brow: false, browCol: '#2b3648',
+      mouth: 'flat', mouthY: -10.0, mouthCol: '#2b1d18', ears: false, nose: false
     });
-    fgBox(head, 3.0, 12, 27, M.dark, 15.8, -13.0, 0, { ol: 1.06 });
+    fgBox(head, 2.4, 7, 15, M.dark, 16.2, -16.2, 0, { ol: 1.06 });
     // 어깨 판금
     [-1, 1].forEach(function (sd) {
       fgSph(torso, 12.5, M.metal, 0, 21, sd * 17.5, { sx: 1.0, sy: 0.62, sz: 1.0, ol: 1.05 });
@@ -668,10 +670,10 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     });
     fgSph(head, 5.6, furM, 11.4, -15.5, 0, { sy: 1.1, sx: 1.1, ol: 1.06 });
     // 털목도리
-    fgTor(torso, 13.6, 5.0, furM, 0, 25.0, 0, { rx: Math.PI / 2, ol: 1.05, seg: 20 });
+    fgTor(torso, 12.6, 3.4, furM, 0, 25.2, 0, { rx: Math.PI / 2, ol: 1.05, seg: 20 });
     for (let i = 0; i < 9; i++) {
       const a = i / 9 * 6.283;
-      fgSph(torso, 4.0, furM, Math.cos(a) * 13.6, 25, Math.sin(a) * 13.6, { ol: 1.08, seg: 10 });
+      fgSph(torso, 2.9, furM, Math.cos(a) * 12.6, 25.2, Math.sin(a) * 12.6, { ol: 1.08, seg: 10 });
     }
     // 코트 자락
     fgLathe(torso, [[0, 1], [15.4, 1], [17.6, -8], [18.6, -16], [0, -17]], M.body, 0, 4, 0, { ol: 1.04, seg: 20 });
@@ -683,11 +685,11 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     /* ---------- 닌자: 두건 + 붉은 머플러 + 카타나 ---------- */
     const cloth = fgToon('#2a3145');
     fgSph(head, 19.6, M.skin, 0, 0, 0, { sx: 1.0, sy: 1.03, sz: 0.97, ol: 1.045, seg: 22, seg2: 18 });
-    fgDome(head, 20.3, cloth, -0.6, 0.4, 0, { theta: 0.62, ol: 1.045 });
-    fgBox(head, 20, 8, 32, cloth, -3, 6.5, 0, { ol: 1.05 });
-    // 얼굴 가리개
-    fgBox(head, 6.5, 14, 30, cloth, 11.4, -10.5, 0, { ol: 1.06 });
-    fgSph(head, 9.0, cloth, 13.5, -7.0, 0, { sx: 0.6, sy: 0.9, sz: 1.5, ol: 1.05 });
+    fgDome(head, 20.3, cloth, -0.6, 0.6, 0, { theta: 0.42, ol: 1.045 });
+    fgSph(head, 17.6, cloth, -7.5, -1.5, 0, { sx: 0.95, sy: 1.0, sz: 0.98, ol: 1.04 });
+    // 얼굴 가리개(눈 아래)
+    fgBox(head, 7.0, 13, 30, cloth, 11.6, -13.0, 0, { ol: 1.06 });
+    fgSph(head, 9.4, cloth, 13.2, -8.5, 0, { sx: 0.62, sy: 0.9, sz: 1.5, ol: 1.05 });
     // 머리띠 + 꼬리
     fgBox(head, 4.6, 4.4, 38, fgToon('#ff3f5e'), 0, 6.0, 0, { ol: 1.06 });
     [-1, 1].forEach(function (sd) {
@@ -695,8 +697,8 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       t.rotation.x = sd * 0.5; t.rotation.y = 0.5;
     });
     fgFace(head, {
-      fx: 16.4, eyeY: 0.6, eyeZ: 6.2, eyeR: 4.6, iris: '#151725', white: '#ffd9e2', skin: cfg.skin,
-      brow: true, browCol: '#131318', browTilt: 0.46, browY: 6.4, browH: 2.2,
+      fx: 16.5, eyeY: -0.6, eyeZ: 6.2, eyeR: 4.6, iris: '#151725', white: '#ffd9e2', skin: cfg.skin,
+      brow: false, browCol: '#131318',
       mouth: 'none', ears: false, nose: false
     });
     // 목 머플러
@@ -849,7 +851,7 @@ function fgWeapon(wpn, charId, M) {
       c.position.set(26, (i - 1) * 4.4, (i - 1) * 3.2);
       c.rotation.z = -Math.PI / 2 + (i - 1) * 0.3;
     }
-    fgSph(wpn, 6.4, M.glowB, 27, 0, 0, {});
+    fgSph(wpn, 4.2, M.glowB, 27, 0, 0, {});
     tip = 34;
   } else if (charId === 'ninja') {
     fgBox(wpn, 26, 1.8, 3.6, fgToon('#e8f0ff', { emissive: '#ffffff', ei: 0.2 }), 12, 0, 0, { ol: 1.05 });
