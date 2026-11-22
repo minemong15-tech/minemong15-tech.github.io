@@ -471,6 +471,9 @@ canvas.detail-ava{display:block}
 #btnPause{position:absolute;left:14px;top:calc(10px + env(safe-area-inset-top));width:38px;height:38px;border-radius:11px;pointer-events:auto;
   background:rgba(6,12,24,.7);border:1px solid rgba(255,255,255,.14);font-size:12px;font-weight:900;color:#cfe0ff;display:flex;align-items:center;justify-content:center;gap:1px}
 #btnPause i{display:block;width:3px;height:12px;background:#cfe0ff;border-radius:2px}
+#btnMuteBattle{position:absolute;left:58px;top:calc(10px + env(safe-area-inset-top));width:38px;height:38px;border-radius:11px;pointer-events:auto;
+  background:rgba(6,12,24,.7);border:1px solid rgba(255,255,255,.14);font-size:16px;color:#cfe0ff;display:flex;align-items:center;justify-content:center}
+#btnMuteBattle.off{opacity:.6}
 #feed{position:absolute;left:12px;top:calc(56px + env(safe-area-inset-top));display:flex;flex-direction:column;gap:4px;max-width:52vw}
 .feedrow{font-size:10.5px;font-weight:700;color:#e6eeff;background:rgba(6,12,24,.62);padding:4px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.08);animation:fadeUp .2s}
 .feedrow b{color:#ffd75e}
@@ -759,6 +762,7 @@ body.inbattle #app,body.inbattle #tabbar{display:none}
     <div id="gemBadge">💎 <b id="heldGems">0</b></div>
     <div id="feed"></div>
     <button id="btnPause" data-act="pause" aria-label="일시정지"><i></i><i></i></button>
+    <button id="btnMuteBattle" data-act="mute" aria-label="소리 켜기/끄기">🔊</button>
     <div id="respawnMsg"></div>
     <div id="joyZone"><div id="joyKnob"></div></div>
     <button id="btnAtk" aria-label="공격">🔥</button>
@@ -1218,6 +1222,12 @@ function syncMuteUI() {
     b.textContent = S.sound ? '🔊' : '🔇';
     b.classList.toggle('off', !S.sound);
     b.setAttribute('aria-label', S.sound ? '소리 끄기' : '소리 켜기');
+  }
+  const bb = $('#btnMuteBattle');
+  if (bb) {
+    bb.textContent = S.sound ? '🔊' : '🔇';
+    bb.classList.toggle('off', !S.sound);
+    bb.setAttribute('aria-label', S.sound ? '소리 끄기' : '소리 켜기');
   }
   const st = $('#soundToggle');
   if (st) st.classList.toggle('on', !!S.sound);
@@ -8477,6 +8487,7 @@ function d3Begin() {
   D3.mat = {};
   d3BuildArena();
   try { d3BuildCrates(); } catch (e) { if (window.console) console.warn('crates 3D failed', e); }
+  try { d3BuildHolos(); } catch (e) { if (window.console) console.warn('holo 3D failed', e); }
   d3InitEntities();
   D3.active = true;
   const cv = D3.cv || document.getElementById('game3d');
@@ -8497,6 +8508,12 @@ function d3End() {
     D3.crateGrp = null;
   }
   D3.crates = {};
+  if (D3.holoGrp) {
+    d3ClearGroup(D3.holoGrp);
+    if (D3.holoGrp.parent) D3.holoGrp.parent.remove(D3.holoGrp);
+    D3.holoGrp = null;
+    D3.holos = [];
+  }
   if (D3.retGrp) { D3.dyn.remove(D3.retGrp); D3.retGrp = null; D3.ret = null; }
   D3.built = false;
   D3.pmap = {}; D3.boss3d = null; D3.ball3d = null; D3.vault3d = null;
@@ -8726,6 +8743,7 @@ function d3Frame() {
   d3SyncBoss(dt);
   d3SyncCrates(dt);
   d3SyncDrops(dt);
+  d3SyncHolos(dt);
   d3SyncProjectiles(dt);
   d3SyncGems(dt);
   d3SyncBall(dt);
@@ -9378,6 +9396,21 @@ function d3DrawOverlay() {
   list.sort((a, b) => b.d - a.d);
   for (const it of list) d3HpBar(ctx, it.p, it.sp, it.p.isBoss);
 
+  // 파괴 가능한 상자 HP 게이지
+  if (B.crates) {
+    for (const cr of B.crates) {
+      if (cr.dead || cr.hp >= cr.maxHp) continue;
+      d3proj(cr.x, cr.y, 80, sp);
+      if (sp.z > 1) continue;
+      const bw = 54, bh = 6;
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = 'rgba(4,8,20,.8)';
+      d3RoundRect(ctx, sp.x - bw / 2 - 2, sp.y - 2, bw + 4, bh + 4, 3); ctx.fill();
+      ctx.fillStyle = cr.kind === 'neon' ? '#7dfcff' : '#ffb35c';
+      d3RoundRect(ctx, sp.x - bw / 2, sp.y, Math.max(2, bw * clamp(cr.hp / cr.maxHp, 0, 1)), bh, 3); ctx.fill();
+    }
+  }
+
   // vault bar labels & boss telegraph already in DOM; damage texts here
   ctx.textAlign = 'center';
   for (const t of B.texts) {
@@ -9780,6 +9813,70 @@ function d3UpdateReticle() {
     R.sector.material.opacity = (0.2 + Math.sin(D3.t * 5) * 0.05) * alpha;
     R.sectorEdge.material.opacity = 0.7 * alpha;
     void half;
+  }
+}
+
+/* ---------- 움직이는 홀로그램 장식 ---------- */
+function d3BuildHolos() {
+  const T = D3.THREE;
+  if (!T) return;
+  if (D3.holoGrp) {
+    d3ClearGroup(D3.holoGrp);
+    if (D3.holoGrp.parent) D3.holoGrp.parent.remove(D3.holoGrp);
+  }
+  const grp = new T.Group();
+  D3.scene.add(grp);
+  D3.holoGrp = grp;
+  D3.holos = [];
+  const spots = [[-430, 180, '#5ce8ff'], [430, 930, '#ff5edb'], [1270, 180, '#9b8cff'], [1270, 930, '#5ce8ff']];
+  for (let i = 0; i < spots.length; i++) {
+    const sp = spots[i];
+    const g = new T.Group();
+    const beam = d3mesh(new T.CylinderGeometry(18, 26, 150, 14, 1, true), new T.MeshBasicMaterial({
+      color: d3col(sp[2]), transparent: true, opacity: 0.09, blending: T.AdditiveBlending,
+      depthWrite: false, side: T.DoubleSide
+    }), 0, 75, 0);
+    g.add(beam);
+    const ringA = d3mesh(new T.TorusGeometry(30, 1.6, 6, 26), new T.MeshBasicMaterial({
+      color: d3col(sp[2]), transparent: true, opacity: 0.6, blending: T.AdditiveBlending, depthWrite: false
+    }), 0, 40, 0);
+    ringA.rotation.x = Math.PI / 2;
+    g.add(ringA);
+    const ringB = d3mesh(new T.TorusGeometry(22, 1.2, 6, 22), new T.MeshBasicMaterial({
+      color: d3col(sp[2]), transparent: true, opacity: 0.45, blending: T.AdditiveBlending, depthWrite: false
+    }), 0, 66, 0);
+    ringB.rotation.x = Math.PI / 2;
+    g.add(ringB);
+    const plate = d3mesh(new T.PlaneGeometry(56, 56), d3basic(sp[2], { op: 0.5, map: D3.tex.glow }), 0, 104, 0);
+    g.add(plate);
+    const star = d3mesh(d3StarGeo(), new T.MeshBasicMaterial({
+      color: d3col(sp[2]), transparent: true, opacity: 0.85, blending: T.AdditiveBlending,
+      depthWrite: false, side: T.DoubleSide
+    }), 0, 104, 0);
+    star.scale.setScalar(15);
+    g.add(star);
+    g.position.set(sp[0] - D3W.x, 0, sp[1] - D3W.z);
+    grp.add(g);
+    D3.holos.push({ g: g, beam: beam, a: ringA, b: ringB, plate: plate, star: star, ph: i * 1.7 });
+  }
+}
+
+function d3SyncHolos(dt) {
+  if (!D3.holos || !D3.holos.length) return;
+  for (let i = 0; i < D3.holos.length; i++) {
+    const h = D3.holos[i];
+    h.a.rotation.z += dt * (0.8 + i * 0.12);
+    h.b.rotation.z -= dt * 1.5;
+    h.g.position.y = Math.sin(D3.t * 1.1 + h.ph) * 3;
+    h.plate.lookAt(D3.camera.position);
+    h.star.lookAt(D3.camera.position);
+    h.star.rotation.z += dt * 0.9;
+    const pulse = 0.45 + Math.sin(D3.t * 2 + h.ph) * 0.18;
+    h.plate.material.opacity = pulse * 0.75;
+    h.beam.material.opacity = 0.06 + pulse * 0.05;
+    h.a.material.opacity = 0.35 + pulse * 0.35;
+    h.b.material.opacity = 0.25 + pulse * 0.3;
+    h.star.material.opacity = 0.55 + pulse * 0.4;
   }
 }
 
