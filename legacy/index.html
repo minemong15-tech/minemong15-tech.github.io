@@ -430,6 +430,103 @@
   .pack-msg{text-align:center; font-size:11px; color:var(--muted2); margin-top:16px; min-height:16px}
   .pack-msg.ok{color:#7fe0a3}
 
+  /* ── 뽑기권 · 우편 · 코드 ── */
+  .icon-btn.mini{position:relative; width:33px; height:33px; border-radius:10px}
+  .icon-btn.mini svg{width:17px; height:17px}
+  .mdot{position:absolute; right:4px; top:4px; width:7px; height:7px; border-radius:50%;
+    background:#ef4444; box-shadow:0 0 8px rgba(239,68,68,.9); animation:pulse 1.8s infinite}
+  .mdot[hidden]{display:none}
+  .code-btn{width:auto; padding:0 12px; gap:7px; display:inline-flex; align-items:center}
+  .code-btn .lbl{display:inline; font-size:11.5px; letter-spacing:.04em}
+
+  /* 카드팩 · 2단 (왼쪽 뽑기 / 오른쪽 인물 쇼케이스) */
+  .pk-sheet{width:min(1000px,100%)}
+  .pk-wrap{display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1fr); gap:20px; align-items:start}
+  .pk-left{display:flex; flex-direction:column; gap:9px; min-width:0}
+  .pk-left .pack-bal{justify-content:space-between; gap:8px; margin:0 0 2px}
+  .pk-left .pack-bal b{font-size:16px}
+  .pk-left .btn-pack{width:100%; text-align:center}
+  .btn-pack.ticket{background:linear-gradient(180deg,#3aa87a,#1f6b4d); color:#f2fff8;
+    border:1px solid rgba(120,240,190,.5); box-shadow:0 0 26px -8px rgba(46,224,148,.9)}
+  .btn-pack.ticket:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
+  .pk-hint{margin:2px 0 0; font-size:9.5px; line-height:1.5; color:var(--muted2)}
+  .pk-hint b{color:var(--gold-hi)}
+  .pk-left .reveal{grid-template-columns:repeat(auto-fill,minmax(86px,1fr)); gap:8px; margin-top:6px}
+  .pk-left .pcard .pbody{padding:6px 7px 8px}
+  .pk-left .pcard .pbody b{font-size:10.5px}
+  .pk-left .pack-msg{text-align:left; margin-top:4px; min-height:14px}
+  .pk-right{min-width:0; position:relative}
+  .pk-show{position:relative; aspect-ratio:4/5; border:1px solid rgba(246,230,189,.3); border-radius:18px; overflow:hidden;
+    background:radial-gradient(circle at 50% 28%, rgba(200,168,106,.22), rgba(10,13,18,.98) 68%);
+    box-shadow:0 0 46px -18px rgba(246,230,189,.55), inset 0 0 60px -30px rgba(246,230,189,.5)}
+  .pks-rays{position:absolute; inset:-30%; background:
+    conic-gradient(from 0deg, transparent 0 8deg, rgba(246,230,189,.16) 8deg 12deg, transparent 12deg 30deg);
+    animation:raySpin 26s linear infinite; opacity:.7}
+  @keyframes raySpin{to{transform:rotate(360deg)}}
+  .pks-frame{position:absolute; inset:13px 13px 96px; display:block; border-radius:12px; overflow:hidden;
+    border:1px solid var(--rc,#c8a86a); box-shadow:0 0 0 1px rgba(0,0,0,.6) inset, 0 0 30px -10px var(--rc,#c8a86a)}
+  .pks-frame .ph-svg,.pks-frame .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .pks-frame .ph-img{object-fit:cover; object-position:top center}
+  .pks-art{position:absolute; inset:0; display:block; background:#0b0e13}
+  .pks-tag{position:absolute; left:14px; top:14px; z-index:3; font-size:8.5px; letter-spacing:.16em; padding:4px 9px;
+    border-radius:999px; color:var(--rc,#c8a86a); border:1px solid var(--rc,#c8a86a); background:rgba(6,8,12,.82);
+    box-shadow:0 0 16px -6px var(--rc,#c8a86a)}
+  .pks-tag.rb{color:#0a0d12; background:linear-gradient(90deg,#f6e6bd,#c8a86a); border-color:#f6e6bd}
+  .pks-cap{position:absolute; left:0; right:0; bottom:0; padding:12px 16px 15px; z-index:3;
+    background:linear-gradient(180deg, transparent, rgba(4,6,10,.94) 40%); text-align:left}
+  .pks-cap b{display:block; font-family:var(--serif); font-size:23px; color:#fff6e2; line-height:1.15;
+    text-shadow:0 0 24px rgba(246,230,189,.5)}
+  .pks-cap em{display:block; font-size:9px; letter-spacing:.14em; color:var(--gold-dim); margin-top:4px; font-style:normal}
+  .pks-cap q{display:block; margin:7px 0 0; font-size:10.5px; line-height:1.5; color:#cfc6b3}
+  @media (max-width:820px){
+    .pk-wrap{grid-template-columns:1fr}
+    .pk-right{order:-1}
+    .pk-show{aspect-ratio:16/11}
+    .pks-frame{inset:10px 10px 86px}
+  }
+
+  /* 우편함 */
+  .mail-list{display:flex; flex-direction:column; gap:10px}
+  .mail-card{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:12px; align-items:flex-start;
+    padding:13px 14px; border:1px solid var(--line2); border-radius:14px;
+    background:linear-gradient(160deg, rgba(200,168,106,.07), rgba(255,255,255,.015))}
+  .mail-card.done{opacity:.76}
+  .mail-card .mi{width:38px; height:38px; border-radius:10px; display:grid; place-items:center; font-size:18px;
+    background:rgba(200,168,106,.12); border:1px solid rgba(200,168,106,.3)}
+  .mail-card .mb{min-width:0}
+  .mail-card .mb > b{display:block; font-family:var(--serif); font-size:14px; color:#f2e9d8}
+  .mail-card .mb p{margin:3px 0 0; font-size:10.5px; line-height:1.55; color:var(--muted2)}
+  .mail-gift{margin-top:7px; font-size:9.5px; color:#9ee6b4; letter-spacing:.02em}
+  .mail-code{display:flex; align-items:center; gap:7px; margin-top:7px; flex-wrap:wrap}
+  .mail-code > span{font-size:8px; letter-spacing:.14em; color:var(--gold-dim)}
+  .mail-code code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; letter-spacing:.12em;
+    color:#ffeec2; background:rgba(246,230,189,.1); border:1px dashed rgba(246,230,189,.45);
+    border-radius:7px; padding:3px 9px}
+  .mail-code .cp{font-size:9.5px; padding:3px 9px; border-radius:999px; cursor:pointer; font-family:inherit;
+    color:var(--gold-hi); border:1px solid rgba(200,168,106,.45); background:rgba(200,168,106,.1)}
+  .mail-code.locked code{color:#6b7280; border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.03)}
+  .mail-code.locked em{font-size:8.5px; font-style:normal; color:#6b7280}
+  .mclaim{align-self:center; font-family:inherit; font-size:10.5px; letter-spacing:.04em; cursor:pointer;
+    padding:7px 14px; border-radius:10px; color:#0a0d12; font-weight:600;
+    background:linear-gradient(90deg,#f6e6bd,#c8a86a); border:none; white-space:nowrap;
+    box-shadow:0 0 20px -8px rgba(246,230,189,.9)}
+  .mdone{align-self:center; font-size:9.5px; color:#7fe0a3; white-space:nowrap}
+  .mail-foot{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:16px;
+    padding-top:12px; border-top:1px solid var(--line2); flex-wrap:wrap}
+  .mail-foot .mf-t{font-size:10.5px; color:#9ee6b4}
+  .btn-pack.sm{padding:8px 14px; font-size:10.5px}
+
+  /* 코드 입력 */
+  .code-box{display:flex; gap:8px}
+  .code-box input{flex:1; min-width:0; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.14em;
+    font-size:14px; color:#ffeec2; padding:12px 14px; border-radius:11px;
+    border:1px solid rgba(200,168,106,.45); background:rgba(255,255,255,.04); outline:none}
+  .code-box input:focus{border-color:var(--gold-hi); box-shadow:0 0 0 3px rgba(200,168,106,.15)}
+  .code-box .btn-pack{padding:11px 20px; white-space:nowrap}
+  .code-log{display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; font-size:9.5px}
+  .cl-done{padding:3px 9px; border-radius:999px; color:#9ee6b4; border:1px solid rgba(46,224,148,.35); background:rgba(46,224,148,.08)}
+  .cl-empty{color:#6b7280}
+
   /* museum */
   .museum-body{position:relative; border-radius:16px; padding:24px 20px 26px; overflow:hidden;
     background:radial-gradient(ellipse at 50% -10%, rgba(200,168,106,.18), transparent 62%), linear-gradient(180deg,#0a0e14,#06080c);
@@ -1629,6 +1726,14 @@
         <span class="bar-row"><span class="tbar"><i id="colBar" style="width:0%"></i></span><span id="colNext">수집 0%</span></span>
       </span>
     </button>
+    <button class="icon-btn mini" id="mailBtn" type="button" aria-label="우편함" title="우편함">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.2"/><path d="m4.6 7.6 7.4 5.4 7.4-5.4"/></svg>
+      <span class="mdot" id="mailDot" hidden></span>
+    </button>
+    <button class="icon-btn code-btn" id="codeBtn" type="button" aria-label="뽑기 코드 입력" title="뽑기 코드 입력">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5V9a3 3 0 0 0 0 6v2.5A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5V15a3 3 0 0 0 0-6Z"/><path d="M13.5 5v14" stroke-dasharray="2 2.6"/></svg>
+      <span class="lbl">코드</span>
+    </button>
     <button class="icon-btn wide" id="archiveBtn" type="button" aria-label="완료한 인물 도감" title="내 도감">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h7v16H4zM13 4h7v16h-7z" opacity=".9"/><path d="M6.5 8h2M15.5 8h2" stroke-linecap="round"/></svg>
       <span class="lbl">도감</span>
@@ -1755,6 +1860,7 @@
         <h3 id="colTitle" style="font-family:var(--serif);font-size:17px;font-weight:600;margin:0;color:#f2e9d8">인물 카드</h3>
         <div class="coin-row">
           <div class="coin-box gold"><span>🪙 코인</span><b id="coinNum">0</b></div>
+          <div class="coin-box"><span>🎟️ 뽑기권</span><b id="ticketNum">0</b></div>
           <div class="coin-box"><span>XP</span><b id="xpNum">0</b></div>
           <div class="coin-box"><span>보유 카드</span><b id="cardNum">0</b></div>
         </div>
@@ -1936,7 +2042,7 @@
 
 <!-- card pack -->
 <div class="modal" id="mPack" role="dialog" aria-modal="true" aria-labelledby="pkTitle">
-  <div class="sheet wide">
+  <div class="sheet wide pk-sheet">
     <div class="sheet-head">
       <div>
         <span class="kicker">CARD PACK</span>
@@ -1945,18 +2051,64 @@
       </div>
       <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
-    <div class="pack-bal">
-      <div><span>보유 코인</span><b id="pkCoins">0</b></div>
-      <div><span>보유 카드</span><b id="pkCards">0</b></div>
-      <div><span>최고 등급</span><b id="pkBest">★0</b></div>
+    <div class="pk-wrap">
+      <div class="pk-left">
+        <div class="pack-bal">
+          <div><span>보유 코인</span><b id="pkCoins">0</b></div>
+          <div><span>뽑기권</span><b id="pkTickets">0</b></div>
+          <div><span>최고 등급</span><b id="pkBest">★0</b></div>
+        </div>
+        <button class="btn-pack ticket" id="pullTicket" type="button">🎟️ 뽑기권으로 뽑기<small>보유 0장 · 1장 사용</small></button>
+        <button class="btn-pack" id="pull1" type="button">1회 뽑기<small>100 코인</small></button>
+        <button class="btn-pack" id="pull5" type="button">5회 뽑기<small>450 코인 · 5명</small></button>
+        <button class="btn-pack ghost" id="pullMuseum" type="button">🏛️ 박물관 보기</button>
+        <p class="pk-hint">뽑기권은 <b>📩 우편함</b>과 <b>🎟️ 코드</b> 입력으로 받을 수 있습니다.</p>
+        <div class="reveal" id="reveal"></div>
+        <div class="pack-msg" id="packMsg">첫 접속 보너스로 코인을 받았습니다. 카드를 모아 진화시켜 보세요.</div>
+      </div>
+      <div class="pk-right">
+        <div class="pk-show" id="pkShow"></div>
+      </div>
     </div>
-    <div class="pack-actions">
-      <button class="btn-pack" id="pull1" type="button">1팩 뽑기<small>100 코인</small></button>
-      <button class="btn-pack" id="pull5" type="button">5연속 뽑기<small>450 코인</small></button>
-      <button class="btn-pack ghost" id="pullMuseum" type="button">박물관 보기</button>
+  </div>
+</div>
+
+<!-- mailbox -->
+<div class="modal" id="mMail" role="dialog" aria-modal="true" aria-labelledby="mailTitle">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">MAILBOX</span>
+        <h2 id="mailTitle">📩 우편함</h2>
+        <p>우편을 수령하면 뽑기권과 비밀 코드가 함께 도착합니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
-    <div class="reveal" id="reveal"></div>
-    <div class="pack-msg" id="packMsg">첫 접속 보너스로 코인을 받았습니다. 카드를 모아 진화시켜 보세요.</div>
+    <div class="mail-list" id="mailList"></div>
+    <div class="mail-foot">
+      <span class="mf-t" id="mailTickets">🎟️ 보유 뽑기권 0장</span>
+      <button class="btn-pack ghost sm" id="mailToCode" type="button">🎟️ 코드 입력</button>
+    </div>
+  </div>
+</div>
+
+<!-- redeem code -->
+<div class="modal" id="mCode" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">REDEEM CODE</span>
+        <h2 id="codeTitle">🎟️ 뽑기 코드</h2>
+        <p>우편으로 받은 코드를 입력하면 뽑기권을 받습니다. 대소문자·공백은 무관합니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="code-box">
+      <input id="codeInput" type="text" placeholder="예: LEGACY100" autocomplete="off" spellcheck="false" maxlength="24">
+      <button class="btn-pack" id="codeSubmit" type="button">확인</button>
+    </div>
+    <div class="pack-msg" id="codeMsg">📩 우편함에서 받은 코드를 입력해 보세요.</div>
+    <div class="code-log" id="codeLog"></div>
   </div>
 </div>
 
@@ -5095,6 +5247,9 @@ function portraitSVG(fig, fit, alt) {
   if (typeof S.doubleXp !== 'boolean') S.doubleXp = false;
   if (!S.ratings || typeof S.ratings !== 'object') S.ratings = {};
   if (!Array.isArray(S.shelves)) S.shelves = [];
+  if (typeof S.tickets !== 'number' || !isFinite(S.tickets)) S.tickets = 0;
+  if (!S.mail || typeof S.mail !== 'object') S.mail = {};
+  if (!S.codes || typeof S.codes !== 'object') S.codes = {};
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
   S.log = S.log.filter(function (v, i, arr) { return v && v.d && arr.map(function (x) { return x.d; }).indexOf(v.d) === i; })
     .sort(function (a, b) { return a.d < b.d ? -1 : 1; });
@@ -5510,12 +5665,14 @@ function portraitSVG(fig, fit, alt) {
   }
   function closeModals() {
     stopSpeak();
+    stopPackRotate();
     document.querySelectorAll('.modal.open').forEach(function (m) { m.classList.remove('open'); });
     document.body.style.overflow = '';
   }
 
   /* ── coins · cards · evolution ── */
   var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 10, MUSEUM_STAR = 5;
+  var GRADE_RANK = { basic: 0, rare: 1, special: 2, legend: 3, mythic: 4, legendary: 5 };
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
 
   function cardOf(id) { return S.cards[id] || null; }
@@ -5593,8 +5750,129 @@ function portraitSVG(fig, fit, alt) {
     $('#coinNum').textContent = S.coins;
     $('#xpNum').textContent = S.xp;
     $('#cardNum').textContent = ownedCount() + ' / ' + N;
+    var tn = $('#ticketNum');
+    if (tn) tn.textContent = S.tickets || 0;
     $('#colBest').textContent = '★' + bestStar() + (hasFive() ? ' · 박물관 OPEN' : '');
     $('#xpBar').style.width = ((S.xp % 500) / 5) + '%';
+  }
+
+  /* ── 우편함 · 뽑기권 · 코드 ── */
+  var MAILS = [
+    { id: 'welcome', icon: '🎉', t: 'LEGACY 오픈 기념 우편', d: '100인의 기록이 시작됩니다. 뽑기권 3장과 오픈 기념 코드를 함께 보냅니다.', tickets: 3, code: 'LEGACY100' },
+    { id: 'star', icon: '✨', t: '별빛 상자 우편', d: '레전더리 인물을 노려볼 시간입니다. 뽑기권 2장과 별빛 코드가 들어 있습니다.', tickets: 2, code: 'STAR777' },
+    { id: 'hundred', icon: '📚', t: '100인 도감 도전 우편', d: '매일 한 명씩 체크하면 코인도 쌓입니다. 응원의 뽑기권 1장을 드립니다.', tickets: 1, code: '' }
+  ];
+  var CODES = {
+    LEGACY100: { tickets: 3, n: '오픈 기념 코드' },
+    STAR777: { tickets: 5, n: '별빛 코드' },
+    HISTORY2026: { tickets: 2, n: '연대기 코드' }
+  };
+
+  function mailUnread() {
+    var n = 0;
+    for (var i = 0; i < MAILS.length; i++) if (!S.mail[MAILS[i].id]) n++;
+    return n;
+  }
+  function refreshMailBadge() {
+    var d = $('#mailDot');
+    if (d) {
+      if (mailUnread() > 0) d.removeAttribute('hidden');
+      else d.setAttribute('hidden', '');
+    }
+    var t = $('#mailTickets');
+    if (t) t.textContent = '🎟️ 보유 뽑기권 ' + (S.tickets || 0) + '장';
+  }
+  function codeLogHtml() {
+    var used = Object.keys(S.codes || {});
+    if (!used.length) return '<span class="cl-empty">아직 사용한 코드가 없습니다.</span>';
+    return used.map(function (k) {
+      var c = CODES[k];
+      return '<span class="cl-done">✓ ' + esc(k) + (c ? ' · 뽑기권 +' + c.tickets : '') + '</span>';
+    }).join('');
+  }
+  function renderCodeLog() {
+    var log = $('#codeLog');
+    if (log) log.innerHTML = codeLogHtml();
+  }
+  function renderMail() {
+    var body = $('#mailList');
+    if (!body) return;
+    body.innerHTML = MAILS.map(function (m) {
+      var got = !!S.mail[m.id];
+      var code = (got && m.code)
+        ? '<div class="mail-code"><span>비밀 코드</span><code>' + esc(m.code) + '</code>' +
+          '<button type="button" class="cp" data-copy="' + esc(m.code) + '">복사</button></div>'
+        : (m.code ? '<div class="mail-code locked"><span>비밀 코드</span><code>••••••</code><em>수령하면 공개</em></div>' : '');
+      return '<article class="mail-card' + (got ? ' done' : '') + '">' +
+        '<span class="mi">' + m.icon + '</span>' +
+        '<div class="mb"><b>' + esc(m.t) + '</b><p>' + esc(m.d) + '</p>' +
+        '<div class="mail-gift">🎟️ 뽑기권 ' + m.tickets + '장' + (m.code ? ' · 뽑기 코드 1개' : '') + '</div>' + code + '</div>' +
+        (got ? '<span class="mdone">✓ 수령 완료</span>'
+            : '<button type="button" class="mclaim" data-claim="' + m.id + '">수령</button>') +
+        '</article>';
+    }).join('');
+    refreshMailBadge();
+  }
+  function claimMail(id) {
+    var m = null, i;
+    for (i = 0; i < MAILS.length; i++) if (MAILS[i].id === id) m = MAILS[i];
+    if (!m || S.mail[id]) return;
+    S.mail[id] = 1;
+    S.tickets = (S.tickets || 0) + m.tickets;
+    saveState();
+    renderMail(); renderCollection(); refreshPackBal();
+    confetti();
+    toast('📩 <b>' + esc(m.t) + '</b> · 뽑기권 +' + m.tickets + '장' + (m.code ? ' · 코드 <b>' + esc(m.code) + '</b>' : ''));
+  }
+  function openMail() {
+    renderMail();
+    openModal('#mMail');
+  }
+  function openCode() {
+    renderCodeLog();
+    var msg = $('#codeMsg');
+    if (msg) { msg.className = 'pack-msg'; msg.textContent = '📩 우편함에서 받은 코드를 입력해 보세요.'; }
+    openModal('#mCode');
+    var inp = $('#codeInput');
+    setTimeout(function () { if (inp) inp.focus(); }, 90);
+  }
+  function submitCode() {
+    var inp = $('#codeInput'), msg = $('#codeMsg');
+    var raw = (inp && inp.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (!raw) {
+      if (msg) { msg.className = 'pack-msg'; msg.textContent = '코드를 입력해 주세요.'; }
+      if (inp) inp.focus();
+      return;
+    }
+    if (S.codes[raw]) {
+      if (msg) { msg.className = 'pack-msg'; msg.textContent = '이미 사용한 코드입니다 · ' + raw; }
+      return;
+    }
+    var c = CODES[raw];
+    if (!c) {
+      if (msg) { msg.className = 'pack-msg'; msg.textContent = '❌ 사용할 수 없는 코드입니다 · 우편함의 코드를 확인하세요.'; }
+      return;
+    }
+    S.codes[raw] = todayK;
+    S.tickets = (S.tickets || 0) + c.tickets;
+    saveState();
+    renderCollection(); refreshPackBal(); renderMail(); renderCodeLog();
+    if (inp) inp.value = '';
+    if (msg) {
+      msg.className = 'pack-msg ok';
+      msg.textContent = '✅ ' + c.n + ' 사용 완료 · 뽑기권 +' + c.tickets + '장 (보유 ' + S.tickets + '장)';
+    }
+    confetti();
+  }
+  function copyText(t) {
+    var done = function () { toast('📋 코드 <b>' + esc(t) + '</b> 복사 완료'); };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(t).then(done, function () { toast('코드: ' + esc(t)); });
+        return;
+      }
+    } catch (e) {}
+    toast('코드: <b>' + esc(t) + '</b>');
   }
 
   function pullOne() {
@@ -5620,22 +5898,95 @@ function portraitSVG(fig, fit, alt) {
       '<span>' + esc(label) + '</span></span></article>';
   }
 
+  /* ── 뽑기 쇼케이스: 옆에 크게 보여주는 인물 ── */
+  var PK_ROT = null, PK_ROT_IDX = 0, PK_HOLD = null;
+  function pkShowHtml(f, tag) {
+    var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+    var rc = gi.color === 'rainbow' ? '#ecd9a8' : gi.color;
+    return '<span class="pks-rays"></span>' +
+      '<span class="pks-frame" style="--rc:' + rc + '">' +
+      '<span class="pks-art">' + photoHtml(f, { fit: 'slice', eager: true, alt: f.name + ' 카드' }) + '</span>' +
+      '</span>' +
+      '<span class="pks-tag' + (gi.color === 'rainbow' ? ' rb' : '') + '" style="--rc:' + rc + '">' + esc(tag) + ' · ' + gi.name + '</span>' +
+      '<span class="pks-cap"><b class="' + (gi.color === 'rainbow' ? 'rainbow-text' : '') + '">' + esc(f.name) + '</b>' +
+      '<em>' + esc(f.en) + ' · ' + esc(f.years) + '</em>' +
+      '<q>“' + esc(f.quote) + '”</q></span>';
+  }
+  function renderPackShow(f, tag) {
+    var el = $('#pkShow');
+    if (!el || !f) return;
+    el.innerHTML = pkShowHtml(f, tag || 'PICK UP');
+  }
+  function packShowPool() {
+    var pool = FIGURES.filter(function (f) { return f.grade === 'legendary' || f.grade === 'mythic'; });
+    if (pool.length < 4) pool = FIGURES.slice(0, 16);
+    return pool;
+  }
+  function stopPackRotate() {
+    if (PK_ROT) { clearInterval(PK_ROT); PK_ROT = null; }
+    if (PK_HOLD) { clearTimeout(PK_HOLD); PK_HOLD = null; }
+  }
+  function startPackRotate() {
+    stopPackRotate();
+    var pool = packShowPool();
+    if (!pool.length) return;
+    var step = function () {
+      renderPackShow(pool[PK_ROT_IDX % pool.length], 'PICK UP');
+      PK_ROT_IDX++;
+    };
+    step();
+    PK_ROT = setInterval(step, 4000);
+  }
+  function showPulled(f) {
+    stopPackRotate();
+    renderPackShow(f, 'GET!');
+    PK_HOLD = setTimeout(function () {
+      PK_HOLD = null;
+      if ($('#mPack').classList.contains('open')) startPackRotate();
+    }, 6500);
+  }
+
+  function refreshPackBal() {
+    if ($('#pkCoins')) $('#pkCoins').textContent = S.coins;
+    if ($('#pkTickets')) $('#pkTickets').textContent = S.tickets || 0;
+    if ($('#pkBest')) $('#pkBest').textContent = '★' + bestStar();
+    var pt = $('#pullTicket');
+    if (pt) {
+      var n = S.tickets || 0;
+      pt.disabled = n < 1;
+      pt.innerHTML = '🎟️ 뽑기권으로 뽑기<small>보유 ' + n + '장 · 1장 사용</small>';
+    }
+  }
+
   function openPackModal() {
-    $('#pkCoins').textContent = S.coins;
-    $('#pkCards').textContent = ownedCount() + ' / ' + N;
-    $('#pkBest').textContent = '★' + bestStar();
+    refreshPackBal();
+    startPackRotate();
     openModal('#mPack');
   }
 
-  function pullPack(count) {
-    var cost = count >= 5 ? PACK5_COST : PACK_COST;
-    if (S.coins < cost) {
-      $('#packMsg').className = 'pack-msg';
-      $('#packMsg').textContent = '코인이 부족합니다 · 매일 체크(+' + COIN_CHECK + ')와 이름 맞추기(+' + COIN_GUESS + ')로 모아보세요.';
-      return;
+  function pullPack(count, useTicket) {
+    var m = $('#packMsg');
+    if (useTicket) {
+      if ((S.tickets || 0) < count) {
+        if (m) {
+          m.className = 'pack-msg';
+          m.textContent = '뽑기권이 부족합니다 · 📩 우편함과 🎟️ 코드 입력으로 받아보세요.';
+        }
+        return;
+      }
+      S.tickets -= count;
+    } else {
+      var cost = count >= 5 ? PACK5_COST : PACK_COST;
+      if (S.coins < cost) {
+        if (m) {
+          m.className = 'pack-msg';
+          m.textContent = '코인이 부족합니다 · 매일 체크(+' + COIN_CHECK + ')와 이름 맞추기(+' + COIN_GUESS + ')로 모아보세요.';
+        }
+        return;
+      }
+      S.coins -= cost;
     }
     var hadFive = hasFive();
-    S.coins -= cost;
     var res = [], i;
     for (i = 0; i < count; i++) res.push(pullOne());
     saveState();
@@ -5643,24 +5994,32 @@ function portraitSVG(fig, fit, alt) {
     $('#reveal').innerHTML = res.map(pcardHtml).join('');
     var news = res.filter(function (r) { return r.isNew; }).length;
     var evos = res.filter(function (r) { return r.ready; });
-    $('#pkCoins').textContent = S.coins;
-    $('#pkCards').textContent = ownedCount() + ' / ' + N;
-    $('#pkBest').textContent = '★' + bestStar();
-    var m = $('#packMsg');
+    var bestR = res[0];
+    for (i = 1; i < res.length; i++) {
+      if ((GRADE_RANK[res[i].f.grade] || 0) > (GRADE_RANK[bestR.f.grade] || 0)) bestR = res[i];
+    }
+    showPulled(bestR.f);
+    refreshPackBal();
+    confetti();
     if (evos.length) {
-      m.className = 'pack-msg ok';
-      m.textContent = '✨ 진화 준비 완료 · ' + evos.map(function (e) { return e.f.name + ' (' + e.frag + '/5)'; }).join(' · ') + ' — 도감에서 진화하세요';
-      confetti();
+      if (m) {
+        m.className = 'pack-msg ok';
+        m.textContent = '✨ 진화 준비 완료 · ' + evos.map(function (e) { return e.f.name + ' (' + e.frag + '/5)'; }).join(' · ') + ' — 도감에서 진화하세요';
+      }
     } else if (news) {
-      m.className = 'pack-msg ok';
-      m.textContent = '새 카드 ' + news + '장을 얻었습니다.';
+      if (m) { m.className = 'pack-msg ok'; m.textContent = '새 카드 ' + news + '장을 얻었습니다.'; }
     } else {
-      m.className = 'pack-msg';
-      m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.';
+      if (m) { m.className = 'pack-msg'; m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.'; }
     }
     if (!hadFive && hasFive()) {
       setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 900);
     }
+  }
+
+  function openPackModal() {
+    refreshPackBal();
+    startPackRotate();
+    openModal('#mPack');
   }
 
   function renderMuseum() {
@@ -6156,10 +6515,16 @@ function portraitSVG(fig, fit, alt) {
   $('#checkBtn').addEventListener('click', doCheck);
   $('#speakBtn').addEventListener('click', speakQuote);
   $('#packBtn').addEventListener('click', openPackModal);
+  $('#mailBtn').addEventListener('click', openMail);
+  $('#codeBtn').addEventListener('click', openCode);
+  $('#mailToCode').addEventListener('click', openCode);
   $('#museumBtn').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
+  $('#pullTicket').addEventListener('click', function () { pullPack(1, true); });
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
   $('#pullMuseum').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
+  $('#codeSubmit').addEventListener('click', submitCode);
+  $('#codeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitCode(); });
   $('#guessBtn').addEventListener('click', submitGuess);
   $('#guessInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitGuess(); });
   document.addEventListener('click', function (e) {
@@ -6246,6 +6611,10 @@ function portraitSVG(fig, fit, alt) {
   $('#pageArcAll').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
   $('#ftArchive').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
   document.addEventListener('click', function (e) {
+    var cl = e.target.closest('[data-claim]');
+    if (cl) { claimMail(cl.getAttribute('data-claim')); return; }
+    var cp = e.target.closest('[data-copy]');
+    if (cp) { copyText(cp.getAttribute('data-copy')); return; }
     var ev = e.target.closest('[data-evolve]');
     if (ev) { e.preventDefault(); e.stopPropagation(); evolveCard(ev.getAttribute('data-evolve')); return; }
     var card = e.target.closest('[data-fig]');
@@ -6272,6 +6641,8 @@ function portraitSVG(fig, fit, alt) {
   ensureAttendance();
   renderAll();
   renderCollection();
+  renderMail();
+  refreshPackBal();
   renderGuess();
   renderClock();
   setInterval(renderClock, 1000);
