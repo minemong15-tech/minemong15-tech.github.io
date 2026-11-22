@@ -1801,7 +1801,7 @@ function portraitSVG(fig, fit, alt) {
   var watchAcc = 0, watchTick = null, lastYTTime = 0, linkOpenedAt = 0;
 
   function watchedToday() {
-    return S.watch === todayK || !currentFig || !currentFig.video;
+    return isDone(todayK) || S.watch === todayK || !currentFig || !currentFig.video;
   }
 
   function watchState() {
