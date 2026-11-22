@@ -1036,7 +1036,7 @@ if (one) {
     const cx = (i % cols) - (cols - 1) / 2;
     const cz = Math.floor(i / cols) - (rows - 1) / 2;
     g.position.set(cx * 126, 0, cz * 155);
-    g.rotation.y = -0.45;
+    g.rotation.y = 0.5;
     scene.add(g); groups.push(g);
   });
   cam.position.set(0, 250, 700);
