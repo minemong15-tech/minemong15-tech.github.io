@@ -164,9 +164,9 @@ function fgEye(head, sd, o) {
   fgSph(head, r, fgToon(o.white || '#ffffff'), ex, ey, ez, { sx: 0.45, sy: 1.0, sz: 0.95, seg: 14, rx: tilt });
   // 홍채(+동공)
   if (o.iris !== false) {
-    fgSph(head, r * 0.56, fgToon(o.iris || '#1b2b4a', o.irisGlow ? { emissive: o.iris || '#1b2b4a', ei: 0.9 } : null),
+    fgSph(head, r * 0.64, fgToon(o.iris || '#1b2b4a', o.irisGlow ? { emissive: o.iris || '#1b2b4a', ei: 0.9 } : null),
       ex + r * 0.22, ey - r * 0.06, ez + sd * r * 0.06, { sx: 0.4, sy: 1.0, sz: 0.9, seg: 12 });
-    fgSph(head, r * 0.27, fgToon(o.pupil || '#0a0f1c'), ex + r * 0.42, ey - r * 0.07, ez, { sx: 0.34, sy: 1.0, sz: 0.9, seg: 10 });
+    fgSph(head, r * 0.25, fgToon(o.pupil || '#0a0f1c'), ex + r * 0.42, ey - r * 0.07, ez, { sx: 0.34, sy: 1.0, sz: 0.9, seg: 10 });
   }
   // 반짝임 하이라이트 2개
   if (o.shine !== false) {
@@ -182,7 +182,7 @@ function fgMouth(head, o) {
   const dark = fgToon(o.col || '#22182a');
   if (style === 'grin') {
     fgSph(head, 5.2, dark, fx - 0.2, y, 0, { sx: 0.32, sy: 0.5, sz: 1.02, ol: 1.12 });
-    fgBox(head, 1.0, 1.6, 9.2, fgToon('#ffffff'), fx + 1.2, y + 1.2, 0, {});
+    fgBox(head, 1.0, 1.3, 7.4, fgToon('#ffffff'), fx + 1.15, y + 1.1, 0, {});
   } else if (style === 'open') {
     fgSph(head, 5.5, dark, fx - 0.2, y, 0, { sx: 0.38, sy: 0.86, sz: 0.92, ol: 1.1 });
     fgSph(head, 2.8, fgToon('#ff6f92'), fx + 1.0, y - 2.0, 0, { sx: 0.32, sy: 0.6, sz: 0.78 });
@@ -232,9 +232,9 @@ function fgFace(head, o) {
     });
     // 굵은 눈썹
     if (o.brow) {
-      const bh = o.browH || 2.3;
-      const b = fgBox(head, 1.7, bh, eyeR * 1.7, fgToon(o.browCol || '#1b2036'), fx + 0.5,
-        eyeY + (o.browY || 7.4), sd * eyeZ, { ol: 1.14 });
+      const bh = o.browH || 1.8;
+      const b = fgBox(head, 1.6, bh, eyeR * 1.36, fgToon(o.browCol || '#1b2036'), fx + 0.6,
+        eyeY + (o.browY == null ? 6.4 : o.browY), sd * eyeZ, { ol: 1.13 });
       b.rotation.x = -sd * (o.browTilt == null ? 0.22 : o.browTilt);
       b.rotation.z = o.browZ || 0;
     }
@@ -337,7 +337,7 @@ function fgArms(torso, P, M, cfg) {
   const shoZ = S.shoZ == null ? 16.6 : S.shoZ;
   const upR = S.upR || 5.5, upL = S.upL || 6.2;
   const foR = S.foR || 4.9;
-  const padR = S.padR || 8.8;
+  const padR = S.padR || 7.8;
   const padMat = cfg.pad === 'body' ? M.body : (cfg.pad === 'metal' ? M.metal : (cfg.pad === 'dark' ? M.dark : M.accent));
   const sleeveMat = cfg.sleeve === 'accent' ? M.accent : (cfg.sleeve === 'skin' ? M.skin : M.body);
   [-1, 1].forEach(function (sd) {
@@ -503,15 +503,15 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       f.rotation.z = -1.05; f.rotation.x = sd * 0.5;
     });
     // 고글 밴드 + 발광 바이저
-    fgTor(head, 17.2, 1.6, M.dark, 0, 11.6, 0, { rx: Math.PI / 2, ol: 1.0, seg: 22 });
-    fgBox(head, 2.6, 8.2, 19.5, M.dark, 14.8, 12.6, 0, { ol: 1.07 });
-    fgBox(head, 2.8, 4.8, 16.4, M.glowB, 16.0, 12.6, 0, { ol: 1.06 });
+    fgTor(head, 17.0, 1.6, M.dark, 0, 13.4, 0, { rx: Math.PI / 2, ol: 1.0, seg: 22 });
+    fgBox(head, 2.6, 7.6, 19.0, M.dark, 14.2, 14.6, 0, { ol: 1.07 });
+    fgBox(head, 2.8, 4.4, 15.8, M.glowB, 15.4, 14.6, 0, { ol: 1.06 });
     [-1, 1].forEach(function (sd) {
-      fgCyl(head, 3.4, 3.4, 2.6, M.dark, 12.8, 12.6, sd * 9.2, { rx: Math.PI / 2, ol: 1.08, seg: 12 });
+      fgCyl(head, 3.2, 3.2, 2.6, M.dark, 12.4, 14.6, sd * 9.0, { rx: Math.PI / 2, ol: 1.08, seg: 12 });
     });
     fgFace(head, {
-      fx: 16.9, eyeY: 1.4, eyeZ: 6.2, eyeR: 5.0, iris: '#1a6fe0', white: '#ffffff', skin: cfg.skin,
-      brow: true, browCol: '#0f3b3a', browTilt: 0.24, browY: 5.8, browH: 1.9, mouth: 'grin', mouthCol: '#2a1830'
+      fx: 16.9, eyeY: 0.6, eyeZ: 6.2, eyeR: 5.0, iris: '#1a6fe0', white: '#ffffff', skin: cfg.skin,
+      brow: true, browCol: '#0f3b3a', browTilt: 0.24, browY: 6.6, browH: 1.8, mouth: 'grin', mouthCol: '#2a1830'
     });
     // 별 엠블럼 + 재킷 라펠
     const st = fgPart(torso, fgStarGeo(7.2, 2.6), M.accent, 14.4, 13.5, 0, { ry: Math.PI / 2 });
@@ -990,11 +990,12 @@ function size() {
 }
 window.addEventListener('resize', size); size();
 
-scene.add(new THREE.HemisphereLight(0xdff1ff, 0x2a3a63, 2.2));
-const key = new THREE.DirectionalLight(0xffffff, 2.6); key.position.set(220, 420, 300); scene.add(key);
-const fill = new THREE.DirectionalLight(0xbfe3ff, 1.1); fill.position.set(-260, 180, 220); scene.add(fill);
-const rimA = new THREE.DirectionalLight(0x63e6ff, 1.7); rimA.position.set(-260, 200, -280); scene.add(rimA);
-const rimB = new THREE.DirectionalLight(0xff6fae, 1.4); rimB.position.set(260, 150, -300); scene.add(rimB);
+scene.add(new THREE.HemisphereLight(0xdff1ff, 0x24304e, 1.45));
+scene.add(new THREE.AmbientLight(0x3a4a6a, 0.3));
+const key = new THREE.DirectionalLight(0xfff4e8, 1.85); key.position.set(220, 420, 300); scene.add(key);
+const fill = new THREE.DirectionalLight(0xbfe3ff, 0.8); fill.position.set(-260, 180, 220); scene.add(fill);
+const rimA = new THREE.DirectionalLight(0x63e6ff, 1.1); rimA.position.set(-260, 200, -280); scene.add(rimA);
+const rimB = new THREE.DirectionalLight(0xff6fae, 0.9); rimB.position.set(260, 150, -300); scene.add(rimB);
 
 const one = q.get('one');
 const three = q.get('three');
