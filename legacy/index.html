@@ -7390,7 +7390,8 @@ function portraitSVG(fig, fit, alt) {
       setTimeout(function () { if (!el.classList.contains('on')) { el.hidden = true; el.className = 'pullfx'; } }, 240);
       done();
     }
-    PULLFX_T = setTimeout(finish, 1440);
+    /* 데모 모드(?preview=N)에서는 연출을 천천히 재생해 확인하기 쉽게 한다 */
+    PULLFX_T = setTimeout(finish, DEMO ? 3600 : 1440);
     el.onclick = function (e) { e.preventDefault(); e.stopPropagation(); finish(); };
     el.ontouchstart = function (e) { e.preventDefault(); finish(); };
   }
