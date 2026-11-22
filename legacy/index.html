@@ -1126,6 +1126,82 @@
     .br-rewards{grid-template-columns:1fr}
   }
 
+
+  /* ───── 세계지도 · 정복 현황 ───── */
+  .wmap{
+    display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:16px; align-items:center;
+    border:1px solid rgba(200,168,106,.22); border-radius:14px; padding:12px 16px; margin-bottom:14px;
+    background:
+      radial-gradient(500px 200px at 20% 0%, rgba(63,174,131,.12), transparent 70%),
+      linear-gradient(160deg, rgba(200,168,106,.06), rgba(255,255,255,.012));
+  }
+  .wmap-art{position:relative; min-width:0}
+  .wmap-art .wmsvg{display:block; width:100%; height:auto; max-height:250px}
+  .wm-grid .wm-line{stroke:rgba(255,255,255,.045); stroke-width:1; fill:none}
+  .wm-r{fill:rgba(255,255,255,.075); stroke:rgba(200,168,106,.24); stroke-width:.8; transition:fill .7s, stroke .7s}
+  .wm-r.own{fill:rgba(63,174,131,.5); stroke:rgba(127,224,182,.85)}
+  .wm-mark{font-size:12px; text-anchor:middle; dominant-baseline:middle}
+  .wm-mark.next{font-size:15px; animation:wpulse 1.8s ease-in-out infinite}
+  .wm-mark.lock{font-size:14px; fill:#39404c}
+  .wm-mark.done{font-size:13px}
+  .wm-lab{font-size:7.5px; fill:#a9e6c0; text-anchor:middle; letter-spacing:.02em}
+  @keyframes wpulse{0%,100%{opacity:.45}50%{opacity:1}}
+  .wmap-hud{border-left:1px solid var(--line2); padding-left:16px}
+  .wmap-hud .wpct{display:block; font-family:var(--serif); font-size:30px; line-height:1.1; color:#8ce6b6; margin-top:4px; text-shadow:0 0 24px rgba(127,224,182,.45)}
+  .wmap-hud .wbar{height:6px; border-radius:3px; background:rgba(255,255,255,.1); overflow:hidden; margin:10px 0 10px}
+  .wmap-hud .wbar i{display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,#3fae83,#c7f5b0); transition:width .9s cubic-bezier(.2,.8,.2,1)}
+  .wmap-hud p{margin:3px 0 0; font-size:10px; color:#8a8878; letter-spacing:.02em}
+  .wmap-hud p b{color:#e9e0cd}
+  @media (max-width:720px){
+    .wmap{grid-template-columns:1fr; padding:10px 12px}
+    .wmap-hud{border-left:0; border-top:1px solid var(--line2); padding:10px 0 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+    .wmap-hud .wpct{font-size:22px; margin:0}
+    .wmap-hud .wbar{flex:1 1 120px; margin:0}
+    .wmap-hud p{margin:0}
+  }
+
+  /* 전장 배경 세계지도 · 영토 잠식 */
+  .fmap{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+  .fmap .wmsvg{width:100%; height:100%; display:block}
+  .fmap .wm-r{fill:rgba(255,255,255,.055); stroke:rgba(200,168,106,.16); stroke-width:.7}
+  .fmap .wm-ownlayer .wm-r{fill:rgba(63,174,131,.62); stroke:rgba(127,224,182,.75); stroke-width:.9}
+  .terr-ring{fill:none; stroke:#7fe0b6; stroke-width:1.1; stroke-dasharray:4 6; opacity:.7}
+  .terr-hud{position:absolute; right:12px; top:44px; z-index:5; display:flex; align-items:center; gap:6px;
+    font-size:8px; letter-spacing:.1em; color:#9ae6c0; background:rgba(6,10,8,.62);
+    border:1px solid rgba(127,224,182,.3); border-radius:999px; padding:4px 10px; backdrop-filter:blur(4px)}
+  .terr-hud b{font-family:var(--serif); font-size:10px; color:#c7f5b0}
+  .terr-hud .tbar{width:48px; height:3px; border-radius:2px; background:rgba(255,255,255,.14); overflow:hidden; margin-left:2px}
+  .terr-hud .tbar i{display:block; height:100%; background:linear-gradient(90deg,#3fae83,#c7f5b0); transition:width .5s}
+  .wm-flag{font-size:12px; text-anchor:middle; animation:flagpop .8s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes flagpop{0%{opacity:0; transform:translateY(8px) scale(.4)}60%{opacity:1; transform:translateY(0) scale(1.25)}100%{transform:scale(1)}}
+
+  /* ───── 궁극기 이펙트 ───── */
+  .ultfx{position:absolute; inset:0; z-index:7; pointer-events:none}
+  .shock{position:absolute; left:50%; top:36%; width:56px; height:56px; margin:-28px 0 0 -28px; border-radius:50%;
+    border:2px solid #ffe9a8; box-shadow:0 0 34px rgba(255,233,168,.85), inset 0 0 22px rgba(255,233,168,.45);
+    animation:shockwave .95s cubic-bezier(.15,.7,.3,1) forwards}
+  @keyframes shockwave{0%{transform:scale(.25); opacity:0}12%{opacity:1}100%{transform:scale(11); opacity:0}}
+  .spark{position:absolute; left:50%; top:36%; width:5px; height:5px; border-radius:50%; background:#ffd98a;
+    box-shadow:0 0 10px currentColor; animation:sparkfly .9s ease-out forwards}
+  @keyframes sparkfly{0%{transform:translate(0,0) scale(1.2); opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.15); opacity:0}}
+  .flash{position:absolute; inset:0; z-index:9; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 38%, #fff 0%, rgba(255,246,220,.55) 30%, transparent 68%)}
+  .flash.go{animation:flashgo .52s ease-out}
+  @keyframes flashgo{0%{opacity:0}14%{opacity:.95}100%{opacity:0}}
+  .cut-in{display:flex; align-items:center; justify-content:center; gap:16px}
+  .cut-face{position:relative; flex:0 0 72px; width:72px; height:72px; border-radius:50%; overflow:hidden;
+    border:2px solid var(--rc,#ecd9a8); box-shadow:0 0 34px rgba(246,230,189,.85); transform:skewX(8deg)}
+  .cut-face .ph-svg,.cut-face .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .cut-face .ph-img{object-fit:cover; object-position:top center}
+  .cut-txt{display:block; text-align:left}
+  .bu.hit-glow{animation:glowhit .62s ease-out}
+  @keyframes glowhit{0%{box-shadow:0 0 0 2px #fff, 0 0 42px rgba(255,233,168,.95); filter:brightness(1.7)}100%{box-shadow:none; filter:none}}
+  @media (max-width:640px){
+    .cut-face{flex-basis:56px; width:56px; height:56px}
+    .terr-hud{top:40px; right:8px; font-size:7px; padding:3px 7px}
+    .terr-hud .tbar{width:34px}
+  }
+
   /* ───── fx ───── */
   #fx{position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden}
   .confetti{
@@ -2329,6 +2405,86 @@ function portraitSVG(fig, fit, alt) {
     }
   ];
 
+
+  /* ── 세계지도 (간략 폴리곤) ── */
+  var WORLD_REGIONS = [
+    { id: 'namerica', n: '북아메리카', c: [214, 130], d: 'M118 92 L176 68 L244 78 L292 104 L302 132 L276 158 L258 176 L238 202 L213 196 L205 166 L176 158 L148 134 L126 116 Z' },
+    { id: 'samerica', n: '남아메리카', c: [316, 330], d: 'M286 258 L332 252 L352 288 L342 336 L322 392 L302 414 L292 382 L302 334 L286 296 Z' },
+    { id: 'britain', n: '영국', c: [481, 97], d: 'M470 88 L490 84 L494 102 L478 110 Z' },
+    { id: 'europe_w', n: '서유럽', c: [490, 126], d: 'M448 108 L506 96 L534 116 L528 146 L494 156 L462 146 Z' },
+    { id: 'europe_n', n: '북유럽', c: [566, 92], d: 'M520 78 L596 72 L614 96 L590 114 L540 110 Z' },
+    { id: 'italy', n: '이탈리아', c: [511, 170], d: 'M504 156 L518 150 L522 176 L510 190 L500 172 Z' },
+    { id: 'greece', n: '그리스', c: [533, 162], d: 'M524 156 L540 150 L544 168 L528 174 Z' },
+    { id: 'africa', n: '아프리카', c: [512, 250], d: 'M452 176 L548 168 L574 200 L560 252 L538 300 L508 340 L482 328 L468 286 L452 236 Z' },
+    { id: 'asia', n: '아시아', c: [680, 140], d: 'M536 92 L644 72 L736 78 L806 104 L826 142 L792 176 L742 192 L696 212 L654 196 L614 172 L580 158 L552 130 Z' },
+    { id: 'india', n: '인도', c: [648, 214], d: 'M636 196 L666 194 L656 236 L640 210 Z' },
+    { id: 'seasia', n: '동남아시아', c: [724, 228], d: 'M700 208 L734 212 L750 240 L722 252 L700 234 Z' },
+    { id: 'korea', n: '한반도', c: [780, 170], d: 'M766 162 L790 154 L796 176 L778 186 Z' },
+    { id: 'japan', n: '일본 열도', c: [817, 180], d: 'M806 172 L824 164 L830 188 L814 196 Z' },
+    { id: 'australia', n: '오세아니아', c: [808, 354], d: 'M758 328 L832 318 L862 348 L846 386 L790 392 L762 366 Z' },
+    { id: 'oceania', n: '뉴질랜드', c: [888, 385], d: 'M878 378 L894 372 L898 392 L884 398 Z' },
+    { id: 'pacific', n: '태평양', c: [874, 243], d: 'M862 236 L882 232 L886 250 L868 254 Z' }
+  ];
+
+  var STAGE_MAP = {
+    s1: { pt: [780, 170], terr: ['korea', 'greece'], label: '고조선 · 그리스' },
+    s2: { pt: [511, 170], terr: ['italy'], label: '로마' },
+    s3: { pt: [490, 126], terr: ['europe_w'], label: '피렌체' },
+    s4: { pt: [817, 180], terr: ['japan'], label: '한산도 · 명량' },
+    s5: { pt: [481, 97], terr: ['britain', 'europe_n'], label: '대영제국' },
+    s6: { pt: [214, 130], terr: ['namerica'], label: '미국' },
+    s7: { pt: [874, 243], terr: ['pacific', 'seasia'], label: '2차대전 유럽·태평양' },
+    s8: { pt: [680, 140], terr: ['asia', 'africa', 'samerica', 'australia', 'india'], label: '21세기 지구' }
+  };
+
+  function regionById(id) {
+    for (var i = 0; i < WORLD_REGIONS.length; i++) if (WORLD_REGIONS[i].id === id) return WORLD_REGIONS[i];
+    return null;
+  }
+
+  function ownedRegions() {
+    var b = ensureState(), own = {};
+    STAGES.forEach(function (st) {
+      var c = b.clear[st.id];
+      if (!c || !c.cleared) return;
+      (STAGE_MAP[st.id] || { terr: [] }).terr.forEach(function (id) { own[id] = 1; });
+    });
+    return own;
+  }
+
+  function worldPercent() {
+    var own = ownedRegions();
+    return Math.round(Object.keys(own).length / WORLD_REGIONS.length * 100);
+  }
+
+  /* 캠페인용 세계지도 */
+  function campaignMapSvg() {
+    var b = ensureState();
+    var own = ownedRegions();
+    var maxNo = 1;
+    STAGES.forEach(function (st) {
+      var prev = STAGES[st.no - 2];
+      if (!prev || (b.clear[prev.id] && b.clear[prev.id].cleared)) maxNo = Math.max(maxNo, st.no);
+    });
+    var paths = WORLD_REGIONS.map(function (r) {
+      return '<path class="wm-r' + (own[r.id] ? ' own' : '') + '" d="' + r.d + '"></path>';
+    }).join('');
+    var marks = STAGES.map(function (st) {
+      var m = STAGE_MAP[st.id];
+      var c = b.clear[st.id] || {};
+      var locked = !c.cleared && st.no > maxNo;
+      var cls = c.cleared ? 'done' : (locked ? 'lock' : 'next');
+      var glyph = c.cleared ? '🚩' : (locked ? '·' : '⚔️');
+      return '<text class="wm-mark ' + cls + '" x="' + m.pt[0] + '" y="' + m.pt[1] + '">' + glyph + '</text>' +
+        (c.cleared ? '<text class="wm-lab done" x="' + m.pt[0] + '" y="' + (m.pt[1] + 16) + '">' + esc(m.label) + '</text>' : '');
+    }).join('');
+    return '<svg class="wmsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">' +
+      '<g class="wm-grid">' +
+      '<path d="M0 125 H1000 M0 250 H1000 M0 375 H1000" class="wm-line"/>' +
+      '<path d="M250 0 V500 M500 0 V500 M750 0 V500" class="wm-line"/>' +
+      '</g><g class="wm-base">' + paths + '</g>' + marks + '</svg>';
+  }
+
   /* ── helpers ── */
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) {
@@ -2531,7 +2687,19 @@ function portraitSVG(fig, fit, alt) {
       '<button type="button" class="bghost" data-deck="1">⚔️ 출격 덱 편성</button>' +
       '<p>인물은 「오늘의 인물 체크」와 카드팩으로 얻습니다. 얻지 않은 인물은 잠겨 있습니다.</p></div>';
 
-    $('#bView').innerHTML = head + map + foot;
+    var wpct = worldPercent();
+    var ownedN = Object.keys(ownedRegions()).length;
+    var wmap = '<div class="wmap">' +
+      '<div class="wmap-art">' + campaignMapSvg() + '</div>' +
+      '<div class="wmap-hud">' +
+      '<span class="kicker">WORLD CONQUEST</span>' +
+      '<b class="wpct">' + wpct + '%</b>' +
+      '<div class="wbar"><i style="width:' + wpct + '%"></i></div>' +
+      '<p>정복한 시대 <b>' + clearedCount() + ' / ' + STAGES.length + '</b></p>' +
+      '<p>점령 영토 <b>' + ownedN + ' / ' + WORLD_REGIONS.length + '</b> 지역</p>' +
+      '</div></div>';
+
+    $('#bView').innerHTML = head + wmap + map + foot;
   }
 
   function renderDeck(stageId) {
@@ -2722,6 +2890,10 @@ function portraitSVG(fig, fit, alt) {
       active: null, log: [], dead: 0, deckSize: deck.length, started: Date.now()
     };
     B_STAGE = stage;
+    var tot = 0;
+    stage.waves.forEach(function (w) { tot += w.u.length + (w.boss ? 1 : 0); });
+    B.totalEnemies = tot;
+    B.killed = 0;
     deck.forEach(function (id) {
       var f = figById(id);
       if (f) B.allies.push(makeAlly(f));
@@ -2732,6 +2904,90 @@ function portraitSVG(fig, fit, alt) {
     tickTimer = setInterval(tick, 90);
     B.log.push({ t: '전투 개시 · ' + stage.era + ' ' + stage.name, k: 'sys' });
     renderLog();
+  }
+
+
+  /* 전투 배경 세계지도 + 영토 잠식 */
+  function fieldMapSvg(stage) {
+    var m = STAGE_MAP[stage.id] || { pt: [500, 250] };
+    var paths = WORLD_REGIONS.map(function (r) {
+      return '<path class="wm-r" d="' + r.d + '"></path>';
+    }).join('');
+    return '<div class="fmap">' +
+      '<svg class="wmsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><clipPath id="terrClip"><circle id="terrC" cx="' + m.pt[0] + '" cy="' + m.pt[1] + '" r="0"></circle></clipPath></defs>' +
+      '<g class="wm-base">' + paths + '</g>' +
+      '<g class="wm-ownlayer" clip-path="url(#terrClip)">' + paths + '</g>' +
+      '<circle id="terrRing" class="terr-ring" cx="' + m.pt[0] + '" cy="' + m.pt[1] + '" r="0"></circle>' +
+      '<text class="wm-mark next wm-pulse" x="' + m.pt[0] + '" y="' + m.pt[1] + '">⚔️</text>' +
+      '</svg>' +
+      '<div class="terr-hud"><span>영토 잠식</span><b id="bTerrPct">0%</b>' +
+      '<div class="tbar"><i id="bTerrBar" style="width:0%"></i></div></div>' +
+      '<div class="ultfx" id="bUltFx"></div>' +
+      '<div class="flash" id="bFlash"></div>' +
+      '</div>';
+  }
+
+  function updateTerritory() {
+    if (!B) return;
+    var total = B.totalEnemies || 1;
+    var prog = Math.max(0, Math.min(1, (B.killed || 0) / total));
+    var m = STAGE_MAP[B.stage.id] || { pt: [500, 250] };
+    var r = 24 + prog * 300;
+    var c = document.getElementById('terrC');
+    if (c) c.setAttribute('r', r);
+    var ring = document.getElementById('terrRing');
+    if (ring) ring.setAttribute('r', r);
+    var pct = document.getElementById('bTerrPct');
+    if (pct) pct.textContent = Math.round(prog * 100) + '%';
+    var bar = document.getElementById('bTerrBar');
+    if (bar) bar.style.width = (prog * 100) + '%';
+  }
+
+  function plantFlag() {
+    var wrap = $('.fmap');
+    var m = STAGE_MAP[B.stage.id];
+    if (!wrap || !m) return;
+    var svg = wrap.querySelector('svg');
+    if (!svg) return;
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('class', 'wm-flag');
+    t.setAttribute('x', m.pt[0] + (B.wave % 2 ? 14 : -14));
+    t.setAttribute('y', m.pt[1] + (B.wave % 2 ? -10 : 12));
+    t.textContent = '🚩';
+    svg.appendChild(t);
+  }
+
+  function ultBurst() {
+    var fmap = $('.fmap');
+    if (!fmap) return;
+    var flash = document.getElementById('bFlash');
+    if (flash) {
+      flash.classList.remove('go');
+      void flash.offsetWidth;
+      flash.classList.add('go');
+    }
+    var fx = document.getElementById('bUltFx');
+    if (!fx) return;
+    for (var i = 0; i < 3; i++) {
+      var ring = document.createElement('i');
+      ring.className = 'shock';
+      ring.style.animationDelay = (i * 0.12) + 's';
+      fx.appendChild(ring);
+      (function (el) { later(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1300); })(ring);
+    }
+    for (var k = 0; k < 28; k++) {
+      var sp = document.createElement('i');
+      sp.className = 'spark';
+      var ang = Math.random() * Math.PI * 2;
+      var dist = 90 + Math.random() * 260;
+      sp.style.setProperty('--dx', (Math.cos(ang) * dist).toFixed(0) + 'px');
+      sp.style.setProperty('--dy', (Math.sin(ang) * dist * 0.7).toFixed(0) + 'px');
+      sp.style.animationDelay = (Math.random() * 0.12).toFixed(2) + 's';
+      sp.style.background = k % 4 === 0 ? '#fff6d8' : (k % 3 === 0 ? '#9ee6b4' : '#ffd98a');
+      fx.appendChild(sp);
+      (function (el) { later(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1200); })(sp);
+    }
   }
 
   function renderArena() {
@@ -2751,13 +3007,14 @@ function portraitSVG(fig, fit, alt) {
       '<button type="button" class="actrl danger" id="bRetreat">후퇴</button>' +
       '</div></div>' +
       '<div class="field" id="bField">' +
-      '<div class="f-bg"></div><div class="f-ground"></div>' +
+      '<div class="f-ground"></div>' + fieldMapSvg(s) +
       '<div class="f-banner"><span class="fb-flag">' + s.flag + '</span><span class="fb-name" id="bEnemyName">' + esc(s.name) + '</span></div>' +
       '<div class="erow" id="bEnemies"></div>' +
       '<div class="vsline"><span>VS</span></div>' +
       '<div class="arow" id="bAllies"></div>' +
       '<div class="floats" id="bFloats"></div>' +
-      '<div class="cutin" id="bCut"><div class="cut-in"><span class="ci-k">ULTIMATE</span><b class="ci-s"></b><span class="ci-n"></span></div></div>' +
+      '<div class="cutin" id="bCut"><div class="cut-in"><span class="cut-face" id="bCutFace"></span>' +
+      '<span class="cut-txt"><span class="ci-k">ULTIMATE</span><b class="ci-s"></b><span class="ci-n"></span></span></div></div>' +
       '<div class="waveban" id="bWaveBan"></div>' +
       '</div>' +
       '<div class="a-log" id="bLog"></div>' +
@@ -2788,6 +3045,7 @@ function portraitSVG(fig, fit, alt) {
     var en = $('#bEnemyName');
     if (en) en.textContent = w.t;
     waveBanner(idx);
+    updateTerritory();
     sfx('wave');
     B.log.push({ t: 'WAVE ' + (idx + 1) + ' · ' + w.t, k: 'sys' });
     renderLog();
@@ -2874,6 +3132,15 @@ function portraitSVG(fig, fit, alt) {
     renderLog();
   }
 
+  function glowHit(u) {
+    var el = unitEl(u);
+    if (!el) return;
+    el.classList.remove('hit-glow');
+    void el.offsetWidth;
+    el.classList.add('hit-glow');
+    later(function () { el.classList.remove('hit-glow'); }, 620);
+  }
+
   function floatDmg(u, dmg, crit, kind) {
     var box = $('#bFloats');
     if (!box) return;
@@ -2916,6 +3183,7 @@ function portraitSVG(fig, fit, alt) {
     if (tgt.hp <= 0) {
       tgt.alive = false;
       if (tgt.side === 'a') B.dead++;
+      if (tgt.side === 'e') { B.killed = (B.killed || 0) + 1; updateTerritory(); }
       logLine('<b>' + esc(tgt.name) + '</b> ' + (tgt.side === 'a' ? '전투불능' : '격파'), tgt.side === 'a' ? 'bad' : 'good');
     }
     paintUnit(tgt);
@@ -3010,8 +3278,10 @@ function portraitSVG(fig, fit, alt) {
     var cut = $('#bCut');
     if (cut) {
       var nm = cut.querySelector('.ci-s'), nn = cut.querySelector('.ci-n');
+      var face = cut.querySelector('#bCutFace');
       if (nm) nm.textContent = sk.n;
       if (nn) nn.textContent = a.name + ' · 궁극기';
+      if (face) face.innerHTML = figArt(a.fig);
       cut.classList.remove('go');
       void cut.offsetWidth;
       cut.classList.add('go');
@@ -3020,6 +3290,7 @@ function portraitSVG(fig, fit, alt) {
     }
     B.hold = true;
     shake('big');
+    ultBurst();
     sfx('ult');
     var el = unitEl(a);
     if (el) el.classList.add('ulting');
@@ -3032,11 +3303,12 @@ function portraitSVG(fig, fit, alt) {
       } else if (sk.e === 'buff') {
         aliveAllies().forEach(function (x) { x.buff = Math.min(2.4, (x.buff || 1) + 0.35); });
       } else if (sk.e === 'aoe') {
-        aliveEnemies().slice().forEach(function (t) { dealDamage(a, t, sk.m, 'ult'); });
+        aliveEnemies().slice().forEach(function (t) { glowHit(t); dealDamage(a, t, sk.m, 'ult'); });
       } else {
         var tg = aliveEnemies();
         if (tg.length) {
           tg.sort(function (x, y) { return x.hp - y.hp; });
+          glowHit(tg[0]);
           dealDamage(a, tg[0], sk.m * 1.15, 'ult');
         }
       }
@@ -3073,7 +3345,9 @@ function portraitSVG(fig, fit, alt) {
       if (B.wave >= B.stage.waves.length - 1) { victory(); return; }
       B.phase = 'moving';
       B.hold = true;
-      logLine('WAVE CLEAR', 'good');
+      plantFlag();
+      updateTerritory();
+      logLine('WAVE CLEAR · 영토 확장', 'good');
       later(function () {
         if (!B) return;
         aliveAllies().forEach(function (a) { healUnit(a, Math.round(a.maxHp * 0.18)); });
