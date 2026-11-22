@@ -1327,22 +1327,22 @@
   /* 전장 배경 세계지도 · 영토 잠식 (시인성 강화) */
   .fmap{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#0c2531}
   .fmap .wmsvg{width:100%; height:100%; display:block}
-  .fmap .wm-c{fill:rgba(74,112,132,.95); stroke:rgba(158,208,228,.55); stroke-width:.4; vector-effect:non-scaling-stroke}
+  .fmap .wm-c{fill:rgba(56,90,108,.97); stroke:rgba(150,205,225,.42); stroke-width:.4; vector-effect:non-scaling-stroke}
   .fmap .wm-grat path{fill:none; stroke:rgba(150,215,235,.17); stroke-width:.5; vector-effect:non-scaling-stroke}
   .fmap .wm-tgtlayer .wm-c{fill:none; stroke:none}
-  .fmap .wm-tgtlayer .wm-c.tgt{fill:rgba(255,198,78,.72); stroke:#fff3c4; stroke-width:2.2; stroke-opacity:1;
+  .fmap .wm-tgtlayer .wm-c.tgt{fill:rgba(255,198,78,.20); stroke:#ffe9b0; stroke-width:1.8; stroke-opacity:1;
     vector-effect:non-scaling-stroke}
   .fmap .wm-tgtlayer{animation:tgtbreath 2.4s ease-in-out infinite}
   @keyframes tgtbreath{0%,100%{opacity:.6}50%{opacity:1}}
   .fmap .wm-ownlayer .wm-c{fill:none; stroke:none}
-  .fmap .wm-ownlayer .wm-c.own{fill:rgba(46,224,148,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.95;
+  .fmap .wm-ownlayer .wm-c.own{fill:rgba(46,224,148,.55); stroke:rgba(205,255,232,.9); stroke-width:1.6; stroke-opacity:.95;
     vector-effect:non-scaling-stroke}
   .fmap.fmap-solar, .fmap.fmap-space{background:#05060a}
   .fmap.fmap-space .wmsvg, .fmap.fmap-solar .wmsvg{opacity:1}
   .fmap .wm-mark{font-size:13px}
 
   /* 영토 잠식 링 · 파동 · 스캔 라인 */
-  .terr-fill{fill:rgba(46,224,148,.16); stroke:none}
+  .terr-fill{fill:rgba(46,224,148,.09); stroke:none}
   .terr-ring{fill:none; stroke:#8effc8; stroke-width:2.2; stroke-dasharray:7 9; vector-effect:non-scaling-stroke;
     animation:terrspin 9s linear infinite}
   .terr-ring.alt{stroke:#ffe9b0; stroke-width:1.5; stroke-dasharray:3 14; opacity:.9; animation:terrspin 5s linear infinite reverse}
@@ -1835,13 +1835,13 @@
   }
   .btm-foot .btm-num{font-size:9px; color:#c9ffe0; letter-spacing:.04em; white-space:nowrap; font-variant-numeric:tabular-nums}
   /* 전장 배경용 흐린 지도 (점령 지도가 위로 올라간 자리) */
-  .fghost{position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.22}
+  .fghost{position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.15}
   .fghost svg{width:100%; height:100%; display:block}
   .fghost .wm-c{fill:rgba(74,112,132,.95); stroke:rgba(158,208,228,.5); stroke-width:.4; vector-effect:non-scaling-stroke}
   .fghost .wm-tgtlayer .wm-c.tgt{fill:rgba(255,198,78,.55); stroke:#ffe9b0; stroke-width:1.6; vector-effect:non-scaling-stroke}
   .fghost .wm-ownlayer .wm-c.own{fill:rgba(46,224,148,.5); stroke:#cfffe6; stroke-width:1.2; vector-effect:non-scaling-stroke}
   /* 점령 영토: 이미 먹은 땅은 늘 에메랄드, 이번 전선은 물결 따라 채워진다 */
-  .wm-cap .wm-c.cap{fill:rgba(46,224,148,.52); stroke:none}
+  .wm-cap .wm-c.cap{fill:rgba(46,224,148,.66); stroke:rgba(198,255,228,.55); stroke-width:1; vector-effect:non-scaling-stroke}
   .terr-front text{
     font-size:12px; text-anchor:middle; dominant-baseline:middle;
     paint-order:stroke; stroke:rgba(2,12,8,.9); stroke-width:2.2px; stroke-linejoin:round;
@@ -2529,7 +2529,7 @@
       <button type="button" id="ftRoadmap">티어 로드맵</button>
       <a href="https://github.com/minemong15-tech" target="_blank" rel="noopener">github.com/minemong15-tech</a>
     </div>
-    매일 한 사람, 한 문장. 100인의 기록이 쌓이면 당신의 티어가 됩니다.<br>
+    매일 한 사람, 한 문장. 200인의 기록이 쌓이면 당신의 티어가 됩니다.<br>
     기록은 이 브라우저에만 저장되며 서버로 전송되지 않습니다.
   </footer>
 </main>
@@ -4893,8 +4893,8 @@ function portraitSVG(fig, fit, alt) {
   function fieldDefs(p) {
     return '<defs>' +
       '<radialGradient id="' + p + 'Sea" cx="50%" cy="38%" r="80%">' +
-      '<stop offset="0" stop-color="#143d4f"/><stop offset=".42" stop-color="#0d2a37"/>' +
-      '<stop offset=".78" stop-color="#081b25"/><stop offset="1" stop-color="#06121a"/></radialGradient>' +
+      '<stop offset="0" stop-color="#123a4c"/><stop offset=".42" stop-color="#0a2430"/>' +
+      '<stop offset=".78" stop-color="#061821"/><stop offset="1" stop-color="#040e15"/></radialGradient>' +
       '<radialGradient id="' + p + 'Glow" cx="50%" cy="42%" r="52%">' +
       '<stop offset="0" stop-color="#7fe8ff" stop-opacity=".16"/><stop offset="1" stop-color="#7fe8ff" stop-opacity="0"/></radialGradient>' +
       '</defs>';
@@ -4934,7 +4934,7 @@ function portraitSVG(fig, fit, alt) {
       pt: m.pt, fit: fit, vb: vb, mode: chap === 'earth' ? 'rad' : 'pt',
       half: Math.max(half, Math.min(vb[2], vb[3]) * 0.12) * 1.12
     };
-    var hud = terrHud(goal), fs = (vb[2] * 0.05).toFixed(2);
+    var hud = terrHud(goal), fs = (vb[3] * 0.3).toFixed(2);
 
     if (chap !== 'earth') {
       var art = chap === 'solar' ? solarSvg('', true) : spaceSvg('', true);
@@ -5000,7 +5000,7 @@ function portraitSVG(fig, fit, alt) {
     FMAP_VIEW.vb = vb;
     svg.setAttribute('viewBox', vbStr(vb));
     var pin = svg.querySelector('.terr-pin');
-    if (pin) pin.style.fontSize = (vb[2] * 0.05).toFixed(2) + 'px';
+    if (pin) pin.style.fontSize = (vb[3] * 0.3).toFixed(2) + 'px';
     terrApply();
   }
 
@@ -5016,7 +5016,7 @@ function portraitSVG(fig, fit, alt) {
   function terrApply() {
     if (!FMAP_VIEW) return;
     var D = FMAP_VIEW.vb[2], rt = TERR.r;
-    var rf = D * (0.06 + 0.9 * TERR.prog);
+    var rf = D * (0.05 + 0.5 * TERR.prog);
     var setR = function (id, v) {
       var el = document.getElementById(id);
       if (el) el.setAttribute('r', v.toFixed(2));
@@ -5025,7 +5025,7 @@ function portraitSVG(fig, fit, alt) {
     setR('terrScan', rf); setR('terrFill', rf);
     var fr = document.getElementById('terrFront');
     if (fr) {
-      var fsz = (D * 0.075).toFixed(2), angs = [-0.44, 0.06, 0.46], html = '';
+      var fsz = (FMAP_VIEW.vb[3] * 0.22).toFixed(2), angs = [-0.5, 0.0, 0.5], html = '';
       for (var i = 0; i < angs.length; i++) {
         var a = angs[i] + TERR.prog * 0.9;
         html += '<text x="' + (FMAP_VIEW.pt[0] + Math.cos(a) * rt * 0.98).toFixed(1) + '" y="' +
@@ -6518,7 +6518,7 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── 우편함 · 뽑기권 · 코드 ── */
   var MAILS = [
-    { id: 'welcome', icon: '🎉', t: 'LEGACY 오픈 기념 우편', d: '100인의 기록이 시작됩니다. 뽑기권 3장과 오픈 기념 코드를 함께 보냅니다.', tickets: 3, code: 'LEGACY100' },
+    { id: 'welcome', icon: '🎉', t: 'LEGACY 오픈 기념 우편', d: '200인의 기록이 시작됩니다. 뽑기권 3장과 오픈 기념 코드를 함께 보냅니다.', tickets: 3, code: 'LEGACY100' },
     { id: 'star', icon: '✨', t: '별빛 상자 우편', d: '레전더리 인물을 노려볼 시간입니다. 뽑기권 2장과 별빛 코드가 들어 있습니다.', tickets: 2, code: 'STAR777' },
     { id: 'hundred', icon: '📚', t: '100인 도감 도전 우편', d: '매일 한 명씩 체크하면 코인도 쌓입니다. 응원의 뽑기권 1장을 드립니다.', tickets: 1, code: '' }
   ];
