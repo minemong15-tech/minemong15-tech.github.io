@@ -5744,15 +5744,27 @@ function togglePause() {
 }
 
 /* ---------- lobby preview ---------- */
-let previewT = 0;
+let previewT = 0, pv3d = null, pvCtx = null;
 function startPreviewLoop() {
   const cv = $('#preview');
   if (!cv) return;
-  const ctx = cv.getContext('2d');
   function frame(ts) {
     previewT = ts / 1000;
-    if (!B.on && curTab === 'lobby' && cv.offsetParent !== null) {
-      drawPreview(ctx, cv.width, cv.height, previewT);
+    const visible = !B.on && curTab === 'lobby' && cv.offsetParent !== null;
+    if (visible) {
+      if (pv3d !== true && previewT < 8) {
+        if (typeof d3HasThree === 'function' && d3HasThree()) {
+          pv3d = (typeof d3PreviewInit === 'function') ? d3PreviewInit() : false;
+        }
+      }
+      if (pv3d === true) {
+        const cid = CH[S.picked] ? S.picked : 'hyeon';
+        if (typeof d3PreviewSet === 'function') d3PreviewSet(cid, colorsOf(cid));
+        if (typeof d3PreviewFrame === 'function') d3PreviewFrame(ts);
+      } else if (previewT > 5) {
+        if (!pvCtx) { try { pvCtx = cv.getContext('2d'); } catch (e) { pvCtx = null; } }
+        if (pvCtx) drawPreview(pvCtx, cv.width, cv.height, previewT);
+      }
     }
     requestAnimationFrame(frame);
   }
@@ -7126,6 +7138,110 @@ function d3BrawlerModel(charId, col) {
   parts.baseRing = baseRing;
 
   return g;
+}
+
+/* ---------- lobby 3D preview (turntable) ---------- */
+function d3PreviewInit() {
+  if (D3.pv && D3.pv.r) return true;
+  const T = D3.THREE;
+  if (!T || !d3HasThreeSafe()) return false;
+  const cv = document.getElementById('preview');
+  if (!cv) return false;
+  let r;
+  try {
+    r = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+    if (!r || !r.getContext()) return false;
+  } catch (e) { return false; }
+  r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  if ('outputColorSpace' in r && T.SRGBColorSpace) r.outputColorSpace = T.SRGBColorSpace;
+  const scene = new T.Scene();
+  const cam = new T.PerspectiveCamera(34, 1, 5, 1600);
+  cam.position.set(148, 96, 168);
+  cam.lookAt(0, 50, 0);
+  scene.add(new T.HemisphereLight(0xcfeaff, 0x0b1424, 1.0));
+  const key = new T.DirectionalLight(0xffffff, 1.6); key.position.set(140, 220, 180); scene.add(key);
+  const rimA = new T.DirectionalLight(0x6ad8ff, 1.15); rimA.position.set(-190, 100, -150); scene.add(rimA);
+  const rimB = new T.DirectionalLight(0xff5ea8, 0.85); rimB.position.set(150, 70, -180); scene.add(rimB);
+
+  const disc = new T.Mesh(new T.CircleGeometry(70, 44), new T.MeshBasicMaterial({
+    color: d3col('#0c1e33'), transparent: true, opacity: 0.6
+  }));
+  disc.rotation.x = -Math.PI / 2;
+  disc.position.y = 0.6;
+  scene.add(disc);
+  const ring = new T.Mesh(new T.RingGeometry(64, 72, 56), new T.MeshBasicMaterial({
+    color: d3col('#3ee0ff'), transparent: true, opacity: 0.55,
+    blending: T.AdditiveBlending, depthWrite: false, side: T.DoubleSide
+  }));
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 1.2;
+  scene.add(ring);
+
+  D3.pv = { r: r, scene: scene, cam: cam, ring: ring, disc: disc, grp: null, key: '', t: 0, last: 0 };
+  d3PreviewResize();
+  return true;
+}
+function d3HasThreeSafe() {
+  return typeof d3HasThree === 'function' ? d3HasThree() : false;
+}
+function d3PreviewResize() {
+  const pv = D3.pv;
+  if (!pv) return;
+  pv.r.setSize(380, 380, false);
+  pv.cam.aspect = 1;
+  pv.cam.updateProjectionMatrix();
+}
+function d3PreviewSet(charId, cols) {
+  if (!D3.pv) return;
+  const key = charId + '|' + cols.body + '|' + cols.accent + '|' + cols.glow;
+  if (D3.pv.key === key && D3.pv.grp) return;
+  const T = D3.THREE;
+  if (D3.pv.grp) {
+    D3.pv.scene.remove(D3.pv.grp);
+    D3.pv.grp.traverse(function (o) {
+      if (o.geometry && o.geometry !== (D3.pools && D3.pools.starGeo)) o.geometry.dispose();
+    });
+    D3.pv.grp = null;
+  }
+  const g = d3BrawlerModel(charId, cols);
+  g.traverse(function (o) {
+    if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; }
+  });
+  g.position.set(0, 0, 0);
+  D3.pv.scene.add(g);
+  D3.pv.grp = g;
+  D3.pv.key = key;
+  if (D3.pv.ring) D3.pv.ring.material.color = d3col(cols.glow || '#3ee0ff');
+  void T;
+}
+function d3PreviewFrame(ts) {
+  const pv = D3.pv;
+  if (!pv || !pv.r) return false;
+  const t = ts / 1000;
+  const dt = pv.last ? Math.min(0.06, t - pv.last) : 0.016;
+  pv.last = t;
+  pv.t += dt;
+  const g = pv.grp;
+  if (g) {
+    g.rotation.y = pv.t * 0.55;
+    g.position.y = Math.sin(pv.t * 1.7) * 1.8;
+    const P = g.userData.parts;
+    if (P) {
+      const sw = Math.sin(pv.t * 1.7);
+      if (P.armL) P.armL.rotation.z = sw * 0.14;
+      if (P.armR) P.armR.rotation.z = -sw * 0.14 - 0.08;
+      if (P.head) P.head.rotation.z = sw * 0.04;
+      if (P.torso) { P.torso.rotation.y = sw * 0.06; P.torso.rotation.z = sw * 0.02; }
+      if (P.legL) P.legL.rotation.z = sw * 0.05;
+      if (P.legR) P.legR.rotation.z = -sw * 0.05;
+      if (P.baseRing) P.baseRing.material.opacity = 0.42 + Math.sin(pv.t * 2.2) * 0.14;
+      if (P.rim) P.rim.material.opacity = 0.10 + Math.abs(Math.sin(pv.t * 1.6)) * 0.05;
+      if (P.muzzle) P.muzzle.material.opacity = 0;
+    }
+  }
+  if (pv.ring) pv.ring.material.opacity = 0.42 + Math.sin(pv.t * 1.9) * 0.16;
+  pv.r.render(pv.scene, pv.cam);
+  return true;
 }
 
 
