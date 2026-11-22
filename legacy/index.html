@@ -761,7 +761,7 @@
   }
   .wcta-glow{position:absolute; inset:-40%; background:conic-gradient(from 0deg, transparent, rgba(200,168,106,.14), transparent 40%); animation:wspin 18s linear infinite; pointer-events:none}
   @keyframes wspin{to{transform:rotate(360deg)}}
-  .wcta-in{position:relative; z-index:2}
+  .wcta-in{position:relative; z-index:2; order:1}
   .warcta h2{
     font-family:var(--serif); font-size:clamp(23px,3.4vw,33px); font-weight:600; letter-spacing:.01em;
     margin:10px 0 0; color:#f7eedb; text-shadow:0 0 34px rgba(200,168,106,.35);
@@ -786,7 +786,7 @@
   .wcta-btn:hover{transform:translateY(-2px); box-shadow:0 18px 36px -14px rgba(200,168,106,.95)}
   .wcta-btn span{font-size:15px}
   .wcta-next{font-size:10.5px; letter-spacing:.05em; color:#8c8779}
-  .wcta-art{position:relative; width:100%; aspect-ratio:1/1; max-width:240px; justify-self:end}
+  .wcta-art{position:relative; order:2; width:100%; aspect-ratio:1/1; max-width:230px; justify-self:end; margin-right:6px}
   .wswords{width:100%; height:100%; filter:drop-shadow(0 0 22px rgba(200,168,106,.35)); animation:wfloat 6s ease-in-out infinite}
   @keyframes wfloat{0%,100%{transform:translateY(-4px) rotate(-2deg)}50%{transform:translateY(6px) rotate(2deg)}}
   .wchip{
