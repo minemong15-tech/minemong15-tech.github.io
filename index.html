@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#060b18">
 <meta name="color-scheme" content="dark">
-<title>ZONE · M — 앱 모음</title>
+<title>ZONE · M · 현성스타즈 — 앱 모음</title>
 <link rel="icon" href="assets/zone-logo.png">
 <style>
   :root{
     --bg:#060b18; --surface:rgba(255,255,255,.045); --line:rgba(255,255,255,.09);
-    --text:#f2f5fa; --dim:#8b96ab; --zone:#2f7cf6; --m:#b16cff;
+    --text:#f2f5fa; --dim:#8b96ab; --zone:#2f7cf6; --m:#b16cff; --stars:#3ee0ff;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
@@ -39,6 +39,7 @@
   a.card:hover,a.card:focus-visible{transform:translateY(-2px); background:rgba(255,255,255,.07); outline:none}
   a.card.zone:hover{border-color:rgba(47,124,246,.55)}
   a.card.m:hover{border-color:rgba(177,108,255,.55)}
+  a.card.stars:hover{border-color:rgba(62,224,255,.55)}
   .logo{
     width:58px;height:58px;flex:0 0 58px;border-radius:16px;overflow:hidden;
     background:#0d1424; display:flex;align-items:center;justify-content:center;
@@ -58,7 +59,7 @@
   <div class="wrap">
     <header>
       <h1>Apps</h1>
-      <p>바로 열리는 웹앱 두 개</p>
+      <p>바로 열리는 웹앱 세 개</p>
     </header>
 
     <main class="apps">
@@ -76,6 +77,15 @@
         <span class="meta">
           <span class="name">M</span>
           <span class="desc">친구들이 모여 채팅·릴스·투표·1분 게임·D-DAY를 함께 즐기는 소셜 앱</span>
+        </span>
+        <span class="arrow">›</span>
+      </a>
+
+      <a class="card stars" href="stars/">
+        <span class="logo"><img src="assets/stars-logo.svg" alt="현성스타즈 로고"></span>
+        <span class="meta">
+          <span class="name">현성스타즈 3D <span class="tag">GAME</span></span>
+          <span class="desc">10명의 브롤러와 함께하는 3vs3 3D 젬 그랩 액션 아레나</span>
         </span>
         <span class="arrow">›</span>
       </a>
