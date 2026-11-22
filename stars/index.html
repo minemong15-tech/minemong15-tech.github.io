@@ -590,7 +590,7 @@ canvas.sc-ava{width:44px;height:44px;border-radius:50%;flex:0 0 auto;border:2px 
 .sc-info b{font-size:12.5px;font-weight:900;letter-spacing:-.3px;color:#fff6d8}
 .sc-info b i{font-style:normal;font-size:8.5px;padding:1px 5px;border-radius:99px;background:#ffd75e;color:#2a1a00;vertical-align:middle}
 .sc-info span{font-size:9.5px;font-weight:700;color:#cbd9f2}
-.result-card{max-height:92dvh;overflow:auto}
+.result-card{max-height:92dvh;overflow-y:auto;overflow-x:hidden}
 
 @media (max-width:380px){
   .lvl-num{font-size:14px;padding:4px 7px}
@@ -6740,9 +6740,16 @@ function endBattle(win, reason) {
   const pool = B.players.filter(q => !q.isBoss);
   const scoreOf = function (q) { return (q.dmgDealt || 0) * 1 + (q.matchKills || 0) * 900 + (q.gems || 0) * 120 + (q.power || 0) * 60; };
   let star = null, starEnemy = null;
-  for (const q of pool) {
-    if (q.team === B.human.team) { if (!star || scoreOf(q) > scoreOf(star)) star = q; }
-    else { if (!starEnemy || scoreOf(q) > scoreOf(starEnemy)) starEnemy = q; }
+  if (B.mode === 'solo') {
+    // 솔로 난투: 개인전이므로 로비 전체에서 최고 활약을 뽑는다
+    for (const q of pool) { if (!star || scoreOf(q) > scoreOf(star)) star = q; }
+    if (star && scoreOf(star) < 300) star = null;
+  } else {
+    for (const q of pool) {
+      if (q.team === B.human.team) { if (!star || scoreOf(q) > scoreOf(star)) star = q; }
+      else { if (!starEnemy || scoreOf(q) > scoreOf(starEnemy)) starEnemy = q; }
+    }
+    if (star && scoreOf(star) < 300) star = null;
   }
   B.star = star;
   B.starEnemy = starEnemy;
@@ -9738,15 +9745,15 @@ function d3UpdateReticle() {
   R.grp.visible = true;
   const alpha = (input.touchMode ? 0.66 : 1) * (p.ammo > 0 ? 1 : 0.42);
   if (isGun) {
-    const width = 10;
+    const width = 7;
     R.gun.position.set(p.x - D3W.x + Math.cos(ang) * len / 2, 0, p.y - D3W.z + Math.sin(ang) * len / 2);
     R.gun.rotation.y = -ang;
     R.line.scale.set(len, width, 1);
-    R.lineGlow.scale.set(len, width * 3.4, 1);
+    R.lineGlow.scale.set(len, width * 2.6, 1);
     R.line.material.color.copy(col);
     R.lineGlow.material.color.copy(col);
-    R.line.material.opacity = (0.42 + Math.sin(D3.t * 7) * 0.08) * alpha;
-    R.lineGlow.material.opacity = 0.13 * alpha;
+    R.line.material.opacity = (0.4 + Math.sin(D3.t * 7) * 0.07) * alpha;
+    R.lineGlow.material.opacity = 0.1 * alpha;
     R.tip.position.set(p.x - D3W.x + Math.cos(ang) * len, 0, p.y - D3W.z + Math.sin(ang) * len);
     R.tip.rotation.y = -ang;
     R.tip.scale.setScalar(0.85 + Math.sin(D3.t * 8) * 0.1);
