@@ -866,7 +866,7 @@ function claimMission(id) {
   save(); updateWallet(); renderMissions();
   sfx('coin'); vibe(40);
   toast('🪙 ' + fmt(rw.tokens) + '  💎 ' + rw.gems + ' 획득!');
-  if ($('#missionWrap')) showMissions();
+  if ($('#modalRoot .overlay')) showMissions();
 }
 function renderMissions() {
   const dot = $('#missionDot'), sum = $('#missionSummary'), bar = $('#missionBar');
