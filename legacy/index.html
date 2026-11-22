@@ -1290,6 +1290,46 @@
     .bd-x{font-size:8px}
   }
 
+
+  /* 3장 챕터 */
+  .bchap{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:2px 0 12px}
+  .bch{
+    text-align:left; cursor:pointer; font-family:inherit; color:#a9a496; position:relative; overflow:hidden;
+    border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:11px 13px; background:rgba(255,255,255,.02);
+    transition:.18s; display:flex; flex-direction:column; gap:3px;
+  }
+  .bch:hover{border-color:rgba(200,168,106,.45); transform:translateY(-1px)}
+  .bch.on{border-color:rgba(200,168,106,.7); background:linear-gradient(150deg, rgba(200,168,106,.16), rgba(200,168,106,.03));
+    box-shadow:0 0 28px -16px rgba(200,168,106,.9)}
+  .bch b{font-family:var(--serif); font-size:14.5px; color:#f2e9d8; font-weight:600}
+  .bch.on b{color:var(--gold-hi)}
+  .bch span{font-size:9.5px; color:#7f8798; letter-spacing:.02em}
+  .bch em{position:absolute; right:10px; top:10px; font-style:normal; font-family:var(--serif); font-size:11px; color:var(--gold-dim)}
+  .bch.on em{color:var(--gold-hi)}
+  @media (max-width:640px){
+    .bchap{grid-template-columns:1fr}
+    .bch{padding:9px 11px}
+    .bch span{font-size:9px}
+  }
+
+  /* 태양계 · 우주 지도 */
+  .wmap.solar{background:
+      radial-gradient(700px 300px at 50% 50%, rgba(255,190,80,.10), transparent 70%),
+      linear-gradient(160deg,#0a0a12,#0c1018 60%,#07080c);}
+  .wmap.space{background:
+      radial-gradient(600px 280px at 25% 20%, rgba(176,122,214,.16), transparent 70%),
+      radial-gradient(500px 260px at 80% 70%, rgba(79,214,224,.12), transparent 70%),
+      linear-gradient(160deg,#08060f,#0a0c16 60%,#05060a);}
+  .wmap.solar .wmap-art, .wmap.space .wmap-art{overflow:hidden; border-radius:10px}
+  .ss-orb{fill:none; stroke:rgba(180,205,255,.16); stroke-width:.9; stroke-dasharray:2 6}
+  .ss-sun circle{filter:blur(.2px)}
+  .ss-planet{transition:transform .3s}
+  .fmap .ss-orb{stroke:rgba(255,255,255,.09)}
+  .fmap .ss-gal{opacity:.55}
+  .fmap .ss-hole{opacity:.7}
+  .terr-over{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+  .fmap .wm-mark{font-size:13px}
+
   /* ───── fx ───── */
   #fx{position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden}
   .confetti{
@@ -2474,6 +2514,48 @@ function portraitSVG(fig, fit, alt) {
   }
   function curDiff() { return diffOf(ensureState().diff || 'normal'); }
 
+
+  /* ── 제2장 태양계 · 제3장 우주 ── */
+  var WARS2 = [
+    { no: 51, id: 's51', name: '달 기지', years: '1969 ~', flag: '🌕', ec: '#cfd6e2', g: 'solar', desc: '달의 먼지가 발자국을 삼킨다', units: ['월면 경비대', '감마선 포탑', '무중력 드론'], boss: ['달 기지 사령관 SELENE', '🌕'] },
+    { no: 52, id: 's52', name: '수성 화염 지대', years: '태양계', flag: '🌡️', ec: '#ffa04a', g: 'solar', desc: '낮 430도, 밤 영하 180도의 땅', units: ['태양풍 정찰병', '플라스마 포대', '열차폐 병기'], boss: ['화염 지대 군주 HELIOS', '🔥'] },
+    { no: 53, id: 's53', name: '금성 황산 구름', years: '태양계', flag: '☁️', ec: '#e2c276', g: 'solar', desc: '산성 구름이 모든 것을 녹인다', units: ['산성 구름함', '황산 포격대', '고압 전투체'], boss: ['구름 성채의 여왕 VENUS', '👑'] },
+    { no: 54, id: 's54', name: '화성 올림푸스 산', years: '태양계', flag: '🔴', ec: '#e06a4a', g: 'solar', desc: '태양계에서 가장 높은 산을 오른다', units: ['붉은 먼지 기병', '모래 폭풍 포대', '궤도 강하대'], boss: ['올림푸스의 군주 ARES', '🗡️'] },
+    { no: 55, id: 's55', name: '소행성대', years: '태양계', flag: '🪨', ec: '#9a8a7a', g: 'solar', desc: '돌의 바다에서 길을 잃는다', units: ['암석 투석기', '채굴 드론', '충돌 유도탄'], boss: ['소행성 군단장 CERES', '🪨'] },
+    { no: 56, id: 's56', name: '목성 대적점', years: '태양계', flag: '🌀', ec: '#d9a06a', g: 'solar', desc: '지구보다 큰 폭풍의 눈', units: ['가스 폭풍함', '번개 창병', '중력 압축대'], boss: ['대적점의 폭풍왕 ZEUS', '🌀'] },
+    { no: 57, id: 's57', name: '토성 고리', years: '태양계', flag: '🪐', ec: '#e2c276', g: 'solar', desc: '얼음 고리가 검을 막아선다', units: ['고리 파편대', '얼음 궁수', '위성 요격함'], boss: ['고리의 수호자 CRONUS', '🪐'] },
+    { no: 58, id: 's58', name: '천왕성 빙하', years: '태양계', flag: '❄️', ec: '#7fd6e6', g: 'solar', desc: '옆으로 누운 행성의 얼음 바다', units: ['빙하 창병', '냉동 포대', '메탄 연무대'], boss: ['빙하의 군주 URANUS', '❄️'] },
+    { no: 59, id: 's59', name: '해왕성 폭풍', years: '태양계', flag: '🌊', ec: '#4f7fe0', g: 'solar', desc: '시속 2000km의 바람이 분다', units: ['폭풍 기병', '심해 압축포', '유령 함대'], boss: ['폭풍의 제왕 POSEIDON', '🌊'] },
+    { no: 60, id: 's60', name: '명왕성 카이퍼 벨트', years: '태양계', flag: '🌑', ec: '#8f9fb5', g: 'solar', desc: '태양계의 끝, 어둠의 경계', units: ['얼음 유목민', '경계 순찰대', '혜성 충돌함'], boss: ['경계의 수문장 HADES', '🌑'] },
+    { no: 61, id: 's61', name: '프록시마 센타우리', years: '우주', flag: '⭐', ec: '#ffd98a', g: 'space', desc: '가장 가까운 별, 가장 먼 여행', units: ['항성 항해함', '광자 포대', '우주 복서'], boss: ['센타우리 함대 사령 PROXIMA', '⭐'] },
+    { no: 62, id: 's62', name: '오리온 성운', years: '우주', flag: '🌌', ec: '#b07ad6', g: 'space', desc: '별이 태어나는 빛의 요람', units: ['성운 포자체', '별빛 창병', '가스 응축포'], boss: ['성운의 어머니 ORION', '🌌'] },
+    { no: 63, id: 's63', name: '게 성운 펄사', years: '우주', flag: '💫', ec: '#7fe0e6', g: 'space', desc: '1초에 30번 깜빡이는 심장', units: ['펄사 포격수', '중성자 창병', '전파 방해체'], boss: ['펄사의 지휘자 CRAB', '💫'] },
+    { no: 64, id: 's64', name: '백조자리 X-1 블랙홀', years: '우주', flag: '🕳️', ec: '#a06aff', g: 'space', desc: '빛조차 빠져나오지 못한다', units: ['사건의 지평선병', '중력 인형', '특이점 포대'], boss: ['블랙홀의 군주 CYGNUS', '🕳️'] },
+    { no: 65, id: 's65', name: '안드로메다 은하', years: '우주', flag: '🌠', ec: '#8ad4ff', g: 'space', desc: '우리 은하와 충돌해 오는 이웃', units: ['은하 순찰함', '나선 포대', '성단 돌격대'], boss: ['안드로메다 총사령 ANDROMEDA', '🌠'] },
+    { no: 66, id: 's66', name: '퀘이사 폭풍', years: '우주', flag: '☄️', ec: '#ff9a6a', g: 'space', desc: '은하 하나보다 밝은 빛의 폭풍', units: ['퀘이사 포격함', '광속 창병', '제트 플레어'], boss: ['퀘이사의 지배자 QUASAR', '☄️'] },
+    { no: 67, id: 's67', name: '암흑 물질 심연', years: '우주', flag: '🌑', ec: '#6a7aff', g: 'space', desc: '보이지 않는 것이 우주를 붙잡고 있다', units: ['그림자 전투체', '중력 그물', '공허 추적자'], boss: ['심연의 지배자 DARK MATTER', '🌑'] },
+    { no: 68, id: 's68', name: '다중 우주 차원문', years: '우주', flag: '🌀', ec: '#c08aff', g: 'space', desc: '모든 가능성이 동시에 열린다', units: ['차원 균열병', '평행 분신대', '차원 절단포'], boss: ['차원문의 수호자 INFINITY', '🌀'] },
+    { no: 69, id: 's69', name: '빅뱅의 잔광', years: '우주', flag: '✨', ec: '#ffe9a8', g: 'space', desc: '우주의 첫 빛이 아직 남아 있다', units: ['우주배경 복사체', '원시 플라스마', '시간 파동포'], boss: ['최초의 빛 PRIMORDIAL', '✨'] },
+    { no: 70, id: 's70', name: '우주 창조주 코어', years: '우주', flag: '♾️', ec: '#ffffff', g: 'space', desc: '모든 것의 시작과 끝, 최종 보스', units: ['창조주 근위대', '차원 붕괴포', '무한 루프체'], boss: ['우주 창조주 CREATOR', '♾️'] }
+  ];
+
+  var CHAPTERS = [
+    { id: 'earth', n: '제1장 · 지구의 세계', sub: '기원전 → 현대 · 50전쟁' },
+    { id: 'solar', n: '제2장 · 태양계', sub: '달 기지 → 카이퍼 벨트 · 10전쟁' },
+    { id: 'space', n: '제3장 · 우주', sub: '프록시마 → 창조주 코어 · 10전쟁' }
+  ];
+  var CHAPTER = 'earth';
+
+  var SOLAR_ORB = [70, 112, 150, 196, 224, 262, 318, 372, 430, 490];
+  var SOLAR_ANG = [20, 82, 150, 214, 268, 316, 38, 122, 196, 250];
+  var SOLAR_ICON = ['☿', '♀', '🌍', '♂', '🪨', '♃', '♄', '♅', '♆', '♇'];
+  function solarPt(i) {
+    var r = SOLAR_ORB[i], a = SOLAR_ANG[i] * Math.PI / 180;
+    return [500 + r * Math.cos(a), 250 + r * 0.62 * Math.sin(a)];
+  }
+  var SPACE_PTS = [[150, 120], [320, 90], [520, 140], [700, 110], [860, 150], [880, 330], [700, 400], [480, 360], [260, 380], [120, 300]];
+  var SPACE_ICO = ['⭐', '🌌', '💫', '🕳️', '🌠', '☄️', '🌑', '🌀', '✨', '♾️'];
+
   var GROUPS = [
     { id: 'all', n: '전체' },
     { id: 'anc', n: '고대·기원전' },
@@ -2482,12 +2564,12 @@ function portraitSVG(fig, fit, alt) {
     { id: 'mod', n: '근대·혁명' },
     { id: 'now', n: '20세기·현대' }
   ];
-  var GROUP_NAME = { anc: '고대·기원전', mid: '삼국·중세', joseon: '조선·대항해', mod: '근대·혁명', now: '20세기·현대' };
+  var GROUP_NAME = { anc: '고대·기원전', mid: '삼국·중세', joseon: '조선·대항해', mod: '근대·혁명', now: '20세기·현대', solar: '태양계', space: '우주' };
   var UNIT_ICON = ['⚔️', '🛡️', '🏹'];
 
-  var STAGES = WARS.map(function (w) {
-    var hp = Math.round(1000 + w.no * 132);
-    var atk = Math.round(42 + w.no * 3.1);
+  var STAGES = WARS.concat(WARS2).map(function (w) {
+    var hp = w.no <= 50 ? Math.round(1000 + w.no * 132) : Math.round(7600 + (w.no - 50) * 300);
+    var atk = w.no <= 50 ? Math.round(42 + w.no * 3.1) : Math.round(196 + (w.no - 50) * 6);
     var u = w.units;
     return {
       id: w.id, no: w.no, era: GROUP_NAME[w.g], group: w.g, name: w.name, years: w.years,
@@ -2502,6 +2584,10 @@ function portraitSVG(fig, fit, alt) {
 
   var STAGE_MAP = {};
   WARS.forEach(function (w) { STAGE_MAP[w.id] = { pt: w.pt, terr: w.terr, label: w.name }; });
+  WARS2.forEach(function (w, i) {
+    var k = i % 10;
+    STAGE_MAP[w.id] = { pt: w.g === 'solar' ? solarPt(k) : SPACE_PTS[k], terr: [], label: w.name, chap: w.g };
+  });
 
   /* ── 세계지도 (간략 폴리곤) ── */
   var WORLD_REGIONS = [
@@ -2544,9 +2630,92 @@ function portraitSVG(fig, fit, alt) {
     return Math.round(clearedCount() / STAGES.length * 100);
   }
 
-  /* 캠페인용 세계지도 */
+  function chapterOf(st) {
+    return st.group === 'solar' ? 'solar' : (st.group === 'space' ? 'space' : 'earth');
+  }
+  function chapterStages(c) {
+    return STAGES.filter(function (st) { return chapterOf(st) === c; });
+  }
+  function chapterCleared(c) {
+    var b = ensureState(), n = 0;
+    chapterStages(c).forEach(function (st) { if (b.clear[st.id] && b.clear[st.id].cleared) n++; });
+    return n;
+  }
+
+  function starField(n, seed) {
+    var out = '', i;
+    for (i = 0; i < n; i++) {
+      var x = ((i * 137 + seed * 73) % 997) + 2;
+      var y = ((i * 89 + seed * 41) % 496) + 2;
+      var r = i % 11 === 0 ? 1.5 : (i % 4 === 0 ? 1 : 0.6);
+      out += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff" opacity="' + (0.12 + ((i * 17) % 60) / 100).toFixed(2) + '"/>';
+    }
+    return out;
+  }
+
+  function solarSvg(marks, dim) {
+    var g = '<defs>' +
+      '<radialGradient id="sunG" cx="50%" cy="50%"><stop offset="0" stop-color="#fffbe8"/><stop offset=".45" stop-color="#ffd76a"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="pG" cx="35%" cy="30%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
+      '</defs>' +
+      '<rect width="1000" height="500" fill="none"/>' + starField(90, 3) +
+      '<g class="ss-sun"><circle cx="500" cy="250" r="66" fill="url(#sunG)" opacity=".55"/>' +
+      '<circle cx="500" cy="250" r="34" fill="url(#sunG)"/><circle cx="500" cy="250" r="17" fill="#fff8dc"/></g>';
+    var i;
+    for (i = 0; i < SOLAR_ORB.length; i++) {
+      g += '<ellipse class="ss-orb" cx="500" cy="250" rx="' + SOLAR_ORB[i] + '" ry="' + (SOLAR_ORB[i] * 0.62).toFixed(1) + '"></ellipse>';
+    }
+    var planetColor = ['#b8b0a4', '#e8cf9a', '#6fa8e8', '#e07a5a', '#9a8a7a', '#d9a06a', '#e2c276', '#7fd6e6', '#4f7fe0', '#8f9fb5'];
+    for (i = 0; i < 10; i++) {
+      var pt = solarPt(i), r = i === 5 ? 13 : (i === 6 ? 12 : (i === 8 ? 10 : 8));
+      g += '<g class="ss-planet"><circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="' + (r + 5) + '" fill="' + planetColor[i] + '" opacity=".18"/>' +
+        '<circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="' + r + '" fill="' + planetColor[i] + '"/>' +
+        '<circle cx="' + (pt[0] - r * 0.3).toFixed(1) + '" cy="' + (pt[1] - r * 0.35).toFixed(1) + '" r="' + (r * 0.45) + '" fill="url(#pG)" opacity=".7"/>' +
+        (i === 6 ? '<ellipse cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" rx="' + (r * 1.9) + '" ry="' + (r * 0.5) + '" fill="none" stroke="#f0dfae" stroke-width="2.2" opacity=".85"/>' : '') +
+        (i === 5 ? '<ellipse cx="' + pt[0].toFixed(1) + '" cy="' + (pt[1] + 1).toFixed(1) + '" rx="' + (r * 0.5) + '" ry="' + (r * 0.3) + '" fill="#c05a3a" opacity=".85"/>' : '') +
+        '</g>';
+    }
+    return '<svg class="wmsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">' + g + (marks || '') + '</svg>';
+  }
+
+  function spaceSvg(marks) {
+    var g = '<defs>' +
+      '<radialGradient id="neb1"><stop offset="0" stop-color="#c08aff" stop-opacity=".55"/><stop offset="1" stop-color="#c08aff" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="neb2"><stop offset="0" stop-color="#4fd6e0" stop-opacity=".45"/><stop offset="1" stop-color="#4fd6e0" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="neb3"><stop offset="0" stop-color="#ff9a6a" stop-opacity=".4"/><stop offset="1" stop-color="#ff9a6a" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="gal"><stop offset="0" stop-color="#fff8e0" stop-opacity=".95"/><stop offset=".3" stop-color="#bcd4ff" stop-opacity=".45"/><stop offset="1" stop-color="#6a7aff" stop-opacity="0"/></radialGradient>' +
+      '</defs>' +
+      starField(150, 7) +
+      '<ellipse cx="250" cy="150" rx="240" ry="150" fill="url(#neb1)"/>' +
+      '<ellipse cx="760" cy="360" rx="230" ry="140" fill="url(#neb2)"/>' +
+      '<ellipse cx="520" cy="120" rx="180" ry="110" fill="url(#neb3)"/>' +
+      '<g class="ss-gal" transform="translate(760 150) rotate(-24)">' +
+      '<ellipse rx="120" ry="42" fill="url(#gal)"/>' +
+      '<ellipse rx="90" ry="30" fill="none" stroke="#cfe0ff" stroke-width="1" opacity=".45"/>' +
+      '<ellipse rx="62" ry="20" fill="none" stroke="#e6f0ff" stroke-width="1" opacity=".5"/>' +
+      '<ellipse rx="26" ry="9" fill="#fff8e8" opacity=".9"/>' +
+      '</g>' +
+      '<g class="ss-hole" transform="translate(320 330)">' +
+      '<circle r="42" fill="url(#neb1)" opacity=".8"/>' +
+      '<circle r="22" fill="#05060a"/>' +
+      '<ellipse rx="30" ry="7" fill="none" stroke="#ffd98a" stroke-width="2.4" opacity=".95"/>' +
+      '<circle r="22" fill="none" stroke="#ffb86a" stroke-width="1.6" opacity=".8"/>' +
+      '</g>';
+    return '<svg class="wmsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">' + g + (marks || '') + '</svg>';
+  }
+
+  /* 캠페인용 지도 */
   function campaignMapSvg() {
     var b = ensureState();
+    if (CHAPTER !== 'earth') {
+      var marks = '';
+      chapterStages(CHAPTER).forEach(function (st) {
+        var m = STAGE_MAP[st.id], c = b.clear[st.id] || {};
+        marks += '<text class="wm-mark ' + (c.cleared ? 'done' : 'next') + '" x="' + m.pt[0].toFixed(1) + '" y="' + m.pt[1].toFixed(1) + '">' + (c.cleared ? '🚩' : '⚔️') + '</text>' +
+          (c.cleared ? '<text class="wm-lab done" x="' + m.pt[0].toFixed(1) + '" y="' + (m.pt[1] + 17).toFixed(1) + '">' + esc(m.label) + '</text>' : '');
+      });
+      return CHAPTER === 'solar' ? solarSvg(marks) : spaceSvg(marks);
+    }
     var own = ownedRegions();
     var maxNo = 1;
     STAGES.forEach(function (st) {
@@ -2556,173 +2725,18 @@ function portraitSVG(fig, fit, alt) {
     var paths = WORLD_REGIONS.map(function (r) {
       return '<path class="wm-r' + (own[r.id] ? ' own' : '') + '" d="' + r.d + '"></path>';
     }).join('');
-    var marks = STAGES.map(function (st) {
+    var mk = STAGES.filter(function (st) { return chapterOf(st) === 'earth'; }).map(function (st) {
       var m = STAGE_MAP[st.id];
       var c = b.clear[st.id] || {};
       var locked = !c.cleared && st.no > maxNo;
-      var cls = c.cleared ? 'done' : (locked ? 'lock' : 'next');
       if (locked) return '';
-      var glyph = c.cleared ? '🚩' : '⚔️';
-      return '<text class="wm-mark ' + cls + '" x="' + m.pt[0] + '" y="' + m.pt[1] + '">' + glyph + '</text>' +
+      return '<text class="wm-mark ' + (c.cleared ? 'done' : 'next') + '" x="' + m.pt[0] + '" y="' + m.pt[1] + '">' + (c.cleared ? '🚩' : '⚔️') + '</text>' +
         (c.cleared ? '<text class="wm-lab done" x="' + m.pt[0] + '" y="' + (m.pt[1] + 16) + '">' + esc(m.label) + '</text>' : '');
     }).join('');
     return '<svg class="wmsvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">' +
-      '<g class="wm-grid">' +
-      '<path d="M0 125 H1000 M0 250 H1000 M0 375 H1000" class="wm-line"/>' +
-      '<path d="M250 0 V500 M500 0 V500 M750 0 V500" class="wm-line"/>' +
-      '</g><g class="wm-base">' + paths + '</g>' + marks + '</svg>';
-  }
-
-  /* ── helpers ── */
-  function $(s, r) { return (r || document).querySelector(s); }
-  function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-  function pad2(n) { return (n < 10 ? '0' : '') + n; }
-  function rnd(a, b) { return a + Math.random() * (b - a); }
-  function pickOne(a) { return a[Math.floor(Math.random() * a.length)]; }
-
-  var GRADES = ['basic', 'rare', 'special', 'mythic', 'legend', 'legendary'];
-
-  function gradeIdx(f) {
-    var i = GRADES.indexOf(f.grade || 'basic');
-    return i < 0 ? 0 : i;
-  }
-  function cardOf(id) { return (S.cards && S.cards[id]) || null; }
-  function starOf(id) { var c = cardOf(id); return c ? (c.star || 0) : 0; }
-
-  function figStats(f) {
-    var g = gradeIdx(f), st = starOf(f.id);
-    return {
-      g: g, star: st,
-      hp: 540 + g * 92 + st * 62,
-      atk: 54 + g * 11 + st * 7,
-      spd: 100 + g * 2.4 + st * 1.6,
-      power: Math.round((540 + g * 92 + st * 62) / 8 + (54 + g * 11 + st * 7) * 4)
-    };
-  }
-
-  function ownedMap() {
-    var m = {};
-    (S.log || []).forEach(function (x) { m[x.id] = 1; });
-    Object.keys(S.cards || {}).forEach(function (k) { m[k] = 1; });
-    return m;
-  }
-  function ownedFigures() {
-    var m = ownedMap();
-    return (CTX ? CTX.figures : []).filter(function (f) { return m[f.id]; });
-  }
-  function figById(id) {
-    var fs = CTX ? CTX.figures : [];
-    for (var i = 0; i < fs.length; i++) if (fs[i].id === id) return fs[i];
-    return null;
-  }
-
-  function ensureState() {
-    if (!S.battle || typeof S.battle !== 'object') S.battle = {};
-    var b = S.battle;
-    if (!b.clear || typeof b.clear !== 'object') b.clear = {};
-    if (!Array.isArray(b.deck)) b.deck = [];
-    if (typeof b.sound !== 'boolean') b.sound = true;
-    if (typeof b.speed !== 'number') b.speed = 1;
-    if (!b.seen || typeof b.seen !== 'object') b.seen = {};
-    return b;
-  }
-  function saveAll() {
-    if (CTX && CTX.save) CTX.save();
-  }
-
-  /* ── web audio ── */
-  var AC = null, SOUND = true;
-  function actx() {
-    if (!AC) {
-      var C = window.AudioContext || window.webkitAudioContext;
-      if (!C) return null;
-      try { AC = new C(); } catch (e) { return null; }
-    }
-    if (AC.state === 'suspended') { try { AC.resume(); } catch (e) {} }
-    return AC;
-  }
-  function tone(freq, dur, type, vol, to, delay) {
-    if (!SOUND) return;
-    var ctx = actx();
-    if (!ctx) return;
-    var t0 = ctx.currentTime + (delay || 0);
-    var o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type || 'sine';
-    o.frequency.setValueAtTime(freq, t0);
-    if (to) o.frequency.exponentialRampToValueAtTime(Math.max(30, to), t0 + dur);
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(vol, t0 + Math.min(0.03, dur / 3));
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    o.connect(g); g.connect(ctx.destination);
-    o.start(t0); o.stop(t0 + dur + 0.03);
-  }
-  function noise(dur, vol, cut) {
-    if (!SOUND) return;
-    var ctx = actx();
-    if (!ctx) return;
-    var n = Math.floor(ctx.sampleRate * dur);
-    var buf = ctx.createBuffer(1, n, ctx.sampleRate);
-    var data = buf.getChannelData(0);
-    for (var i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / n);
-    var src = ctx.createBufferSource();
-    src.buffer = buf;
-    var f = ctx.createBiquadFilter();
-    f.type = 'lowpass'; f.frequency.value = cut || 1800;
-    var g = ctx.createGain();
-    g.gain.setValueAtTime(vol, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    src.connect(f); f.connect(g); g.connect(ctx.destination);
-    src.start();
-  }
-  function sfx(kind) {
-    if (!SOUND) return;
-    if (kind === 'hit') { noise(0.12, 0.09, 1200); tone(120, 0.1, 'square', 0.05, 70); }
-    else if (kind === 'skill') { tone(420, 0.16, 'triangle', 0.06, 780); noise(0.12, 0.05, 2400); }
-    else if (kind === 'heal') { tone(523, 0.3, 'sine', 0.05, 784); tone(659, 0.34, 'sine', 0.04, 988, 0.06); }
-    else if (kind === 'buff') { tone(196, 0.28, 'sawtooth', 0.045, 392); }
-    else if (kind === 'ult') {
-      tone(110, 0.75, 'sawtooth', 0.075, 55); noise(0.6, 0.12, 900);
-      tone(523, 0.5, 'sine', 0.06, 784, 0.05);
-      tone(784, 0.6, 'sine', 0.05, 1046, 0.12);
-      tone(1046, 0.8, 'triangle', 0.04, 1568, 0.2);
-    }
-    else if (kind === 'wave') { tone(392, 0.25, 'sine', 0.05, 587); tone(587, 0.35, 'sine', 0.05, 784, 0.1); }
-    else if (kind === 'win') { [523, 659, 784, 1046].forEach(function (f, i) { tone(f, 0.4, 'triangle', 0.05, null, i * 0.1); }); }
-    else if (kind === 'lose') { [330, 262, 196, 147].forEach(function (f, i) { tone(f, 0.5, 'sine', 0.06, null, i * 0.13); }); }
-    else if (kind === 'tap') { tone(880, 0.05, 'sine', 0.035); }
-  }
-
-  /* ── banner on the main page ── */
-  function totalStars() {
-    var b = ensureState(), n = 0;
-    Object.keys(b.clear).forEach(function (k) { n += (b.clear[k] && b.clear[k].stars) || 0; });
-    return n;
-  }
-  function clearedCount() {
-    var b = ensureState(), n = 0;
-    STAGES.forEach(function (s) { if (b.clear[s.id] && b.clear[s.id].cleared) n++; });
-    return n;
-  }
-  function validDeck() {
-    var b = ensureState(), m = ownedMap();
-    var ids = b.deck.filter(function (id) { return m[id]; }).slice(0, 6);
-    return ids;
-  }
-  function renderBanner() {
-    var el = $('#warCleared');
-    if (!el) return;
-    var b = ensureState();
-    el.textContent = clearedCount() + ' / ' + STAGES.length;
-    $('#warDeck').textContent = validDeck().length + ' / 6';
-    $('#warStars').textContent = totalStars() + ' / ' + (STAGES.length * 3);
-    var next = null;
-    for (var i = 0; i < STAGES.length; i++) { if (!(b.clear[STAGES[i].id] && b.clear[STAGES[i].id].cleared)) { next = STAGES[i]; break; } }
-    var nt = $('#warNext');
-    if (nt) nt.textContent = next ? ('다음 전장 · ' + next.era + ' ' + next.name) : '모든 시대 정복 완료 · 최종 전장을 다시 도전하세요';
-    var cta = $('#warEnter');
-    if (cta) cta.innerHTML = (clearedCount() ? '전투 계속' : '전투 시작') + ' <span>→</span>';
+      '<g class="wm-grid"><path d="M0 125 H1000 M0 250 H1000 M0 375 H1000" class="wm-line"/>' +
+      '<path d="M250 0 V500 M500 0 V500 M750 0 V500" class="wm-line"/></g>' +
+      '<g class="wm-base">' + paths + '</g>' + mk + '</svg>';
   }
 
   /* ── views ── */
@@ -2743,61 +2757,69 @@ function portraitSVG(fig, fit, alt) {
     var owned = ownedFigures();
     var deck = validDeck();
     var maxNo = 1;
-    STAGES.forEach(function (s) {
-      var prev = STAGES[s.no - 2];
-      if (!prev || (b.clear[prev.id] && b.clear[prev.id].cleared)) maxNo = Math.max(maxNo, s.no);
+    STAGES.forEach(function (st) {
+      var prev = STAGES[st.no - 2];
+      if (!prev || (b.clear[prev.id] && b.clear[prev.id].cleared)) maxNo = Math.max(maxNo, st.no);
     });
+    var cStages = chapterStages(CHAPTER);
+    var cDone = chapterCleared(CHAPTER);
+    var pct = Math.round(cDone / Math.max(1, cStages.length) * 100);
+
     var head = '<div class="bmap-head">' +
-      '<div class="bmap-txt"><span class="kicker">CAMPAIGN · 기원전 → 현재</span>' +
-      '<h3>시대 정복 지도</h3>' +
-      '<p>내가 얻은 인물 최대 <b>6명</b>으로 덱을 짜고, 시대별 나라와 싸웁니다. 클리어하면 다음 시대가 열립니다.</p></div>' +
-      '<div class="bmap-info"><div><span>정복</span><b>' + clearedCount() + '/' + STAGES.length + '</b></div>' +
+      '<div class="bmap-txt"><span class="kicker">CAMPAIGN · 3 CHAPTERS</span>' +
+      '<h3>역사 전쟁 지도</h3>' +
+      '<p>내가 얻은 인물 최대 <b>6명</b>으로 덱을 짜고, 시대와 행성, 우주 끝까지 싸웁니다. 클리어할수록 지도가 내 색으로 물듭니다.</p></div>' +
+      '<div class="bmap-info"><div><span>정복</span><b>' + cDone + '/' + cStages.length + '</b></div>' +
       '<div><span>보유 인물</span><b>' + owned.length + '</b></div>' +
       '<div><span>출격 덱</span><b>' + deck.length + '/6</b></div></div></div>';
 
-    var tabs = '<div class="bfilter">' + GROUPS.map(function (g) {
-      var n = g.id === 'all' ? STAGES.length : STAGES.filter(function (x) { return x.group === g.id; }).length;
-      return '<button type="button" class="bfil' + (FILTER === g.id ? ' on' : '') + '" data-filter="' + g.id + '">' + g.n + ' <b>' + n + '</b></button>';
+    var chapTabs = '<div class="bchap">' + CHAPTERS.map(function (c) {
+      var n = chapterCleared(c.id), t = chapterStages(c.id).length;
+      return '<button type="button" class="bch' + (CHAPTER === c.id ? ' on' : '') + '" data-chap="' + c.id + '">' +
+        '<b>' + c.n + '</b><span>' + c.sub + '</span><em>' + n + ' / ' + t + '</em></button>';
     }).join('') + '</div>';
 
-    var list = STAGES.filter(function (s) { return FILTER === 'all' || s.group === FILTER; });
-    var map = '<div class="bmap">' + list.map(function (s) {
-      var c = b.clear[s.id] || {};
-      var locked = s.no > maxNo && !c.cleared;
+    var wmap = '<div class="wmap ' + CHAPTER + '">' +
+      '<div class="wmap-art">' + campaignMapSvg() + '</div>' +
+      '<div class="wmap-hud">' +
+      '<span class="kicker">' + (CHAPTER === 'earth' ? 'WORLD CONQUEST' : (CHAPTER === 'solar' ? 'SOLAR CONQUEST' : 'COSMIC CONQUEST')) + '</span>' +
+      '<b class="wpct">' + pct + '%</b>' +
+      '<div class="wbar"><i style="width:' + pct + '%"></i></div>' +
+      '<p>정복 <b>' + cDone + ' / ' + cStages.length + '</b></p>' +
+      (CHAPTER === 'earth'
+        ? '<p>점령 영토 <b>' + Object.keys(ownedRegions()).length + ' / ' + WORLD_REGIONS.length + '</b> 지역</p>'
+        : '<p>난이도 <b>' + curDiff().ico + ' ' + curDiff().n + '</b></p>') +
+      '</div></div>';
+
+    var tabs = CHAPTER === 'earth' ? ('<div class="bfilter">' + GROUPS.filter(function (g) { return g.id !== 'solar' && g.id !== 'space'; }).map(function (g) {
+      var n = g.id === 'all' ? 50 : STAGES.filter(function (x) { return x.group === g.id; }).length;
+      return '<button type="button" class="bfil' + (FILTER === g.id ? ' on' : '') + '" data-filter="' + g.id + '">' + g.n + ' <b>' + n + '</b></button>';
+    }).join('') + '</div>') : '';
+
+    var list = cStages.filter(function (st) { return CHAPTER !== 'earth' || FILTER === 'all' || st.group === FILTER; });
+    var map = '<div class="bmap">' + list.map(function (st) {
+      var c = b.clear[st.id] || {};
+      var locked = CHAPTER === 'earth' && !c.cleared && st.no > maxNo;
       var stars = c.stars || 0;
-      return '<button type="button" class="bstage' + (locked ? ' locked' : '') + (c.cleared ? ' cleared' : '') + '" data-stage="' + s.id + '" style="--ec:' + s.ec + '">' +
-        '<span class="bs-no">' + pad2(s.no) + '</span>' +
-        '<span class="bs-flag">' + s.flag + '</span>' +
-        '<span class="bs-era">' + esc(s.era) + ' · ' + pad2(s.no) + '</span>' +
-        '<b class="bs-name">' + esc(s.name) + '</b>' +
-        '<span class="bs-year">' + esc(s.years) + '</span>' +
-        '<span class="bs-desc">' + esc(s.desc) + '</span>' +
+      var topD = null;
+      ['easy', 'normal', 'hard', 'impossible'].forEach(function (k) { if (c.diffs && c.diffs[k]) topD = k; });
+      return '<button type="button" class="bstage' + (locked ? ' locked' : '') + (c.cleared ? ' cleared' : '') + '" data-stage="' + st.id + '" style="--ec:' + st.ec + '">' +
+        '<span class="bs-no">' + pad2(st.no) + '</span>' +
+        '<span class="bs-flag">' + st.flag + '</span>' +
+        '<span class="bs-era">' + esc(st.era) + '</span>' +
+        '<b class="bs-name">' + esc(st.name) + '</b>' +
+        '<span class="bs-year">' + esc(st.years) + '</span>' +
+        '<span class="bs-desc">' + esc(st.desc) + '</span>' +
         '<span class="bs-star">' + (locked ? '🔒 잠김' : ('★'.repeat(stars) + '☆'.repeat(3 - stars))) + '</span>' +
-        (c.cleared ? '<span class="bs-clear">정복 완료' + (function () {
-          var order = ['easy', 'normal', 'hard', 'impossible'], top = null;
-          order.forEach(function (k) { if (c.diffs && c.diffs[k]) top = k; });
-          return top && top !== 'normal' ? ' · ' + diffOf(top).ico : '';
-        })() + '</span>' : '') +
+        (c.cleared ? '<span class="bs-clear">정복' + (topD && topD !== 'normal' ? ' · ' + diffOf(topD).ico + ' ' + diffOf(topD).n : '') + '</span>' : '') +
         '</button>';
     }).join('') + '</div>';
 
     var foot = '<div class="bmap-foot">' +
       '<button type="button" class="bghost" data-deck="1">⚔️ 출격 덱 편성</button>' +
-      '<p>인물은 「오늘의 인물 체크」와 카드팩으로 얻습니다. 얻지 않은 인물은 잠겨 있습니다.</p></div>';
+      '<p>인물은 「오늘의 인물 체크」와 카드팩으로 얻습니다. 제2장·제3장은 바로 도전할 수 있습니다.</p></div>';
 
-    var wpct = worldPercent();
-    var ownedN = Object.keys(ownedRegions()).length;
-    var wmap = '<div class="wmap">' +
-      '<div class="wmap-art">' + campaignMapSvg() + '</div>' +
-      '<div class="wmap-hud">' +
-      '<span class="kicker">WORLD CONQUEST</span>' +
-      '<b class="wpct">' + wpct + '%</b>' +
-      '<div class="wbar"><i style="width:' + wpct + '%"></i></div>' +
-      '<p>정복한 시대 <b>' + clearedCount() + ' / ' + STAGES.length + '</b></p>' +
-      '<p>점령 영토 <b>' + ownedN + ' / ' + WORLD_REGIONS.length + '</b> 지역</p>' +
-      '</div></div>';
-
-    $('#bView').innerHTML = head + wmap + tabs + map + foot;
+    $('#bView').innerHTML = head + chapTabs + wmap + tabs + map + foot;
   }
 
   function renderDeck(stageId) {
@@ -2869,12 +2891,19 @@ function portraitSVG(fig, fit, alt) {
         '<span class="bd-ico">' + d.ico + '</span><b>' + d.n + '</b>' +
         '<span class="bd-x">적 HP ×' + d.hp + ' · 보상 ×' + d.rew + '</span></button>';
     }).join('') + '</div>';
+    var D = curDiff();
+    var diffBar = '<div class="bdiff">' + DIFFS.map(function (d) {
+      return '<button type="button" class="bdif' + (D.id === d.id ? ' on' : '') + '" data-diff="' + d.id + '" style="--dc:' + d.color + '">' +
+        '<span class="bd-ico">' + d.ico + '</span><b>' + d.n + '</b>' +
+        '<span class="bd-x">적 HP ×' + d.hp + ' · 보상 ×' + d.rew + '</span></button>';
+    }).join('') + '</div>';
     var bossName = stage.waves[stage.waves.length - 1].boss[0];
     var prep = '<div class="bprep">' +
       '<div class="bprep-row"><span>출격 인원</span><b id="bDeckCount">' + deck.length + ' / 6</b></div>' +
       '<div class="bprep-row"><span>덱 전투력</span><b>' + power.toLocaleString() + '</b></div>' +
       '<div class="bprep-row"><span>최종 보스</span><b>' + esc(bossName) + '</b></div>' +
       '<div class="bprep-row"><span>웨이브</span><b>' + stage.waves.length + ' 단계</b></div>' +
+      '<div class="bprep-row"><span>추천 전투력</span><b>' + Math.round((stage.hp * 2.2 + stage.atk * 30) * curDiff().hp) + '</b></div>' +
       '<button type="button" class="bgo big" data-start="1"' + (deck.length ? '' : ' disabled') + '>⚔️ 전투 시작</button>' +
       '<p class="bprep-note">' + (deck.length ? '10번 공격하면 궁극기가 자동 발동합니다.' : '인물을 1명 이상 선택하세요.') + '</p>' +
       '</div>';
@@ -2927,88 +2956,6 @@ function portraitSVG(fig, fit, alt) {
     if (CTX.refreshCoins) CTX.refreshCoins();
     renderDeck(B_STAGE.id);
     renderBanner();
-  }
-
-  /* ── battle engine ── */
-  var B = null, B_STAGE = null, tickTimer = null, timers = [];
-
-  function later(fn, ms) {
-    var t = setTimeout(function () {
-      timers = timers.filter(function (x) { return x !== t; });
-      fn();
-    }, ms);
-    timers.push(t);
-    return t;
-  }
-  function clearTimers() {
-    timers.forEach(function (t) { clearTimeout(t); });
-    timers = [];
-  }
-
-  function makeAlly(f) {
-    var st = figStats(f), sk = SKILLS[f.id];
-    return {
-      side: 'a', uid: 'a' + f.id, fig: f, name: f.name,
-      hp: st.hp, maxHp: st.hp, atk: st.atk, spd: st.spd,
-      hits: 0, buff: 1, alive: true, ct: rnd(0.1, 0.7), acted: 0,
-      skills: sk, star: st.star, grade: f.grade
-    };
-  }
-
-  function makeEnemy(wave, stage, deckSize) {
-    var scale = 0.5 + 0.5 * (Math.max(1, Math.min(6, deckSize)) / 6);
-    var D = curDiff();
-    var out = [];
-    function mk(arr, isBoss, idx) {
-      var hp = Math.round(stage.hp * arr[2] * scale * D.hp);
-      var atk = Math.round(stage.atk * arr[3] * (0.62 + 0.38 * (Math.max(1, Math.min(6, deckSize)) / 6)) * D.atk);
-      if (isBoss) { hp = Math.round(hp); }
-      out.push({
-        side: 'e', uid: 'e' + idx + (isBoss ? 'b' : ''), name: arr[0], icon: arr[1],
-        hp: hp, maxHp: hp, atk: atk, spd: isBoss ? 104 : rnd(92, 112),
-        alive: true, ct: rnd(0.2, 0.8), boss: !!isBoss, acted: 0
-      });
-    }
-    wave.u.forEach(function (u, i) { mk(u, false, i); });
-    if (wave.boss) mk(wave.boss, true, 9);
-    return out;
-  }
-
-  function figArt(f, fit) {
-    var img = '';
-    if (f.photo && f.photo.url) {
-      img = '<img class="ph-img" src="' + f.photo.url + '" alt="' + esc(f.name) + '" loading="lazy" decoding="async" onerror="this.style.display=&#39;none&#39;">';
-    }
-    var svg = '';
-    try { if (window.portraitSVG) svg = window.portraitSVG(f, fit || 'slice', f.name); } catch (e) { svg = ''; }
-    return '<span class="ph-svg">' + svg + '</span>' + img;
-  }
-
-  function startBattle(stage) {
-    var deck = validDeck();
-    if (!deck.length) { toast('출격할 인물을 먼저 편성하세요'); return; }
-    clearTimers();
-    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
-    B = {
-      stage: stage, wave: 0, allies: [], enemies: [],
-      speed: ensureState().speed || 1, auto: true, hold: false, phase: 'fight',
-      active: null, log: [], dead: 0, deckSize: deck.length, started: Date.now()
-    };
-    B_STAGE = stage;
-    var tot = 0;
-    stage.waves.forEach(function (w) { tot += w.u.length + (w.boss ? 1 : 0); });
-    B.totalEnemies = tot;
-    B.killed = 0;
-    deck.forEach(function (id) {
-      var f = figById(id);
-      if (f) B.allies.push(makeAlly(f));
-    });
-    renderArena();
-    spawnWave(0);
-    if (tickTimer) clearInterval(tickTimer);
-    tickTimer = setInterval(tick, 90);
-    B.log.push({ t: '전투 개시 · ' + stage.era + ' ' + stage.name, k: 'sys' });
-    renderLog();
   }
 
 
@@ -3611,6 +3558,8 @@ function portraitSVG(fig, fit, alt) {
       var t = e.target;
 
       /* campaign */
+      var cp = t.closest && t.closest('[data-chap]');
+      if (cp) { CHAPTER = cp.getAttribute('data-chap'); FILTER = 'all'; sfx('tap'); renderMap(); return; }
       var fl = t.closest && t.closest('[data-filter]');
       if (fl) { FILTER = fl.getAttribute('data-filter'); sfx('tap'); renderMap(); return; }
       var st = t.closest && t.closest('[data-stage]');
@@ -3621,7 +3570,7 @@ function portraitSVG(fig, fit, alt) {
         for (var i = 0; i < STAGES.length; i++) if (STAGES[i].id === sid) stage = STAGES[i];
         if (!stage) return;
         var prev = STAGES[stage.no - 2];
-        if (!(b.clear[sid] && b.clear[sid].cleared) && prev && !(b.clear[prev.id] && b.clear[prev.id].cleared)) {
+        if (chapterOf(stage) === 'earth' && !(b.clear[sid] && b.clear[sid].cleared) && prev && !(b.clear[prev.id] && b.clear[prev.id].cleared)) {
           toast('🔒 이전 시대를 먼저 정복해야 열립니다'); return;
         }
         sfx('tap');
