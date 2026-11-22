@@ -2739,6 +2739,160 @@ function portraitSVG(fig, fit, alt) {
       '<g class="wm-base">' + paths + '</g>' + mk + '</svg>';
   }
 
+  /* ── helpers ── */
+  function $(s, r) { return (r || document).querySelector(s); }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function pickOne(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+  var GRADES = ['basic', 'rare', 'special', 'mythic', 'legend', 'legendary'];
+
+  function gradeIdx(f) {
+    var i = GRADES.indexOf(f.grade || 'basic');
+    return i < 0 ? 0 : i;
+  }
+  function cardOf(id) { return (S.cards && S.cards[id]) || null; }
+  function starOf(id) { var c = cardOf(id); return c ? (c.star || 0) : 0; }
+
+  function figStats(f) {
+    var g = gradeIdx(f), st = starOf(f.id);
+    return {
+      g: g, star: st,
+      hp: 540 + g * 92 + st * 62,
+      atk: 54 + g * 11 + st * 7,
+      spd: 100 + g * 2.4 + st * 1.6,
+      power: Math.round((540 + g * 92 + st * 62) / 8 + (54 + g * 11 + st * 7) * 4)
+    };
+  }
+
+  function ownedMap() {
+    var m = {};
+    (S.log || []).forEach(function (x) { m[x.id] = 1; });
+    Object.keys(S.cards || {}).forEach(function (k) { m[k] = 1; });
+    return m;
+  }
+  function ownedFigures() {
+    var m = ownedMap();
+    return (CTX ? CTX.figures : []).filter(function (f) { return m[f.id]; });
+  }
+  function figById(id) {
+    var fs = CTX ? CTX.figures : [];
+    for (var i = 0; i < fs.length; i++) if (fs[i].id === id) return fs[i];
+    return null;
+  }
+
+  function ensureState() {
+    if (!S.battle || typeof S.battle !== 'object') S.battle = {};
+    var b = S.battle;
+    if (!b.clear || typeof b.clear !== 'object') b.clear = {};
+    if (!Array.isArray(b.deck)) b.deck = [];
+    if (typeof b.sound !== 'boolean') b.sound = true;
+    if (typeof b.speed !== 'number') b.speed = 1;
+    if (!b.diff) b.diff = 'normal';
+    if (!b.seen || typeof b.seen !== 'object') b.seen = {};
+    return b;
+  }
+  function saveAll() {
+    if (CTX && CTX.save) CTX.save();
+  }
+
+  /* ── web audio ── */
+  var AC = null, SOUND = true;
+  function actx() {
+    if (!AC) {
+      var C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return null;
+      try { AC = new C(); } catch (e) { return null; }
+    }
+    if (AC.state === 'suspended') { try { AC.resume(); } catch (e) {} }
+    return AC;
+  }
+  function tone(freq, dur, type, vol, to, delay) {
+    if (!SOUND) return;
+    var ctx = actx();
+    if (!ctx) return;
+    var t0 = ctx.currentTime + (delay || 0);
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, t0);
+    if (to) o.frequency.exponentialRampToValueAtTime(Math.max(30, to), t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(vol, t0 + Math.min(0.03, dur / 3));
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t0); o.stop(t0 + dur + 0.03);
+  }
+  function noise(dur, vol, cut) {
+    if (!SOUND) return;
+    var ctx = actx();
+    if (!ctx) return;
+    var n = Math.floor(ctx.sampleRate * dur);
+    var buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    var src = ctx.createBufferSource();
+    src.buffer = buf;
+    var f = ctx.createBiquadFilter();
+    f.type = 'lowpass'; f.frequency.value = cut || 1800;
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    src.connect(f); f.connect(g); g.connect(ctx.destination);
+    src.start();
+  }
+  function sfx(kind) {
+    if (!SOUND) return;
+    if (kind === 'hit') { noise(0.12, 0.09, 1200); tone(120, 0.1, 'square', 0.05, 70); }
+    else if (kind === 'skill') { tone(420, 0.16, 'triangle', 0.06, 780); noise(0.12, 0.05, 2400); }
+    else if (kind === 'heal') { tone(523, 0.3, 'sine', 0.05, 784); tone(659, 0.34, 'sine', 0.04, 988, 0.06); }
+    else if (kind === 'buff') { tone(196, 0.28, 'sawtooth', 0.045, 392); }
+    else if (kind === 'ult') {
+      tone(110, 0.75, 'sawtooth', 0.075, 55); noise(0.6, 0.12, 900);
+      tone(523, 0.5, 'sine', 0.06, 784, 0.05);
+      tone(784, 0.6, 'sine', 0.05, 1046, 0.12);
+      tone(1046, 0.8, 'triangle', 0.04, 1568, 0.2);
+    }
+    else if (kind === 'wave') { tone(392, 0.25, 'sine', 0.05, 587); tone(587, 0.35, 'sine', 0.05, 784, 0.1); }
+    else if (kind === 'win') { [523, 659, 784, 1046].forEach(function (f, i) { tone(f, 0.4, 'triangle', 0.05, null, i * 0.1); }); }
+    else if (kind === 'lose') { [330, 262, 196, 147].forEach(function (f, i) { tone(f, 0.5, 'sine', 0.06, null, i * 0.13); }); }
+    else if (kind === 'tap') { tone(880, 0.05, 'sine', 0.035); }
+  }
+
+  /* ── banner on the main page ── */
+  function totalStars() {
+    var b = ensureState(), n = 0;
+    Object.keys(b.clear).forEach(function (k) { n += (b.clear[k] && b.clear[k].stars) || 0; });
+    return n;
+  }
+  function clearedCount() {
+    var b = ensureState(), n = 0;
+    STAGES.forEach(function (s) { if (b.clear[s.id] && b.clear[s.id].cleared) n++; });
+    return n;
+  }
+  function validDeck() {
+    var b = ensureState(), m = ownedMap();
+    var ids = b.deck.filter(function (id) { return m[id]; }).slice(0, 6);
+    return ids;
+  }
+  function renderBanner() {
+    var el = $('#warCleared');
+    if (!el) return;
+    var b = ensureState();
+    el.textContent = clearedCount() + ' / ' + STAGES.length;
+    $('#warDeck').textContent = validDeck().length + ' / 6';
+    $('#warStars').textContent = totalStars() + ' / ' + (STAGES.length * 3);
+    var next = null;
+    for (var i = 0; i < STAGES.length; i++) { if (!(b.clear[STAGES[i].id] && b.clear[STAGES[i].id].cleared)) { next = STAGES[i]; break; } }
+    var nt = $('#warNext');
+    if (nt) nt.textContent = next ? ('다음 전장 · ' + next.era + ' ' + next.name) : '모든 시대 정복 완료 · 최종 전장을 다시 도전하세요';
+    var cta = $('#warEnter');
+    if (cta) cta.innerHTML = (clearedCount() ? '전투 계속' : '전투 시작') + ' <span>→</span>';
+  }
+
+
   /* ── views ── */
   var VIEW = 'map', FILTER = 'all';
 
