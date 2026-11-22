@@ -451,7 +451,7 @@
   .btn-pack.ticket:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
   .pk-hint{margin:2px 0 0; font-size:9.5px; line-height:1.5; color:var(--muted2)}
   .pk-hint b{color:var(--gold-hi)}
-  .pk-left .reveal{grid-template-columns:repeat(auto-fill,minmax(86px,1fr)); gap:8px; margin-top:6px}
+  .pk-left .reveal{grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px; margin-top:6px}
   .pk-left .pcard .pbody{padding:6px 7px 8px}
   .pk-left .pcard .pbody b{font-size:10.5px}
   .pk-left .pack-msg{text-align:left; margin-top:4px; min-height:14px}
@@ -1285,11 +1285,13 @@
   .fmap .wmsvg{width:100%; height:100%; display:block}
   .fmap .wm-c{fill:rgba(97,139,158,.94); stroke:rgba(188,234,246,.5); stroke-width:.4; vector-effect:non-scaling-stroke}
   .fmap .wm-grat path{fill:none; stroke:rgba(150,215,235,.17); stroke-width:.5; vector-effect:non-scaling-stroke}
-  .fmap .wm-tgtlayer .wm-c{fill:rgba(226,176,74,.62); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.92;
+  .fmap .wm-tgtlayer .wm-c{fill:none; stroke:none}
+  .fmap .wm-tgtlayer .wm-c.tgt{fill:rgba(226,176,74,.62); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.92;
     vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 6px rgba(255,214,120,.95))}
   .fmap .wm-tgtlayer{animation:tgtbreath 2.4s ease-in-out infinite}
   @keyframes tgtbreath{0%,100%{opacity:.6}50%{opacity:1}}
-  .fmap .wm-ownlayer .wm-c{fill:rgba(46,224,148,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.95;
+  .fmap .wm-ownlayer .wm-c{fill:none; stroke:none}
+  .fmap .wm-ownlayer .wm-c.own{fill:rgba(46,224,148,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:.95;
     vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 8px rgba(46,224,148,.95))}
   .fmap.fmap-solar, .fmap.fmap-space{background:#05060a}
   .fmap.fmap-space .wmsvg, .fmap.fmap-solar .wmsvg{opacity:1}
@@ -1339,9 +1341,11 @@
   .btarget-map .wmsvg{position:absolute; inset:0; width:100%; height:100%; display:block}
   .btarget-map .wm-grat path{fill:none; stroke:rgba(150,215,235,.15); stroke-width:.5; vector-effect:non-scaling-stroke}
   .bm-base .wm-c{fill:rgba(97,139,158,.96); stroke:rgba(188,234,246,.42); stroke-width:.4; vector-effect:non-scaling-stroke}
-  .bm-own .wm-c{fill:rgba(46,224,148,.78); stroke:#d8ffe9; stroke-width:.9; stroke-opacity:.95;
+  .bm-own .wm-c{fill:none; stroke:none}
+  .bm-own .wm-c.own{fill:rgba(46,224,148,.78); stroke:#d8ffe9; stroke-width:.9; stroke-opacity:.95;
     vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 5px rgba(46,224,148,.9))}
-  .bm-tgt .wm-c{fill:rgba(232,182,78,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:1;
+  .bm-tgt .wm-c{fill:none; stroke:none}
+  .bm-tgt .wm-c.tgt{fill:rgba(232,182,78,.72); stroke:#ffe9b0; stroke-width:2.2; stroke-opacity:1;
     vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 9px rgba(255,214,120,1))}
   .bm-tgt{animation:tgtbreath 2.2s ease-in-out infinite}
   .tp-halo{fill:rgba(255,214,120,.2)}
@@ -3227,14 +3231,17 @@ function portraitSVG(fig, fit, alt) {
   function realmSig(own, tgt) {
     return Object.keys(own || {}).sort().join(',') + '|' + Object.keys(tgt || {}).sort().join(',');
   }
-  function landMarkup(own, tgt, withTitle) {
+  function landMarkup(own, tgt, withTitle, only) {
     if (!GEO) return '';
-    var key = realmSig(own, tgt) + (withTitle ? '#t' : '');
+    var key = realmSig(own, tgt) + (withTitle ? '#t' : '') + (only ? '#' + only : '');
     if (LAND_CACHE[key]) return LAND_CACHE[key];
     var out = '';
     for (var i = 0; i < GEO.countries.length; i++) {
       var c = GEO.countries[i];
-      var cls = 'wm-c' + (own && own[c.r] ? ' own' : (tgt && tgt[c.r] ? ' tgt' : ''));
+      var inOwn = !!(own && own[c.r]), inTgt = !!(tgt && tgt[c.r]);
+      if (only === 'own' && !inOwn) continue;
+      if (only === 'tgt' && !inTgt) continue;
+      var cls = 'wm-c' + (inOwn ? ' own' : (inTgt ? ' tgt' : ''));
       out += '<path class="' + cls + '" d="' + c.d + '">' + (withTitle ? '<title>' + esc(c.n) + '</title>' : '') + '</path>';
     }
     if (LAND_CACHE_N > 60) { LAND_CACHE = {}; LAND_CACHE_N = 0; }
@@ -3970,8 +3977,8 @@ function portraitSVG(fig, fit, alt) {
       fieldDefs('bmp') + fieldOcean('bmp') +
       '<g class="wm-grat"><path d="' + (GEO ? GEO.grat : '') + '"/></g>' +
       '<g class="bm-base" transform="scale(' + sc + ')">' + landMarkup(null, null, false) + '</g>' +
-      '<g class="bm-own" transform="scale(' + sc + ')">' + landMarkup(own, null, false) + '</g>' +
-      '<g class="bm-tgt" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false) + '</g>' +
+      '<g class="bm-own" transform="scale(' + sc + ')">' + landMarkup(own, null, false, 'own') + '</g>' +
+      '<g class="bm-tgt" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false, 'tgt') + '</g>' +
       targetPin(m.pt, stage.flag, vb[2] * 0.04) +
       '</svg>';
   }
@@ -4324,9 +4331,9 @@ function portraitSVG(fig, fit, alt) {
       fieldDefs('wmv') + fieldOcean('wmv') +
       '<g class="wm-grat"><path d="' + (GEO ? GEO.grat : '') + '"/></g>' +
       '<g class="wm-base" transform="scale(' + sc + ')">' + landMarkup(null, null, false) + '</g>' +
-      '<g class="wm-tgtlayer" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false) + '</g>' +
+      '<g class="wm-tgtlayer" transform="scale(' + sc + ')">' + landMarkup(null, tgt, false, 'tgt') + '</g>' +
       '<defs><clipPath id="terrClip"><circle id="terrC" cx="' + cx + '" cy="' + cy + '" r="0"/></clipPath></defs>' +
-      '<g class="wm-ownlayer" clip-path="url(#terrClip)"><g transform="scale(' + sc + ')">' + landMarkup(own, null, false) + '</g></g>' +
+      '<g class="wm-ownlayer" clip-path="url(#terrClip)"><g transform="scale(' + sc + ')">' + landMarkup(own, null, false, 'own') + '</g></g>' +
       terrRings(cx, cy) +
       '</svg>' + hud + '</div>';
   }
