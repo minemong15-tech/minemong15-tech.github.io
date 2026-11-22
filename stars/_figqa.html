@@ -989,9 +989,9 @@ function size() {
 }
 window.addEventListener('resize', size); size();
 
-scene.add(new THREE.HemisphereLight(0xdff1ff, 0x24304e, 1.45));
+scene.add(new THREE.HemisphereLight(0xdff1ff, 0x24304e, 1.0));
 scene.add(new THREE.AmbientLight(0x3a4a6a, 0.3));
-const key = new THREE.DirectionalLight(0xfff4e8, 1.85); key.position.set(220, 420, 300); scene.add(key);
+const key = new THREE.DirectionalLight(0xfff4e8, 1.35); key.position.set(220, 420, 300); scene.add(key);
 const fill = new THREE.DirectionalLight(0xbfe3ff, 0.8); fill.position.set(-260, 180, 220); scene.add(fill);
 const rimA = new THREE.DirectionalLight(0x63e6ff, 1.1); rimA.position.set(-260, 200, -280); scene.add(rimA);
 const rimB = new THREE.DirectionalLight(0xff6fae, 0.9); rimB.position.set(260, 150, -300); scene.add(rimB);
@@ -1024,7 +1024,7 @@ if (one) {
     g.scale.setScalar(i === 1 ? 1.02 : 0.9);
     scene.add(g); groups.push(g);
   });
-  cam.position.set(-78, 116, 236); cam.fov = 30; cam.lookAt(0, 56, 0);
+  cam.position.set(-150, 205, 430); cam.fov = 30; cam.lookAt(0, 50, 0);
   cam.updateProjectionMatrix();
   // 로비 스튜디오와 동일한 무대
   const disc = new THREE.Mesh(new THREE.CircleGeometry(150, 48), new THREE.MeshBasicMaterial({ color: 0x123055, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
