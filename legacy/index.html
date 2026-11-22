@@ -173,7 +173,7 @@
   }
   @keyframes shine{to{transform:translateX(140%)}}
   .daytag{
-    position:absolute; left:-14px; bottom:18px;
+    position:absolute; z-index:4; left:-14px; bottom:18px;
     padding:5px 11px; border-radius:8px;
     background:rgba(9,11,15,.92); border:1px solid var(--line);
     font-size:9px; letter-spacing:.18em; color:var(--gold-hi);
@@ -520,7 +520,14 @@
   }
   .arc-card.locked{cursor:default; border-style:dashed; border-color:rgba(255,255,255,.07); background:rgba(255,255,255,.012)}
   .arc-card.locked:hover{transform:none; border-color:rgba(255,255,255,.07); background:rgba(255,255,255,.012)}
-  .arc-card.locked .ph svg, .arc-card.locked .ph .ph-img{filter:blur(11px) grayscale(1) brightness(.4) contrast(.92); transform:scale(1.12)}
+  .lock-ph{
+    position:absolute; inset:0; display:grid; place-items:center;
+    background:
+      radial-gradient(circle at 50% 33%, rgba(255,255,255,.09) 0 21%, transparent 22%),
+      radial-gradient(ellipse 62% 40% at 50% 102%, rgba(255,255,255,.075) 0 99%, transparent 100%),
+      linear-gradient(180deg,#0c1017,#070a0e);
+  }
+  .lock-ph span{font-family:var(--serif); font-size:24px; color:#39404b; letter-spacing:.1em}
   .arc-card.locked .body b{color:#4e5662}
   .arc-card.locked .body p{color:#3d444e}
   .arc-card.locked .arc-badge{border-color:rgba(255,255,255,.1); color:#4a515c}
@@ -1678,7 +1685,7 @@ function portraitSVG(fig, fit, alt) {
     var lockedHtml = lockedFigs.map(function (f) {
       return '<div class="arc-card locked" data-locked="1" role="img" aria-label="아직 배우지 않은 인물">' +
         '<span class="arc-badge">미학습</span>' +
-        '<span class="ph">' + photoHtml(f, { fit: 'slice', alt: '잠긴 인물 실루엣' }) + '</span>' +
+        '<span class="ph"><span class="lock-ph"><span>?</span></span></span>' +
         '<span class="body"><b>???</b><p>아직 배우지 않은 인물</p><span class="when">LOCKED</span></span></div>';
     }).join('');
 
