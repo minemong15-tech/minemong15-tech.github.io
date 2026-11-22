@@ -6611,6 +6611,7 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── archive · 내가 배운 인물 ── */
   var arcQuery = '';
+  var arcLimit = 36;   /* 잠긴 인물은 한 번에 36명씩 (300인 도감 성능) */
   function figMatches(f, q) {
     if (!q) return true;
     var hay = (f.name + ' ' + (f.en || '') + ' ' + f.era + ' ' + f.birthplace + ' ' + (f.title || '') + ' ' + (f.flag || '')).toLowerCase();
@@ -6635,7 +6636,9 @@ function portraitSVG(fig, fit, alt) {
     var learnedTotal = learnedFigs.length;
     var byGrade = function (f) { return (gradeFilter === 'all' || f.grade === gradeFilter) && figMatches(f, q); };
     var mLearned = learnedFigs.filter(byGrade);
-    var mLocked = lockedFigs.filter(byGrade);
+    var mLockedAll = lockedFigs.filter(byGrade);
+    var mLocked = q ? mLockedAll : mLockedAll.slice(0, arcLimit);
+    var moreLocked = q ? 0 : mLockedAll.length - mLocked.length;
 
 
     var learnedCard = function (f) {
@@ -6673,7 +6676,11 @@ function portraitSVG(fig, fit, alt) {
       ? '<div class="arc-empty" style="grid-column:1/-1">🔍 검색 결과가 없습니다.<br>인물 이름·시대·나라로 다시 찾아보세요.</div>'
       : '<div class="arc-empty" style="grid-column:1/-1">' + (GRADE_INFO[gradeFilter] || {}).name + ' 등급에서 아직 배운 인물이 없습니다.<br>인물을 체크하거나 카드팩에서 만나면 이곳에 기록됩니다.</div>';
 
-    var cardsHtml = ((mLearned.length + mLocked.length) ? '' : emptyFiltered) + learnedHtml + lockedHtml;
+    var moreHtml = moreLocked > 0
+      ? '<button class="arc-card locked more" type="button" data-arclimit="1"><span class="body" style="text-align:center;padding:18px 8px">' +
+        '<b style="font-size:15px;color:#6f7885">+' + moreLocked + '</b><p>잠긴 인물 더 보기</p></span></button>'
+      : '';
+    var cardsHtml = ((mLearned.length + mLocked.length) ? '' : emptyFiltered) + learnedHtml + lockedHtml + moreHtml;
     if (shelfView === 'all') $('#arcGrid').innerHTML = cardsHtml;
     var pageGrid = $('#pageArcGrid');
     if (pageGrid) {
@@ -8184,6 +8191,7 @@ function portraitSVG(fig, fit, alt) {
   if ($('#arcSearch')) {
     $('#arcSearch').addEventListener('input', function () {
       arcQuery = this.value.trim();
+      arcLimit = 36;
       if ($('#arcSearchClear')) $('#arcSearchClear').hidden = !arcQuery;
       shelfView = 'all';
       renderArchive();
@@ -8219,6 +8227,11 @@ function portraitSVG(fig, fit, alt) {
       if (!tab.getAttribute('data-tab')) shelfView = 'mine';
       renderShelves();
       if (shelfView === 'all') renderArchive();
+      return;
+    }
+    if (e.target.closest('[data-arclimit]')) {
+      arcLimit += 60;
+      renderArchive();
       return;
     }
     var gf = e.target.closest('[data-gf]');
