@@ -769,6 +769,14 @@ var TONES = {
 
 var PORTRAIT_UID = 0;
 
+/* 인물별 얼굴 폭 — 같은 조형이라도 골격이 달라 보이도록 */
+var FACE_W = {
+  'galileo': 0.94, 'gandhi': 0.95, 'lincoln': 0.95, 'steve-jobs': 0.96, 'hawking': 0.96,
+  'tesla': 0.97, 'chanel': 0.97, 'helen-keller': 0.97, 'marie-curie': 0.97, 'yu-gwansun': 0.97,
+  'churchill': 1.06, 'mandela': 1.05, 'beethoven': 1.05, 'newton': 1.04, 'darwin': 1.04,
+  'socrates': 1.03, 'michelangelo': 1.03, 'yi-sunsin': 1.03, 'buffett': 1.03, 'sejong': 1.02
+};
+
 function hairLayers(style, c) {
   var cap = function (d) { return '<path d="' + d + '" fill="' + c + '"/>'; };
   var shine = '<path d="M148 118 C 162 110 186 108 202 114" stroke="#fff" stroke-opacity=".14" stroke-width="3" fill="none" stroke-linecap="round"/>';
@@ -937,8 +945,8 @@ function garmentLayer(kind, cloth, cloth2, acc, skin) {
         '<path d="M150 334 C 142 372 138 408 138 440" stroke="#000" stroke-opacity=".12" stroke-width="3" fill="none"/>';
     case 'armor':
       return '<path d="M2 440 C 14 342 94 298 180 298 C 266 298 346 342 358 440 Z" fill="' + cloth + '"/>' +
-        '<path d="M4 440 C 10 384 46 342 96 326 C 104 366 96 410 86 440 Z" fill="#6d7885" opacity=".5"/>' +
-        '<path d="M356 440 C 350 384 314 342 264 326 C 256 366 264 410 274 440 Z" fill="#6d7885" opacity=".5"/>' +
+        '<path d="M10 430 C 16 382 48 344 96 328 C 100 356 90 384 78 400 C 52 410 30 420 10 430 Z" fill="#6d7885" opacity=".45"/>' +
+        '<path d="M350 430 C 344 382 312 344 264 328 C 260 356 270 384 282 400 C 308 410 330 420 350 430 Z" fill="#6d7885" opacity=".45"/>' +
         '<path d="M110 336 Q180 306 250 336 L256 376 Q180 344 104 376 Z" fill="#69747f"/>' +
         '<path d="M104 376 Q180 344 256 376 L262 410 Q180 378 98 410 Z" fill="#525d68"/>' +
         '<path d="M110 336 Q180 306 250 336" stroke="#fff" stroke-opacity=".3" stroke-width="2.5" fill="none"/>' +
@@ -1022,7 +1030,7 @@ function portraitSVG(fig, fit, alt) {
   var hl = hairLayers(a.hair || 'short', hair);
 
   var s = '';
-  s += '<svg viewBox="0 0 360 440" preserveAspectRatio="' + (fit === 'slice' ? 'xMidYMid slice' : 'xMidYMid meet') + '" role="img" aria-label="' + (alt || fig.name + ' 초상') + '" xmlns="http://www.w3.org/2000/svg">';
+  s += '<svg viewBox="0 0 360 440" preserveAspectRatio="' + (fit === 'slice' ? 'xMidYMin slice' : 'xMidYMid meet') + '" role="img" aria-label="' + (alt || fig.name + ' 초상') + '" xmlns="http://www.w3.org/2000/svg">';
   s += '<defs>';
   s += '<radialGradient id="bg' + uid + '" cx="50%" cy="34%" r="82%">' +
     '<stop offset="0" stop-color="' + t[0] + '"/><stop offset="55%" stop-color="' + t[0] + '" stop-opacity=".55"/>' +
@@ -1035,6 +1043,9 @@ function portraitSVG(fig, fit, alt) {
     '<stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity=".5"/></linearGradient>';
   s += '<pattern id="hatch' + uid + '" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">' +
     '<line x1="0" y1="0" x2="0" y2="5" stroke="#fff" stroke-opacity=".05" stroke-width="1"/></pattern>';
+  s += '<pattern id="engr' + uid + '" width="4" height="4" patternTransform="rotate(36)" patternUnits="userSpaceOnUse">' +
+    '<line x1="0" y1="0" x2="0" y2="4" stroke="#2a1c10" stroke-opacity=".5" stroke-width=".9"/></pattern>';
+  s += '<clipPath id="hd' + uid + '"><path d="M180 102 C 214 102 236 132 237 172 C 238 200 232 222 220 240 C 209 256 195 265 180 265 C 165 265 151 256 140 240 C 128 222 122 200 123 172 C 124 132 146 102 180 102 Z"/></clipPath>';
   s += '</defs>';
 
   s += '<rect width="360" height="440" fill="url(#bg' + uid + ')"/>';
@@ -1055,6 +1066,9 @@ function portraitSVG(fig, fit, alt) {
     s += '<path d="M152 262 C 168 254 192 254 208 262" stroke="#fff" stroke-opacity=".1" stroke-width="2" fill="none"/>';
   }
 
+  // head unit (face-width varies per figure)
+  var fx = FACE_W[fig.id] || 1;
+  s += '<g transform="translate(180 0) scale(' + fx + ' 1) translate(-180 0)">';
   // ears
   s += '<ellipse cx="119" cy="190" rx="10" ry="16" fill="' + skin + '"/>';
   s += '<ellipse cx="241" cy="190" rx="10" ry="16" fill="' + skin + '"/>';
@@ -1122,7 +1136,9 @@ function portraitSVG(fig, fit, alt) {
   }
 
   // rim light + vignette
-  s += '<path d="M180 102 C 148 102 126 130 124 168" stroke="#fff" stroke-opacity=".2" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+  s += '<rect x="112" y="96" width="136" height="176" fill="url(#engr' + uid + ')" clip-path="url(#hd' + uid + ')" opacity=".16"/>';
+  s += '<path d="M180 102 C 148 102 126 130 124 168" stroke="#fff" stroke-opacity=".24" stroke-width="2.8" fill="none" stroke-linecap="round"/>';
+  s += '</g>';
   s += '<path d="M152 236 C 158 246 168 252 180 252" stroke="#fff" stroke-opacity=".08" stroke-width="2" fill="none"/>';
   s += '</g>';
   s += '<rect y="330" width="360" height="110" fill="url(#flo' + uid + ')"/>';
