@@ -1248,6 +1248,26 @@
   .evo-btn:disabled{cursor:not-allowed; opacity:.65}
   @keyframes evoPulse{50%{box-shadow:0 0 30px rgba(255,233,168,.85)}}
 
+
+  /* 10성 진화 별 표시 */
+  .stline{display:inline-flex; gap:1px; line-height:1; letter-spacing:0}
+  .stline .st{font-style:normal; font-size:9px; font-weight:700}
+  .stline .st.y{color:#f6cf5a; text-shadow:0 0 6px rgba(246,207,90,.7)}
+  .stline .st.r{
+    background:linear-gradient(90deg,#ff8a8a,#ffe08a,#8affb0,#8ad4ff,#d08aff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 5px rgba(255,255,255,.65));
+  }
+  .stline .st.e{color:#3c434e}
+  .pcard .stline .st{font-size:10px}
+  .evolve-box .stline{margin-top:2px}
+  .museum-grid .cap .stline{display:flex; justify-content:center; margin:4px 0 2px}
+  .bu-star.rb{
+    background:linear-gradient(90deg,#ff8a8a,#ffe08a,#8affb0,#8ad4ff,#d08aff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 5px rgba(255,255,255,.8)); font-weight:700;
+  }
+
   /* ───── fx ───── */
   #fx{position:fixed; inset:0; pointer-events:none; z-index:90; overflow:hidden}
   .confetti{
@@ -2541,10 +2561,10 @@ function portraitSVG(fig, fit, alt) {
     var g = gradeIdx(f), st = starOf(f.id);
     return {
       g: g, star: st,
-      hp: 540 + g * 92 + st * 88,
-      atk: 54 + g * 11 + st * 9.5,
+      hp: 540 + g * 92 + st * 62,
+      atk: 54 + g * 11 + st * 7,
       spd: 100 + g * 2.4 + st * 1.6,
-      power: Math.round((540 + g * 92 + st * 88) / 8 + (54 + g * 11 + st * 9.5) * 4)
+      power: Math.round((540 + g * 92 + st * 62) / 8 + (54 + g * 11 + st * 7) * 4)
     };
   }
 
@@ -3118,7 +3138,7 @@ function portraitSVG(fig, fit, alt) {
     for (var i = 0; i < ULT_HITS; i++) pips += '<i></i>';
     return '<div class="bu ally ' + gi.cls + '" data-a="' + a.uid + '" style="--rc:' + rc + '">' +
       '<span class="bu-art">' + figArt(a.fig) + '</span>' +
-      '<span class="bu-star">' + (a.star ? '★' + a.star : '') + '</span>' +
+      '<span class="bu-star' + (a.star > 5 ? ' rb' : '') + '">' + (a.star ? '★' + a.star : '') + '</span>' +
       '<span class="bu-name">' + esc(a.name) + '</span>' +
       '<span class="hpb"><i class="hpf" style="width:100%"></i></span>' +
       '<span class="bu-hp">' + a.hp + ' / ' + a.maxHp + '</span>' +
@@ -4144,7 +4164,7 @@ function portraitSVG(fig, fit, alt) {
       $('#pgTierTxt').textContent = 'LV.' + p.cur.n + ' ' + p.cur.name + ' · ' + snap.tierPct + '%';
       $('#pgTierBar').style.width = snap.tierPct + '%';
       $('#pgTierSub').textContent = p.next ? (p.cur.name + ' → ' + p.next.name + ' · ' + p.label) : '최고 티어 달성';
-      $('#pgCardTxt').textContent = snap.cards + '장 · ★5 ' + snap.five + ' · 전시 ' + snap.five;
+      $('#pgCardTxt').textContent = snap.cards + '장 · ★5+ ' + snap.five + ' · 전시 ' + snap.five;
       $('#pgCardBar').style.width = snap.cardsPct + '%';
     }
     $('#recTier').textContent = 'LV.' + p.cur.n + ' ' + p.cur.name;
@@ -4201,7 +4221,7 @@ function portraitSVG(fig, fit, alt) {
   }
 
   /* ── coins · cards · evolution ── */
-  var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 5;
+  var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 10, MUSEUM_STAR = 5;
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
 
   function cardOf(id) { return S.cards[id] || null; }
@@ -4212,14 +4232,26 @@ function portraitSVG(fig, fit, alt) {
     return m;
   }
   function hasFive() {
-    return Object.keys(S.cards).some(function (k) { return (S.cards[k].star || 0) >= MAX_STAR; });
+    return Object.keys(S.cards).some(function (k) { return (S.cards[k].star || 0) >= MUSEUM_STAR; });
   }
   function fiveFigures() {
-    return FIGURES.filter(function (f) { var c = S.cards[f.id]; return c && (c.star || 0) >= MAX_STAR; });
+    return FIGURES.filter(function (f) { var c = S.cards[f.id]; return c && (c.star || 0) >= MUSEUM_STAR; });
   }
   function fragOf(c) {
     if (!c) return 0;
     return Math.max(0, Math.min(FRAG_PER_STAR, (c.n - 1) - (c.star * FRAG_PER_STAR)));
+  }
+
+  function starHtml(st) {
+    st = st || 0;
+    var h = '<span class="stline">';
+    var y = Math.min(5, st), r = Math.max(0, st - 5);
+    var empty = st <= 5 ? 5 - st : 10 - st;
+    var i;
+    for (i = 0; i < y; i++) h += '<b class="st y">★</b>';
+    for (i = 0; i < r; i++) h += '<b class="st r">★</b>';
+    for (i = 0; i < empty; i++) h += '<b class="st e">☆</b>';
+    return h + '</span>';
   }
 
   function canEvolve(id) {
@@ -4253,9 +4285,10 @@ function portraitSVG(fig, fit, alt) {
     var st = c.star || 0, fr = fragOf(c);
     var pct = st >= MAX_STAR ? 100 : Math.round(fr / FRAG_PER_STAR * 100);
     var ready = st < MAX_STAR && fr >= FRAG_PER_STAR;
-    var label = st >= MAX_STAR ? '★5 최고 진화' : (ready ? '✨ 진화하기' : '진화 (' + fr + '/' + FRAG_PER_STAR + ')');
+    var label = st >= MAX_STAR ? '★10 최고 진화' : (ready ? '✨ 진화하기 (' + st + '→' + (st + 1) + ')' : '진화 (' + fr + '/' + FRAG_PER_STAR + ')');
     return '<div class="evolve-box' + (ready ? ' ready' : '') + '">' +
-      '<div class="ev-top"><b>★' + st + '</b><span class="ev-frag">' + (st >= MAX_STAR ? 'MAX' : fr + ' / ' + FRAG_PER_STAR) + '</span></div>' +
+      '<div class="ev-top"><b>★' + st + '</b><span class="ev-frag">' + (st >= MAX_STAR ? 'MAX ★10' : fr + ' / ' + FRAG_PER_STAR) + '</span></div>' +
+      starHtml(st) +
       '<div class="ev-bar"><i style="width:' + pct + '%"></i></div>' +
       '<button type="button" class="evo-btn' + (ready ? ' on' : '') + '" data-evolve="' + id + '"' + (ready || st >= MAX_STAR ? '' : ' disabled') + '>' + label + '</button>' +
       '</div>';
@@ -4283,7 +4316,7 @@ function portraitSVG(fig, fit, alt) {
   function pcardHtml(r, i) {
     var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
     var rc = gi.color === 'rainbow' ? '#ecd9a8' : gi.color;
-    var stars = '★'.repeat(r.star) + '☆'.repeat(Math.max(0, MAX_STAR - r.star));
+    var stars = starHtml(r.star);
     var label = r.isNew ? 'NEW' : (r.ready ? '✨ 진화 가능 ' + r.frag + '/' + FRAG_PER_STAR : '+' + r.frag + ' / ' + FRAG_PER_STAR);
     return '<article class="pcard ' + gi.cls + (r.isNew ? ' new' : '') + '" style="--rc:' + rc + '; animation-delay:' + (i * 0.09).toFixed(2) + 's">' +
       '<span class="tagline">' + (r.isNew ? 'NEW' : gi.name) + '</span>' +
@@ -4361,7 +4394,7 @@ function portraitSVG(fig, fit, alt) {
         '<span class="case"><span class="spot"></span>' +
         '<span class="arch">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
         '<span class="pedestal"></span></span>' +
-        '<span class="cap">' + esc(f.name) + '<em>★5 · ' + gi.name + ' · ' + f.years + '</em></span></button>';
+        '<span class="cap">' + esc(f.name) + starHtml((S.cards[f.id] || {}).star || 5) + '<em>' + gi.name + ' · ' + f.years + '</em></span></button>';
     }).join('') + '</div>';
   }
 
@@ -4370,7 +4403,7 @@ function portraitSVG(fig, fit, alt) {
     if (!f) return;
     var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
     $('#plaqueBody').innerHTML = '<div class="plaque">' +
-      '<span class="rarity-chip' + (gi.color === 'rainbow' ? ' rb-fill' : '') + '" style="--rc:' + (gi.color === 'rainbow' ? '#ecd9a8' : gi.color) + '">★5 · ' + gi.name + '</span>' +
+      '<span class="rarity-chip' + (gi.color === 'rainbow' ? ' rb-fill' : '') + '" style="--rc:' + (gi.color === 'rainbow' ? '#ecd9a8' : gi.color) + '">★' + ((S.cards[f.id] || {}).star || 5) + ' · ' + gi.name + '</span>' + starHtml((S.cards[f.id] || {}).star || 5) +
       '<h4>' + esc(f.name) + '</h4>' +
       '<div class="reader-origin" style="margin-top:8px"><span class="pin">📍</span><span class="fl">' + esc(f.flag) + '</span> ' + esc(f.birthplace) + '</div>' +
       '<p class="q">“' + esc(f.quote) + '”</p>' +
