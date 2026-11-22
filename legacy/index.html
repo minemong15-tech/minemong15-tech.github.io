@@ -1328,12 +1328,6 @@ function portraitSVG(fig, fit, alt) {
     'mlk': 'suit', 'fdr': 'suit', 'jfk': 'suit', 'mandela': 'shirt', 'steve-jobs': 'turtleneck',
     'buffett': 'suit', 'hawking': 'suit', 'saint-exupery': 'leather'
   };
-  FIGURES.forEach(function (f) {
-    f.art.garment = GARMENT[f.id] || 'suit';
-    f.grade = GRADE[f.id] || 'basic';
-    f.video = (typeof VIDEOS !== 'undefined' && VIDEOS[f.id]) ? VIDEOS[f.id] : null;
-  });
-
   var LEVELS = [
     { n: 1, name: '기본', en: 'COMMON', req: '첫 체크', desc: '기록을 시작한 사람', checks: 0, days: 0, color: '#9ca3af' },
     { n: 2, name: '희귀', en: 'RARE', req: '체크 10회', desc: '열 사람의 삶을 읽었습니다', checks: 10, days: 0, color: '#3b82f6' },
@@ -1364,6 +1358,13 @@ function portraitSVG(fig, fit, alt) {
     'wright': 'basic', 'chanel': 'basic', 'chaplin': 'basic', 'fdr': 'basic', 'buffett': 'basic',
     'hawking': 'basic', 'saint-exupery': 'basic'
   };
+
+  FIGURES.forEach(function (f) {
+    f.art.garment = GARMENT[f.id] || 'suit';
+    f.grade = GRADE[f.id] || 'basic';
+    f.video = (typeof VIDEOS !== 'undefined' && VIDEOS[f.id]) ? VIDEOS[f.id] : null;
+  });
+
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var pad2 = function (n) { return (n < 10 ? '0' : '') + n; };
