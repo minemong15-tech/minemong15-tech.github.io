@@ -6489,7 +6489,7 @@ function portraitSVG(fig, fit, alt) {
     var p = $('#hubWarProg');
     if (p) p.innerHTML = chapterRowsHtml();
     var rb = $('#hubRecBadge');
-    if (rb) rb.textContent = ownedCount() + ' / ' + N + '명';
+    if (rb) rb.textContent = learnedIds().length + ' / ' + N + '명';
     var b = $('#hubMailBadge');
     if (b) {
       var n = mailUnread();
