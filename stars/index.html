@@ -1351,9 +1351,9 @@ function renderLobby() {
   if (hs) hs.textContent = sk ? '✨ ' + sk.name : '기본 스킨';
   const tr = $('#heroTrophies');
   if (tr) tr.textContent = fmt(S.trophies);
-  const ti = tierOf(S.trophies);
+  const tierNow = tierOf(S.trophies);
   const ht = $('#heroTier');
-  if (ht) { ht.textContent = ti.icon + ' ' + ti.n; ht.style.color = ti.c; ht.style.borderColor = rgba(ti.c, 0.45); }
+  if (ht) { ht.textContent = tierNow.icon + ' ' + tierNow.n; ht.style.color = tierNow.c; ht.style.borderColor = rgba(tierNow.c, 0.45); }
   const hl = $('#heroLv');
   if (hl) hl.textContent = 'Lv.' + plevelOf(c.id);
   syncMuteUI();
