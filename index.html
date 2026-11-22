@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060b18">
+<meta name="color-scheme" content="dark">
+<title>ZONE · M — 앱 모음</title>
+<link rel="icon" href="assets/zone-logo.png">
+<style>
+  :root{
+    --bg:#060b18; --surface:rgba(255,255,255,.045); --line:rgba(255,255,255,.09);
+    --text:#f2f5fa; --dim:#8b96ab; --zone:#2f7cf6; --m:#b16cff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100dvh; background:var(--bg); color:var(--text);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:40px 20px calc(40px + env(safe-area-inset-bottom));
+    position:relative; overflow-x:hidden;
+  }
+  body::before,body::after{
+    content:""; position:fixed; border-radius:50%; filter:blur(90px); opacity:.28; pointer-events:none; z-index:0;
+  }
+  body::before{width:420px;height:420px;background:#1e5fd0;top:-160px;left:-140px}
+  body::after{width:420px;height:420px;background:#8a3cd6;bottom:-180px;right:-150px}
+  .wrap{width:100%; max-width:460px; position:relative; z-index:1}
+  header{margin-bottom:26px; text-align:center}
+  h1{font-size:15px; font-weight:600; letter-spacing:.16em; color:var(--dim); margin:0 0 6px; text-transform:uppercase}
+  header p{margin:0; font-size:13px; color:#5f6a7e}
+  .apps{display:flex; flex-direction:column; gap:14px}
+  a.card{
+    display:flex; align-items:center; gap:16px; text-decoration:none; color:inherit;
+    background:var(--surface); border:1px solid var(--line); border-radius:20px;
+    padding:18px; backdrop-filter:blur(12px); transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  a.card:hover,a.card:focus-visible{transform:translateY(-2px); background:rgba(255,255,255,.07); outline:none}
+  a.card.zone:hover{border-color:rgba(47,124,246,.55)}
+  a.card.m:hover{border-color:rgba(177,108,255,.55)}
+  .logo{
+    width:58px;height:58px;flex:0 0 58px;border-radius:16px;overflow:hidden;
+    background:#0d1424; display:flex;align-items:center;justify-content:center;
+  }
+  .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .meta{flex:1;min-width:0}
+  .meta .name{font-size:19px;font-weight:700;letter-spacing:.01em;margin:0 0 5px;display:flex;align-items:center;gap:8px}
+  .meta .desc{margin:0;font-size:13px;line-height:1.45;color:var(--dim)}
+  .tag{font-size:10px;font-weight:600;letter-spacing:.06em;padding:3px 7px;border-radius:6px;border:1px solid var(--line);color:#8b96ab}
+  .arrow{color:#4d576b;font-size:20px;line-height:1;transition:transform .15s ease,color .15s ease}
+  a.card:hover .arrow{transform:translateX(3px);color:#c9d2e2}
+  footer{margin-top:28px;text-align:center;font-size:11.5px;line-height:1.6;color:#4a5468}
+  footer a{color:#6e7a90;text-decoration:none;border-bottom:1px solid rgba(110,122,144,.3)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Apps</h1>
+      <p>바로 열리는 웹앱 두 개</p>
+    </header>
+
+    <main class="apps">
+      <a class="card zone" href="zone/">
+        <span class="logo"><img src="assets/zone-logo.png" alt="ZONE 로고"></span>
+        <span class="meta">
+          <span class="name">ZONE</span>
+          <span class="desc">단수·정전·민방위·재난을 가장 먼저 알리는 비상 알림 앱</span>
+        </span>
+        <span class="arrow">›</span>
+      </a>
+
+      <a class="card m" href="m/">
+        <span class="logo"><img src="assets/m-icon.png" alt="M 로고"></span>
+        <span class="meta">
+          <span class="name">M</span>
+          <span class="desc">친구들이 모여 채팅·릴스·투표·1분 게임·D-DAY를 함께 즐기는 소셜 앱</span>
+        </span>
+        <span class="arrow">›</span>
+      </a>
+    </main>
+
+    <footer>
+      홈 화면에 추가하면 앱처럼 전체 화면으로 열립니다.<br>
+      <a href="https://github.com/minemong15-tech">github.com/minemong15-tech</a>
+    </footer>
+  </div>
+</body>
+</html>
