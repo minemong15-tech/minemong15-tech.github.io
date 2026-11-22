@@ -460,6 +460,54 @@
   .plaque .q{font-family:var(--serif); font-size:14px; line-height:1.7; color:#e9dfcb; margin:10px 0 0; word-break:keep-all}
   .plaque ul{margin:12px 0 0; padding-left:16px; font-size:11px; color:var(--muted2); line-height:1.7}
 
+
+  /* ───── ratings ───── */
+  .rate{display:flex; align-items:center; justify-content:center; gap:10px; margin-top:12px; flex-wrap:wrap}
+  .rate .rlabel{font-size:9px; letter-spacing:.16em; color:var(--gold-dim)}
+  .rate .stars{display:inline-flex; gap:1px}
+  .rate .stars button{background:none; border:0; padding:0 2px; cursor:pointer; font-size:16px; line-height:1;
+    color:#3b424d; transition:color .15s, transform .15s}
+  .rate .stars button.on{color:var(--gold)}
+  .rate .stars button:hover{transform:scale(1.15); color:var(--gold-hi)}
+  .rate .rval{font-size:10px; color:var(--muted2); min-width:36px; text-align:left}
+  .arc-card .when .rt{color:var(--gold); margin-left:5px}
+
+  /* ───── shelves (내 모음집) ───── */
+  .arc-tabs{display:flex; gap:8px; margin:2px 0 16px; flex-wrap:wrap; align-items:center}
+  .arc-tab{padding:7px 14px; border-radius:999px; border:1px solid var(--line2); background:rgba(255,255,255,.02);
+    color:var(--muted); font-size:11px; letter-spacing:.02em; cursor:pointer; transition:.2s}
+  .arc-tab:hover{color:var(--gold-hi); border-color:var(--line)}
+  .arc-tab.on{border-color:rgba(200,168,106,.6); color:var(--gold-hi); background:rgba(200,168,106,.1)}
+  .arc-tab.add{border-style:dashed}
+  .shelf-list{display:flex; flex-direction:column; gap:8px; margin-bottom:16px}
+  .shelf-row{display:flex; align-items:center; gap:10px; padding:11px 14px; border:1px solid var(--line2);
+    border-radius:11px; background:rgba(255,255,255,.02)}
+  .shelf-row .nm{flex:1; text-align:left; background:none; border:0; color:#f0e7d6; font-family:var(--serif);
+    font-size:13.5px; cursor:pointer; padding:0}
+  .shelf-row .nm:hover{color:var(--gold-hi)}
+  .shelf-row .ct{font-size:9.5px; color:var(--muted2); letter-spacing:.06em}
+  .shelf-row .op{background:none; border:0; color:var(--muted2); font-size:10.5px; cursor:pointer; padding:3px 5px}
+  .shelf-row .op:hover{color:var(--gold-hi)}
+  .shelf-row .op.del:hover{color:#ef8a8a}
+  .shelf-new{display:flex; gap:8px; margin-bottom:14px}
+  .shelf-new input{flex:1; min-width:0; padding:10px 12px; border-radius:10px; border:1px solid var(--line2);
+    background:rgba(255,255,255,.03); color:var(--text); font-size:12.5px; outline:none; font-family:inherit}
+  .shelf-new input:focus{border-color:rgba(200,168,106,.5)}
+  .shelf-new button{padding:10px 15px; border-radius:10px; border:1px solid rgba(200,168,106,.45);
+    background:rgba(200,168,106,.12); color:var(--gold-hi); font-size:12px; cursor:pointer}
+  .shelf-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap}
+  .shelf-head h3{font-family:var(--serif); font-size:18px; margin:0; color:#f4ecdd; font-weight:600}
+  .shelf-head .ops{display:flex; gap:8px}
+  .shelf-chips{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px}
+  .shelf-chip{padding:7px 13px; border-radius:999px; border:1px solid var(--line2); background:rgba(255,255,255,.02);
+    color:#cfd4dd; font-size:11px; cursor:pointer}
+  .shelf-chip:hover{border-color:rgba(200,168,106,.5); color:var(--gold-hi)}
+  .picker{display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:8px; margin-top:8px}
+  .picker button{display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; border:1px solid var(--line2);
+    background:rgba(255,255,255,.02); color:#cfd4dd; font-size:11px; cursor:pointer; text-align:left}
+  .picker button.on{border-color:rgba(34,197,94,.55); color:#a9e6bd; background:rgba(34,197,94,.08)}
+  .picker button .mk{color:var(--muted2); font-size:11px}
+
   /* ───── journey ───── */
   .journey{margin-top:22px; padding:26px 30px 30px}
   .j-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px}
@@ -780,6 +828,8 @@
     .reveal{grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:9px}
     .museum-grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:12px}
     .pack-actions{flex-direction:column}
+    .picker{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+    .rate .stars button{font-size:18px}
     .btn-pack{width:100%}
     .arc-card .body{padding:8px 8px 9px}
     .arc-card .body b{font-size:11.5px}
@@ -860,6 +910,7 @@
           </button>
           <span class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
         </div>
+        <div id="rateBox"></div>
       </div>
 
       <div class="check-row">
@@ -1007,6 +1058,7 @@
         <button class="link-btn" id="pageArcAll" type="button">도감 전체 화면</button>
       </div>
     </div>
+    <div class="shelf-chips" id="pageShelves"></div>
     <div class="arc-grid" id="pageArcGrid"></div>
   </section>
 
@@ -1052,6 +1104,12 @@
       <span class="arc-count" id="arcCount">0 / 36</span>
       <span class="pill" id="arcStreak">연속 기록 —</span>
     </div>
+    <div class="arc-tabs" id="arcTabs">
+      <button class="arc-tab on" type="button" data-tab="all">전체 인물</button>
+      <button class="arc-tab" type="button" data-tab="mine">내 모음집 <b id="shelfCount">0</b></button>
+      <button class="arc-tab add" type="button" id="newShelfBtn">＋ 새 모음집</button>
+    </div>
+    <div id="shelfPanel" hidden></div>
     <div class="arc-grid" id="arcGrid"></div>
   </div>
 </div>
@@ -1647,6 +1705,8 @@ function portraitSVG(fig, fit, alt) {
   if (!S.cards || typeof S.cards !== 'object') S.cards = {};
   if (!S.guess || typeof S.guess !== 'object') S.guess = {};
   if (typeof S.doubleXp !== 'boolean') S.doubleXp = false;
+  if (!S.ratings || typeof S.ratings !== 'object') S.ratings = {};
+  if (!Array.isArray(S.shelves)) S.shelves = [];
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
   S.log = S.log.filter(function (v, i, arr) { return v && v.d && arr.map(function (x) { return x.d; }).indexOf(v.d) === i; })
     .sort(function (a, b) { return a.d < b.d ? -1 : 1; });
@@ -1789,6 +1849,7 @@ function portraitSVG(fig, fit, alt) {
     }).join('');
     $('#jCount').textContent = f.journey.length;
     $('#rumorGrid').innerHTML = rumorCards(f);
+    $('#rateBox').innerHTML = rateHtml(f.id);
 
     renderCheck(f);
     renderTomorrow(idx);
@@ -1930,25 +1991,32 @@ function portraitSVG(fig, fit, alt) {
         '<span class="arc-badge">' + gi.name + '</span>' +
         '<span class="ph">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
         '<span class="body"><b>' + esc(f.name) + '</b><p>' + esc(f.title) + '</p>' +
-        '<span class="when">' + d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate()) + (m.n > 1 ? ' · ' + m.n + '회' : '') + '</span></span></button>';
+        '<span class="when">' + d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate()) + (m.n > 1 ? ' · ' + m.n + '회' : '') + (S.ratings[f.id] ? '<span class="rt">★' + S.ratings[f.id] + '</span>' : '') + '</span></span></button>';
     }).join('');
 
-    var lockedHtml = lockedFigs.map(function (f) {
+    var lockCard = function (f) {
       return '<div class="arc-card locked" data-locked="1" role="img" aria-label="아직 배우지 않은 인물">' +
         '<span class="arc-badge">미학습</span>' +
         '<span class="ph"><span class="lock-ph"><span>?</span></span></span>' +
         '<span class="body"><b>???</b><p>아직 배우지 않은 인물</p><span class="when">LOCKED</span></span></div>';
-    }).join('');
+    };
+    var lockedHtml = lockedFigs.map(lockCard).join('');
 
     var empty = learnedFigs.length ? '' :
       '<div class="arc-empty" style="grid-column:1/-1">아직 배운 인물이 없습니다.<br>오늘의 인물을 읽고 체크하면 이름과 한 줄 소개가 이곳에 남습니다.</div>';
 
     var cardsHtml = empty + learnedHtml + lockedHtml;
-    $('#arcGrid').innerHTML = cardsHtml;
+    if (shelfView === 'all') $('#arcGrid').innerHTML = cardsHtml;
     var pageGrid = $('#pageArcGrid');
-    if (pageGrid) pageGrid.innerHTML = cardsHtml;
+    if (pageGrid) {
+      var rest = lockedFigs.length - 6;
+      pageGrid.innerHTML = empty + learnedHtml + lockedFigs.slice(0, 6).map(lockCard).join('') +
+        (rest > 0 ? '<button class="arc-card locked" type="button" data-more="1"><span class="body" style="text-align:center;padding:18px 8px"><b style="font-size:15px;color:#6f7885">+' + rest + '</b><p>잠긴 인물 더 보기</p></span></button>' : '');
+    }
     $('#arcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N;
     if ($('#pageArcCount')) $('#pageArcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N;
+    renderPageShelves();
+    renderTabs();
     var sk = streak();
     $('#arcStreak').textContent = sk > 0 ? '연속 ' + sk + '일 기록 중' : '연속 기록 없음';
     $('#arcStreak').classList.toggle('gold', sk > 0);
@@ -1978,6 +2046,7 @@ function portraitSVG(fig, fit, alt) {
       '<h3>' + esc(f.name) + '</h3>' +
       '<div class="yrs">' + esc(f.years) + ' <em class="age">' + esc(ageText(f)) + '</em></div>' +
       '<div><span class="reader-origin"><span class="pin">📍</span><span class="fl">' + esc(f.flag) + '</span> ' + esc(f.birthplace) + '</span></div>' +
+      '<div style="text-align:left">' + rateHtml(f.id) + '</div>' +
       '<p class="reader-q">“' + esc(f.quote) + '”</p>' +
       '<div class="quote-src">' + esc(f.src) + '</div></div></div>';
     body += '<div class="reader-sec"><h4>THE JOURNEY · 과정</h4>' + f.journey.map(function (x) {
@@ -2082,6 +2151,7 @@ function portraitSVG(fig, fit, alt) {
       $('#packMsg').textContent = '코인이 부족합니다 · 매일 체크(+' + COIN_CHECK + ')와 이름 맞추기(+' + COIN_GUESS + ')로 모아보세요.';
       return;
     }
+    var hadFive = hasFive();
     S.coins -= cost;
     var res = [], i;
     for (i = 0; i < count; i++) res.push(pullOne());
@@ -2106,7 +2176,7 @@ function portraitSVG(fig, fit, alt) {
       m.className = 'pack-msg';
       m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.';
     }
-    if (hasFive()) {
+    if (!hadFive && hasFive()) {
       setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 900);
     }
   }
@@ -2155,6 +2225,122 @@ function portraitSVG(fig, fit, alt) {
       '</div>';
     openModal('#mPlaque');
     $('#plaqueReader').addEventListener('click', function () { openReader(f.id); });
+  }
+
+  /* ── 내 평점 ── */
+  function rateHtml(id) {
+    var v = S.ratings[id] || 0;
+    var h = '<span class="rate" data-rate="' + id + '"><span class="rlabel">내 평점</span><span class="stars">';
+    for (var i = 1; i <= 5; i++) {
+      h += '<button type="button" data-v="' + i + '" class="' + (i <= v ? 'on' : '') + '" aria-label="' + i + '점">★</button>';
+    }
+    h += '</span><span class="rval">' + (v ? '★ ' + v.toFixed(1) : '—') + '</span></span>';
+    return h;
+  }
+
+  function paintRate(box, id) {
+    if (!box) return;
+    var v = S.ratings[id] || 0;
+    box.querySelectorAll('button').forEach(function (b) {
+      b.classList.toggle('on', +b.getAttribute('data-v') <= v);
+    });
+    var rv = box.querySelector('.rval');
+    if (rv) rv.textContent = v ? '★ ' + v.toFixed(1) : '—';
+  }
+
+  function rateFigure(id, v) {
+    var f = FIGURES.filter(function (x) { return x.id === id; })[0];
+    if (!f) return;
+    var prev = S.ratings[id] || 0;
+    S.ratings[id] = (prev === v) ? 0 : v;
+    saveState();
+    document.querySelectorAll('[data-rate="' + id + '"]').forEach(function (b) { paintRate(b, id); });
+    renderArchive();
+    if (S.ratings[id]) toast('<b>' + esc(f.name) + '</b> · ★' + v + ' 저장');
+    else toast('평점을 지웠습니다');
+  }
+
+  /* ── 나의 모음집 ── */
+  var shelfView = 'all', activeShelf = null, pickMode = false, renameShelf = null;
+
+  function shelfOf(id) {
+    return S.shelves.filter(function (x) { return x.id === id; })[0] || null;
+  }
+
+  function renderTabs() {
+    if (!$('#arcTabs')) return;
+    $('#shelfCount').textContent = S.shelves.length;
+    document.querySelectorAll('#arcTabs .arc-tab[data-tab]').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-tab') === (shelfView === 'all' ? 'all' : 'mine'));
+    });
+    var p = $('#shelfPanel');
+    if (p) p.hidden = shelfView !== 'mine';
+  }
+
+  function renderShelves() {
+    renderTabs();
+    var p = $('#shelfPanel');
+    if (!p || shelfView !== 'mine') return;
+    var html = '<div class="shelf-new"><input id="shelfName" maxlength="24" placeholder="모음집 이름 (예: 조선의 인물)"><button type="button" id="shelfAdd">＋ 새 모음집</button></div>';
+    if (S.shelves.length) {
+      html += '<div class="shelf-list">' + S.shelves.map(function (sh) {
+        var isRenaming = renameShelf === sh.id;
+        var nm = isRenaming
+          ? '<input class="shelf-name-input" id="shelfRename" value="' + esc(sh.name) + '" maxlength="24" style="flex:1;padding:7px 10px;border-radius:8px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--text);font-size:12.5px">' +
+            '<button class="op" type="button" data-rename-save="' + sh.id + '">저장</button>'
+          : '<button class="nm" type="button" data-open="' + sh.id + '">' + esc(sh.name) + (activeShelf === sh.id ? ' ✓' : '') + '</button>';
+        return '<div class="shelf-row" data-shelf="' + sh.id + '">' + nm +
+          '<span class="ct">' + sh.ids.length + '명</span>' +
+          (isRenaming ? '' : '<button class="op" type="button" data-rename="' + sh.id + '">이름 변경</button>' +
+          '<button class="op del" type="button" data-del="' + sh.id + '">삭제</button>') + '</div>';
+      }).join('') + '</div>';
+    } else {
+      html += '<p class="arc-empty" style="padding:6px 0 14px">아직 모음집이 없습니다. 이름을 적고 만들어 보세요.</p>';
+    }
+    var sel = shelfOf(activeShelf);
+    if (sel) {
+      html += '<div class="shelf-head"><h3>' + esc(sel.name) + ' <span class="ct">' + sel.ids.length + '명</span></h3><div class="ops">' +
+        '<button class="link-btn primary" type="button" data-pick="1">' + (pickMode ? '편집 완료' : '인물 추가·편집') + '</button></div></div>';
+    }
+    p.innerHTML = html;
+
+    var grid = $('#arcGrid');
+    if (!sel) { grid.innerHTML = ''; return; }
+    if (pickMode) {
+      grid.innerHTML = '<div class="picker">' + FIGURES.map(function (f) {
+        var on = sel.ids.indexOf(f.id) !== -1;
+        return '<button type="button" class="' + (on ? 'on' : '') + '" data-pick-id="' + f.id + '"><span class="mk">' + (on ? '✓' : '＋') + '</span>' + esc(f.name) + '</button>';
+      }).join('') + '</div>';
+    } else if (!sel.ids.length) {
+      grid.innerHTML = '<div class="arc-empty" style="grid-column:1/-1">아직 담은 인물이 없습니다. 「인물 추가·편집」으로 인물을 골라보세요.</div>';
+    } else {
+      grid.innerHTML = sel.ids.map(function (id) {
+        var f = FIGURES.filter(function (x) { return x.id === id; })[0];
+        if (!f) return '';
+        var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+        var r = S.ratings[f.id];
+        return '<button class="arc-card ' + gi.cls + '" type="button" data-fig="' + f.id + '">' +
+          '<span class="arc-badge">' + gi.name + '</span>' +
+          '<span class="ph">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
+          '<span class="body"><b>' + esc(f.name) + '</b><p>' + esc(f.title) + '</p>' +
+          '<span class="when">' + esc(f.birthplace) + (r ? '<span class="rt">★' + r + '</span>' : '') + '</span></span></button>';
+      }).join('');
+    }
+  }
+
+  function openMine(shelfId) {
+    shelfView = 'mine';
+    if (shelfId) activeShelf = shelfId;
+    pickMode = false;
+    renderShelves();
+  }
+
+  function renderPageShelves() {
+    var box = $('#pageShelves');
+    if (!box) return;
+    box.innerHTML = S.shelves.map(function (sh) {
+      return '<button class="shelf-chip" type="button" data-shelf-chip="' + sh.id + '">📂 ' + esc(sh.name) + ' <span style="color:#7c8697">' + sh.ids.length + '</span></button>';
+    }).join('') + '<button class="shelf-chip" type="button" id="pageNewShelf">＋ 새 모음집</button>';
   }
 
   /* ── 명언 읽어주기 ── */
@@ -2487,7 +2673,74 @@ function portraitSVG(fig, fit, alt) {
   $('#guessInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitGuess(); });
   document.addEventListener('click', function (e) {
     var ex = e.target.closest('[data-exhibit]');
-    if (ex) openPlaque(ex.getAttribute('data-exhibit'));
+    if (ex) { openPlaque(ex.getAttribute('data-exhibit')); return; }
+
+    var st = e.target.closest('[data-rate] button');
+    if (st) { rateFigure(st.closest('[data-rate]').getAttribute('data-rate'), +st.getAttribute('data-v')); return; }
+
+    var tab = e.target.closest('#arcTabs .arc-tab');
+    if (tab) {
+      shelfView = tab.getAttribute('data-tab') === 'mine' ? 'mine' : 'all';
+      renameShelf = null;
+      if (!tab.getAttribute('data-tab')) shelfView = 'mine';
+      renderShelves();
+      if (shelfView === 'all') renderArchive();
+      return;
+    }
+    if (e.target.closest('#newShelfBtn')) {
+      shelfView = 'mine'; renderShelves();
+      setTimeout(function () { var i = $('#shelfName'); if (i) i.focus(); }, 60);
+      return;
+    }
+    if (e.target.closest('#pageNewShelf')) {
+      shelfView = 'mine'; openModal('#mArchive'); renderShelves();
+      setTimeout(function () { var i = $('#shelfName'); if (i) i.focus(); }, 80);
+      return;
+    }
+    if (e.target.closest('#shelfAdd')) {
+      var inp = $('#shelfName');
+      var name = (inp && inp.value || '').trim();
+      if (!name) { toast('모음집 이름을 입력해 주세요'); if (inp) inp.focus(); return; }
+      var sh = { id: 'sh' + Date.now().toString(36), name: name.slice(0, 24), ids: [] };
+      S.shelves.push(sh); activeShelf = sh.id; pickMode = false;
+      saveState(); renderShelves(); renderPageShelves();
+      toast('📂 <b>' + esc(sh.name) + '</b> 모음집을 만들었습니다');
+      return;
+    }
+    var op = e.target.closest('[data-open]');
+    if (op) { activeShelf = op.getAttribute('data-open'); pickMode = false; renderShelves(); return; }
+    var rn = e.target.closest('[data-rename]');
+    if (rn) { renameShelf = rn.getAttribute('data-rename'); renderShelves(); setTimeout(function () { var i = $('#shelfRename'); if (i) { i.focus(); i.select(); } }, 50); return; }
+    var rs = e.target.closest('[data-rename-save]');
+    if (rs) {
+      var id2 = rs.getAttribute('data-rename-save');
+      var i2 = $('#shelfRename');
+      var v2 = (i2 && i2.value || '').trim();
+      var s2 = shelfOf(id2);
+      if (s2 && v2) { s2.name = v2.slice(0, 24); saveState(); }
+      renameShelf = null; renderShelves(); renderPageShelves(); return;
+    }
+    var del = e.target.closest('[data-del]');
+    if (del) {
+      var id3 = del.getAttribute('data-del');
+      S.shelves = S.shelves.filter(function (x) { return x.id !== id3; });
+      if (activeShelf === id3) activeShelf = null;
+      saveState(); renderShelves(); renderPageShelves(); renderArchive();
+      toast('모음집을 삭제했습니다'); return;
+    }
+    if (e.target.closest('[data-pick]')) { pickMode = !pickMode; renderShelves(); return; }
+    var pk = e.target.closest('[data-pick-id]');
+    if (pk) {
+      var s3 = shelfOf(activeShelf); if (!s3) return;
+      var fid2 = pk.getAttribute('data-pick-id');
+      var at = s3.ids.indexOf(fid2);
+      if (at === -1) s3.ids.push(fid2); else s3.ids.splice(at, 1);
+      saveState(); renderShelves(); renderPageShelves(); return;
+    }
+    var chip = e.target.closest('[data-shelf-chip]');
+    if (chip) {
+      openModal('#mArchive'); openMine(chip.getAttribute('data-shelf-chip')); return;
+    }
   });
   $('#ytBtn').addEventListener('click', function () { linkOpenedAt = Date.now(); });
   document.addEventListener('visibilitychange', function () {
@@ -2498,15 +2751,16 @@ function portraitSVG(fig, fit, alt) {
   $('#statsBtn').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
   $('#roadmapBtn').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
   $('#ftRoadmap').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
-  $('#archiveBtn').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
-  $('#ftArchive').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
+  $('#archiveBtn').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
+  $('#pageArcAll').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
+  $('#ftArchive').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
   document.addEventListener('click', function (e) {
     var card = e.target.closest('[data-fig]');
     if (card && card.closest('.arc-grid')) { openReader(card.getAttribute('data-fig')); return; }
     if (e.target.closest('[data-locked]')) toast('아직 배우지 않은 인물입니다 · 매일 한 명씩 열립니다');
   });
   $('#pageArcAll').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
-  $('#recArchive').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
+  $('#recArchive').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
   $('#recRoadmap').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
   document.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closeModals); });
   document.querySelectorAll('.modal').forEach(function (m) {
