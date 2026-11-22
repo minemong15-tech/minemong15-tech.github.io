@@ -7351,10 +7351,10 @@ function d3Init() {
   cam.lookAt(0, 0, 0);
   D3.camera = cam;
 
-  scene.add(new T.HemisphereLight(0x9fd8ff, 0x0d1526, 0.62));
-  const amb = new T.AmbientLight(0x3a4a6a, 0.28); scene.add(amb);
+  scene.add(new T.HemisphereLight(0xc6ecff, 0x16243c, 0.9));
+  const amb = new T.AmbientLight(0x54688e, 0.36); scene.add(amb);
 
-  const sun = new T.DirectionalLight(0xeaf6ff, 1.05);
+  const sun = new T.DirectionalLight(0xf4fbff, 1.45);
   sun.position.set(320, 780, 420);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024, 1024);
