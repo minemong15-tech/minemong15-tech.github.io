@@ -159,21 +159,21 @@ function fgEye(head, sd, o) {
     return;
   }
   // 눈 테두리(검은 테)
-  fgSph(head, r * 1.1, fgToon('#0e1220'), ex - 0.7, ey, ez, { sx: 0.42, sy: 1.02, sz: 0.98, seg: 14, rx: tilt });
+  fgSph(head, r * 1.07, fgToon('#0e1220'), ex - 0.45, ey, ez, { sx: 0.42, sy: 1.02, sz: 0.99, seg: 14, rx: tilt });
   // 흰자
   fgSph(head, r, fgToon(o.white || '#ffffff'), ex, ey, ez, { sx: 0.45, sy: 1.0, sz: 0.95, seg: 14, rx: tilt });
   // 홍채(+동공)
   if (o.iris !== false) {
-    fgSph(head, r * 0.62, fgToon(o.iris || '#1b2b4a', o.irisGlow ? { emissive: o.iris || '#1b2b4a', ei: 0.9 } : null),
-      ex + r * 0.24, ey - r * 0.05, ez + sd * r * 0.05, { sx: 0.4, sy: 1.0, sz: 0.92, seg: 12 });
-    fgSph(head, r * 0.30, fgToon(o.pupil || '#0a0f1c'), ex + r * 0.46, ey - r * 0.06, ez, { sx: 0.34, sy: 1.0, sz: 0.9, seg: 10 });
+    fgSph(head, r * 0.56, fgToon(o.iris || '#1b2b4a', o.irisGlow ? { emissive: o.iris || '#1b2b4a', ei: 0.9 } : null),
+      ex + r * 0.22, ey - r * 0.06, ez + sd * r * 0.06, { sx: 0.4, sy: 1.0, sz: 0.9, seg: 12 });
+    fgSph(head, r * 0.27, fgToon(o.pupil || '#0a0f1c'), ex + r * 0.42, ey - r * 0.07, ez, { sx: 0.34, sy: 1.0, sz: 0.9, seg: 10 });
   }
   // 반짝임 하이라이트 2개
   if (o.shine !== false) {
-    fgPart(head, new D3.THREE.SphereGeometry(r * 0.22, 8, 6), fgToon('#ffffff'),
-      ex + r * 0.52, ey + r * 0.34, ez + sd * r * 0.26, { sx: 0.7, sy: 1.1, sz: 1.0 });
-    fgPart(head, new D3.THREE.SphereGeometry(r * 0.11, 6, 5), fgToon('#ffffff'),
-      ex + r * 0.5, ey - r * 0.3, ez - sd * r * 0.34, {});
+    fgPart(head, new D3.THREE.SphereGeometry(r * 0.2, 8, 6), fgToon('#ffffff'),
+      ex + r * 0.48, ey + r * 0.36, ez + sd * r * 0.24, { sx: 0.7, sy: 1.1, sz: 1.0 });
+    fgPart(head, new D3.THREE.SphereGeometry(r * 0.1, 6, 5), fgToon('#ffffff'),
+      ex + r * 0.46, ey - r * 0.3, ez - sd * r * 0.3, {});
   }
 }
 
@@ -181,21 +181,21 @@ function fgMouth(head, o) {
   const fx = o.fx, y = o.mouthY, style = o.style || 'grin';
   const dark = fgToon(o.col || '#22182a');
   if (style === 'grin') {
-    fgSph(head, 6.2, dark, fx - 0.2, y, 0, { sx: 0.34, sy: 0.52, sz: 1.72, ol: 1.12 });
-    fgBox(head, 1.1, 1.9, 15.4, fgToon('#ffffff'), fx + 1.3, y + 1.5, 0, {});
+    fgSph(head, 5.2, dark, fx - 0.2, y, 0, { sx: 0.32, sy: 0.5, sz: 1.02, ol: 1.12 });
+    fgBox(head, 1.0, 1.6, 9.2, fgToon('#ffffff'), fx + 1.2, y + 1.2, 0, {});
   } else if (style === 'open') {
-    fgSph(head, 6.8, dark, fx - 0.2, y, 0, { sx: 0.4, sy: 0.92, sz: 1.16, ol: 1.1 });
-    fgSph(head, 3.4, fgToon('#ff6f92'), fx + 1.2, y - 2.4, 0, { sx: 0.32, sy: 0.6, sz: 0.86 });
-    fgBox(head, 1.0, 1.7, 11.6, fgToon('#ffffff'), fx + 1.6, y + 5.0, 0, {});
+    fgSph(head, 5.5, dark, fx - 0.2, y, 0, { sx: 0.38, sy: 0.86, sz: 0.92, ol: 1.1 });
+    fgSph(head, 2.8, fgToon('#ff6f92'), fx + 1.0, y - 2.0, 0, { sx: 0.32, sy: 0.6, sz: 0.78 });
+    fgBox(head, 1.0, 1.5, 8.4, fgToon('#ffffff'), fx + 1.4, y + 4.2, 0, {});
   } else if (style === 'smirk') {
-    fgSph(head, 5.4, dark, fx - 0.2, y + 0.6, 2.4, { sx: 0.32, sy: 0.4, sz: 1.3, ol: 1.12 });
-    fgBox(head, 1.0, 1.3, 7.0, fgToon('#ffffff'), fx + 1.2, y + 1.9, 2.6, {});
+    fgSph(head, 4.6, dark, fx - 0.2, y + 0.6, 2.2, { sx: 0.32, sy: 0.4, sz: 0.9, ol: 1.12 });
+    fgBox(head, 1.0, 1.2, 5.4, fgToon('#ffffff'), fx + 1.2, y + 1.7, 2.4, {});
   } else if (style === 'flat') {
     fgBox(head, 1.6, 1.5, 8.2, dark, fx + 0.6, y, 0, { ol: 1.16 });
   } else if (style === 'fangs') {
-    fgSph(head, 5.8, dark, fx - 0.2, y, 0, { sx: 0.34, sy: 0.5, sz: 1.6, ol: 1.1 });
+    fgSph(head, 5.0, dark, fx - 0.2, y, 0, { sx: 0.32, sy: 0.48, sz: 1.0, ol: 1.1 });
     [-1, 1].forEach(function (sd) {
-      fgCone(head, 1.7, 3.6, fgToon('#ffffff'), fx + 1.2, y + 1.6, sd * 4.4, { rx: Math.PI, seg: 6 });
+      fgCone(head, 1.4, 3.2, fgToon('#ffffff'), fx + 1.2, y + 1.5, sd * 3.2, { rx: Math.PI, seg: 6 });
     });
   } else if (style === 'zigzag') {
     for (let i = 0; i < 5; i++) {
@@ -208,13 +208,13 @@ function fgMouth(head, o) {
 
 function fgFace(head, o) {
   o = o || {};
-  const fx = o.fx == null ? 16.4 : o.fx;
-  const eyeY = o.eyeY == null ? 2.4 : o.eyeY;
-  const eyeZ = o.eyeZ == null ? 6.6 : o.eyeZ;
-  const eyeR = o.eyeR == null ? 6.4 : o.eyeR;
+  const fx = o.fx == null ? 16.9 : o.fx;
+  const eyeY = o.eyeY == null ? 1.8 : o.eyeY;
+  const eyeZ = o.eyeZ == null ? 6.2 : o.eyeZ;
+  const eyeR = o.eyeR == null ? 4.9 : o.eyeR;
   // 코
   if (o.nose !== false) {
-    fgSph(head, 2.1, fgToon(o.noseCol || o.skin || '#f0b98e'), fx + 1.9, eyeY - 5.4, 0, { sx: 0.8, sy: 0.8, sz: 0.9 });
+    fgSph(head, 1.8, fgToon(o.noseCol || o.skin || '#f0b98e'), fx + 1.6, eyeY - 4.6, 0, { sx: 0.8, sy: 0.8, sz: 0.9 });
   }
   // 귀
   if (o.ears !== false) {
@@ -503,15 +503,15 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       f.rotation.z = -1.05; f.rotation.x = sd * 0.5;
     });
     // 고글 밴드 + 발광 바이저
-    fgTor(head, 17.4, 1.7, M.dark, 0, 9.0, 0, { rx: Math.PI / 2, ol: 1.0, seg: 22 });
-    fgBox(head, 3.0, 10.4, 24, M.dark, 14.6, 10.2, 0, { ol: 1.07 });
-    fgBox(head, 3.2, 6.6, 20.5, M.glowB, 16.2, 10.2, 0, { ol: 1.06 });
+    fgTor(head, 17.2, 1.6, M.dark, 0, 11.6, 0, { rx: Math.PI / 2, ol: 1.0, seg: 22 });
+    fgBox(head, 2.6, 8.2, 19.5, M.dark, 14.8, 12.6, 0, { ol: 1.07 });
+    fgBox(head, 2.8, 4.8, 16.4, M.glowB, 16.0, 12.6, 0, { ol: 1.06 });
     [-1, 1].forEach(function (sd) {
-      fgCyl(head, 4.2, 4.2, 3.0, M.dark, 12.4, 10.2, sd * 11.4, { rx: Math.PI / 2, ol: 1.08, seg: 12 });
+      fgCyl(head, 3.4, 3.4, 2.6, M.dark, 12.8, 12.6, sd * 9.2, { rx: Math.PI / 2, ol: 1.08, seg: 12 });
     });
     fgFace(head, {
-      fx: 16.3, eyeY: 0.4, eyeZ: 6.7, eyeR: 6.5, iris: '#1a6fe0', white: '#ffffff', skin: cfg.skin,
-      brow: true, browCol: '#0f3b3a', browTilt: 0.24, browY: 7.6, mouth: 'grin', mouthCol: '#2a1830'
+      fx: 16.9, eyeY: 1.4, eyeZ: 6.2, eyeR: 5.0, iris: '#1a6fe0', white: '#ffffff', skin: cfg.skin,
+      brow: true, browCol: '#0f3b3a', browTilt: 0.24, browY: 5.8, browH: 1.9, mouth: 'grin', mouthCol: '#2a1830'
     });
     // 별 엠블럼 + 재킷 라펠
     const st = fgPart(torso, fgStarGeo(7.2, 2.6), M.accent, 14.4, 13.5, 0, { ry: Math.PI / 2 });
@@ -539,7 +539,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       tip.rotation.x = sd * 1.05; tip.rotation.z = -0.45;
     });
     fgFace(head, {
-      fx: 16.2, eyeY: 0.8, eyeZ: 6.6, eyeR: 6.2, iris: '#ffb347', irisGlow: true, white: '#2a0d06', shine: false,
+      fx: 16.2, eyeY: 0.8, eyeZ: 6.6, eyeR: 4.9, iris: '#ffb347', irisGlow: true, white: '#2a0d06', shine: false,
       brow: true, browCol: '#1c060a', browTilt: 0.72, browY: 8.2, browH: 3.0, skin: cfg.skin,
       mouth: 'fangs', mouthY: -8.6, mouthCol: '#4a0f16'
     });
@@ -587,7 +587,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       h2.rotation.x = sd * 1.25; h2.rotation.z = -0.4;
     });
     fgFace(head, {
-      fx: 16.6, eyeY: -1.2, eyeZ: 6.8, eyeR: 5.2, iris: '#0d3a2c', white: '#ffffff', skin: cfg.skin,
+      fx: 16.6, eyeY: -1.2, eyeZ: 6.8, eyeR: 4.4, iris: '#0d3a2c', white: '#ffffff', skin: cfg.skin,
       brow: true, browCol: '#2b3648', browTilt: 0.62, browY: 6.2, browH: 3.0,
       mouth: 'flat', mouthY: -10.4, mouthCol: '#2b1d18', ears: false, nose: false
     });
@@ -626,7 +626,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     fgCyl(hat, 13.0, 13.0, 3.0, M.accent, 0, 1.6, 0, { ol: 1.05, seg: 20 });
     fgSph(hat, 3.0, M.glowB, 12.6, 1.8, 0, { sx: 0.7, sy: 1, sz: 1 });
     fgFace(head, {
-      fx: 16.2, eyeY: 1.0, eyeZ: 6.7, eyeR: 6.0, iris: '#4a2d7a', white: '#ffffff', skin: cfg.skin,
+      fx: 16.2, eyeY: 1.0, eyeZ: 6.7, eyeR: 4.8, iris: '#4a2d7a', white: '#ffffff', skin: cfg.skin,
       brow: true, browCol: '#2b1d18', browTilt: 0.3, browY: 7.8, oneClosed: true, eyesOne: true,
       mouth: 'smirk', mouthY: -8.2, mouthCol: '#3a2030'
     });
@@ -656,7 +656,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     fgTor(head, 13.4, 2.2, iceM, 0, 14.6, 0, { rx: Math.PI / 2, ol: 1.04, seg: 22 });
     fgPart(head, fgStarGeo(6.4, 2.2, 0.34), fgToon('#eafcff', { emissive: '#7fe6ff', ei: 0.5 }), 13.6, 17.5, 0, { ry: Math.PI / 2, ol: 1.06 });
     fgFace(head, {
-      fx: 16.2, eyeY: 1.2, eyeZ: 6.7, eyeR: 6.2, iris: '#0d6a92', white: '#ffffff', skin: cfg.skin,
+      fx: 16.2, eyeY: 1.2, eyeZ: 6.7, eyeR: 5.0, iris: '#0d6a92', white: '#ffffff', skin: cfg.skin,
       brow: true, browCol: '#8fd6ee', browTilt: 0.12, browY: 7.8,
       mouth: 'grin', mouthY: -8.4, mouthCol: '#2a4f66'
     });
@@ -695,7 +695,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
       t.rotation.x = sd * 0.5; t.rotation.y = 0.5;
     });
     fgFace(head, {
-      fx: 16.4, eyeY: 0.6, eyeZ: 6.2, eyeR: 5.6, iris: '#151725', white: '#ffd9e2', skin: cfg.skin,
+      fx: 16.4, eyeY: 0.6, eyeZ: 6.2, eyeR: 4.6, iris: '#151725', white: '#ffd9e2', skin: cfg.skin,
       brow: true, browCol: '#131318', browTilt: 0.46, browY: 6.4, browH: 2.2,
       mouth: 'none', ears: false, nose: false
     });
@@ -739,7 +739,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     const halo = fgTor(head, 12.6, 2.2, fgToon('#fff6b0', { emissive: '#ffe066', ei: 1.3 }), 0, 26, 0, { rx: Math.PI / 2, seg: 24 });
     halo.name = 'healHalo';
     fgFace(head, {
-      fx: 16.2, eyeY: 1.4, eyeZ: 6.7, eyeR: 6.4, iris: '#137a58', white: '#ffffff', skin: cfg.skin,
+      fx: 16.2, eyeY: 1.4, eyeZ: 6.7, eyeR: 5.2, iris: '#137a58', white: '#ffffff', skin: cfg.skin,
       brow: true, browCol: '#c9a44a', browTilt: 0.1, browY: 7.8,
       mouth: 'grin', mouthY: -8.4, mouthCol: '#2a3f52'
     });
@@ -777,7 +777,7 @@ function fgHeadBuild(charId, head, torso, g, P, M, cfg) {
     fgSph(head, 1.5, fgToon('#fff3a8', { emissive: '#ffe066', ei: 0.8 }), Math.cos(a) * rr * 0.5 - 6, Math.cos(a * 1.7) * 14, Math.sin(a) * rr, {});
   }
   fgFace(head, {
-    fx: 16.2, eyeY: 1.6, eyeZ: 6.8, eyeR: 6.5, iris: '#6a3fd0', white: '#ffffff', skin: cfg.skin,
+    fx: 16.2, eyeY: 1.6, eyeZ: 6.8, eyeR: 5.0, iris: '#6a3fd0', white: '#ffffff', skin: cfg.skin,
     brow: true, browCol: '#4a3a86', browTilt: 0.16, browY: 8.0,
     mouth: 'open', mouthY: -8.2, mouthCol: '#2a1550'
   });
