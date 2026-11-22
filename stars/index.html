@@ -9015,7 +9015,7 @@ function d3InitEntities() {
 function d3PlayerModel(p) {
   const T = D3.THREE;
   const g = d3BrawlerModel(p.charId, { body: p.color, accent: p.accent, glow: p.glow });
-  g.scale.setScalar(1.16);
+  g.scale.setScalar(1.32);
   g.traverse(function (o) {
     if (!o.isMesh) return;
     o.castShadow = !o.material.isMeshBasicMaterial && !o.material.transparent;
@@ -9028,8 +9028,8 @@ function d3PlayerModel(p) {
   flash.visible = false;
   g.add(flash);
   // spawn shield
-  const shield = d3mesh(new T.SphereGeometry(48, 14, 12), new T.MeshBasicMaterial({
-    color: d3col('#bfe6ff'), transparent: true, opacity: 0.12, wireframe: true, depthWrite: false
+  const shield = d3mesh(new T.SphereGeometry(42, 12, 9), new T.MeshBasicMaterial({
+    color: d3col('#bfe6ff'), transparent: true, opacity: 0.07, wireframe: true, depthWrite: false
   }), 0, 52, 0);
   shield.visible = false;
   g.add(shield);
