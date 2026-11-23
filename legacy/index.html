@@ -7665,13 +7665,17 @@ function portraitSVG(fig, fit, alt) {
   var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 10, MUSEUM_STAR = 5;
   /* 등급 서열 — 도감 칩(GRADE_ORDER)과 같은 순서: 신화 < 전설 < 레전더리 < 초월 */
   var GRADE_RANK = { basic: 0, rare: 1, special: 2, mythic: 3, legend: 4, legendary: 5, transcendent: 6, immortal: 7 };
-  /* 뽑기 등급 확률(%) — 합 100 · 초월은 1.8%의 초희귀 */
+  /* 뽑기 등급 확률(%) — 합 정확히 100 · 희귀할수록 아래로 내려가는 순서
+     기본 44.4 · 희귀 27 · 특별 15 · 신화 8 · 전설 5 · 레전더리 0.5 · 초월 0.1
+     불멸(immortal)은 뽑기 풀에 넣지 않는다 — 오직 초월 2장 합성 전용. */
   var PULL_RATES = [
-    { g: 'basic', p: 24 }, { g: 'rare', p: 24 }, { g: 'special', p: 20 },
-    { g: 'legend', p: 14 }, { g: 'mythic', p: 10 }, { g: 'legendary', p: 6.2 },
-    { g: 'transcendent', p: 1.8 }
+    { g: 'basic', p: 44.4 }, { g: 'rare', p: 27 }, { g: 'special', p: 15 },
+    { g: 'mythic', p: 8 }, { g: 'legend', p: 5 }, { g: 'legendary', p: 0.5 },
+    { g: 'transcendent', p: 0.1 }
   ];
   var PULL5_FLOOR = 4; /* 5회 뽑기: 전설(GRADE_RANK 4) 이상 1장 보장 */
+  /* 초월 천장 — 50회 뽑기마다 초월 1장 확정 */
+  var PULL_CEIL = 50;
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
 
   function cardOf(id) { return S.cards[id] || null; }
@@ -8400,8 +8404,8 @@ function portraitSVG(fig, fit, alt) {
   function refreshPackBal() {
     if ($('#pkCoins')) $('#pkCoins').textContent = S.coins;
     var pity = S.pity || 0;
-    if ($('#pityNum')) $('#pityNum').textContent = pity + ' / 50';
-    if ($('#pityBar')) $('#pityBar').style.width = Math.min(100, pity / 50 * 100) + '%';
+    if ($('#pityNum')) $('#pityNum').textContent = pity + ' / ' + PULL_CEIL;
+    if ($('#pityBar')) $('#pityBar').style.width = Math.min(100, pity / PULL_CEIL * 100) + '%';
     var pz = $('#pity');
     if (pz) {
       pz.classList.toggle('near', pity >= 40);
@@ -8410,7 +8414,7 @@ function portraitSVG(fig, fit, alt) {
     if ($('#pityNote')) {
       $('#pityNote').textContent = pity >= 49
         ? '다음 뽑기에서 초월 확정! (게이지 0으로 리셋)'
-        : (50 - pity) + '회 더 뽑으면 초월 1장 확정 · 1회 +1 · 5회 +5';
+        : (PULL_CEIL - pity) + '회 더 뽑으면 초월 1장 확정 · 1회 +1 · 5회 +5';
     }
     if ($('#pkTickets')) $('#pkTickets').textContent = S.infTickets ? '∞' : (S.tickets || 0);
     if ($('#pkBest')) $('#pkBest').textContent = '★' + bestStar();
@@ -8677,7 +8681,7 @@ function portraitSVG(fig, fit, alt) {
     /* 🖤🤍 초월 천장 — 50회마다 초월 1장 확정 */
     var ceilingHit = false;
     S.pity = (S.pity || 0) + count;
-    if (S.pity >= 50) {
+    if (S.pity >= PULL_CEIL) {
       S.pity = 0;
       ceilingHit = true;
       var li = 0;
