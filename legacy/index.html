@@ -3677,6 +3677,7 @@
   .sd-btn[data-sd="relic"]{--c:#b98cff}
   .sd-btn[data-sd="shop"]{--c:#4fd1a5}
   .sd-btn[data-sd="archive"]{--c:#7aa8ff}
+  .sd-btn[data-sd="figures"]{--c:#e8b45c}
   .sd-ic{font-size:19px; line-height:1; filter:drop-shadow(0 1px 3px rgba(0,0,0,.65)); transition:transform .13s cubic-bezier(.2,1.6,.4,1)}
   .sd-lb{font-size:8.5px; font-weight:700; letter-spacing:.01em; color:#c2cad6; line-height:1.1}
   .sd-btn:hover{
@@ -3728,12 +3729,13 @@
     main{padding-right:66px}
   }
   @media (orientation: landscape) and (max-height: 560px){
-    .side-dock{right:calc(6px + env(safe-area-inset-right,0px)); gap:4px; padding:4px; border-radius:12px}
-    .sd-btn{width:36px; height:36px; border-radius:9px; gap:0}
-    .sd-ic{font-size:15px}
-    .sd-lb{font-size:7px; letter-spacing:0}
+    .side-dock{right:calc(6px + env(safe-area-inset-right,0px)); gap:3px; padding:3px; border-radius:12px;
+      max-height:calc(100dvh - 12px)}
+    .sd-btn{width:32px; height:32px; border-radius:8px; gap:0}
+    .sd-ic{font-size:13px}
+    .sd-lb{font-size:6.5px; letter-spacing:0}
     .sd-badge{top:-4px; right:-4px; min-width:14px; height:14px; line-height:14px; font-size:8px; padding:0 3px}
-    main{padding-right:56px}
+    main{padding-right:48px}
   }
   @media (prefers-reduced-motion: reduce){
     .side-dock, .sd-btn, .sd-ic{transition:none}
@@ -4643,6 +4645,9 @@
   </button>
   <button class="sd-btn" id="sdArchive" type="button" data-sd="archive" aria-label="도감 열기" title="도감 · 인물 수집">
     <span class="sd-ic" aria-hidden="true">📖</span><span class="sd-lb">도감</span>
+  </button>
+  <button class="sd-btn" id="sdFigures" type="button" data-sd="figures" aria-label="인물 열기" title="인물 · 내가 얻은 인물">
+    <span class="sd-ic" aria-hidden="true">👤</span><span class="sd-lb">인물</span>
   </button>
 </div>
 
@@ -11563,6 +11568,7 @@ function portraitSVG(fig, fit, alt) {
     if (what === 'relic') { openRelic(); return; }
     if (what === 'shop') { openShop(); return; }
     if (what === 'archive') { shelfView = 'all'; renderArchive(); openModal('#mArchive'); return; }
+    if (what === 'figures') { openMyFigures(); return; }
   }
 
   /* ── events ── */
@@ -11777,6 +11783,11 @@ function portraitSVG(fig, fit, alt) {
     });
   });
   if ($('#psCamera')) $('#psCamera').addEventListener('click', function () { var i = $('#psCamInput'); if (i) i.click(); });
+  /* 입력을 다시 시작하면 오류 문구를 지운다 */
+  [['#psName', '#psErr'], ['#psAge', '#psErr'], ['#pfName', '#pfErr'], ['#pfAge', '#pfErr']].forEach(function (pair) {
+    var el = $(pair[0]);
+    if (el) el.addEventListener('input', function () { showFieldErr(pair[1], ''); });
+  });
   if ($('#psAlbum')) $('#psAlbum').addEventListener('click', function () { var i = $('#psAlbumInput'); if (i) i.click(); });
   if ($('#psCamInput')) $('#psCamInput').addEventListener('change', function () { fileToAvatar(this.files && this.files[0]); this.value = ''; });
   if ($('#psAlbumInput')) $('#psAlbumInput').addEventListener('change', function () { fileToAvatar(this.files && this.files[0]); this.value = ''; });
