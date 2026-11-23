@@ -876,6 +876,76 @@
   }
   .arc-more-link:hover{background:rgba(200,168,106,.1); border-color:rgba(200,168,106,.55)}
 
+  /* ───── 인물 · 뽑기/도감으로 얻은 모든 인물 3줄 소개 ───── */
+  .figs-sec{padding-top:20px}
+  .figs-sec .arc-head{margin-bottom:14px; align-items:flex-start}
+  .figs-sec .arc-head p b{font-family:var(--serif); font-weight:600; color:var(--gold-hi); font-variant-numeric:tabular-nums; letter-spacing:.02em}
+  .mfs-search{
+    width:216px; max-width:100%; font-family:inherit; font-size:11.5px; color:#eae2d2;
+    padding:9px 14px; border-radius:999px; border:1px solid var(--line2);
+    background:rgba(255,255,255,.03); outline:none; transition:border-color .16s, background .16s;
+  }
+  .mfs-search:focus{border-color:rgba(200,168,106,.6); background:rgba(200,168,106,.07)}
+  .mfs-search::placeholder{color:#6b7381}
+  .figs-sec .arc-filters{margin:0 0 14px}
+  .mfs-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:12px}
+  .mfs-card{
+    position:relative; display:flex; align-items:flex-start; gap:12px; text-align:left; cursor:pointer;
+    font-family:inherit; color:inherit; padding:12px 13px 12px 15px; border-radius:14px;
+    border:1px solid var(--line2); background:rgba(255,255,255,.022);
+    transition:transform .16s, border-color .16s, background .16s;
+  }
+  .mfs-card::before{
+    content:""; position:absolute; left:6px; top:14px; bottom:14px; width:2px; border-radius:2px;
+    background:var(--rc,#9ca3af); opacity:.8;
+  }
+  .mfs-card:hover{transform:translateY(-2px); border-color:rgba(200,168,106,.45); background:rgba(200,168,106,.05)}
+  .mfs-ph{
+    position:relative; flex:0 0 auto; width:74px; aspect-ratio:4/5; overflow:hidden;
+    border-radius:10px; background:#0b0e13; border:1px solid color-mix(in srgb, var(--rc,#9ca3af) 45%, transparent);
+  }
+  .mfs-ph::after{content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:linear-gradient(180deg, transparent 62%, rgba(8,10,14,.55))}
+  .mfs-body{display:block; flex:1 1 auto; min-width:0}
+  .mfs-top{display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+  .mfs-name{font-family:var(--serif); font-size:15px; font-weight:600; color:#f2e9d8; letter-spacing:.01em; line-height:1.3}
+  .mfs-state{
+    font-size:8.5px; letter-spacing:.08em; padding:2.5px 8px; border-radius:999px; white-space:nowrap;
+    border:1px solid rgba(255,255,255,.16); color:#9aa3b1; background:rgba(255,255,255,.03);
+  }
+  .mfs-state.learned{color:#08090c; border-color:transparent; font-weight:700; background:linear-gradient(100deg,#c8a86a,#ecd9a8)}
+  .mfs-state.card{color:var(--gold-hi); border-color:rgba(200,168,106,.42); background:rgba(200,168,106,.1)}
+  .mfs-state.dex{color:#8b93a1; border-color:rgba(255,255,255,.13)}
+  .mfs-lines{display:block; margin-top:8px}
+  .mfs-line{display:flex; align-items:flex-start; gap:7px; font-size:11px; line-height:1.62; color:#b9c0cc; word-break:keep-all; overflow-wrap:anywhere}
+  .mfs-line + .mfs-line{margin-top:4px}
+  .mfs-line i{
+    flex:0 0 auto; width:15px; height:15px; margin-top:1.5px; border-radius:5px; display:grid; place-items:center;
+    font-style:normal; font-size:8px; font-weight:700; color:#0a0c10; background:rgba(200,168,106,.85);
+  }
+  .mfs-line > span{flex:1 1 auto; min-width:0}
+  .mfs-line.l1{color:#9aa3b1}
+  .mfs-line b{color:#efe6d4; font-weight:600}
+  .mfs-line em{font-style:normal; color:var(--gold-hi); font-weight:600}
+  .mfs-line em::after{content:" · "; color:#6b7381; font-weight:400}
+  .mfs-go{display:inline-block; margin-top:8px; font-size:9px; letter-spacing:.1em; color:var(--gold-dim)}
+  .mfs-card:hover .mfs-go{color:var(--gold-hi)}
+  .mfs-more{
+    grid-column:1/-1; cursor:pointer; font-family:inherit; font-size:11px; letter-spacing:.04em; color:var(--gold-hi);
+    padding:12px 14px; border-radius:11px; border:1px dashed rgba(200,168,106,.32); background:rgba(200,168,106,.045);
+    transition:background .16s, border-color .16s;
+  }
+  .mfs-more:hover{background:rgba(200,168,106,.1); border-color:rgba(200,168,106,.55)}
+  .mfs-empty{grid-column:1/-1; padding:28px 10px; text-align:center; font-size:12px; color:var(--muted2); line-height:1.85}
+  @media (max-width:640px){
+    .mfs-list{grid-template-columns:1fr; gap:10px}
+    .mfs-ph{width:62px}
+    .mfs-name{font-size:14px}
+    .mfs-line{font-size:10.5px; line-height:1.6}
+    .mfs-search{width:100%}
+    .figs-sec .arc-head .right{width:100%}
+  }
+
   .record{padding:20px 22px 21px}
   .rec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin:15px 0 0}
   .rec-grid div{text-align:center; border:1px solid var(--line2); border-radius:11px; padding:10px 3px; background:rgba(255,255,255,.02)}
@@ -3827,6 +3897,21 @@
     </div>
     <div class="shelf-chips" id="pageShelves"></div>
     <div class="arc-grid" id="pageArcGrid"></div>
+  </section>
+
+  <section class="card figs-sec" id="myFigSec" aria-labelledby="mfsTitle">
+    <div class="arc-head">
+      <div>
+        <span class="kicker">ALL FIGURES</span>
+        <h2 id="mfsTitle">인물</h2>
+        <p>내가 뽑기 · 도감으로 얻은 모든 인물 <b id="mfsCount">(0 / 501)</b> — 세 줄로 먼저 읽고, 누르면 명언·과정·업적·영상까지 펼쳐집니다.</p>
+      </div>
+      <div class="right">
+        <input id="mfsSearch" class="mfs-search" type="text" placeholder="🔍 인물 이름·시대 검색" autocomplete="off" spellcheck="false" aria-label="내 인물 검색">
+      </div>
+    </div>
+    <div class="arc-filters" id="mfsGrades"></div>
+    <div class="mfs-list" id="mfsList"></div>
   </section>
 
 
@@ -8499,6 +8584,110 @@ function portraitSVG(fig, fit, alt) {
     var sk = streak();
     $('#arcStreak').textContent = sk > 0 ? '연속 ' + sk + '일 기록 중' : '연속 기록 없음';
     $('#arcStreak').classList.toggle('gold', sk > 0);
+    renderMyFigures();
+  }
+
+  /* ── 인물 — 뽑기 · 도감으로 얻은 모든 인물 (각 3줄 소개) ──
+     카드 보유(S.cards) · 학습(S.log) · 한 번이라도 얻었던 인물(S.dexSeen, 합성 재료로 0장이 된 경우)까지 모두 모은다. */
+  var MFS_STEP = 12;
+  var mfsLimit = MFS_STEP;
+  var mfsQuery = '';
+  var mfsGrade = 'all';
+
+  function myFigMap() {
+    var set = {}, learned = {};
+    function add(id) { if (id && byId(id)) set[id] = 1; }
+    S.log.forEach(function (x) { if (x && x.id) { add(x.id); learned[x.id] = 1; } });
+    Object.keys(S.cards || {}).forEach(function (id) { if (S.cards[id]) add(id); });
+    Object.keys(S.dexSeen || {}).forEach(function (id) { if (S.dexSeen[id]) add(id); });
+    return { set: set, learned: learned };
+  }
+
+  function myFigLine3(f) {
+    if (f.feats && f.feats[1]) return '<em>' + esc(f.feats[1].t) + '</em>' + esc(f.feats[1].d);
+    if (f.journey && f.journey.length) {
+      var j = f.journey[f.journey.length - 1];
+      return '<em>' + esc(j.t) + '</em>' + esc(j.d);
+    }
+    return esc(f.quote || '');
+  }
+
+  function mfsCardHtml(f, learned) {
+    var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+    var rc = gradeRc(gi);
+    var c = S.cards[f.id];
+    var st = learned[f.id]
+      ? '<span class="mfs-state learned">학습 완료</span>'
+      : (c ? '<span class="mfs-state card">카드 보유 ' + (c.n || 1) + '장</span>' : '<span class="mfs-state dex">도감 기록</span>');
+    var l1 = '<b>' + esc(f.title) + '</b> · ' + esc(f.era) + ' · ' + esc(f.years) + ' · ' + esc(f.birthplace);
+    var l2 = (f.feats && f.feats[0])
+      ? '<em>' + esc(f.feats[0].t) + '</em>' + esc(f.feats[0].d)
+      : esc(f.quote || '');
+    return '<button class="mfs-card" type="button" data-mfig="' + f.id + '" style="--rc:' + rc + '" aria-label="' + esc(f.name) + ' 더 자세히 보기">' +
+      '<span class="mfs-ph">' + photoHtml(f, { fit: 'slice', alt: f.name + ' 사진' }) + '</span>' +
+      '<span class="mfs-body">' +
+        '<span class="mfs-top"><b class="mfs-name">' + esc(f.name) + '</b>' +
+          '<span class="' + chipClsOf(gi) + '" style="--rc:' + rc + '">' + gi.name + '</span>' + st + '</span>' +
+        '<span class="mfs-lines">' +
+          '<span class="mfs-line l1"><i>1</i><span>' + l1 + '</span></span>' +
+          '<span class="mfs-line"><i>2</i><span>' + l2 + '</span></span>' +
+          '<span class="mfs-line"><i>3</i><span>' + myFigLine3(f) + '</span></span>' +
+        '</span>' +
+        '<span class="mfs-go">자세히 보기 ›</span>' +
+      '</span></button>';
+  }
+
+  function renderMyFigures() {
+    var listEl = $('#mfsList'), cntEl = $('#mfsCount'), gEl = $('#mfsGrades');
+    if (!listEl) return;
+    var m = myFigMap();
+    var all = FIGURES.filter(function (f) { return m.set[f.id]; });
+    all.sort(function (a, b) {
+      var ra = GRADE_RANK[a.grade] || 0, rb = GRADE_RANK[b.grade] || 0;
+      if (ra !== rb) return rb - ra;
+      var sa = (S.cards[a.id] || {}).star || 0, sb = (S.cards[b.id] || {}).star || 0;
+      if (sa !== sb) return sb - sa;
+      return String(a.name).localeCompare(String(b.name), 'ko');
+    });
+    if (cntEl) cntEl.textContent = '(' + all.length + ' / ' + N + ')';
+
+    /* 등급 필터 칩 — 지금 모은 인물에 있는 등급만 */
+    if (gEl) {
+      var counts = {};
+      all.forEach(function (f) { counts[f.grade] = (counts[f.grade] || 0) + 1; });
+      var chips = '';
+      if (all.length) {
+        chips = '<button type="button" class="gfchip' + (mfsGrade === 'all' ? ' on' : '') + '" data-mfsgrade="all" style="--gc:#c8a86a">전체 <b>' + all.length + '</b></button>';
+        GRADE_ORDER.forEach(function (g) {
+          var gi = GRADE_INFO[g];
+          if (!gi || !counts[g]) return;
+          chips += '<button type="button" class="gfchip gf-' + g + (mfsGrade === g ? ' on' : '') + '" data-mfsgrade="' + g +
+            '" style="--gc:' + gradeRc(gi) + '">' + gi.name + ' <b>' + counts[g] + '</b></button>';
+        });
+      }
+      gEl.innerHTML = chips;
+    }
+
+    var q = mfsQuery.trim().toLowerCase();
+    var pool = all.filter(function (f) {
+      if (mfsGrade !== 'all' && f.grade !== mfsGrade) return false;
+      if (!q) return true;
+      var hay = (f.name + ' ' + (f.en || '') + ' ' + (f.era || '') + ' ' + (f.birthplace || '') + ' ' + (f.title || '') + ' ' + (f.years || '')).toLowerCase();
+      return hay.indexOf(q) >= 0;
+    });
+    var shown = pool.slice(0, mfsLimit);
+    var rest = pool.length - shown.length;
+    var html;
+    if (pool.length) {
+      html = shown.map(function (f) { return mfsCardHtml(f, m.learned); }).join('') +
+        (rest > 0 ? '<button class="mfs-more" type="button" data-mfsmore="1">' +
+          Math.min(rest, MFS_STEP) + '명 더 보기 · 남은 ' + rest + '명</button>' : '');
+    } else {
+      html = '<div class="mfs-empty">' + (all.length || q || mfsGrade !== 'all'
+        ? '🔍 조건에 맞는 인물이 없습니다 · 다른 이름·시대·등급으로 찾아보세요.'
+        : '아직 얻은 인물이 없습니다.<br>카드팩 뽑기나 오늘의 인물 체크로 인물을 모으면 이곳에 세 줄 소개와 함께 남습니다.') + '</div>';
+    }
+    listEl.innerHTML = html;
   }
 
   /* ── 장착 칭호 ── */
@@ -8705,6 +8894,7 @@ function portraitSVG(fig, fit, alt) {
     $('#colBest').textContent = '★' + bestStar() + (hasFive() ? ' · 박물관 OPEN' : '');
     $('#xpBar').style.width = ((S.xp % 500) / 5) + '%';
     renderTopCur();
+    renderMyFigures();
   }
 
   /* ── 상단 미니 프로필 · 모든 재화 ── */
@@ -11378,11 +11568,22 @@ function portraitSVG(fig, fit, alt) {
       if (k === 'a') FUSE_SLOT.a = null; else FUSE_SLOT.b = null;
       renderFusion(); return;
     }
+    var mfg = e.target.closest('[data-mfsgrade]');
+    if (mfg) { mfsGrade = mfg.getAttribute('data-mfsgrade') || 'all'; mfsLimit = MFS_STEP; renderMyFigures(); return; }
+    var mfm = e.target.closest('[data-mfsmore]');
+    if (mfm) { mfsLimit += MFS_STEP; renderMyFigures(); return; }
+    var mfi = e.target.closest('[data-mfig]');
+    if (mfi) { openReader(mfi.getAttribute('data-mfig')); return; }
     var card = e.target.closest('[data-fig]');
     if (card && card.closest('.arc-grid')) { openReader(card.getAttribute('data-fig')); return; }
     if (e.target.closest('[data-locked]')) toast('아직 배우지 않은 인물입니다 · 매일 한 명씩 열립니다');
   });
   $('#pageArcAll').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
+  if ($('#mfsSearch')) $('#mfsSearch').addEventListener('input', function () {
+    mfsQuery = this.value || '';
+    mfsLimit = MFS_STEP;
+    renderMyFigures();
+  });
   $('#recArchive').addEventListener('click', function () { shelfView = 'all'; renderArchive(); openModal('#mArchive'); });
   $('#recRoadmap').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
   document.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closeModals); });
