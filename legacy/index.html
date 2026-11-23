@@ -2597,6 +2597,12 @@
   }
   .gfchip.gf-immortal::before{content:"👑"; font-size:9px; margin-right:1px}
   .gfchip.gf-immortal.on{background:linear-gradient(100deg,#ff2d55,#ffd60a 60%,#fff7cc); color:#2a0600; border-color:transparent; font-weight:800}
+  @media (max-width:560px){
+    /* 모바일 60fps: 큰 면적을 덮는 카드 전체 광택 레이어만 빼고 테두리·사진 광택·불꽃은 유지 */
+    .arc-card.r-immortal::before{display:none}
+    .arc-card.r-immortal .body::before{animation:none; opacity:.5}
+    .arc-card.r-immortal .ph::before{animation-duration:6.4s}
+  }
   @media (prefers-reduced-motion: reduce){
     .arc-card.r-immortal,.pcard.r-immortal,.exhibit.r-immortal .case,.bcard.r-immortal,.pks-frame.r-immortal{animation:none!important}
     .arc-card.r-immortal .ph::before,.arc-card.r-immortal .body::before,.arc-card.r-immortal::after,.pcard.r-immortal .ph::before,.pks-frame.r-immortal::after{animation:none!important}
