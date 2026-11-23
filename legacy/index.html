@@ -3165,6 +3165,13 @@
     display:flex; flex-direction:column; gap:6px; padding:11px 12px; border-radius:13px;
     border:1px solid var(--line2); background:linear-gradient(160deg, rgba(28,22,14,.5), rgba(10,12,16,.6));
   }
+  .shop-item .si-fig{display:flex; align-items:center; gap:6px; min-width:0}
+  .shop-item .si-ph{
+    flex:0 0 26px; width:26px; height:26px; border-radius:50%; overflow:hidden; position:relative;
+    border:1px solid var(--rc,var(--line2)); background:#0b0e13;
+  }
+  .shop-item .si-ph .ph-svg,.shop-item .si-ph .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .shop-item .si-ph .ph-img{object-fit:cover}
   .shop-item .si-own{font-size:9px; letter-spacing:.08em; color:var(--muted2)}
   .shop-item .si-nm{font-family:var(--serif); font-size:13px; color:#f4ead6; line-height:1.35}
   .shop-item .si-b{font-size:10px; color:#7fe0a3}
@@ -3339,6 +3346,15 @@
     padding:2px 6px; border-radius:999px; border:1px solid var(--rc,#9ca3af); color:var(--rc,#9ca3af);
     background:rgba(6,8,12,.72)}
   .rl-card .rc-nm{position:relative; z-index:1; font-family:var(--serif); font-size:13px; color:#f4ecdd; line-height:1.32; margin-top:3px}
+  .rl-card .rc-head{position:relative; z-index:1; display:flex; align-items:center; gap:8px; margin-top:5px}
+  .rl-card .rc-ph{
+    flex:0 0 40px; width:40px; height:40px; border-radius:50%; overflow:hidden; position:relative;
+    border:1px solid var(--rc,#9ca3af); background:#0b0e13; box-shadow:0 0 12px -4px var(--rc,#9ca3af);
+  }
+  .rl-card .rc-ph .ph-svg,.rl-card .rc-ph .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .rl-card .rc-ph .ph-img{object-fit:cover}
+  .rl-card .rc-info{display:block; min-width:0}
+  .rl-card .rc-info .rc-nm{margin-top:0}
   .rl-card .rc-fig{position:relative; z-index:1; font-size:9.5px; color:var(--muted2)}
   .rl-card .rc-b{position:relative; z-index:1; font-size:9.5px; color:#7fe0a3; font-variant-numeric:tabular-nums; margin-top:2px}
   .rl-card .rc-lv{position:relative; z-index:1; font-size:9.5px; color:#ecd9a8}
@@ -3353,6 +3369,13 @@
   .rl-show .rs-fig{font-size:10.5px; color:var(--muted2)}
   .rl-show .rs-b{font-size:11px; color:#7fe0a3; margin-top:4px; font-variant-numeric:tabular-nums}
   .rl-show .rs-lv{font-size:10.5px; color:var(--gold-hi)}
+  .rl-show .rs-ph{
+    display:block; width:66px; height:66px; border-radius:50%; overflow:hidden; position:relative;
+    border:1px solid var(--rc,#ecd9a8); background:#0b0e13;
+    box-shadow:0 0 24px -8px var(--rc,#ecd9a8); margin-bottom:2px;
+  }
+  .rl-show .rs-ph .ph-svg,.rl-show .rs-ph .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .rl-show .rs-ph .ph-img{object-fit:cover}
   .rl-lvnote{border:1px solid var(--line2); border-radius:12px; padding:12px 14px; background:rgba(255,255,255,.02)}
   .rl-lvnote b{font-family:var(--serif); font-size:12px; color:var(--gold-hi)}
   .rl-lvnote p{margin:5px 0 0; font-size:10px; color:var(--muted2); line-height:1.65}
@@ -3420,6 +3443,14 @@
   .relicfx.open .rf-cap{opacity:1}
   .rf-cap .rf-k{display:block; font-size:9px; letter-spacing:.34em; color:#ffe9b6;
     text-shadow:0 1px 14px rgba(0,0,0,.9), 0 0 22px rgba(255,220,150,.6)}
+  .rf-cap .rf-ph{
+    display:block; width:92px; height:92px; margin:0 auto 10px; border-radius:50%; overflow:hidden;
+    position:relative; border:1px solid var(--rc,#ecd9a8); background:#0b0e13;
+    box-shadow:0 0 34px -10px var(--rc,#ecd9a8), 0 0 0 3px rgba(7,9,13,.55);
+  }
+  .rf-cap .rf-ph:empty{display:none}
+  .rf-cap .rf-ph .ph-svg,.rf-cap .rf-ph .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .rf-cap .rf-ph .ph-img{object-fit:cover}
   .rf-cap .rf-n{display:block; font-family:var(--serif); font-size:20px; color:#fffdf6; margin-top:6px;
     text-shadow:0 2px 16px rgba(0,0,0,.9), 0 0 26px var(--rc)}
   .rf-tip{position:absolute; left:0; right:0; bottom:calc(9% + env(safe-area-inset-bottom,0px)); text-align:center;
@@ -4219,6 +4250,7 @@
     <div class="rf-flash"></div>
   </div>
   <div class="rf-cap">
+    <span class="rf-ph" id="rfPhoto"></span>
     <span class="rf-k" id="rfKicker">RELIC BOX</span>
     <b class="rf-n" id="rfName"></b>
   </div>
@@ -8884,8 +8916,10 @@ function portraitSVG(fig, fit, alt) {
       var k = itemKeyOf(sl.f.id, sl.i);
       var own = itemOwned(k);
       var poor = !bought && S.coins < sl.price;
+      var sgi = GRADE_INFO[sl.f.grade] || GRADE_INFO.basic, src = gradeRc(sgi);
       return '<div class="shop-item">' +
-        '<span class="si-own">' + esc(sl.f.name) + ' 전용' + (own ? ' · 보유 중' : '') + '</span>' +
+        '<span class="si-fig"><span class="si-ph" style="--rc:' + src + '">' + photoHtml(sl.f, { fit: 'slice', alt: sl.f.name }) + '</span>' +
+        '<span class="si-own">' + esc(sl.f.name) + ' 전용' + (own ? ' · 보유 중' : '') + '</span></span>' +
         '<b class="si-nm">⚔️ ' + esc(sl.it.n) + '</b>' +
         '<span class="si-b">ATK +' + sl.it.atk + '% · HP +' + sl.it.hp + '%<em>' + esc(sl.it.d) + '</em></span>' +
         '<span class="sc-price">🪙 ' + sl.price.toLocaleString() + ' <em>코인</em></span>' +
@@ -10102,7 +10136,9 @@ function portraitSVG(fig, fit, alt) {
       return;
     }
     var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    var rc = gradeRc(gi);
     box.innerHTML = '<span class="rs-tag">' + (r.isNew ? '✨ NEW RELIC' : 'LAST BEST') + '</span>' +
+      '<span class="rs-ph" style="--rc:' + rc + '">' + photoHtml(r.f, { fit: 'slice', alt: r.f.name }) + '</span>' +
       '<b class="rs-nm ' + textClsOf(gi) + '">' + esc(r.it.n) + '</b>' +
       '<span class="rs-fig">' + esc(r.f.name) + ' · ' + gi.name + '</span>' +
       '<span class="rs-b">' + itemBonusText(r.it, r.lv || 0) + '</span>' +
@@ -10182,7 +10218,7 @@ function portraitSVG(fig, fit, alt) {
     RELIC_FX_DONE = null;
     if (el) {
       el.classList.remove('on');
-      setTimeout(function () { if (el && !el.classList.contains('on')) { el.className = 'relicfx'; el.hidden = true; } }, 220);
+      setTimeout(function () { if (el && !el.classList.contains('on')) { el.className = 'relicfx'; el.hidden = true; if ($('#rfPhoto')) $('#rfPhoto').innerHTML = ''; } }, 220);
     }
     if (cb) cb();
   }
@@ -10195,6 +10231,10 @@ function portraitSVG(fig, fit, alt) {
     el.hidden = false;
     if ($('#rfKicker')) $('#rfKicker').textContent = 'RELIC BOX';
     if ($('#rfName')) $('#rfName').textContent = '';
+    if ($('#rfPhoto')) {
+      $('#rfPhoto').style.setProperty('--rc', gradeRc(gi));
+      $('#rfPhoto').innerHTML = photoHtml(best.f, { fit: 'slice', alt: best.f.name });
+    }
     RELIC_FX_DONE = done || null;
     RELIC_FX_FIN = false;
     void el.offsetWidth;
@@ -10217,8 +10257,13 @@ function portraitSVG(fig, fit, alt) {
     var tag = r.isNew ? '✨ NEW' : (r.maxed ? '최대 강화' : '🔨 강화 +' + lv);
     return '<article class="rl-card' + (r.isNew ? ' new' : '') + '" style="--rc:' + rc + '; animation-delay:' + (i * 0.07).toFixed(2) + 's">' +
       '<span class="rc-tag">' + tag + '</span>' +
-      '<b class="rc-nm ' + textClsOf(gi) + '">' + esc(r.it.n) + '</b>' +
-      '<span class="rc-fig">' + esc(r.f.name) + ' · ' + gi.name + '</span>' +
+      '<span class="rc-head">' +
+        '<span class="rc-ph">' + photoHtml(r.f, { fit: 'slice', alt: r.f.name }) + '</span>' +
+        '<span class="rc-info">' +
+          '<b class="rc-nm ' + textClsOf(gi) + '">' + esc(r.it.n) + '</b>' +
+          '<span class="rc-fig">' + esc(r.f.name) + ' · ' + gi.name + '</span>' +
+        '</span>' +
+      '</span>' +
       '<span class="rc-b">' + itemBonusText(r.it, lv) + '</span>' +
       (lv ? '<span class="rc-lv">🔨 +' + lv + '강</span>' : '') +
       '</article>';
