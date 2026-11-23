@@ -3945,7 +3945,7 @@
   .pvp-empty{ font-size:11.5px; color:#7f8798; padding:8px 2px }
   .pvp-code{ display:flex; align-items:center; gap:8px; margin-top:9px; padding:8px 10px; border-radius:10px; background:rgba(0,0,0,.35); border:1px solid var(--line2) }
   .pv-cd-k{ font-size:9.5px; letter-spacing:.08em; color:#8b93a1; flex:0 0 auto }
-  .pvp-code code{ flex:1; font-size:10.5px; color:#9ad8ff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:ui-monospace,Menlo,monospace }
+  .pvp-code code{ flex:1; min-width:0; font-size:10.5px; color:#9ad8ff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:ui-monospace,Menlo,monospace }
   .pvp-input{ display:flex; gap:8px; flex-wrap:wrap }
   .pvp-input input{
     flex:1; min-width:200px; height:42px; padding:0 13px; border-radius:11px;
@@ -13320,7 +13320,7 @@ function portraitSVG(fig, fit, alt) {
   function pLv(id) { var L = LB(); return L ? L.lvOf(id) : 1; }
   function pSk(id) { var L = LB(); return L ? L.skillLvOf(id) : 1; }
   function pLvCost(lv) { var L = LB(); return L ? L.lvCost(lv) : 0; }
-  function pSkCost(lv) { var L = LB(); return L ? L.skCost(lv) : 0; }
+  function pSkCost(lv) { var L = LB(); return L ? L.skillCost(lv) : 0; }
   function infNow() { return !!S.infTickets; }
   function moneyTxt(n) { return infNow() ? '∞' : Number(n || 0).toLocaleString(); }
 
