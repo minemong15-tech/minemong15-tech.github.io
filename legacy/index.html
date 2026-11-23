@@ -2536,7 +2536,7 @@
     background:rgba(255,255,255,.04); color:#7d8695; font-size:13px; font-weight:700; cursor:not-allowed;
   }
   .fu-go.ready{
-    cursor:pointer; color:#1d0702; border-color:transparent;
+    cursor:pointer; color:#2a0a01; border-color:transparent; text-shadow:0 1px 0 rgba(255,255,255,.35);
     background:linear-gradient(100deg,#ff3b30,#ff7a18 40%,#ffd60a);
     box-shadow:0 0 30px -8px rgba(255,140,20,1); animation:imBreath 2.6s ease-in-out infinite;
   }
@@ -5657,8 +5657,9 @@ function portraitSVG(fig, fit, alt) {
       '<div class="bprep-row"><span>적 HP</span><b>' + towerStage(next).hp.toLocaleString() + '</b></div>' +
       '<div class="bprep-row"><span>적 ATK</span><b>' + towerStage(next).atk.toLocaleString() + '</b></div>' +
       '<div class="bprep-row"><span>웨이브</span><b>' + towerStage(next).waves.length + ' 단계</b></div>' +
-      '<button type="button" class="bgo big" data-tower-start="' + next + '"' + (deck.length ? '' : ' disabled') + '>🗼 ' + next + '층 도전</button>' +
-      '<p class="bprep-note">' + (deck.length ? '층을 오를 때마다 코인 · 보석 · 뽑기권을 받습니다.' : '출격 덱을 먼저 편성하세요.') + '</p>' +
+      '<button type="button" class="bgo big" data-tower-start="' + next + '"' + (owned ? '' : ' disabled') + '>🗼 ' + next + '층 도전</button>' +
+      '<p class="bprep-note">' + (deck.length ? '층을 오를 때마다 코인 · 보석 · 뽑기권을 받습니다.'
+        : (owned ? '덱이 비어 있으면 전투력 높은 인물 6명으로 자동 편성합니다.' : '인물을 먼저 모아야 도전할 수 있습니다.')) + '</p>' +
       '</div></div></div>';
   }
 
@@ -6083,7 +6084,7 @@ function portraitSVG(fig, fit, alt) {
     }).join('');
     var html = '<div class="arena' + (B.speed === 2 ? ' spd2' : (B.speed === 3 ? ' spd3' : '')) + '" id="arena" style="--ec:' + s.ec + '">' +
       '<div class="a-top">' +
-      '<div class="a-stage"><span class="kicker">STAGE ' + pad2(s.no) + ' · ' + esc(s.era) + '</span><h4>' + s.flag + ' ' + esc(s.name) +
+      '<div class="a-stage"><span class="kicker">' + (s.isTower ? 'FLOOR ' : 'STAGE ') + pad2(s.no) + ' · ' + esc(s.era) + '</span><h4>' + s.flag + ' ' + esc(s.name) +
       '</h4><span class="adiff" style="--dc:' + curDiff().color + '">' + curDiff().ico + ' ' + curDiff().n + '</span></div>' +
       '<div class="a-wave"><b id="bWaveTxt">WAVE 1 / ' + s.waves.length + '</b><span class="wavedots" id="bWaveDots">' + waveDots + '</span></div>' +
       '<div class="a-ctrl">' +
