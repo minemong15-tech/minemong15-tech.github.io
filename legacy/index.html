@@ -10029,7 +10029,9 @@ function portraitSVG(fig, fit, alt) {
     if (!field || !stage) return;
     var ov = document.createElement('div');
     ov.className = 'fx-intro';
-    var boss = stage.bossName ? ' · BOSS ' + esc(stage.bossName) : '';
+    /* 보스가 실제로 나오는 전장에서만 BOSS 이름을 띄운다 (탑은 5층 배수만) */
+    var showBoss = stage.bossName && !(stage.isTower && (stage.floor || 0) % 5 !== 0);
+    var boss = showBoss ? ' · BOSS ' + esc(stage.bossName) : '';
     ov.innerHTML = '<div class="fxi-in"><span class="fxi-k">' +
       (stage.isTower ? 'FLOOR ' + stage.no : 'STAGE ' + (stage.no < 10 ? '0' : '') + stage.no) +
       ' · ' + esc(stage.era) + '</span>' +
