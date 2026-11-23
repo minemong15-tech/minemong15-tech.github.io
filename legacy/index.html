@@ -3254,6 +3254,7 @@
   .itslot.have{border-color:rgba(126,224,163,.32)}
   .itslot.eq{border-color:rgba(236,217,168,.55); background:rgba(200,168,106,.09)}
   .itslot .is-nm{font-size:11px; color:#efe6d4; line-height:1.35; word-break:keep-all}
+  .is-lv{font-family:var(--sans); font-size:9px; font-weight:700; color:#ffcf7a; letter-spacing:.02em}
   .itslot .is-b{font-size:9.5px; color:#7fe0a3; font-variant-numeric:tabular-nums}
   .itslot .is-b em{font-style:normal; color:var(--muted2); margin-left:4px}
   .itslot .is-x{font-size:9px; color:var(--muted2)}
@@ -3295,6 +3296,140 @@
     font-size:11px; font-weight:700; letter-spacing:.02em;
   }
   .bitem-btn:hover{background:rgba(126,224,163,.16)}
+
+  /* ── ⚔️ 전용 아이템 뽑기(유물 소환) ── */
+  .relic-entry{
+    width:100%; display:flex; align-items:center; gap:12px; margin:0 0 16px; padding:11px 14px;
+    border-radius:14px; cursor:pointer; text-align:left; color:#f7eedb;
+    border:1px solid rgba(236,217,168,.42);
+    background:linear-gradient(100deg, rgba(200,168,106,.20), rgba(88,64,26,.26) 52%, rgba(16,20,28,.9));
+    box-shadow:0 10px 26px -18px rgba(200,168,106,.9);
+    transition:transform .18s, box-shadow .18s;
+  }
+  .relic-entry:hover{transform:translateY(-2px); box-shadow:0 16px 30px -18px rgba(236,217,168,.95)}
+  .relic-entry .re-ico{font-size:19px; line-height:1; filter:drop-shadow(0 0 10px rgba(236,217,168,.6))}
+  .relic-entry .re-tx{flex:1; min-width:0}
+  .relic-entry .re-tx b{display:block; font-family:var(--serif); font-size:13.5px; font-weight:600; letter-spacing:.01em}
+  .relic-entry .re-tx i{display:block; font-style:normal; font-size:10px; color:#cfc3aa; margin-top:2px}
+  .relic-entry .re-go{font-size:10px; letter-spacing:.12em; color:var(--gold-hi); white-space:nowrap}
+
+  .rl-sheet{width:min(920px,100%)}
+  .rl-wrap{display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr); gap:20px; align-items:start}
+  .rl-bal{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:14px}
+  .rl-bal div{text-align:center; min-width:76px}
+  .rl-bal span{display:block; font-size:8.5px; letter-spacing:.14em; color:var(--muted2)}
+  .rl-bal b{display:block; font-family:var(--serif); font-size:17px; color:var(--gold-hi); margin-top:3px}
+  .rl-btns{display:grid; gap:9px}
+  .rl-btns .btn-pack{width:100%; text-align:center}
+  .rl-rates{font-size:10px; color:var(--muted2); line-height:1.75; margin:12px 0 0; text-align:center}
+  .rl-rates b{color:var(--gold-hi); font-weight:600}
+  .rl-reveal{margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:9px}
+  .rl-card{
+    position:relative; display:flex; flex-direction:column; gap:3px; padding:11px 11px 12px;
+    border-radius:12px; overflow:hidden; text-align:left;
+    border:1px solid var(--rc,#9ca3af);
+    background:linear-gradient(170deg, rgba(20,26,36,.96), rgba(9,12,17,.99));
+    box-shadow:0 12px 26px -18px var(--rc,#000);
+    animation:pop .5s cubic-bezier(.2,.9,.2,1) backwards;
+  }
+  .rl-card::after{content:""; position:absolute; inset:0; pointer-events:none; opacity:.12;
+    background:radial-gradient(circle at 50% 0%, var(--rc,#9ca3af), transparent 62%)}
+  .rl-card.new{box-shadow:0 0 0 1px var(--rc,#9ca3af), 0 0 26px -8px var(--rc,#9ca3af)}
+  .rl-card .rc-tag{position:relative; z-index:1; align-self:flex-start; font-size:7.5px; letter-spacing:.1em;
+    padding:2px 6px; border-radius:999px; border:1px solid var(--rc,#9ca3af); color:var(--rc,#9ca3af);
+    background:rgba(6,8,12,.72)}
+  .rl-card .rc-nm{position:relative; z-index:1; font-family:var(--serif); font-size:13px; color:#f4ecdd; line-height:1.32; margin-top:3px}
+  .rl-card .rc-fig{position:relative; z-index:1; font-size:9.5px; color:var(--muted2)}
+  .rl-card .rc-b{position:relative; z-index:1; font-size:9.5px; color:#7fe0a3; font-variant-numeric:tabular-nums; margin-top:2px}
+  .rl-card .rc-lv{position:relative; z-index:1; font-size:9.5px; color:#ecd9a8}
+
+  .rl-right{display:flex; flex-direction:column; gap:12px}
+  .rl-show{position:relative; min-height:206px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; padding:18px; text-align:center; border-radius:16px; overflow:hidden;
+    border:1px solid var(--line);
+    background:radial-gradient(circle at 50% 20%, rgba(200,168,106,.15), rgba(10,13,18,.98) 64%)}
+  .rl-show .rs-tag{font-size:8.5px; letter-spacing:.22em; color:var(--gold-dim)}
+  .rl-show .rs-nm{font-family:var(--serif); font-size:17px; color:#f7eedb; line-height:1.35}
+  .rl-show .rs-fig{font-size:10.5px; color:var(--muted2)}
+  .rl-show .rs-b{font-size:11px; color:#7fe0a3; margin-top:4px; font-variant-numeric:tabular-nums}
+  .rl-show .rs-lv{font-size:10.5px; color:var(--gold-hi)}
+  .rl-lvnote{border:1px solid var(--line2); border-radius:12px; padding:12px 14px; background:rgba(255,255,255,.02)}
+  .rl-lvnote b{font-family:var(--serif); font-size:12px; color:var(--gold-hi)}
+  .rl-lvnote p{margin:5px 0 0; font-size:10px; color:var(--muted2); line-height:1.65}
+  .rl-lvnote p b{font-family:inherit; font-size:10px; color:#ecd9a8}
+
+  /* 유물 상자 오픈 연출 — 쿵! 번쩍! */
+  .relicfx{position:fixed; inset:0; z-index:225; display:block; cursor:pointer; overflow:hidden;
+    -webkit-tap-highlight-color:transparent; --rc:#ecd9a8}
+  .relicfx[hidden]{display:none}
+  .rf-bg{position:absolute; inset:0; opacity:0; transition:opacity .16s;
+    background:radial-gradient(circle at 50% 48%, #241a0d 0%, #0e0b07 44%, #040406 80%)}
+  .relicfx.on .rf-bg{opacity:1}
+  .rf-aura{position:absolute; inset:0; pointer-events:none; opacity:0; mix-blend-mode:screen;
+    background:radial-gradient(circle at 50% 48%, var(--rc) 0%, rgba(0,0,0,0) 54%); transition:opacity .3s}
+  .relicfx.on .rf-aura{opacity:.42}
+  .relicfx.open .rf-aura{opacity:.92; transition:opacity .2s}
+  .rf-stage{position:absolute; inset:0}
+  .rf-chest{position:absolute; left:50%; top:50%; width:min(46vmin,210px); height:min(40vmin,186px);
+    margin-left:calc(min(46vmin,210px) / -2); margin-top:calc(min(40vmin,186px) / -2);
+    animation:rfDrop .46s cubic-bezier(.2,1.3,.4,1) both; filter:drop-shadow(0 18px 34px rgba(0,0,0,.7))}
+  .rf-chest .rf-lid{position:absolute; left:0; right:0; top:0; height:44%; border-radius:14px 14px 4px 4px;
+    background:linear-gradient(180deg,#9a6a2c,#6b4315 62%,#4a2c0b);
+    border:1px solid rgba(255,226,160,.45); transform-origin:50% 100%;
+    box-shadow:inset 0 6px 12px -6px rgba(255,238,190,.7)}
+  .rf-chest .rf-box{position:absolute; left:0; right:0; bottom:0; height:60%; border-radius:6px 6px 12px 12px;
+    background:linear-gradient(180deg,#7d5220,#5a3510 58%,#3a220a);
+    border:1px solid rgba(255,226,160,.4);
+    box-shadow:inset 0 10px 18px -12px rgba(255,238,190,.55), inset 0 -14px 22px -14px rgba(0,0,0,.9)}
+  .rf-chest .rf-band{position:absolute; left:44%; right:44%; top:0; bottom:0;
+    background:linear-gradient(180deg,#f4e0b0,#c9a35e); opacity:.9}
+  .rf-chest .rf-lock{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15px; font-style:normal;
+    filter:drop-shadow(0 0 8px rgba(255,236,180,.9))}
+  .rf-chest .rf-ring{position:absolute; left:50%; top:58%; width:150%; height:64%; margin-left:-75%; margin-top:-32%;
+    border-radius:50%; border:2px solid var(--rc); opacity:0}
+  .relicfx.charge .rf-chest{animation:rfShake .09s linear infinite alternate}
+  .relicfx.open .rf-chest{animation:rfOpen .5s ease-out both}
+  .relicfx.open .rf-lid{transform:rotateX(-118deg) translateY(-4%); transition:transform .34s cubic-bezier(.2,.9,.2,1);
+    box-shadow:0 0 26px var(--rc)}
+  .relicfx.open .rf-ring{opacity:1; animation:rfRing .6s ease-out both}
+  .rf-rays{position:absolute; left:50%; top:50%; width:min(130vmin,780px); height:min(130vmin,780px);
+    margin-left:calc(min(130vmin,780px) / -2); margin-top:calc(min(130vmin,780px) / -2); opacity:0; pointer-events:none}
+  .rf-rays i{position:absolute; left:50%; top:50%; width:6px; height:50%; margin-left:-3px; transform-origin:50% 0;
+    background:linear-gradient(180deg, rgba(255,255,255,0), var(--rc)); filter:blur(.7px)}
+  .rf-rays i:nth-child(2){transform:rotate(45deg)}
+  .rf-rays i:nth-child(3){transform:rotate(90deg)}
+  .rf-rays i:nth-child(4){transform:rotate(135deg)}
+  .rf-rays i:nth-child(5){transform:rotate(180deg)}
+  .rf-rays i:nth-child(6){transform:rotate(225deg)}
+  .rf-rays i:nth-child(7){transform:rotate(270deg)}
+  .rf-rays i:nth-child(8){transform:rotate(315deg)}
+  .relicfx.open .rf-rays{opacity:.85; animation:rfSpin 12s linear infinite}
+  .rf-spark{position:absolute; left:50%; top:50%; width:min(70vmin,420px); height:min(70vmin,420px);
+    margin-left:calc(min(70vmin,420px) / -2); margin-top:calc(min(70vmin,420px) / -2); border-radius:50%;
+    background:radial-gradient(circle,#fff 0%, var(--rc) 32%, rgba(0,0,0,0) 70%); transform:scale(.05); opacity:0}
+  .relicfx.open .rf-spark{animation:rfSpark .5s ease-out both}
+  .rf-flash{position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none}
+  .relicfx.open .rf-flash{animation:rfFlash .34s ease-out both}
+  .rf-cap{position:absolute; left:0; right:0; top:calc(11% + env(safe-area-inset-top,0px)); text-align:center; opacity:0; transition:opacity .2s}
+  .relicfx.open .rf-cap{opacity:1}
+  .rf-cap .rf-k{display:block; font-size:9px; letter-spacing:.34em; color:var(--gold-dim)}
+  .rf-cap .rf-n{display:block; font-family:var(--serif); font-size:20px; color:#fff7e4; margin-top:6px; text-shadow:0 0 24px var(--rc)}
+  .rf-tip{position:absolute; left:0; right:0; bottom:calc(9% + env(safe-area-inset-bottom,0px)); text-align:center;
+    font-size:10px; letter-spacing:.12em; color:rgba(255,255,255,.5)}
+  @keyframes rfDrop{0%{opacity:0; transform:translateY(-26%) scale(.86)}55%{opacity:1; transform:translateY(2%) scale(1.04)}100%{opacity:1; transform:none}}
+  @keyframes rfShake{from{transform:translate(-2px,1px) rotate(-.7deg)}to{transform:translate(2px,-1px) rotate(.7deg)}}
+  @keyframes rfOpen{0%{transform:none}30%{transform:scale(1.1) rotate(-1deg)}100%{transform:scale(1.2)}}
+  @keyframes rfRing{0%{transform:scale(.3); opacity:.9}100%{transform:scale(1.35); opacity:0}}
+  @keyframes rfSpin{to{transform:rotate(360deg)}}
+  @keyframes rfSpark{0%{transform:scale(.1); opacity:0}35%{opacity:1}100%{transform:scale(1); opacity:0}}
+  @keyframes rfFlash{0%{opacity:0}12%{opacity:.92}100%{opacity:0}}
+
+  @media (max-width:820px){
+    .rl-wrap{grid-template-columns:1fr; gap:16px}
+    .rl-right{order:-1}
+    .rl-show{min-height:150px}
+    .rl-reveal{grid-template-columns:repeat(auto-fill,minmax(118px,1fr))}
+  }
 </style>
 </head>
 
@@ -3668,6 +3803,11 @@
       </div>
       <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
+    <button class="relic-entry" type="button" id="packRelicBtn">
+      <span class="re-ico">⚔️</span>
+      <span class="re-tx"><b>전용 아이템 뽑기</b><i>유물 1,002종 · 같은 유물은 🔨 강화</i></span>
+      <span class="re-go">열기 ›</span>
+    </button>
     <div class="pk-wrap">
       <div class="pk-left">
         <div class="pity" id="pity">
@@ -3952,6 +4092,11 @@
       </div>
       <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
+    <button class="relic-entry" type="button" id="itemsRelicBtn">
+      <span class="re-ico">⚔️</span>
+      <span class="re-tx"><b>전용 아이템 뽑기</b><i>유물 1,002종 · 중복은 🔨 +1강 강화</i></span>
+      <span class="re-go">열기 ›</span>
+    </button>
     <div class="it-top">
       <span class="it-count" id="itemCount">0 / 0</span>
       <input id="itemSearch" class="it-search" type="text" placeholder="🔍 인물 이름 검색" autocomplete="off" spellcheck="false">
@@ -3961,6 +4106,45 @@
       </div>
     </div>
     <div class="it-list" id="itemList"></div>
+  </div>
+</div>
+
+<!-- ⚔️ 전용 아이템 뽑기 (유물 소환) -->
+<div class="modal" id="mRelic" role="dialog" aria-modal="true" aria-labelledby="rlTitle">
+  <div class="sheet wide rl-sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">RELIC SUMMON</span>
+        <h2 id="rlTitle">⚔️ 전용 아이템 뽑기</h2>
+        <p>인물들의 전용 유물 <b>1,002종</b> 중 하나가 나옵니다 · 같은 유물이 또 나오면 <b>🔨 +1강</b> (ATK·HP 보너스 +5%p)</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="rl-wrap">
+      <div class="rl-left">
+        <div class="rl-bal">
+          <div><span>코인</span><b id="rlCoins">0</b></div>
+          <div><span>보유 유물</span><b id="rlOwned">0 / 0</b></div>
+          <div><span>최고 강화</span><b id="rlMaxLv">+0강</b></div>
+        </div>
+        <div class="rl-btns">
+          <button class="btn-pack" id="rlPull1" type="button">⚔️ 1회 뽑기<small>1,500 코인</small></button>
+          <button class="btn-pack" id="rlPull5" type="button">⚔️ 5회 뽑기<small>6,500 코인 · 5개</small></button>
+          <button class="btn-pack ticket" id="rlPullInf" type="button" hidden>🎟️ 유물 5회 <b>(∞)</b><small>무한 모드 · 5개</small></button>
+        </div>
+        <p class="rl-rates" id="rlRates"></p>
+        <div class="pack-msg" id="rlMsg">1회 1,500 코인 · 5회 6,500 코인 · 같은 유물이 또 나오면 🔨 강화됩니다.</div>
+        <div class="reveal rl-reveal" id="rlReveal"></div>
+      </div>
+      <div class="rl-right">
+        <div class="rl-show" id="rlShow"></div>
+        <div class="rl-lvnote">
+          <b>🔨 유물 강화</b>
+          <p>같은 유물이 또 나오면 <b>+1강</b> · 강마다 <b>ATK +5%p · HP +5%p</b> · 최대 <b>+5강</b></p>
+          <p>강화된 보너스는 그 인물에게 장착하면 <b>전투 능력치</b>에 그대로 더해집니다.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -4011,6 +4195,27 @@
 </div>
 
 <!-- 냥코식 뽑기 캡슐 연출 · 최고 등급까지 8단계 승격 -->
+<!-- 유물 상자 오픈 연출 — 쿵! 번쩍! · 탭하면 스킵 -->
+<div class="relicfx" id="relicFx" hidden aria-hidden="true">
+  <div class="rf-bg"></div>
+  <div class="rf-aura"></div>
+  <div class="rf-stage">
+    <div class="rf-chest">
+      <span class="rf-lid"></span>
+      <span class="rf-box"><i class="rf-band"></i><i class="rf-lock">⚔️</i></span>
+      <span class="rf-ring"></span>
+    </div>
+    <div class="rf-rays"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="rf-spark"></div>
+    <div class="rf-flash"></div>
+  </div>
+  <div class="rf-cap">
+    <span class="rf-k" id="rfKicker">RELIC BOX</span>
+    <b class="rf-n" id="rfName"></b>
+  </div>
+  <div class="rf-tip">탭하면 바로 결과를 봅니다</div>
+</div>
+
 <div class="pullfx" id="pullFx" hidden aria-hidden="true">
   <div class="pf-bg"></div>
   <div class="pf-aura"></div>
@@ -7679,6 +7884,7 @@ function portraitSVG(fig, fit, alt) {
   if (!Array.isArray(S.fusions)) S.fusions = [];
   if (!S.items || typeof S.items !== 'object') S.items = {};
   if (!S.equip || typeof S.equip !== 'object') S.equip = {};
+  if (!S.itemLv || typeof S.itemLv !== 'object') S.itemLv = {};
   if (!S.shop || typeof S.shop !== 'object') S.shop = {};
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
   S.log = S.log.filter(function (v, i, arr) { return v && v.d && arr.map(function (x) { return x.d; }).indexOf(v.d) === i; })
@@ -8228,7 +8434,12 @@ function portraitSVG(fig, fit, alt) {
       $(back).classList.add('open');
       document.body.style.overflow = 'hidden';
       if (back === '#mPack') { startPackRotate(); refreshPackBal(); }
+      if (back === '#mItems') renderItems();
       if (back === '#mBattle' && window.LegacyBattle && window.LegacyBattle.refresh) window.LegacyBattle.refresh();
+      if (back === '#mItems' || back === '#mBattle') {
+        CLOSE_BACK = RELIC_PREV;
+        RELIC_PREV = null;
+      }
     }
   }
 
@@ -8388,6 +8599,18 @@ function portraitSVG(fig, fit, alt) {
      ───────────────────────────────────────────── */
   var ITEMS = (typeof LEGACY_ITEMS !== 'undefined') ? LEGACY_ITEMS : {};
   var ITEM_TAB = 'mine';
+  /* 유물 강화 — 중복 획득 1회당 +1강, 강당 ATK·HP 보너스 +5%p, 최대 +5강 */
+  var ITEM_LV_MAX = 5, ITEM_LV_STEP = 5;
+  function itemLvOf(k) {
+    var v = (S.itemLv || {})[k] || 0;
+    v = v | 0;
+    if (v < 0) v = 0;
+    if (v > ITEM_LV_MAX) v = ITEM_LV_MAX;
+    return v;
+  }
+  function itemBonusText(it, lv) {
+    return 'ATK +' + ((it.atk || 0) + lv * ITEM_LV_STEP) + '% · HP +' + ((it.hp || 0) + lv * ITEM_LV_STEP) + '%';
+  }
   function itemList(fid) { return ITEMS[fid] || []; }
   function itemKeyOf(fid, i) { return fid + '#' + i; }
   function itemOfKey(k) { var p = String(k).split('#'); var a = ITEMS[p[0]]; return a ? a[+p[1]] : null; }
@@ -8398,12 +8621,27 @@ function portraitSVG(fig, fit, alt) {
     if (!itemOwned(k)) { S.items[k] = 1; saveState(); }
     return true;
   }
+  /* 중복 유물 → 강화. 성공하면 새 레벨, 이미 +5강이면 null */
+  function enhanceItem(k) {
+    if (!itemOwned(k)) return null;
+    var lv = itemLvOf(k);
+    if (lv >= ITEM_LV_MAX) return null;
+    lv += 1;
+    S.itemLv[k] = lv;
+    saveState();
+    return lv;
+  }
   function itemBonus(fid) {
     var k = S.equip[fid];
     if (!k || !itemOwned(k)) return null;
     var it = itemOfKey(k);
     if (!it) return null;
-    return { key: k, item: it, atk: it.atk, hp: it.hp, name: it.n };
+    var lv = itemLvOf(k);
+    return {
+      key: k, item: it, lv: lv, name: it.n,
+      atk: (it.atk || 0) + lv * ITEM_LV_STEP,
+      hp: (it.hp || 0) + lv * ITEM_LV_STEP
+    };
   }
   function equipItem(k) {
     var p = String(k).split('#');
@@ -8416,7 +8654,8 @@ function portraitSVG(fig, fit, alt) {
       toast('⚔️ <b>' + esc(it.n) + '</b> 장착을 해제했습니다');
     } else {
       S.equip[fid] = k;
-      toast('⚔️ <b>' + esc(it.n) + '</b> 장착 · <b>ATK +' + it.atk + '%</b> · HP +' + it.hp + '%');
+      var bl = itemLvOf(k);
+      toast('⚔️ <b>' + esc(it.n) + '</b> 장착' + (bl ? ' (+' + bl + '강)' : '') + ' · <b>ATK +' + ((it.atk || 0) + bl * ITEM_LV_STEP) + '%</b> · HP +' + ((it.hp || 0) + bl * ITEM_LV_STEP) + '%');
     }
     saveState();
     renderItems();
@@ -8430,9 +8669,10 @@ function portraitSVG(fig, fit, alt) {
     var k = itemKeyOf(fid, i);
     var have = itemOwned(k);
     var eq = S.equip[fid] === k;
+    var lv = have ? itemLvOf(k) : 0;
     return '<div class="itslot' + (have ? ' have' : '') + (eq ? ' eq' : '') + '">' +
-      '<span class="is-nm">' + esc(it.n) + '</span>' +
-      '<span class="is-b">ATK +' + it.atk + '% · HP +' + it.hp + '%</span>' +
+      '<span class="is-nm">' + esc(it.n) + (lv ? ' <b class="is-lv">+' + lv + '강</b>' : '') + '</span>' +
+      '<span class="is-b">' + itemBonusText(it, lv) + (lv ? '<em>강화 ' + lv + '회</em>' : '') + '</span>' +
       (have
         ? '<button type="button" class="is-btn' + (eq ? ' on' : '') + '" data-equip="' + k + '">' + (eq ? '✓ 장착 중' : '장착') + '</button>'
         : '<button type="button" class="is-btn" disabled>미보유 · 전투/상점</button>') +
@@ -8499,9 +8739,10 @@ function portraitSVG(fig, fit, alt) {
       var k = itemKeyOf(fid, i);
       var have = itemOwned(k);
       var eq = S.equip[fid] === k;
+      var lv = have ? itemLvOf(k) : 0;
       return '<div class="rd-item' + (have ? ' have' : '') + '">' +
-        '<span class="r-nm">' + esc(it.n) + '<small>' + esc(it.d) + '</small></span>' +
-        '<span class="r-b">ATK +' + it.atk + '% · HP +' + it.hp + '%</span>' +
+        '<span class="r-nm">' + esc(it.n) + (lv ? ' <b class="is-lv">+' + lv + '강</b>' : '') + '<small>' + esc(it.d) + '</small></span>' +
+        '<span class="r-b">' + itemBonusText(it, lv) + '</span>' +
         (have ? '<button type="button" class="is-btn' + (eq ? ' on' : '') + '" data-equip="' + k + '">' + (eq ? '✓ 장착' : '장착') + '</button>'
                : '<span class="is-x" style="font-size:9px;color:var(--muted2)">미보유</span>') +
         '</div>';
@@ -9751,6 +9992,289 @@ function portraitSVG(fig, fit, alt) {
     openModal('#mPack');
   }
 
+  /* ─────────────────────────────────────────────
+     ⚔️ 전용 아이템 뽑기 (유물 소환)
+     1,002종 유물을 등급 확률로 뽑고, 중복은 🔨 강화로 이어진다.
+     ───────────────────────────────────────────── */
+  var RELIC_COST1 = 1500, RELIC_COST5 = 6500, RELIC_MAX_REFUND = 400;
+  /* 등급 확률(%) — 합 100 · 기본·희귀가 잘 나오고 신화 위로는 드물게 */
+  var RELIC_RATES = [
+    { g: 'basic', p: 36 }, { g: 'rare', p: 24 }, { g: 'special', p: 14 },
+    { g: 'heroic', p: 9 }, { g: 'mythic', p: 7 }, { g: 'legend', p: 5.5 },
+    { g: 'legendary', p: 2.5 }, { g: 'transcendent', p: 1.2 }, { g: 'immortal', p: 0.8 }
+  ];
+  var RELIC_POOL = null;
+  var LAST_RELIC = null;
+  var RELIC_PREV = null;   /* 유물 뽑기를 열기 전 창으로 돌아가는 사슬(전투 → 아이템 → 뽑기) */
+
+  function relicPool() {
+    if (RELIC_POOL) return RELIC_POOL;
+    RELIC_POOL = {};
+    FIGURES.forEach(function (f) {
+      var g = GRADE_INFO[f.grade] ? f.grade : 'basic';
+      itemList(f.id).forEach(function (it, i) {
+        (RELIC_POOL[g] = RELIC_POOL[g] || []).push({ k: itemKeyOf(f.id, i), fid: f.id, f: f, it: it });
+      });
+    });
+    return RELIC_POOL;
+  }
+  function relicRollGrade(minRank) {
+    var rows = RELIC_RATES;
+    if (minRank) rows = RELIC_RATES.filter(function (x) { return (GRADE_RANK[x.g] || 0) >= minRank; });
+    if (!rows.length) rows = RELIC_RATES;
+    var total = 0, i;
+    for (i = 0; i < rows.length; i++) total += rows[i].p;
+    var r = Math.random() * total, acc = 0;
+    for (i = 0; i < rows.length; i++) {
+      acc += rows[i].p;
+      if (r < acc) return rows[i].g;
+    }
+    return rows[rows.length - 1].g;
+  }
+  /* 보유 중인 인물의 유물은 살짝 우대한다 (35%) */
+  function ownedFigMap() {
+    var m = {};
+    (S.log || []).forEach(function (x) { if (x && x.id) m[x.id] = 1; });
+    Object.keys(S.cards || {}).forEach(function (k) { m[k] = 1; });
+    return m;
+  }
+  function relicPickOne(grade) {
+    var pool = relicPool()[grade] || [];
+    if (!pool.length) {
+      pool = [];
+      Object.keys(relicPool()).forEach(function (g) { pool = pool.concat(relicPool()[g]); });
+    }
+    if (!pool.length) return null;
+    var cands = pool;
+    var own = ownedFigMap();
+    var mine = pool.filter(function (x) { return !!own[x.fid]; });
+    if (mine.length && Math.random() < 0.35) cands = mine;
+    return cands[Math.floor(Math.random() * cands.length)];
+  }
+  /* 1개 뽑기 → 새 유물이면 지급, 이미 있으면 🔨 강화 */
+  function relicPullOne(grade) {
+    var pick = relicPickOne(grade || relicRollGrade(0));
+    if (!pick) return null;
+    var r = { k: pick.k, fid: pick.fid, f: pick.f, it: pick.it, isNew: false, lv: itemLvOf(pick.k), maxed: false };
+    if (!itemOwned(r.k)) {
+      r.isNew = true;
+      r.lv = 0;
+      S.items[r.k] = 1;
+    } else {
+      var up = enhanceItem(r.k);
+      if (up === null) {
+        r.maxed = true;
+        r.lv = ITEM_LV_MAX;
+        S.coins = (S.coins || 0) + RELIC_MAX_REFUND;
+      } else {
+        r.lv = up;
+      }
+    }
+    return r;
+  }
+
+  function relicRatesHtml() {
+    return RELIC_RATES.map(function (x) {
+      var gi = GRADE_INFO[x.g] || GRADE_INFO.basic;
+      var nm = gi.name, p = Math.round(x.p * 10) / 10;
+      if (x.g === 'legendary') nm = '<b class="rainbow-text">레전더리</b>';
+      else if (x.g === 'transcendent') nm = '<b class="mono-text">초월</b>';
+      else if (x.g === 'immortal') nm = '<b class="immortal-text">불멸</b>';
+      return nm + ' ' + p + '%';
+    }).join(' · ');
+  }
+  function renderRelicShow(r) {
+    var box = $('#rlShow');
+    if (!box) return;
+    if (!r) {
+      box.innerHTML = '<span class="rs-tag">RELIC BOX</span><b class="rs-nm">⚔️ 유물 상자</b>' +
+        '<span class="rs-fig">뽑기를 누르면 상자가 열립니다</span>' +
+        '<span class="rs-b">1회 1,500 · 5회 6,500 코인</span>';
+      return;
+    }
+    var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    box.innerHTML = '<span class="rs-tag">' + (r.isNew ? '✨ NEW RELIC' : 'LAST BEST') + '</span>' +
+      '<b class="rs-nm ' + textClsOf(gi) + '">' + esc(r.it.n) + '</b>' +
+      '<span class="rs-fig">' + esc(r.f.name) + ' · ' + gi.name + '</span>' +
+      '<span class="rs-b">' + itemBonusText(r.it, r.lv || 0) + '</span>' +
+      '<span class="rs-lv">' + ((r.lv || 0) ? '🔨 +' + r.lv + '강' : (r.isNew ? '새로 얻은 유물' : '')) + '</span>';
+  }
+  function renderRelic() {
+    if ($('#rlCoins')) $('#rlCoins').textContent = Number(S.coins || 0).toLocaleString();
+    if ($('#rlOwned')) $('#rlOwned').textContent = itemOwnedCount() + ' / ' + itemTotal();
+    var mx = 0;
+    Object.keys(S.itemLv || {}).forEach(function (k) { var v = itemLvOf(k); if (v > mx) mx = v; });
+    if ($('#rlMaxLv')) $('#rlMaxLv').textContent = '+' + mx + '강';
+    if ($('#rlRates')) $('#rlRates').innerHTML = relicRatesHtml() + '<br>5회 뽑기는 <b>영웅 이상 1개</b>를 보장합니다.';
+    var pi = $('#rlPullInf');
+    if (pi) {
+      if (S.infTickets) pi.removeAttribute('hidden');
+      else pi.setAttribute('hidden', '');
+    }
+    renderRelicShow(LAST_RELIC);
+  }
+  function openRelic(fromSel) {
+    RELIC_PREV = CLOSE_BACK;
+    if (fromSel && $(fromSel) && $(fromSel).classList.contains('open')) CLOSE_BACK = fromSel;
+    else CLOSE_BACK = null;
+    renderRelic();
+    openModal('#mRelic');
+  }
+
+  /* ── 짧고 시원한 유물 상자 오픈 연출 ── */
+  var RELIC_FX_TIMERS = [], RELIC_FX_DONE = null, RELIC_FX_FIN = true;
+  function relicFxSound(kind) {
+    if (pfSoundOff()) return;
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    try {
+      var t0 = ctx.currentTime;
+      if (kind === 'thud') {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(180, t0);
+        o.frequency.exponentialRampToValueAtTime(48, t0 + 0.18);
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.16, t0 + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.26);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t0); o.stop(t0 + 0.28);
+      } else {
+        var s = ctx.createOscillator(), sg = ctx.createGain();
+        s.type = 'triangle';
+        s.frequency.setValueAtTime(320, t0);
+        s.frequency.exponentialRampToValueAtTime(1760, t0 + 0.22);
+        sg.gain.setValueAtTime(0.0001, t0);
+        sg.gain.exponentialRampToValueAtTime(0.06, t0 + 0.02);
+        sg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.34);
+        s.connect(sg); sg.connect(ctx.destination);
+        s.start(t0); s.stop(t0 + 0.36);
+        [659.25, 830.61, 987.77].forEach(function (fr, k) {
+          var o2 = ctx.createOscillator(), g2 = ctx.createGain();
+          var st = t0 + 0.14 + k * 0.05;
+          o2.type = 'sine';
+          o2.frequency.setValueAtTime(fr, st);
+          g2.gain.setValueAtTime(0.0001, st);
+          g2.gain.exponentialRampToValueAtTime(0.07, st + 0.02);
+          g2.gain.exponentialRampToValueAtTime(0.0001, st + 0.5);
+          o2.connect(g2); g2.connect(ctx.destination);
+          o2.start(st); o2.stop(st + 0.54);
+        });
+      }
+    } catch (e) {}
+  }
+  function relicFxEnd() {
+    if (RELIC_FX_FIN) return;
+    RELIC_FX_FIN = true;
+    for (var i = 0; i < RELIC_FX_TIMERS.length; i++) clearTimeout(RELIC_FX_TIMERS[i]);
+    RELIC_FX_TIMERS = [];
+    var el = $('#relicFx');
+    var cb = RELIC_FX_DONE;
+    RELIC_FX_DONE = null;
+    if (el) {
+      el.classList.remove('on');
+      setTimeout(function () { if (el && !el.classList.contains('on')) { el.className = 'relicfx'; el.hidden = true; } }, 220);
+    }
+    if (cb) cb();
+  }
+  function playRelicFx(best, done) {
+    var el = $('#relicFx');
+    if (!el || !best) { if (done) done(); return; }
+    var gi = GRADE_INFO[best.f.grade] || GRADE_INFO.basic;
+    el.style.setProperty('--rc', gradeRc(gi));
+    el.className = 'relicfx';
+    el.hidden = false;
+    if ($('#rfKicker')) $('#rfKicker').textContent = 'RELIC BOX';
+    if ($('#rfName')) $('#rfName').textContent = '';
+    RELIC_FX_DONE = done || null;
+    RELIC_FX_FIN = false;
+    void el.offsetWidth;
+    el.classList.add('on');
+    RELIC_FX_TIMERS.push(setTimeout(function () { el.classList.add('charge'); relicFxSound('thud'); }, 140));
+    RELIC_FX_TIMERS.push(setTimeout(function () { el.classList.add('open'); relicFxSound('open'); }, 540));
+    RELIC_FX_TIMERS.push(setTimeout(function () {
+      if ($('#rfKicker')) $('#rfKicker').textContent = gi.en || 'RELIC';
+      if ($('#rfName')) $('#rfName').textContent = best.it.n;
+    }, 660));
+    RELIC_FX_TIMERS.push(setTimeout(relicFxEnd, 1500));
+    el.onclick = function (e) { if (e && e.preventDefault) e.preventDefault(); relicFxEnd(); };
+    el.ontouchstart = function (e) { if (e && e.preventDefault) e.preventDefault(); relicFxEnd(); };
+  }
+
+  function rlCardHtml(r, i) {
+    var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    var rc = gradeRc(gi);
+    var lv = r.lv || 0;
+    var tag = r.isNew ? '✨ NEW' : (r.maxed ? '최대 강화' : '🔨 강화 +' + lv);
+    return '<article class="rl-card' + (r.isNew ? ' new' : '') + '" style="--rc:' + rc + '; animation-delay:' + (i * 0.07).toFixed(2) + 's">' +
+      '<span class="rc-tag">' + tag + '</span>' +
+      '<b class="rc-nm ' + textClsOf(gi) + '">' + esc(r.it.n) + '</b>' +
+      '<span class="rc-fig">' + esc(r.f.name) + ' · ' + gi.name + '</span>' +
+      '<span class="rc-b">' + itemBonusText(r.it, lv) + '</span>' +
+      (lv ? '<span class="rc-lv">🔨 +' + lv + '강</span>' : '') +
+      '</article>';
+  }
+
+  function relicPull(count, free) {
+    var m = $('#rlMsg');
+    function say(txt, ok) {
+      if (!m) return;
+      m.className = 'pack-msg' + (ok ? ' ok' : '');
+      m.textContent = txt;
+    }
+    if (free) {
+      if (!S.infTickets) { say('무한 뽑기는 현성 전용입니다 · ?vip=hs2026 으로 접속하면 열립니다'); return; }
+    } else {
+      var cost = count >= 5 ? RELIC_COST5 : RELIC_COST1;
+      if ((S.coins || 0) < cost) {
+        say('코인이 부족합니다 · 필요 ' + cost.toLocaleString() + ' 코인 (보유 ' + Number(S.coins || 0).toLocaleString() + ')');
+        return;
+      }
+      S.coins -= cost;
+    }
+    var grades = [], i;
+    for (i = 0; i < count; i++) grades.push(relicRollGrade(0));
+    /* 5회 뽑기 보장 — 영웅 이상이 하나도 없으면 마지막 자리를 승격 */
+    if (count >= 5 && !grades.some(function (g) { return (GRADE_RANK[g] || 0) >= 3; })) {
+      grades[count - 1] = relicRollGrade(3);
+    }
+    var res = [];
+    for (i = 0; i < grades.length; i++) {
+      var one = relicPullOne(grades[i]);
+      if (one) res.push(one);
+    }
+    saveState();
+    if (!res.length) { renderRelic(); say('유물 데이터를 불러오지 못했습니다'); return; }
+
+    var news = 0, ups = 0, maxed = 0;
+    res.forEach(function (r) {
+      if (r.isNew) news++;
+      else if (r.maxed) maxed++;
+      else ups++;
+    });
+    var best = res[0];
+    res.forEach(function (r) { if ((GRADE_RANK[r.f.grade] || 0) > (GRADE_RANK[best.f.grade] || 0)) best = r; });
+    var dres = res.slice().sort(function (a, b) {
+      if (!!b.isNew !== !!a.isNew) return b.isNew ? 1 : -1;
+      var dr = (GRADE_RANK[b.f.grade] || 0) - (GRADE_RANK[a.f.grade] || 0);
+      if (dr) return dr;
+      return (b.lv || 0) - (a.lv || 0);
+    });
+    LAST_RELIC = best;
+
+    playRelicFx(best, function () {
+      if ($('#rlReveal')) $('#rlReveal').innerHTML = dres.map(rlCardHtml).join('');
+      renderRelic();
+      var bits = [];
+      if (news) bits.push('✨ 새 유물 ' + news + '개');
+      if (ups) bits.push('🔨 강화 ' + ups + '회');
+      if (maxed) bits.push('최대 강화 ' + maxed + '개 (코인 +' + (maxed * RELIC_MAX_REFUND) + ')');
+      say((bits.length ? bits.join(' · ') : '유물을 얻었습니다') +
+        ' · 보유 유물 ' + itemOwnedCount() + ' / ' + itemTotal(), true);
+      if ((GRADE_RANK[best.f.grade] || 0) >= 6) confetti(isMono(GRADE_INFO[best.f.grade]));
+    });
+  }
+
   function renderMuseum() {
     var body = $('#museumBody');
     if (!body) return;
@@ -10439,6 +10963,12 @@ function portraitSVG(fig, fit, alt) {
   if ($('#summon')) $('#summon').addEventListener('click', endSummon);
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
+  /* ⚔️ 전용 아이템 뽑기 */
+  if ($('#packRelicBtn')) $('#packRelicBtn').addEventListener('click', function () { openRelic('#mPack'); });
+  if ($('#itemsRelicBtn')) $('#itemsRelicBtn').addEventListener('click', function () { openRelic('#mItems'); });
+  if ($('#rlPull1')) $('#rlPull1').addEventListener('click', function () { relicPull(1, false); });
+  if ($('#rlPull5')) $('#rlPull5').addEventListener('click', function () { relicPull(5, false); });
+  if ($('#rlPullInf')) $('#rlPullInf').addEventListener('click', function () { relicPull(5, true); });
   /* 연출음 음소거 — 이 브라우저에만 저장된다 */
   if ($('#pfMute')) {
     $('#pfMute').addEventListener('click', function (e) {
@@ -10663,11 +11193,16 @@ function portraitSVG(fig, fit, alt) {
     list: ITEMS,
     bonus: itemBonus,
     grant: grantItem,
+    enhance: enhanceItem,
     has: itemOwned,
     key: itemKeyOf,
+    lv: itemLvOf,
+    maxLv: ITEM_LV_MAX,
+    lvStep: ITEM_LV_STEP,
     equipped: function (fid) { return S.equip[fid] || null; },
     ownedCount: itemOwnedCount,
-    open: openItems
+    open: openItems,
+    openPull: openRelic
   };
   if (window.LegacyBattle) {
     window.LegacyBattle.init({
