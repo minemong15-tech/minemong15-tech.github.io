@@ -10196,7 +10196,7 @@ function portraitSVG(fig, fit, alt) {
       if ($('#rfKicker')) $('#rfKicker').textContent = gi.en || 'RELIC';
       if ($('#rfName')) $('#rfName').textContent = best.it.n;
     }, 660));
-    RELIC_FX_TIMERS.push(setTimeout(relicFxEnd, 1500));
+    RELIC_FX_TIMERS.push(setTimeout(relicFxEnd, 2400));
     el.onclick = function (e) { if (e && e.preventDefault) e.preventDefault(); relicFxEnd(); };
     el.ontouchstart = function (e) { if (e && e.preventDefault) e.preventDefault(); relicFxEnd(); };
   }
