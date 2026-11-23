@@ -3155,20 +3155,28 @@
     display:flex; align-items:center; gap:10px; min-height:40px;
   }
   .avatar-btn{
-    flex:0 0 auto; width:32px; height:32px; padding:0; border-radius:50%; cursor:pointer;
-    border:1px solid rgba(200,168,106,.55); background:radial-gradient(circle at 30% 25%, rgba(200,168,106,.3), rgba(200,168,106,.05) 70%);
-    display:grid; place-items:center; overflow:hidden; position:relative;
+    flex:0 0 auto; width:auto; max-width:220px; height:32px; padding:3px 11px 3px 3px; border-radius:999px; cursor:pointer;
+    border:1px solid rgba(200,168,106,.55); background:radial-gradient(circle at 6% 25%, rgba(200,168,106,.3), rgba(200,168,106,.05) 70%);
+    display:flex; align-items:center; gap:7px; min-width:0; position:relative;
     box-shadow:0 0 0 3px rgba(200,168,106,.06), inset 0 0 8px rgba(200,168,106,.18);
     transition:border-color .2s, box-shadow .2s, transform .2s;
   }
   .avatar-btn:hover{border-color:var(--gold-hi); box-shadow:0 0 0 4px rgba(200,168,106,.12), inset 0 0 10px rgba(200,168,106,.28)}
   .avatar-btn:active{transform:scale(.94)}
   .av-img{
-    width:100%; height:100%; border-radius:50%; display:grid; place-items:center;
-    font-family:var(--serif); font-size:13px; color:var(--gold-hi);
+    flex:0 0 26px; width:26px; height:26px; border-radius:50%; display:grid; place-items:center; overflow:hidden;
+    font-family:var(--serif); font-size:12px; color:var(--gold-hi);
     background-size:cover; background-position:center; background-repeat:no-repeat;
   }
   .av-img.has{font-size:0!important}
+  .av-meta{display:flex; align-items:baseline; gap:4px; min-width:0; line-height:1.1; text-align:left}
+  .av-meta b{
+    font-family:var(--serif); font-weight:600; font-size:11.5px; letter-spacing:.01em; color:#f4ecdd;
+    max-width:92px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .av-meta i{font-style:normal; font-size:10px; letter-spacing:.02em; color:var(--gold); white-space:nowrap; font-variant-numeric:tabular-nums}
+  .av-meta i:empty{display:none}
+  .avatar-btn.unset .av-meta b{color:var(--muted)}
   .tm-hi{
     font-size:8.5px; letter-spacing:.24em; color:var(--gold-dim); white-space:nowrap;
   }
@@ -3190,16 +3198,20 @@
   }
   @media (max-width:560px){
     .topmini-in{padding:4px 12px 0}
-    .avatar-btn{width:28px; height:28px}
-    .av-img{font-size:11px}
+    .avatar-btn{height:28px; padding:2px 9px 2px 2px; gap:6px; max-width:170px}
+    .av-img{flex-basis:22px; width:22px; height:22px; font-size:10.5px}
+    .av-meta b{font-size:10.5px; max-width:74px}
+    .av-meta i{font-size:9px}
     .tm-cur{gap:4px}
     .tmc i{font-size:9px}
     .tmc b{font-size:10px}
   }
   @media (orientation: landscape) and (max-height: 560px){
     .topmini-in{min-height:28px; padding:2px 12px 0}
-    .avatar-btn{width:22px; height:22px}
-    .av-img{font-size:9px}
+    .avatar-btn{height:22px; padding:1px 7px 1px 1px; gap:5px}
+    .av-img{flex-basis:18px; width:18px; height:18px; font-size:9px}
+    .av-meta b{font-size:9px}
+    .av-meta i{font-size:8px}
   }
 
   /* 프로필 모달 */
@@ -3218,6 +3230,57 @@
   .av-act b{font-size:12.5px; font-weight:600; display:block}
   .av-act i{font-size:10px; color:var(--muted2); font-style:normal; display:block; margin-top:2px}
   .av-act.ghost{opacity:.85}
+
+  /* ✨ 첫 시작 · 프로필 설정 (온보딩) & 이름·나이 입력 */
+  .ps-sheet{width:min(420px,100%); padding:24px 24px 22px}
+  .ps-hero{text-align:center; margin:2px 0 16px}
+  .ps-seal{
+    display:grid; place-items:center; width:40px; height:40px; margin:0 auto 12px; border-radius:13px;
+    font-family:var(--serif); font-size:20px; color:#0c0904; font-weight:700;
+    background:linear-gradient(160deg,#f0dfae,#c8a86a 58%,#a8863f);
+    box-shadow:0 12px 28px -14px rgba(200,168,106,.9), inset 0 0 0 1px rgba(255,255,255,.35);
+  }
+  .ps-hero .kicker{display:block; margin-bottom:8px}
+  .ps-hero h2{font-family:var(--serif); font-size:23px; font-weight:600; margin:0; color:#f6eedd; letter-spacing:-.01em}
+  .ps-hero p{margin:7px 0 0; font-size:11.5px; color:var(--muted); line-height:1.6}
+  .ps-avatar{display:grid; place-items:center; gap:10px; margin:0 0 18px}
+  .ps-av-acts{display:flex; flex-wrap:wrap; justify-content:center; gap:7px}
+  .av-mini{
+    cursor:pointer; padding:7px 12px; border-radius:999px; font-size:10.5px; font-weight:600;
+    color:#f0e6d2; border:1px solid rgba(200,168,106,.4); background:rgba(200,168,106,.1);
+  }
+  .av-mini:hover{border-color:var(--gold-hi); background:rgba(200,168,106,.18)}
+  .av-mini.ghost{border-color:var(--line2); background:rgba(255,255,255,.03); color:var(--muted); font-weight:500}
+  .av-mini.ghost:hover{color:#f0e6d2; border-color:rgba(200,168,106,.35)}
+  .ps-fields{display:grid; gap:10px; margin:0 0 4px}
+  .ps-field{display:flex; align-items:center; gap:10px; padding:9px 13px; border-radius:13px;
+    border:1px solid var(--line2); background:rgba(255,255,255,.025); transition:border-color .18s, background .18s}
+  .ps-field:focus-within{border-color:rgba(200,168,106,.55); background:rgba(200,168,106,.07)}
+  .ps-field>span{flex:0 0 34px; font-size:10px; letter-spacing:.12em; color:var(--gold-dim); font-weight:600}
+  .ps-field input{
+    flex:1; min-width:0; padding:4px 0; border:0; background:none; outline:none;
+    font-family:inherit; font-size:14px; color:#f7f0e2; letter-spacing:.01em;
+  }
+  .ps-field input::placeholder{color:#5d6470}
+  .ps-field input::-webkit-outer-spin-button,
+  .ps-field input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0}
+  .ps-field input[type=number]{-moz-appearance:textfield; appearance:textfield}
+  .ps-err{margin:9px 0 0; padding:8px 11px; border-radius:10px; font-size:10.5px; line-height:1.5;
+    color:#ffb9a8; border:1px solid rgba(255,120,90,.32); background:rgba(255,90,60,.09)}
+  .ps-err[hidden]{display:none}
+  .ps-start{
+    width:100%; margin-top:12px; cursor:pointer; padding:13px 16px; border:0; border-radius:13px;
+    font-size:13.5px; font-weight:800; letter-spacing:.02em; color:#170f03;
+    background:linear-gradient(180deg,#f4e3b0,#d8b878 52%,#c09a52);
+    box-shadow:0 16px 34px -18px rgba(236,217,168,.85), inset 0 0 0 1px rgba(255,255,255,.4);
+    transition:transform .15s, filter .15s;
+  }
+  .ps-start:hover{filter:brightness(1.06)}
+  .ps-start:active{transform:scale(.985)}
+  .ps-start.sm{width:auto; min-width:130px; padding:10px 22px; font-size:12px; margin:10px 0 16px; display:block}
+  .ps-note{margin:10px 0 0; text-align:center; font-size:9.5px; line-height:1.6; color:#5f6673; letter-spacing:.01em}
+  .av-fields{margin:2px 0 0}
+  .av-sheet .av-acts{margin-top:6px}
 
   /* ═════════════════════════════════════════════
      🏪 이달의 상점
@@ -3684,8 +3747,9 @@
 <header class="top">
   <div class="topmini">
     <div class="topmini-in">
-      <button class="avatar-btn" id="avatarBtn" type="button" aria-label="프로필 사진 바꾸기" title="내 프로필">
+      <button class="avatar-btn" id="avatarBtn" type="button" aria-label="내 프로필 · 이름·나이·사진 수정" title="내 프로필">
         <span class="av-img" id="avatarImg">L</span>
+        <span class="av-meta"><b id="avName">게스트</b><i id="avAgeLabel"></i></span>
       </button>
       <span class="tm-hi">MY CHRONICLE</span>
       <div class="tm-cur">
@@ -4422,18 +4486,60 @@
   </div>
 </div>
 
-<!-- 👤 프로필 사진 -->
+<!-- ✨ 첫 시작 · 내 프로필 설정 (온보딩) -->
+<div class="modal" id="mProfileSetup" role="dialog" aria-modal="true" aria-labelledby="psTitle">
+  <div class="sheet av-sheet ps-sheet">
+    <div class="ps-hero">
+      <span class="ps-seal">L</span>
+      <span class="kicker">WELCOME TO LEGACY</span>
+      <h2 id="psTitle">✨ LEGACY 시작하기</h2>
+      <p>내 프로필을 설정하고 역사 여행을 시작하세요</p>
+    </div>
+    <div class="ps-avatar">
+      <span class="av-img big" id="psPreview">L</span>
+      <div class="ps-av-acts">
+        <button class="av-mini" id="psAlbum" type="button">🖼️ 앨범에서 선택</button>
+        <button class="av-mini ghost" id="psCamera" type="button">📷 사진 찍기</button>
+      </div>
+    </div>
+    <div class="ps-fields">
+      <label class="ps-field"><span>이름</span>
+        <input id="psName" type="text" maxlength="12" placeholder="예: 현성" autocomplete="nickname" enterkeyhint="next">
+      </label>
+      <label class="ps-field"><span>나이</span>
+        <input id="psAge" type="number" min="1" max="120" inputmode="numeric" placeholder="예: 16" enterkeyhint="done">
+      </label>
+    </div>
+    <p class="ps-err" id="psErr" hidden></p>
+    <button class="ps-start" id="psStart" type="button">시작하기 🚀</button>
+    <p class="ps-note">이름·나이·사진은 이 기기에만 저장됩니다 · 서버로 보내지 않습니다.</p>
+    <input id="psCamInput" type="file" accept="image/*" capture="user" hidden>
+    <input id="psAlbumInput" type="file" accept="image/*" hidden>
+  </div>
+</div>
+
+<!-- 👤 내 프로필 (이름 · 나이 · 사진 수정) -->
 <div class="modal" id="mAvatar" role="dialog" aria-modal="true" aria-labelledby="avTitle">
   <div class="sheet av-sheet">
     <div class="sheet-head">
       <div>
         <span class="kicker">PROFILE</span>
-        <h2 id="avTitle">내 프로필 사진</h2>
-        <p>사진은 이 기기에만 저장됩니다 · 서버로 보내지 않습니다.</p>
+        <h2 id="avTitle">내 프로필</h2>
+        <p>이름·나이·사진은 이 기기에만 저장됩니다 · 서버로 보내지 않습니다.</p>
       </div>
       <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
     <div class="av-preview"><span class="av-img big" id="avPreview">L</span></div>
+    <div class="ps-fields av-fields">
+      <label class="ps-field"><span>이름</span>
+        <input id="pfName" type="text" maxlength="12" placeholder="예: 현성" autocomplete="nickname">
+      </label>
+      <label class="ps-field"><span>나이</span>
+        <input id="pfAge" type="number" min="1" max="120" inputmode="numeric" placeholder="예: 16">
+      </label>
+    </div>
+    <p class="ps-err" id="pfErr" hidden></p>
+    <button class="ps-start sm" id="pfSave" type="button">저장</button>
     <div class="av-acts">
       <button class="av-act" id="avCamera" type="button"><span class="av-ico">📷</span><b>사진 찍기</b><i>카메라로 바로 찍기</i></button>
       <button class="av-act" id="avAlbum" type="button"><span class="av-ico">🖼️</span><b>앨범에서 선택</b><i>저장된 사진 고르기</i></button>
@@ -8181,6 +8287,11 @@ function portraitSVG(fig, fit, alt) {
   if (!S.equip || typeof S.equip !== 'object') S.equip = {};
   if (!S.itemLv || typeof S.itemLv !== 'object') S.itemLv = {};
   if (!S.shop || typeof S.shop !== 'object') S.shop = {};
+  /* 내 프로필 — 이름·나이. 이름이 비어 있으면 첫 실행 온보딩을 띄운다 */
+  if (typeof S.userName !== 'string') S.userName = '';
+  S.userName = String(S.userName).trim().slice(0, 12);
+  var _age = parseInt(S.userAge, 10);
+  S.userAge = (isFinite(_age) && _age >= 1 && _age <= 120) ? _age : 0;
   S.att = S.att.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
   S.log = S.log.filter(function (v, i, arr) { return v && v.d && arr.map(function (x) { return x.d; }).indexOf(v.d) === i; })
     .sort(function (a, b) { return a.d < b.d ? -1 : 1; });
@@ -8962,15 +9073,56 @@ function portraitSVG(fig, fit, alt) {
 
   var AVA_KEY = 'legacy.avatar';
   function readAvatar() { try { return localStorage.getItem(AVA_KEY) || ''; } catch (e) { return ''; } }
+  function userName() { return String(S.userName || '').trim(); }
+  function userAge() { var a = parseInt(S.userAge, 10); return (isFinite(a) && a >= 1 && a <= 120) ? a : 0; }
   function paintAvatar() {
     var u = readAvatar();
-    ['#avatarImg', '#avPreview'].forEach(function (sel) {
+    var ini = userName() ? userName().charAt(0) : 'L';
+    ['#avatarImg', '#avPreview', '#psPreview'].forEach(function (sel) {
       var el = $(sel);
       if (!el) return;
       el.style.backgroundImage = u ? 'url("' + u + '")' : '';
       el.classList.toggle('has', !!u);
-      if (!u) el.textContent = 'L';
+      if (!u) el.textContent = ini;
     });
+  }
+  /* 상단 미니 프로필 — 사진 옆에 이름 · 나이 */
+  function paintProfile() {
+    paintAvatar();
+    var n = userName(), a = userAge();
+    var btn = $('#avatarBtn');
+    if ($('#avName')) $('#avName').textContent = n || '게스트';
+    if ($('#avAgeLabel')) $('#avAgeLabel').textContent = a ? '· ' + a + '세' : '';
+    if (btn) {
+      btn.classList.toggle('unset', !n);
+      btn.setAttribute('aria-label', n ? '내 프로필 · ' + n + (a ? ' · ' + a + '세' : '') + ' · 이름·나이·사진 수정' : '내 프로필 설정');
+    }
+  }
+  function saveProfile(name, age) {
+    S.userName = String(name || '').trim().slice(0, 12);
+    var a = parseInt(age, 10);
+    S.userAge = (isFinite(a) && a >= 1 && a <= 120) ? a : 0;
+    saveState();
+    paintProfile();
+  }
+  function showFieldErr(sel, msg) {
+    var el = $(sel);
+    if (!el) return;
+    if (msg) { el.textContent = msg; el.hidden = false; }
+    else { el.textContent = ''; el.hidden = true; }
+  }
+  /* 이름·나이 입력 검증 — 실패하면 null */
+  function readProfileForm(nameSel, ageSel, errSel) {
+    var n = String(($(nameSel).value || '')).replace(/\s+/g, ' ').trim();
+    var rawA = String(($(ageSel).value || '')).trim();
+    if (!n) { showFieldErr(errSel, '이름을 입력해 주세요'); $(nameSel).focus(); return null; }
+    if (n.length > 12) { showFieldErr(errSel, '이름은 12자까지 입력할 수 있습니다'); $(nameSel).focus(); return null; }
+    var a = Number(rawA);
+    if (!rawA || !isFinite(a) || Math.floor(a) !== a || a < 1 || a > 120) {
+      showFieldErr(errSel, '나이는 1~120 사이 숫자로 입력해 주세요'); $(ageSel).focus(); return null;
+    }
+    showFieldErr(errSel, '');
+    return { name: n, age: a };
   }
   function saveAvatar(url) {
     try {
@@ -9002,7 +9154,32 @@ function portraitSVG(fig, fit, alt) {
     fr.onerror = function () { toast('파일을 읽지 못했습니다'); };
     fr.readAsDataURL(file);
   }
-  function openAvatar() { paintAvatar(); openModal('#mAvatar'); }
+  function openAvatar() {
+    paintAvatar();
+    if ($('#pfName')) $('#pfName').value = userName();
+    if ($('#pfAge')) $('#pfAge').value = userAge() || '';
+    showFieldErr('#pfErr', '');
+    openModal('#mAvatar');
+  }
+  /* 첫 실행 — 이름·나이·프로필 사진 설정 */
+  function openOnboarding() {
+    if ($('#psName')) $('#psName').value = userName();
+    if ($('#psAge')) $('#psAge').value = userAge() || '';
+    showFieldErr('#psErr', '');
+    paintAvatar();
+    openModal('#mProfileSetup');
+    setTimeout(function () {
+      var el = $('#psName');
+      if (el) { try { el.focus({ preventScroll: true }); } catch (e) {} }
+    }, 280);
+  }
+  function startFromOnboarding() {
+    var r = readProfileForm('#psName', '#psAge', '#psErr');
+    if (!r) return;
+    saveProfile(r.name, r.age);
+    closeModals();
+    toast('✨ <b>' + esc(r.name) + '</b>님, LEGACY에 오신 것을 환영합니다');
+  }
 
   /* ─────────────────────────────────────────────
      ⚔️ 인물별 전용 아이템(유물)
@@ -11576,6 +11753,32 @@ function portraitSVG(fig, fit, alt) {
   });
   $('#statsBtn').addEventListener('click', function () { renderRoadmap(); openModal('#mRoadmap'); });
   if ($('#avatarBtn')) $('#avatarBtn').addEventListener('click', openAvatar);
+  /* 내 프로필 — 이름·나이 저장 */
+  if ($('#pfSave')) $('#pfSave').addEventListener('click', function () {
+    var r = readProfileForm('#pfName', '#pfAge', '#pfErr');
+    if (!r) return;
+    saveProfile(r.name, r.age);
+    closeModals();
+    toast('프로필을 저장했습니다');
+  });
+  ['#pfName', '#pfAge'].forEach(function (sel) {
+    var el = $(sel);
+    if (el) el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); if ($('#pfSave')) $('#pfSave').click(); }
+    });
+  });
+  /* 첫 시작 온보딩 */
+  if ($('#psStart')) $('#psStart').addEventListener('click', startFromOnboarding);
+  ['#psName', '#psAge'].forEach(function (sel) {
+    var el = $(sel);
+    if (el) el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); startFromOnboarding(); }
+    });
+  });
+  if ($('#psCamera')) $('#psCamera').addEventListener('click', function () { var i = $('#psCamInput'); if (i) i.click(); });
+  if ($('#psAlbum')) $('#psAlbum').addEventListener('click', function () { var i = $('#psAlbumInput'); if (i) i.click(); });
+  if ($('#psCamInput')) $('#psCamInput').addEventListener('change', function () { fileToAvatar(this.files && this.files[0]); this.value = ''; });
+  if ($('#psAlbumInput')) $('#psAlbumInput').addEventListener('change', function () { fileToAvatar(this.files && this.files[0]); this.value = ''; });
   if ($('#avCamera')) $('#avCamera').addEventListener('click', function () { var i = $('#avCamInput'); if (i) i.click(); });
   if ($('#avAlbum')) $('#avAlbum').addEventListener('click', function () { var i = $('#avAlbumInput'); if (i) i.click(); });
   if ($('#avCamInput')) $('#avCamInput').addEventListener('change', function () { fileToAvatar(this.files && this.files[0]); this.value = ''; });
@@ -11663,7 +11866,7 @@ function portraitSVG(fig, fit, alt) {
   var dl = $('#figNames');
   if (dl) dl.innerHTML = FIGURES.map(function (f) { return '<option value="' + esc(f.name) + '">'; }).join('');
   ensureAttendance();
-  paintAvatar();
+  paintProfile();
   renderAll();
   renderCollection();
   renderMail();
@@ -11672,6 +11875,8 @@ function portraitSVG(fig, fit, alt) {
   renderGuess();
   renderClock();
   setInterval(renderClock, 1000);
+  /* 처음 온 사람에게는 프로필 설정(이름·나이·사진) 창을 먼저 보여준다 */
+  if (!DEMO && !userName()) openOnboarding();
   window.LegacyItems = {
     list: ITEMS,
     bonus: itemBonus,
