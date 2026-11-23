@@ -876,18 +876,48 @@
   }
   .arc-more-link:hover{background:rgba(200,168,106,.1); border-color:rgba(200,168,106,.55)}
 
-  /* ───── 인물 · 뽑기/도감으로 얻은 모든 인물 3줄 소개 ───── */
-  .figs-sec{padding-top:20px}
-  .figs-sec .arc-head{margin-bottom:14px; align-items:flex-start}
-  .figs-sec .arc-head p b{font-family:var(--serif); font-weight:600; color:var(--gold-hi); font-variant-numeric:tabular-nums; letter-spacing:.02em}
+  /* ───── 인물 · 도감 아래 진입 배너 → 모달(뽑기/도감으로 얻은 모든 인물 3줄 소개) ───── */
+  .mfig-entry{
+    display:flex; align-items:center; gap:14px; width:100%; margin:22px 0 0; padding:14px 18px;
+    text-align:left; font-family:inherit; color:inherit; cursor:pointer;
+    border-radius:var(--r); border:1px solid var(--line);
+    background:linear-gradient(100deg, rgba(200,168,106,.17), rgba(48,38,20,.3) 44%, rgba(12,16,22,.95));
+    box-shadow:0 26px 54px -40px #000, inset 0 1px 0 rgba(255,255,255,.04);
+    transition:transform .18s, border-color .18s, box-shadow .18s;
+  }
+  .mfig-entry:hover, .mfig-entry:focus-visible{
+    transform:translateY(-2px); border-color:rgba(200,168,106,.55); outline:none;
+    box-shadow:0 26px 54px -30px rgba(200,168,106,.45), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .mfig-entry .mfe-ico{
+    flex:0 0 auto; width:42px; height:42px; border-radius:13px; display:grid; place-items:center;
+    font-size:19px; line-height:1; border:1px solid rgba(200,168,106,.4);
+    background:radial-gradient(circle at 32% 26%, rgba(200,168,106,.3), rgba(200,168,106,.04) 74%);
+    box-shadow:0 0 18px -6px rgba(200,168,106,.55);
+  }
+  .mfig-entry .mfe-tx{flex:1 1 auto; min-width:0}
+  .mfig-entry .mfe-tx b{display:block; font-family:var(--serif); font-size:16px; font-weight:600; color:#f4ecdd; letter-spacing:.02em}
+  .mfig-entry .mfe-tx i{display:block; font-style:normal; font-size:10.5px; color:#cfc3aa; margin-top:3px; line-height:1.55; word-break:keep-all}
+  .mfig-entry .mfe-tx em{font-style:normal; font-family:var(--serif); font-weight:600; color:var(--gold-hi); font-variant-numeric:tabular-nums; letter-spacing:.02em}
+  .mfig-entry .mfe-go{
+    flex:0 0 auto; font-size:10px; letter-spacing:.12em; color:var(--gold-hi); white-space:nowrap;
+    padding:6px 12px; border-radius:999px; border:1px solid rgba(200,168,106,.3); background:rgba(200,168,106,.07);
+    transition:background .16s, border-color .16s;
+  }
+  .mfig-entry:hover .mfe-go{background:rgba(200,168,106,.16); border-color:rgba(200,168,106,.55)}
+
+  .mmf-sheet{width:min(1000px,100%)}
+  .mmf-sheet .sheet-head{margin-bottom:14px; align-items:flex-start}
+  .mmf-sheet .sheet-head p b{font-family:var(--serif); font-weight:600; color:var(--gold-hi); font-variant-numeric:tabular-nums; letter-spacing:.02em}
+  .mfs-tools{display:flex; flex-direction:column; gap:10px; margin:0 0 16px}
+  .mfs-tools .arc-filters{margin:0}
   .mfs-search{
-    width:216px; max-width:100%; font-family:inherit; font-size:11.5px; color:#eae2d2;
+    width:100%; max-width:100%; font-family:inherit; font-size:11.5px; color:#eae2d2;
     padding:9px 14px; border-radius:999px; border:1px solid var(--line2);
     background:rgba(255,255,255,.03); outline:none; transition:border-color .16s, background .16s;
   }
   .mfs-search:focus{border-color:rgba(200,168,106,.6); background:rgba(200,168,106,.07)}
   .mfs-search::placeholder{color:#6b7381}
-  .figs-sec .arc-filters{margin:0 0 14px}
   .mfs-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:12px}
   .mfs-card{
     position:relative; display:flex; align-items:flex-start; gap:12px; text-align:left; cursor:pointer;
@@ -943,7 +973,11 @@
     .mfs-name{font-size:14px}
     .mfs-line{font-size:10.5px; line-height:1.6}
     .mfs-search{width:100%}
-    .figs-sec .arc-head .right{width:100%}
+    .mfig-entry{margin-top:16px; padding:12px 14px; gap:11px; border-radius:16px}
+    .mfig-entry .mfe-ico{width:36px; height:36px; border-radius:11px; font-size:16px}
+    .mfig-entry .mfe-tx b{font-size:14.5px}
+    .mfig-entry .mfe-tx i{font-size:10px}
+    .mfig-entry .mfe-go{font-size:9px; padding:5px 9px}
   }
 
   .record{padding:20px 22px 21px}
@@ -3899,20 +3933,15 @@
     <div class="arc-grid" id="pageArcGrid"></div>
   </section>
 
-  <section class="card figs-sec" id="myFigSec" aria-labelledby="mfsTitle">
-    <div class="arc-head">
-      <div>
-        <span class="kicker">ALL FIGURES</span>
-        <h2 id="mfsTitle">인물</h2>
-        <p>내가 뽑기 · 도감으로 얻은 모든 인물 <b id="mfsCount">(0 / 501)</b> — 세 줄로 먼저 읽고, 누르면 명언·과정·업적·영상까지 펼쳐집니다.</p>
-      </div>
-      <div class="right">
-        <input id="mfsSearch" class="mfs-search" type="text" placeholder="🔍 인물 이름·시대 검색" autocomplete="off" spellcheck="false" aria-label="내 인물 검색">
-      </div>
-    </div>
-    <div class="arc-filters" id="mfsGrades"></div>
-    <div class="mfs-list" id="mfsList"></div>
-  </section>
+  <!-- 인물 — 도감 바로 아래 컴팩트 진입 배너 (누르면 #mMyFigures 모달) -->
+  <button class="card mfig-entry" id="openMyFigsBtn" type="button" aria-haspopup="dialog" aria-controls="mMyFigures">
+    <span class="mfe-ico" aria-hidden="true">📖</span>
+    <span class="mfe-tx">
+      <b>인물</b>
+      <i>내가 뽑기 · 도감으로 얻은 모든 인물 <em id="mfsCount">(0 / 501)</em> · 세 줄 소개</i>
+    </span>
+    <span class="mfe-go">열기 ›</span>
+  </button>
 
 
   <section class="card warcta" id="warCta" aria-labelledby="warTitle">
@@ -4004,6 +4033,25 @@
     </div>
     <div id="shelfPanel" hidden></div>
     <div class="arc-grid" id="arcGrid"></div>
+  </div>
+</div>
+
+<!-- 인물 — 뽑기·도감으로 얻은 모든 인물 (3줄 소개 · 검색 · 등급 필터) -->
+<div class="modal" id="mMyFigures" role="dialog" aria-modal="true" aria-labelledby="mmfTitle">
+  <div class="sheet wide mmf-sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">ALL FIGURES</span>
+        <h2 id="mmfTitle">📖 인물</h2>
+        <p>내가 뽑기 · 도감으로 얻은 모든 인물 <b id="mfsModalCount">0 / 501</b> — 세 줄로 먼저 읽고, 누르면 명언·과정·업적·영상까지 펼쳐집니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="mfs-tools">
+      <input id="mfsSearch" class="mfs-search" type="text" placeholder="🔍 인물 이름·시대 검색" autocomplete="off" spellcheck="false" aria-label="내 인물 검색">
+      <div class="arc-filters" id="mfsGrades"></div>
+    </div>
+    <div class="mfs-list" id="mfsList"></div>
   </div>
 </div>
 
@@ -8639,8 +8687,7 @@ function portraitSVG(fig, fit, alt) {
 
   function renderMyFigures() {
     var listEl = $('#mfsList'), cntEl = $('#mfsCount'), gEl = $('#mfsGrades');
-    if (!listEl) return;
-    var m = myFigMap();
+    if (!listEl) return;    var m = myFigMap();
     var all = FIGURES.filter(function (f) { return m.set[f.id]; });
     all.sort(function (a, b) {
       var ra = GRADE_RANK[a.grade] || 0, rb = GRADE_RANK[b.grade] || 0;
@@ -8650,6 +8697,7 @@ function portraitSVG(fig, fit, alt) {
       return String(a.name).localeCompare(String(b.name), 'ko');
     });
     if (cntEl) cntEl.textContent = '(' + all.length + ' / ' + N + ')';
+    if ($('#mfsModalCount')) $('#mfsModalCount').textContent = all.length + ' / ' + N;
 
     /* 등급 필터 칩 — 지금 모은 인물에 있는 등급만 */
     if (gEl) {
@@ -8688,6 +8736,13 @@ function portraitSVG(fig, fit, alt) {
         : '아직 얻은 인물이 없습니다.<br>카드팩 뽑기나 오늘의 인물 체크로 인물을 모으면 이곳에 세 줄 소개와 함께 남습니다.') + '</div>';
     }
     listEl.innerHTML = html;
+  }
+
+  /* 도감 아래 '인물' 배너 → #mMyFigures 모달 */
+  function openMyFigures() {
+    CLOSE_BACK = null;
+    renderMyFigures();
+    openModal('#mMyFigures');
   }
 
   /* ── 장착 칭호 ── */
@@ -8787,6 +8842,7 @@ function portraitSVG(fig, fit, alt) {
       document.body.style.overflow = 'hidden';
       if (back === '#mPack') { startPackRotate(); refreshPackBal(); }
       if (back === '#mItems') renderItems();
+      if (back === '#mMyFigures') renderMyFigures();
       if (back === '#mBattle' && window.LegacyBattle && window.LegacyBattle.refresh) window.LegacyBattle.refresh();
       if (back === '#mItems' || back === '#mBattle') {
         CLOSE_BACK = RELIC_PREV;
@@ -11573,12 +11629,18 @@ function portraitSVG(fig, fit, alt) {
     var mfm = e.target.closest('[data-mfsmore]');
     if (mfm) { mfsLimit += MFS_STEP; renderMyFigures(); return; }
     var mfi = e.target.closest('[data-mfig]');
-    if (mfi) { openReader(mfi.getAttribute('data-mfig')); return; }
+    if (mfi) {
+      /* 인물 모달 안의 카드 → 리더를 닫으면 인물 모달로 복관 */
+      if (mfi.closest('#mMyFigures')) CLOSE_BACK = '#mMyFigures';
+      openReader(mfi.getAttribute('data-mfig'));
+      return;
+    }
     var card = e.target.closest('[data-fig]');
     if (card && card.closest('.arc-grid')) { openReader(card.getAttribute('data-fig')); return; }
     if (e.target.closest('[data-locked]')) toast('아직 배우지 않은 인물입니다 · 매일 한 명씩 열립니다');
   });
   $('#pageArcAll').addEventListener('click', function () { renderArchive(); openModal('#mArchive'); });
+  if ($('#openMyFigsBtn')) $('#openMyFigsBtn').addEventListener('click', openMyFigures);
   if ($('#mfsSearch')) $('#mfsSearch').addEventListener('input', function () {
     mfsQuery = this.value || '';
     mfsLimit = MFS_STEP;
