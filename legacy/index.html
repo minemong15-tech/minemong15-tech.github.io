@@ -2470,15 +2470,21 @@
   @keyframes imBreath{0%,100%{opacity:.42}50%{opacity:1}}
   .arc-card.r-immortal{
     --rc:#ffd60a; position:relative; overflow:hidden;
-    border:1.6px solid transparent; border-radius:13px;
+    border:2px solid transparent; border-radius:13px;
     background-image:
       linear-gradient(180deg,#241009 0%,#120604 55%,#080302 100%),
       linear-gradient(112deg,#ffd60a 0%,#ff2d55 18%,#fff7cc 36%,#ffd60a 52%,#ff2d55 72%,#fff7cc 88%,#ffd60a 100%);
     background-origin:border-box; background-clip:padding-box,border-box;
     background-size:100% 100%,260% 100%; background-position:0 0,0% 50%;
     animation:imBorderFlow 6s linear infinite;
-    box-shadow:0 0 0 1px rgba(255,214,10,.22), 0 0 20px -6px rgba(255,45,85,.72), 0 0 42px -16px rgba(255,214,10,.85), 0 18px 34px -22px #000;
+    box-shadow:0 0 0 1px rgba(255,214,10,.3), 0 0 22px -4px rgba(255,45,85,.8), 0 0 48px -14px rgba(255,214,10,.95), 0 18px 34px -22px #000;
     transition:transform .2s, box-shadow .25s;
+  }
+  /* 카드 전체를 한 번씩 훑고 지나가는 홀로그램 광택 */
+  .arc-card.r-immortal::before{
+    content:""; position:absolute; inset:-2px; z-index:5; pointer-events:none; border-radius:inherit;
+    background:linear-gradient(104deg,transparent 40%,rgba(255,247,204,.06) 45%,rgba(255,255,255,.22) 50%,rgba(255,247,204,.06) 55%,transparent 60%);
+    transform:translateX(-100%); animation:imShine 6.4s cubic-bezier(.45,0,.3,1) infinite;
   }
   .arc-card.r-immortal:hover, .arc-card.r-immortal:focus-visible{
     transform:translateY(-4px);
@@ -2497,8 +2503,9 @@
   .arc-card.r-immortal .arc-badge{
     background:linear-gradient(100deg,#ff2d55,#ffd60a 52%,#fff7cc 72%,#ff2d55);
     background-size:220% 100%; animation:imFlow 2.8s linear infinite;
-    color:#2a0600; border-color:rgba(255,247,204,.85); font-weight:900; letter-spacing:.1em;
-    box-shadow:0 0 10px rgba(255,45,85,.9), 0 0 22px rgba(255,214,10,.62);
+    color:#2a0600; border-color:rgba(255,247,204,.9); font-weight:900; letter-spacing:.08em;
+    font-size:9px; padding:4px 8px;
+    box-shadow:0 0 12px rgba(255,45,85,.95), 0 0 24px rgba(255,214,10,.7);
   }
   .arc-card.r-immortal .arc-badge::before{content:"👑🔥 "; letter-spacing:0}
   .arc-card.r-immortal .body{
@@ -2531,7 +2538,7 @@
 
   .pcard.r-immortal{
     position:relative; overflow:hidden;
-    border:1.6px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
+    border:2px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
     background-image:linear-gradient(180deg,#241009,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 18%,#fff7cc 36%,#ffd60a 54%,#ff2d55 74%,#fff7cc 90%,#ffd60a);
     background-size:100% 100%,260% 100%;
     animation:pop .55s cubic-bezier(.2,.9,.2,1) backwards, imBorderFlow 5s linear infinite;
@@ -2553,7 +2560,7 @@
   .pcard.r-immortal .pbody b{color:#fff7cc; text-shadow:0 1px 0 #7a2c00, 0 0 9px rgba(255,140,20,.9)}
   .pcard.r-immortal .pbody span{color:#e2bd92}
   .exhibit.r-immortal .case{
-    border:1.6px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
+    border:2px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
     background-image:linear-gradient(180deg,#241009,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 20%,#fff7cc 40%,#ffd60a 58%,#ff2d55 78%,#fff7cc 92%,#ffd60a);
     background-size:100% 100%,260% 100%; animation:imBorderFlow 7s linear infinite;
     box-shadow:0 0 0 1px rgba(255,214,10,.3), 0 0 44px -12px rgba(255,120,20,1), inset 0 0 40px rgba(0,0,0,.6);
