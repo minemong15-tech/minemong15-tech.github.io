@@ -8212,11 +8212,21 @@ function portraitSVG(fig, fit, alt) {
     $(sel).classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+  /* 확률표·전용 아이템처럼 다른 창 위에 얹혀 열린 창을 닫으면 원래 창으로 돌아온다 */
+  var CLOSE_BACK = null;
   function closeModals() {
+    var back = CLOSE_BACK;
+    CLOSE_BACK = null;
     stopSpeak();
     stopPackRotate();
     document.querySelectorAll('.modal.open').forEach(function (m) { m.classList.remove('open'); });
     document.body.style.overflow = '';
+    if (back && $(back)) {
+      $(back).classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (back === '#mPack') { startPackRotate(); refreshPackBal(); }
+      if (back === '#mBattle' && window.LegacyBattle && window.LegacyBattle.refresh) window.LegacyBattle.refresh();
+    }
   }
 
   /* ── coins · cards · evolution ── */
@@ -8466,6 +8476,7 @@ function portraitSVG(fig, fit, alt) {
     for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('on', tabs[i].getAttribute('data-itab') === ITEM_TAB);
   }
   function openItems(fid) {
+    if ($('#mBattle') && $('#mBattle').classList.contains('open')) CLOSE_BACK = '#mBattle';
     ITEM_TAB = 'mine';
     if (fid) {
       ITEM_TAB = 'all';
@@ -8664,6 +8675,7 @@ function portraitSVG(fig, fit, alt) {
     tb.innerHTML = rows;
   }
   function openRates() {
+    if ($('#mPack') && $('#mPack').classList.contains('open')) CLOSE_BACK = '#mPack';
     renderRates();
     openModal('#mRates');
   }
