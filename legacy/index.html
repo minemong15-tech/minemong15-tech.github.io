@@ -1111,82 +1111,113 @@
   .bmap-title b.off{font-family:inherit; font-size:10px; color:#6f7787}
   .actrl.spd{min-width:56px}
 
-  /* ── 냥코식 뽑기 캡슐 연출 ── */
+  /* ── 냥코식 뽑기 캡슐 연출 · 최고 등급까지 7단계 승격 ── */
   .pullfx{position:fixed; inset:0; z-index:220; display:block; cursor:pointer; overflow:hidden;
-    -webkit-tap-highlight-color:transparent}
+    -webkit-tap-highlight-color:transparent; --gc:#9ca3af; --pi:0; --s0:1; --shk:2px}
   .pullfx[hidden]{display:none}
+  .pullfx[data-g="basic"]{--gc:#9ca3af}
+  .pullfx[data-g="rare"]{--gc:#3b82f6}
+  .pullfx[data-g="special"]{--gc:#22c55e}
+  .pullfx[data-g="mythic"]{--gc:#ef4444}
+  .pullfx[data-g="legend"]{--gc:#eab308}
+  .pullfx[data-g="legendary"]{--gc:#ffe9a8}
+  .pullfx[data-g="transcendent"]{--gc:#ffffff}
   .pullfx .pf-bg{position:absolute; inset:0; background:radial-gradient(circle at 50% 46%, #2a1f12 0%, #120e08 42%, #050406 78%);
     opacity:0; transition:opacity .18s}
   .pullfx.on .pf-bg{opacity:1}
+  .pullfx[data-g="transcendent"] .pf-bg{background:radial-gradient(circle at 50% 46%, #2b2b30 0%, #0c0c0f 44%, #000 80%)}
+  /* 등급 빛무리 — 단계가 오를수록 진해진다 */
+  .pf-aura{position:absolute; inset:0; pointer-events:none; opacity:calc(var(--pi) * .8);
+    background:radial-gradient(circle at 50% 47%, var(--gc) 0%, rgba(0,0,0,0) 58%);
+    mix-blend-mode:screen; transition:opacity .22s, background .22s}
+  .pullfx[data-g="legendary"] .pf-aura{opacity:calc(var(--pi) * .6);
+    background:radial-gradient(circle at 50% 47%, #fff 0%, #ffd166 20%, #7bf1a8 38%, #7ad7ff 56%, #b78aff 72%, rgba(0,0,0,0) 88%)}
+  .pullfx[data-g="transcendent"] .pf-aura{opacity:calc(var(--pi) * .92);
+    background:radial-gradient(circle at 50% 47%, #fff 0%, #b9bec8 30%, #23252b 58%, rgba(0,0,0,0) 78%)}
   .pf-stage{position:absolute; inset:0}
   .pf-machine{position:absolute; left:50%; top:50%; width:min(38vmin,190px); height:min(52vmin,260px);
-    transform:translate(-50%,-50%); will-change:transform}
-  .pf-cap{position:absolute; inset:0; border-radius:50% / 46%;
+    transform:translate(-50%,-50%) scale(var(--s0)); will-change:transform;
+    filter:drop-shadow(0 0 calc(3px + var(--pi) * 44px) var(--gc))}
+  .pf-cap{position:absolute; inset:0; border-radius:50% / 46%; overflow:hidden;
     background:
       radial-gradient(circle at 34% 24%, #fff6d4 0%, #ffe9a8 18%, #e8bf6a 46%, #a97c2f 78%, #6b4a17 100%);
     box-shadow:0 24px 60px -18px rgba(255,206,120,.55), inset 0 -18px 34px -12px rgba(60,32,0,.6),
-      inset 0 14px 24px -10px rgba(255,250,220,.65);
-    overflow:hidden;
-  }
+      inset 0 14px 24px -10px rgba(255,250,220,.65)}
+  .pullfx[data-g="transcendent"] .pf-cap{background:radial-gradient(circle at 34% 24%, #fff 0%, #eee 16%, #9a9a9a 46%, #2a2a2a 78%, #000 100%)}
   .pf-cap .pf-band{position:absolute; left:0; right:0; top:44%; height:12%;
     background:linear-gradient(180deg, rgba(90,58,14,.75), rgba(255,236,180,.55), rgba(90,58,14,.75));
     opacity:.85}
   .pf-cap .pf-shine{position:absolute; left:14%; top:10%; width:26%; height:34%; border-radius:50%;
     background:radial-gradient(circle, rgba(255,255,255,.92), rgba(255,255,255,0) 70%); filter:blur(1px)}
-  .pf-ring{position:absolute; left:50%; top:50%; border-radius:50%; border:2px solid rgba(255,226,160,.55);
+  /* 단계마다 캡슐에 스며드는 등급 색 · 테두리 발광 */
+  .pf-cap .pf-tint{position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+    background:radial-gradient(circle at 50% 42%, var(--gc) 0%, rgba(0,0,0,0) 74%);
+    opacity:calc(.1 + var(--pi) * .66); mix-blend-mode:screen; transition:opacity .2s, background .2s}
+  .pf-cap .pf-edge{position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    border:2px solid var(--gc); opacity:calc(.22 + var(--pi) * .78);
+    box-shadow:inset 0 0 calc(8px + var(--pi) * 40px) var(--gc); transition:opacity .2s, box-shadow .2s}
+  .pf-ring{position:absolute; left:50%; top:50%; border-radius:50%; border:2px solid var(--gc);
     transform:translate(-50%,-50%); opacity:0}
-  .pf-ring.r1{width:56%; height:24%; border-color:rgba(255,226,160,.4)}
-  .pf-ring.r2{width:78%; height:34%; border-color:rgba(255,226,160,.22)}
+  .pf-ring.r1{width:56%; height:24%}
+  .pf-ring.r2{width:78%; height:34%}
+  .pf-ring.r3{width:100%; height:44%}
   .pf-beams{position:absolute; left:50%; top:50%; width:min(120vmin,720px); height:min(120vmin,720px);
     transform:translate(-50%,-50%); opacity:0; pointer-events:none}
   .pf-beams i{position:absolute; left:50%; top:50%; width:5px; height:52%; margin-left:-2.5px;
-    transform-origin:50% 0; background:linear-gradient(180deg, rgba(255,226,160,0), rgba(255,236,190,.9));
-    filter:blur(.5px)}
-  .pf-burst{position:absolute; left:50%; top:50%; width:min(70vmin,420px); height:min(70vmin,420px);
-    margin-left:calc(min(70vmin,420px) / -2); margin-top:calc(min(70vmin,420px) / -2); border-radius:50%;
-    background:radial-gradient(circle, rgba(255,252,240,.95) 0%, rgba(255,226,160,.6) 32%, rgba(255,196,110,0) 68%);
+    transform-origin:50% 0; background:linear-gradient(180deg, rgba(255,255,255,0), var(--gc)); filter:blur(.6px)}
+  .pullfx.on .pf-beams{opacity:calc(var(--pi) * .75); animation:pfSpin 9s linear infinite}
+  .pf-burst{position:absolute; left:50%; top:50%; width:min(76vmin,460px); height:min(76vmin,460px);
+    margin-left:calc(min(76vmin,460px) / -2); margin-top:calc(min(76vmin,460px) / -2); border-radius:50%;
+    background:radial-gradient(circle, #fff 0%, var(--gc) 30%, rgba(0,0,0,0) 72%);
     transform:scale(.1); opacity:0}
-  .pf-flash{position:absolute; inset:0; background:#fff; opacity:0}
+  .pf-flash{position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none}
+  .pf-grade{position:absolute; left:0; right:0; top:calc(8% + env(safe-area-inset-top, 0px));
+    text-align:center; pointer-events:none; z-index:2}
+  .pf-grade .pf-gk{display:block; font-size:8.5px; letter-spacing:.42em; color:rgba(255,240,205,.5)}
+  .pf-grade .pf-gn{display:inline-block; margin-top:7px; font-family:var(--serif);
+    font-size:clamp(22px,6.2vw,38px); line-height:1.15; letter-spacing:.03em; color:var(--gc);
+    text-shadow:0 0 16px var(--gc), 0 0 42px var(--gc); word-break:keep-all}
+  .pf-grade .pf-gn.pop{animation:pfPop .34s cubic-bezier(.2,1.5,.4,1) both}
+  .pf-steps{position:absolute; left:50%; bottom:calc(15% + env(safe-area-inset-bottom, 0px));
+    transform:translateX(-50%); display:flex; align-items:center; gap:7px; pointer-events:none; z-index:2}
+  .pf-steps i{width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.13); transition:.22s}
+  .pf-steps i.on{background:var(--pc); box-shadow:0 0 9px var(--pc), 0 0 18px var(--pc); transform:scale(1.18)}
+  .pf-steps i[data-g="basic"]{--pc:#9ca3af}
+  .pf-steps i[data-g="rare"]{--pc:#3b82f6}
+  .pf-steps i[data-g="special"]{--pc:#22c55e}
+  .pf-steps i[data-g="mythic"]{--pc:#ef4444}
+  .pf-steps i[data-g="legend"]{--pc:#eab308}
+  .pf-steps i[data-g="legendary"]{--pc:#ffe9a8}
+  .pf-steps i[data-g="transcendent"]{--pc:#ffffff}
+  .pf-mute{position:absolute; right:14px; top:calc(12px + env(safe-area-inset-top, 0px)); z-index:4;
+    width:38px; height:38px; padding:0; border-radius:50%; cursor:pointer; font-size:15px; line-height:1;
+    border:1px solid rgba(255,240,205,.26); background:rgba(0,0,0,.45); color:#f6e6bd;
+    -webkit-tap-highlight-color:transparent}
   .pf-tip{position:absolute; left:0; right:0; bottom:8%; text-align:center; font-size:10.5px; letter-spacing:.22em;
-    color:rgba(255,240,205,.5)}
+    color:rgba(255,240,205,.5); z-index:2}
 
-  .pullfx.on .pf-machine{animation:pfShake 1.42s cubic-bezier(.3,.9,.35,1) forwards}
-  .pullfx.on .pf-ring.r1{animation:pfRing .9s ease-out .1s infinite}
-  .pullfx.on .pf-ring.r2{animation:pfRing 1.1s ease-out .3s infinite}
-  .pullfx.on .pf-burst{animation:pfBurst .52s ease-out .86s forwards}
-  .pullfx.on .pf-flash{animation:pfFlash .3s ease-out .98s forwards}
-  .pullfx.on .pf-cap{animation:pfGlow 1.42s ease-in forwards}
-  .pullfx.hi.on .pf-beams{animation:pfBeams 1.42s ease-out forwards}
-  .pullfx.top.on .pullfx .pf-burst{background:radial-gradient(circle, #fff 0%, #ffe9a8 24%, #ff8a8a 44%, #8ad4ff 64%, #d08aff 82%, rgba(208,138,255,0) 92%)}
-  .pullfx.top.on .pf-burst{background:radial-gradient(circle, #fff 0%, #ffe9a8 24%, #ff8a8a 44%, #8ad4ff 62%, #d08aff 80%, rgba(208,138,255,0) 92%)}
-  .pullfx.mono.on .pf-bg{background:radial-gradient(circle at 50% 46%, #2b2b30 0%, #0c0c0f 44%, #000 80%)}
-  .pullfx.mono.on .pf-cap{background:radial-gradient(circle at 34% 24%, #fff 0%, #eee 16%, #9a9a9a 46%, #2a2a2a 78%, #000 100%)}
-  .pullfx.mono.on .pf-burst{background:radial-gradient(circle, #fff 0%, #ddd 26%, #777 52%, rgba(0,0,0,0) 78%)}
-  .pullfx.mono.on .pf-beams i{background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.85))}
+  .pf-machine.pf-in{animation:pfDrop .5s cubic-bezier(.2,.9,.3,1.25) both}
+  .pf-machine.pf-k{animation:pfKick .36s cubic-bezier(.25,.9,.35,1.1) both}
+  .pf-burst.pf-b{animation:pfBurst .6s ease-out both}
+  .pf-flash.pf-f{animation:pfFlash .24s ease-out both}
+  .pullfx.on .pf-ring.r1{animation:pfRing 1.5s ease-out .1s infinite}
+  .pullfx.on .pf-ring.r2{animation:pfRing 1.8s ease-out .35s infinite}
+  .pullfx.on .pf-ring.r3{animation:pfRing 2.1s ease-out .6s infinite}
 
-  @keyframes pfShake{
-    0%{transform:translate(-50%,-50%) scale(.55); opacity:0}
-    7%{transform:translate(-50%,-50%) scale(1.04); opacity:1}
-    16%{transform:translate(-52.5%,-50%) rotate(-7deg) scale(1.01)}
-    24%{transform:translate(-47.5%,-50%) rotate(7deg) scale(1.07)}
-    32%{transform:translate(-50%,-53%) scale(.97)}
-    40%{transform:translate(-52.5%,-50%) rotate(-8deg) scale(1.04)}
-    48%{transform:translate(-47.5%,-50%) rotate(6deg) scale(1.02)}
-    56%{transform:translate(-50%,-52%) scale(1.12)}
-    64%{transform:translate(-53.5%,-50%) rotate(-6deg) scale(1.06)}
-    72%{transform:translate(-46.5%,-50%) rotate(6deg) scale(1.12)}
-    80%{transform:translate(-50%,-50%) scale(1.18)}
-    88%{transform:translate(-50%,-50%) scale(1.3); opacity:1}
-    94%{transform:translate(-50%,-50%) scale(1.5); opacity:.85}
-    100%{transform:translate(-50%,-50%) scale(1.9); opacity:0}
-  }
-  @keyframes pfRing{0%{opacity:.55; transform:translate(-50%,-50%) scale(.7)}100%{opacity:0; transform:translate(-50%,-50%) scale(1.9)}}
-  @keyframes pfGlow{0%{filter:none}70%{filter:drop-shadow(0 0 24px rgba(255,220,150,.55))}
-    88%{filter:drop-shadow(0 0 44px rgba(255,236,180,.9))}100%{filter:drop-shadow(0 0 60px rgba(255,255,255,.95))}}
-  @keyframes pfBurst{0%{opacity:.15; transform:scale(.15)}30%{opacity:1}100%{opacity:0; transform:scale(2.5)}}
-  @keyframes pfFlash{0%{opacity:0}35%{opacity:.95}100%{opacity:0}}
-  @keyframes pfBeams{0%,58%{opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.6)}
-    72%{opacity:.85}100%{opacity:0; transform:translate(-50%,-50%) rotate(38deg) scale(1.15)}}
+  @keyframes pfDrop{0%{transform:translate(-50%,-62%) scale(.42); opacity:0}
+    55%{transform:translate(-50%,-48%) scale(calc(var(--s0) * 1.12)); opacity:1}
+    100%{transform:translate(-50%,-50%) scale(var(--s0)); opacity:1}}
+  @keyframes pfKick{0%{transform:translate(-50%,-50%) scale(calc(var(--s0) * .84))}
+    16%{transform:translate(-50%,-50%) scale(calc(var(--s0) * 1.16))}
+    32%{transform:translate(calc(-50% - var(--shk)),-50%) rotate(-2.6deg) scale(calc(var(--s0) * 1.02))}
+    48%{transform:translate(calc(-50% + var(--shk)),-50%) rotate(2.6deg) scale(calc(var(--s0) * 1.09))}
+    66%{transform:translate(calc(-50% - var(--shk) * .5),-50%) rotate(-1.2deg) scale(calc(var(--s0) * 1.03))}
+    100%{transform:translate(-50%,-50%) scale(var(--s0))}}
+  @keyframes pfPop{0%{transform:scale(.6); opacity:0} 60%{transform:scale(1.1); opacity:1} 100%{transform:scale(1); opacity:1}}
+  @keyframes pfBurst{0%{opacity:.2; transform:scale(.12)} 26%{opacity:1} 100%{opacity:0; transform:scale(2.6)}}
+  @keyframes pfFlash{0%{opacity:0} 30%{opacity:.92} 100%{opacity:0}}
+  @keyframes pfSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @keyframes pfRing{0%{opacity:.5; transform:translate(-50%,-50%) scale(.68)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.78)}}
 
   /* ── 초월 천장 게이지 ── */
   .pity{border:1px solid rgba(246,230,189,.32); border-radius:14px; padding:10px 12px;
@@ -2919,19 +2950,29 @@
   <div class="sm-tip">클릭하면 넘어갑니다</div>
 </div>
 
-<!-- 냥코식 뽑기 캡슐 연출 -->
+<!-- 냥코식 뽑기 캡슐 연출 · 최고 등급까지 7단계 승격 -->
 <div class="pullfx" id="pullFx" hidden aria-hidden="true">
   <div class="pf-bg"></div>
+  <div class="pf-aura"></div>
   <div class="pf-stage">
     <div class="pf-machine">
-      <span class="pf-cap"><i class="pf-band"></i><i class="pf-shine"></i></span>
+      <span class="pf-cap"><i class="pf-band"></i><i class="pf-shine"></i><i class="pf-tint"></i><i class="pf-edge"></i></span>
       <span class="pf-ring r1"></span>
       <span class="pf-ring r2"></span>
+      <span class="pf-ring r3"></span>
     </div>
     <div class="pf-beams"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="pf-burst"></div>
     <div class="pf-flash"></div>
   </div>
+  <div class="pf-grade">
+    <span class="pf-gk" id="pfGradeKicker">GRADE</span>
+    <b class="pf-gn" id="pfGradeName"></b>
+  </div>
+  <div class="pf-steps">
+    <i data-g="basic"></i><i data-g="rare"></i><i data-g="special"></i><i data-g="mythic"></i><i data-g="legend"></i><i data-g="legendary"></i><i data-g="transcendent"></i>
+  </div>
+  <button class="pf-mute" type="button" id="pfMute" aria-label="뽑기 연출음 끄기">🔊</button>
   <div class="pf-tip">탭하면 바로 결과를 봅니다</div>
 </div>
 
@@ -6789,14 +6830,15 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── coins · cards · evolution ── */
   var PACK_COST = 100, PACK5_COST = 450, FRAG_PER_STAR = 5, MAX_STAR = 10, MUSEUM_STAR = 5;
-  var GRADE_RANK = { basic: 0, rare: 1, special: 2, legend: 3, mythic: 4, legendary: 5, transcendent: 6 };
+  /* 등급 서열 — 도감 칩(GRADE_ORDER)과 같은 순서: 신화 < 전설 < 레전더리 < 초월 */
+  var GRADE_RANK = { basic: 0, rare: 1, special: 2, mythic: 3, legend: 4, legendary: 5, transcendent: 6 };
   /* 뽑기 등급 확률(%) — 합 100 · 초월은 1.8%의 초희귀 */
   var PULL_RATES = [
     { g: 'basic', p: 24 }, { g: 'rare', p: 24 }, { g: 'special', p: 20 },
     { g: 'legend', p: 14 }, { g: 'mythic', p: 10 }, { g: 'legendary', p: 6.2 },
     { g: 'transcendent', p: 1.8 }
   ];
-  var PULL5_FLOOR = 3; /* 5회 뽑기: 전설(GRADE_RANK 3) 이상 1장 보장 */
+  var PULL5_FLOOR = 4; /* 5회 뽑기: 전설(GRADE_RANK 4) 이상 1장 보장 */
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
 
   function cardOf(id) { return S.cards[id] || null; }
@@ -7377,30 +7419,198 @@ function portraitSVG(fig, fit, alt) {
     openModal('#mPack');
   }
 
-  /* ── 냥코식 뽑기 캡슐 연출 (약 1.4초 · 탭하면 즉시 스킵) ── */
-  var PULLFX_T = null;
+  /* ── 냥코식 뽑기 캡슐 연출 · 최고 등급까지 7단계 승격 ──
+     기본(회색)부터 뽑힌 가장 높은 등급까지 한 단계씩 쿵! 쿵! 색·빛·배지가 바뀌며 올라간다.
+     화면 아무 곳이나 탭하면 즉시 결과로 스킵. */
+  var GRADE_LADDER = ['basic', 'rare', 'special', 'mythic', 'legend', 'legendary', 'transcendent'];
+  var GRADE_STEP = { basic: 0, rare: 1, special: 2, mythic: 3, legend: 4, legendary: 5, transcendent: 6 };
+  var PF_LABEL = {
+    basic: '기본', rare: '희귀!', special: '특별!!', mythic: '신화!!',
+    legend: '전설!!!', legendary: '레전더리!!!!', transcendent: '🖤🤍 초월 강림 🖤🤍'
+  };
+  /* 한 단계마다 반음씩 올라가는 승격음 (도 · 미 · 솔 · 시♭ …) */
+  var PF_TONE = [261.63, 329.63, 392.00, 466.16, 523.25, 659.25, 783.99];
+  var PF_TIMERS = [], PULLFX_T = null, PF_FIN = true, PF_DONE = null;
+  var PF_MUTE_KEY = 'legacy.sfx.mute';
+
+  function pfSoundOff() { try { return localStorage.getItem(PF_MUTE_KEY) === '1'; } catch (e) { return false; } }
+  function pfPaintMute() {
+    var b = $('#pfMute');
+    if (!b) return;
+    var off = pfSoundOff();
+    b.textContent = off ? '🔇' : '🔊';
+    b.setAttribute('aria-label', off ? '뽑기 연출음 켜기' : '뽑기 연출음 끄기');
+  }
+
+  /* 단계 승격음 — 쿵(낮은 타격) + 띠링(한 음씩 올라가는 종), 마지막 단계엔 팡! */
+  function pfStepSound(idx, last) {
+    if (pfSoundOff()) return;
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    try {
+      var t0 = ctx.currentTime;
+      var f = PF_TONE[Math.min(idx, PF_TONE.length - 1)];
+      var bo = ctx.createOscillator(), bg = ctx.createGain();
+      bo.type = 'sine';
+      bo.frequency.setValueAtTime(150 + idx * 12, t0);
+      bo.frequency.exponentialRampToValueAtTime(54, t0 + 0.2);
+      bg.gain.setValueAtTime(0.0001, t0);
+      bg.gain.exponentialRampToValueAtTime(0.13 + idx * 0.012, t0 + 0.01);
+      bg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.3);
+      bo.connect(bg); bg.connect(ctx.destination);
+      bo.start(t0); bo.stop(t0 + 0.32);
+      [f, f * 2].forEach(function (fr, k) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = k ? 'sine' : 'triangle';
+        o.frequency.setValueAtTime(fr, t0 + 0.01);
+        g.gain.setValueAtTime(0.0001, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(k ? 0.034 : 0.07, t0 + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.28);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t0 + 0.01); o.stop(t0 + 0.32);
+      });
+      if (!last) return;
+      /* 팡 — 상승 스윕 + 터지는 화음 + 낮은 울림 */
+      var sw = ctx.createOscillator(), sg = ctx.createGain();
+      sw.type = 'sawtooth';
+      sw.frequency.setValueAtTime(240, t0 + 0.05);
+      sw.frequency.exponentialRampToValueAtTime(1980, t0 + 0.3);
+      sg.gain.setValueAtTime(0.0001, t0 + 0.05);
+      sg.gain.exponentialRampToValueAtTime(0.05, t0 + 0.09);
+      sg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.42);
+      sw.connect(sg); sg.connect(ctx.destination);
+      sw.start(t0 + 0.05); sw.stop(t0 + 0.46);
+      [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, k) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        var st = t0 + 0.3 + k * 0.035;
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(fr, st);
+        g.gain.setValueAtTime(0.0001, st);
+        g.gain.exponentialRampToValueAtTime(0.08, st + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, st + 0.7);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(st); o.stop(st + 0.74);
+      });
+      var bm2 = ctx.createOscillator(), bg2 = ctx.createGain();
+      bm2.type = 'sine';
+      bm2.frequency.setValueAtTime(120, t0 + 0.3);
+      bm2.frequency.exponentialRampToValueAtTime(38, t0 + 0.9);
+      bg2.gain.setValueAtTime(0.0001, t0 + 0.3);
+      bg2.gain.exponentialRampToValueAtTime(0.18, t0 + 0.34);
+      bg2.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.0);
+      bm2.connect(bg2); bg2.connect(ctx.destination);
+      bm2.start(t0 + 0.3); bm2.stop(t0 + 1.04);
+    } catch (e) {}
+  }
+
+  function pfKick(node, cls) {
+    if (!node) return;
+    node.classList.remove(cls);
+    void node.offsetWidth;
+    node.classList.add(cls);
+  }
+
+  function pfReset() {
+    var i;
+    for (i = 0; i < PF_TIMERS.length; i++) clearTimeout(PF_TIMERS[i]);
+    PF_TIMERS = [];
+    if (PULLFX_T) { clearTimeout(PULLFX_T); PULLFX_T = null; }
+    var f = $('#pullFx');
+    if (!f) return;
+    var m = f.querySelector('.pf-machine');
+    if (m) m.classList.remove('pf-in', 'pf-k');
+    var b = f.querySelector('.pf-burst');
+    if (b) b.classList.remove('pf-b');
+    var fl = f.querySelector('.pf-flash');
+    if (fl) fl.classList.remove('pf-f');
+    var pips = f.querySelectorAll('.pf-steps i');
+    for (i = 0; i < pips.length; i++) pips[i].classList.remove('on');
+    var gn = $('#pfGradeName');
+    if (gn) { gn.className = 'pf-gn'; gn.textContent = ''; }
+    var gk = $('#pfGradeKicker');
+    if (gk) gk.textContent = 'GRADE';
+  }
+
   function playPullFx(best, done) {
     var el = $('#pullFx');
-    if (!el || !best) { done(); return; }
-    var gi = GRADE_INFO[best.f.grade] || GRADE_INFO.basic;
-    var rank = GRADE_RANK[best.f.grade] || 0;
+    if (!el || !best) { if (done) done(); return; }
+    var target = GRADE_STEP[best.f.grade];
+    if (target === undefined || !(target >= 0)) target = 0;
+    if (target > GRADE_LADDER.length - 1) target = GRADE_LADDER.length - 1;
+
+    pfReset();
+    PF_DONE = done || null;
+    PF_FIN = false;
     el.className = 'pullfx';
     el.hidden = false;
+    el.setAttribute('data-g', 'basic');
+    el.style.setProperty('--pi', '0');
+    el.style.setProperty('--s0', '1');
+    el.style.setProperty('--shk', '2px');
+    pfPaintMute();
     void el.offsetWidth;
-    el.className = 'pullfx on' + (rank >= 3 ? ' hi' : '') + (rank >= 5 ? ' top' : '') + (isMono(gi) ? ' mono' : '');
-    var fin = false;
+    el.classList.add('on');
+
+    var machine = el.querySelector('.pf-machine');
+    var burst = el.querySelector('.pf-burst');
+    var flash = el.querySelector('.pf-flash');
+    var gn = $('#pfGradeName'), gk = $('#pfGradeKicker');
+    var pips = el.querySelectorAll('.pf-steps i');
+    /* 한 단계 0.38초 — 너무 늘어지지 않게 쫄깃한 리듬 */
+    var stepMs = DEMO ? 900 : 380;
+    var holdMs = DEMO ? 1200 : (target >= 6 ? 780 : 560);
+    var i;
+
+    function applyStep(idx) {
+      var g = GRADE_LADDER[idx];
+      var t = idx / (GRADE_LADDER.length - 1);
+      el.setAttribute('data-g', g);
+      el.style.setProperty('--pi', t.toFixed(3));
+      el.style.setProperty('--s0', (1 + idx * 0.055).toFixed(3));
+      el.style.setProperty('--shk', (2 + idx * 1.7).toFixed(1) + 'px');
+      if (gn) {
+        gn.textContent = PF_LABEL[g] || '';
+        gn.className = 'pf-gn' + (g === 'legendary' ? ' rainbow-text' : (g === 'transcendent' ? ' mono-text' : ''));
+        pfKick(gn, 'pop');
+      }
+      if (gk) gk.textContent = 'GRADE ' + (idx + 1) + ' / 7' + (GRADE_INFO[g] ? ' · ' + GRADE_INFO[g].en : '');
+      if (pips[idx]) pips[idx].classList.add('on');
+      if (machine) {
+        if (idx === 0) { machine.classList.remove('pf-k'); pfKick(machine, 'pf-in'); }
+        else pfKick(machine, 'pf-k');
+      }
+      if (idx >= 2 && flash) pfKick(flash, 'pf-f');
+      if (burst) pfKick(burst, 'pf-b');
+      pfStepSound(idx, idx === target);
+    }
+
     function finish() {
-      if (fin) return;
-      fin = true;
-      clearTimeout(PULLFX_T); PULLFX_T = null;
+      if (PF_FIN) return;
+      PF_FIN = true;
+      pfReset();
       el.classList.remove('on');
       setTimeout(function () { if (!el.classList.contains('on')) { el.hidden = true; el.className = 'pullfx'; } }, 240);
-      done();
+      var cb = PF_DONE; PF_DONE = null;
+      if (cb) cb();
     }
-    /* 데모 모드(?preview=N)에서는 연출을 천천히 재생해 확인하기 쉽게 한다 */
-    PULLFX_T = setTimeout(finish, DEMO ? 3600 : 1440);
-    el.onclick = function (e) { e.preventDefault(); e.stopPropagation(); finish(); };
-    el.ontouchstart = function (e) { e.preventDefault(); finish(); };
+
+    applyStep(0);
+    for (i = 1; i <= target; i++) {
+      PF_TIMERS.push((function (idx) {
+        return setTimeout(function () { if (!PF_FIN) applyStep(idx); }, idx * stepMs);
+      })(i));
+    }
+    PULLFX_T = setTimeout(finish, target * stepMs + holdMs);
+
+    function chromeHit(t) { return !!(t && t.closest && t.closest('.pf-mute')); }
+    el.onclick = function (e) {
+      if (chromeHit(e.target)) return;
+      e.preventDefault(); e.stopPropagation(); finish();
+    };
+    el.ontouchstart = function (e) {
+      if (chromeHit(e.target)) return;
+      e.preventDefault(); finish();
+    };
   }
 
   function pullPack(count, useTicket) {
@@ -8187,6 +8397,20 @@ function portraitSVG(fig, fit, alt) {
   if ($('#summon')) $('#summon').addEventListener('click', endSummon);
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
+  /* 연출음 음소거 — 이 브라우저에만 저장된다 */
+  if ($('#pfMute')) {
+    $('#pfMute').addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var off = !pfSoundOff();
+      try {
+        if (off) localStorage.setItem(PF_MUTE_KEY, '1');
+        else localStorage.removeItem(PF_MUTE_KEY);
+      } catch (e2) {}
+      pfPaintMute();
+      if (!off) pfStepSound(0, false);
+    });
+  }
+  pfPaintMute();
   $('#pullMuseum').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
   if ($('#arcSearch')) {
     $('#arcSearch').addEventListener('input', function () {
