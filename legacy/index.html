@@ -854,6 +854,17 @@
   .arc-card.locked .body p{color:#3d444e}
   .arc-card.locked .arc-badge{border-color:rgba(255,255,255,.1); color:#4a515c}
   .arc-empty{padding:26px 4px; text-align:center; font-size:12px; color:var(--muted2); line-height:1.8}
+  /* 카드로만 만난 인물(미학습 탭) — 배운 인물 카드와 확실히 구분 */
+  .arc-card.met{border-style:solid; border-color:rgba(255,255,255,.14); background:rgba(255,255,255,.015)}
+  .arc-card.met:hover{border-color:color-mix(in srgb, var(--rc,#9ca3af) 60%, transparent); background:rgba(255,255,255,.035)}
+  .arc-card.met .arc-badge{color:#aab3c2; border-color:rgba(255,255,255,.18); background:rgba(8,10,14,.75)}
+  .arc-card.met .body b{color:#cfd6e2}
+  .arc-more-link{
+    grid-column:1/-1; cursor:pointer; font-family:inherit; font-size:11px; letter-spacing:.04em; color:var(--gold-hi);
+    padding:11px 14px; border-radius:11px; border:1px dashed rgba(200,168,106,.32); background:rgba(200,168,106,.045);
+    transition:background .16s, border-color .16s;
+  }
+  .arc-more-link:hover{background:rgba(200,168,106,.1); border-color:rgba(200,168,106,.55)}
 
   .record{padding:20px 22px 21px}
   .rec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin:15px 0 0}
@@ -2438,60 +2449,151 @@
      ═════════════════════════════════════════════ */
   .rarity-chip.im-fill{
     border-color:transparent!important; color:#1d0a02!important; font-weight:800;
-    background:linear-gradient(100deg,#ff3b30 0%,#ff7a18 30%,#ffd60a 58%,#ff3b30 100%);
-    background-size:220% 100%; animation:imFlow 3.6s linear infinite;
-    box-shadow:0 0 18px -4px rgba(255,59,48,.95), 0 0 26px -8px rgba(255,214,10,.85);
+    background:linear-gradient(100deg,#ff2d55 0%,#ffd60a 30%,#fff7cc 50%,#ffd60a 70%,#ff2d55 100%);
+    background-size:220% 100%; animation:imFlow 3s linear infinite;
+    box-shadow:0 0 18px -4px rgba(255,45,85,.95), 0 0 30px -8px rgba(255,214,10,.9);
   }
   .rarity-chip.im-fill::before{background:#2a0b02}
   @keyframes imFlow{to{background-position:220% 0}}
   .immortal-text{
-    background:linear-gradient(100deg,#ff3b30,#ffb020 45%,#ffd60a 62%,#ff3b30);
+    background:linear-gradient(100deg,#ff2d55,#ffb020 38%,#fff7cc 50%,#ffd60a 62%,#ff2d55);
     background-size:220% 100%; -webkit-background-clip:text; background-clip:text;
     color:transparent!important; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 7px rgba(255,140,20,.8));
     animation:imFlow 4.2s linear infinite;
   }
+  /* 불멸 카드 — 크림슨+골드+백광이 흐르는 네온 테두리·홀로그램 광택·불꽃 텍스트
+     성능: transform / opacity / background-position 만 애니메이션 (60fps, blur 없음) */
+  @keyframes imBorderFlow{0%{background-position:0 0,0% 50%}100%{background-position:0 0,100% 50%}}
+  @keyframes imShine{0%{transform:translateX(-98%)}58%{transform:translateX(98%)}100%{transform:translateX(98%)}}
+  @keyframes imTwinkle{0%,100%{opacity:.25; transform:translate3d(0,0,0)}50%{opacity:.95; transform:translate3d(0,-1.5px,0)}}
+  @keyframes imBreath{0%,100%{opacity:.42}50%{opacity:1}}
   .arc-card.r-immortal{
-    --rc:#ffd60a; position:relative; border:1px solid #ff9a2a; background:linear-gradient(180deg,#1d0a05,#0a0403);
-    box-shadow:0 0 0 1px rgba(255,59,48,.4), 0 0 30px -12px rgba(255,110,20,.95), 0 18px 34px -22px #000;
+    --rc:#ffd60a; position:relative; overflow:hidden;
+    border:1.6px solid transparent; border-radius:13px;
+    background-image:
+      linear-gradient(180deg,#241009 0%,#120604 55%,#080302 100%),
+      linear-gradient(112deg,#ffd60a 0%,#ff2d55 18%,#fff7cc 36%,#ffd60a 52%,#ff2d55 72%,#fff7cc 88%,#ffd60a 100%);
+    background-origin:border-box; background-clip:padding-box,border-box;
+    background-size:100% 100%,260% 100%; background-position:0 0,0% 50%;
+    animation:imBorderFlow 6s linear infinite;
+    box-shadow:0 0 0 1px rgba(255,214,10,.22), 0 0 20px -6px rgba(255,45,85,.72), 0 0 42px -16px rgba(255,214,10,.85), 0 18px 34px -22px #000;
+    transition:transform .2s, box-shadow .25s;
   }
-  .arc-card.r-immortal:hover{
-    transform:translateY(-3px); border-color:#ffd60a;
-    box-shadow:0 0 0 1px rgba(255,214,10,.55), 0 0 46px -10px rgba(255,90,20,1), 0 18px 34px -22px #000;
+  .arc-card.r-immortal:hover, .arc-card.r-immortal:focus-visible{
+    transform:translateY(-4px);
+    box-shadow:0 0 0 1.6px rgba(255,247,204,.92), 0 0 26px -2px rgba(255,45,85,1), 0 0 58px -6px rgba(255,214,10,1), 0 20px 40px -22px #000;
+    animation-duration:2.2s;
   }
-  .arc-card.r-immortal .ph{background:#0a0403}
-  .arc-card.r-immortal .ph .ph-img{filter:saturate(1.12) contrast(1.06)}
-  .arc-card.r-immortal .ph::after{background:linear-gradient(180deg,rgba(70,10,2,.22) 0%,transparent 38%,rgba(18,4,2,.9) 90%)}
+  .arc-card.r-immortal:active{transform:translateY(-1px) scale(.994)}
+  .arc-card.r-immortal .ph{background:#0a0403; overflow:hidden}
+  .arc-card.r-immortal .ph .ph-img{filter:saturate(1.14) contrast(1.07)}
+  .arc-card.r-immortal .ph::after{background:linear-gradient(180deg,rgba(70,10,2,.2) 0%,transparent 36%,rgba(18,4,2,.92) 90%)}
+  .arc-card.r-immortal .ph::before{
+    content:""; position:absolute; inset:-30% -60%; z-index:1; pointer-events:none;
+    background:linear-gradient(102deg,transparent 42%,rgba(255,247,204,.22) 47%,rgba(255,255,255,.68) 50%,rgba(255,247,204,.22) 53%,transparent 58%);
+    transform:translateX(-98%); animation:imShine 5.4s cubic-bezier(.42,0,.3,1) infinite;
+  }
   .arc-card.r-immortal .arc-badge{
-    background:linear-gradient(100deg,#ff3b30,#ffd60a); color:#1d0702; border-color:transparent;
-    font-weight:800; box-shadow:0 0 14px -4px #ff7a18;
+    background:linear-gradient(100deg,#ff2d55,#ffd60a 52%,#fff7cc 72%,#ff2d55);
+    background-size:220% 100%; animation:imFlow 2.8s linear infinite;
+    color:#2a0600; border-color:rgba(255,247,204,.85); font-weight:900; letter-spacing:.1em;
+    box-shadow:0 0 10px rgba(255,45,85,.9), 0 0 22px rgba(255,214,10,.62);
   }
-  .arc-card.r-immortal .body{border-top:1px solid rgba(255,214,10,.45); background:linear-gradient(180deg,#170806,#070302)}
-  .arc-card.r-immortal .body b{color:#ffe9b0; text-shadow:0 0 12px rgba(255,140,20,.5)}
-  .arc-card.r-immortal .body p{color:#d9b48a}
-  .arc-card.r-immortal .body .when{color:#b58f6a}
-  .arc-card.r-immortal .evo-mini{color:#ffd60a; border-color:rgba(255,214,10,.5)}
+  .arc-card.r-immortal .arc-badge::before{content:"👑🔥 "; letter-spacing:0}
+  .arc-card.r-immortal .body{
+    position:relative; overflow:hidden; border-top:1px solid rgba(255,214,10,.55);
+    background:linear-gradient(180deg,#1c0a06,#0a0302);
+  }
+  .arc-card.r-immortal .body::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:
+      radial-gradient(1.6px 1.6px at 18% 28%,#fff7cc,transparent 72%),
+      radial-gradient(1.3px 1.3px at 71% 16%,#ffd60a,transparent 72%),
+      radial-gradient(1.5px 1.5px at 43% 76%,#ff2d55,transparent 72%),
+      radial-gradient(1.2px 1.2px at 87% 58%,#fff7cc,transparent 72%),
+      radial-gradient(1.2px 1.2px at 28% 62%,#ffb020,transparent 72%);
+    animation:imTwinkle 3.6s ease-in-out infinite;
+  }
+  .arc-card.r-immortal .body > *{position:relative; z-index:1}
+  .arc-card.r-immortal .body b{
+    color:#fff7cc; font-weight:700;
+    text-shadow:0 1px 0 #7a2c00, 0 2px 0 #451700, 0 0 9px rgba(255,140,20,.9), 0 0 18px rgba(255,45,85,.55);
+  }
+  .arc-card.r-immortal .body p{color:#e2bd92}
+  .arc-card.r-immortal .body .when{color:#bd956d}
+  .arc-card.r-immortal .evo-mini{color:#ffd60a; border-color:rgba(255,214,10,.55); box-shadow:0 0 10px -4px rgba(255,214,10,.9)}
   .arc-card.r-immortal::after{
-    content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
-    background:radial-gradient(120% 60% at 50% 0%, rgba(255,140,20,.22), transparent 62%);
-    animation:imBreath 4.6s ease-in-out infinite;
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:4;
+    background:radial-gradient(120% 55% at 50% 0%, rgba(255,150,30,.3), transparent 62%);
+    animation:imBreath 4.4s ease-in-out infinite;
   }
-  @keyframes imBreath{0%,100%{opacity:.5}50%{opacity:1}}
 
   .pcard.r-immortal{
-    border:1px solid #ff9a2a; background:linear-gradient(180deg,#1d0a05,#0a0403);
-    box-shadow:0 0 26px -12px rgba(255,110,20,.95);
+    position:relative; overflow:hidden;
+    border:1.6px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
+    background-image:linear-gradient(180deg,#241009,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 18%,#fff7cc 36%,#ffd60a 54%,#ff2d55 74%,#fff7cc 90%,#ffd60a);
+    background-size:100% 100%,260% 100%;
+    animation:pop .55s cubic-bezier(.2,.9,.2,1) backwards, imBorderFlow 5s linear infinite;
+    box-shadow:0 0 22px -6px rgba(255,45,85,.9), 0 0 46px -16px rgba(255,214,10,.9), 0 12px 30px -18px #000;
   }
-  .pcard.r-immortal .tagline{background:linear-gradient(100deg,#ff3b30,#ffd60a); color:#1d0702; border-color:transparent; font-weight:800}
-  .pcard.r-immortal .pbody b{color:#ffe9b0}
-  .pcard.r-immortal .pbody span{color:#d9b48a}
+  .pcard.r-immortal .ph::before{
+    content:""; position:absolute; inset:-30% -60%; z-index:2; pointer-events:none;
+    background:linear-gradient(102deg,transparent 42%,rgba(255,247,204,.22) 47%,rgba(255,255,255,.7) 50%,rgba(255,247,204,.22) 53%,transparent 58%);
+    transform:translateX(-98%); animation:imShine 4.6s cubic-bezier(.42,0,.3,1) infinite;
+  }
+  .pcard.r-immortal .tagline{
+    background:linear-gradient(100deg,#ff2d55,#ffd60a 55%,#fff7cc); background-size:200% 100%;
+    animation:imFlow 2.6s linear infinite;
+    color:#2a0600; border-color:rgba(255,247,204,.85); font-weight:900;
+    box-shadow:0 0 10px rgba(255,45,85,.85);
+  }
+  .pcard.r-immortal .tagline::before{content:"👑🔥 "}
+  .pcard.r-immortal .pbody{background:linear-gradient(180deg,#1c0a06,#0a0302); border-top:1px solid rgba(255,214,10,.5)}
+  .pcard.r-immortal .pbody b{color:#fff7cc; text-shadow:0 1px 0 #7a2c00, 0 0 9px rgba(255,140,20,.9)}
+  .pcard.r-immortal .pbody span{color:#e2bd92}
   .exhibit.r-immortal .case{
-    border-color:#ff9a2a;
-    box-shadow:0 0 0 1px rgba(255,59,48,.45), 0 0 44px -14px rgba(255,120,20,1);
+    border:1.6px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
+    background-image:linear-gradient(180deg,#241009,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 20%,#fff7cc 40%,#ffd60a 58%,#ff2d55 78%,#fff7cc 92%,#ffd60a);
+    background-size:100% 100%,260% 100%; animation:imBorderFlow 7s linear infinite;
+    box-shadow:0 0 0 1px rgba(255,214,10,.3), 0 0 44px -12px rgba(255,120,20,1), inset 0 0 40px rgba(0,0,0,.6);
   }
-  .exhibit.r-immortal:hover .case{border-color:#ffd60a; box-shadow:0 0 0 1px rgba(255,214,10,.6), 0 0 54px -8px rgba(255,120,20,1)}
-  .exhibit.r-immortal .spot{background:radial-gradient(ellipse at 50% 0%, rgba(255,150,30,.55), transparent 70%)}
-  .bcard.r-immortal{border-color:#ff9a2a!important; background:linear-gradient(180deg,#1b0a05,#0a0403)!important}
-  .bcard.r-immortal .bc-badge{background:linear-gradient(100deg,#ff3b30,#ffd60a); color:#1d0702; border-color:transparent; font-weight:800}
+  .exhibit.r-immortal:hover .case{box-shadow:0 0 0 1.5px rgba(255,247,204,.8), 0 0 58px -6px rgba(255,120,20,1), inset 0 0 40px rgba(0,0,0,.6)}
+  .exhibit.r-immortal .spot{background:radial-gradient(ellipse at 50% 0%, rgba(255,150,30,.62), transparent 70%)}
+  .exhibit.r-immortal .cap{color:#fff2c9; text-shadow:0 0 10px rgba(255,120,20,.85)}
+  .exhibit.r-immortal .cap em{color:#ffd60a}
+  .exhibit.r-immortal .pedestal{background:linear-gradient(180deg,#ffd60a,#a8611a 58%,#2a1208)}
+  .bcard.r-immortal{
+    border:1.4px solid transparent!important; background-clip:padding-box,border-box!important; background-origin:border-box!important;
+    background-image:linear-gradient(180deg,#241009,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 22%,#fff7cc 42%,#ffd60a 60%,#ff2d55 80%,#ffd60a)!important;
+    background-size:100% 100%,260% 100%!important; animation:imBorderFlow 6s linear infinite;
+    box-shadow:0 0 20px -6px rgba(255,45,85,.9), 0 0 36px -14px rgba(255,214,10,.9);
+  }
+  .bcard.r-immortal .bc-badge{background:linear-gradient(100deg,#ff2d55,#ffd60a); color:#1d0702; border-color:transparent; font-weight:900}
+  .bcard.r-immortal .bc-badge::before{content:"👑🔥 "}
+  .bcard.r-immortal .bc-name{color:#fff7cc; text-shadow:0 0 9px rgba(255,140,20,.85)}
+  .pks-frame.r-immortal{
+    border:2px solid transparent; background-clip:padding-box,border-box; background-origin:border-box;
+    background-image:linear-gradient(#0a0403,#0a0403),linear-gradient(112deg,#ffd60a,#ff2d55 18%,#fff7cc 36%,#ffd60a 54%,#ff2d55 74%,#fff7cc 90%,#ffd60a);
+    background-size:100% 100%,260% 100%; animation:imBorderFlow 4.5s linear infinite;
+    box-shadow:0 0 0 1px rgba(255,214,10,.45), 0 0 46px -8px rgba(255,120,20,1), 0 0 80px -30px rgba(255,45,85,.95);
+  }
+  .pks-frame.r-immortal::after{
+    content:""; position:absolute; inset:-40% -60%; pointer-events:none;
+    background:linear-gradient(102deg,transparent 42%,rgba(255,247,204,.25) 47%,rgba(255,255,255,.7) 50%,rgba(255,247,204,.25) 53%,transparent 58%);
+    transform:translateX(-98%); animation:imShine 4.2s cubic-bezier(.42,0,.3,1) infinite;
+  }
+  .gfchip.gf-immortal{
+    --gc:#ffd60a; color:#ffd60a; border-color:rgba(255,214,10,.6);
+    background:linear-gradient(100deg,rgba(255,45,85,.22),rgba(255,214,10,.14));
+    box-shadow:0 0 14px -6px rgba(255,45,85,.9);
+  }
+  .gfchip.gf-immortal::before{content:"👑"; font-size:9px; margin-right:1px}
+  .gfchip.gf-immortal.on{background:linear-gradient(100deg,#ff2d55,#ffd60a 60%,#fff7cc); color:#2a0600; border-color:transparent; font-weight:800}
+  @media (prefers-reduced-motion: reduce){
+    .arc-card.r-immortal,.pcard.r-immortal,.exhibit.r-immortal .case,.bcard.r-immortal,.pks-frame.r-immortal{animation:none!important}
+    .arc-card.r-immortal .ph::before,.arc-card.r-immortal .body::before,.arc-card.r-immortal::after,.pcard.r-immortal .ph::before,.pks-frame.r-immortal::after{animation:none!important}
+  }
   .slots .bslot.r-immortal, .bslot.on.r-immortal{border-color:#ff9a2a!important; box-shadow:0 0 22px -10px rgba(255,120,20,1)}
   .fuse-btn{
     background:linear-gradient(100deg,rgba(255,59,48,.9),rgba(255,214,10,.85))!important;
@@ -3162,7 +3264,8 @@
     </div>
     <div class="arc-filters" id="arcGrade"></div>
     <div class="arc-tabs" id="arcTabs">
-      <button class="arc-tab on" type="button" data-tab="all">전체 인물</button>
+      <button class="arc-tab on" type="button" data-tab="all">배운 인물</button>
+      <button class="arc-tab" type="button" data-tab="locked">미학습 <b id="lockCount">0</b></button>
       <button class="arc-tab" type="button" data-tab="mine">내 모음집 <b id="shelfCount">0</b></button>
       <button class="arc-tab add" type="button" id="newShelfBtn">＋ 새 모음집</button>
     </div>
@@ -7101,10 +7204,10 @@ function portraitSVG(fig, fit, alt) {
     return FIGURES.filter(function (f) { return set[f.id]; });
   }
 
+  /* '배움'은 직접 체크한 인물만 — 카드로만 만난 인물(dexSeen)은 배운 것으로 치지 않는다 */
   function learnedIds() {
     var m = {};
     S.log.forEach(function (x) { m[x.id] = 1; });
-    Object.keys(S.dexSeen).forEach(function (k) { m[k] = 1; });
     return Object.keys(m);
   }
 
@@ -7327,42 +7430,53 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── archive · 내가 배운 인물 ── */
   var arcQuery = '';
-  var arcLimit = 36;   /* 잠긴 인물은 한 번에 36명씩 (300인 도감 성능) */
+  var arcLimit = 36;   /* 미학습 인물은 한 번에 36명씩 (453인 도감 성능) */
   function figMatches(f, q) {
     if (!q) return true;
     var hay = (f.name + ' ' + (f.en || '') + ' ' + f.era + ' ' + f.birthplace + ' ' + (f.title || '') + ' ' + (f.flag || '')).toLowerCase();
     return hay.indexOf(q) >= 0;
   }
-  function renderArchive() {
-    var map = {}, learned = [];
+  /* 도감 3분류 ─ 배움(직접 체크) / 카드로만 만난 인물 / 미학습
+     '배운 인물' 탭에는 S.log(체크 기록)에 있는 인물만 들어간다. */
+  function arcIndex() {
+    var logMap = {};
     S.log.forEach(function (x) {
-      if (!map[x.id]) { map[x.id] = { n: 0, last: x.d }; learned.push(x.id); }
-      map[x.id].n++;
-      if (x.d > map[x.id].last) map[x.id].last = x.d;
+      if (!x || !x.id) return;
+      var m = logMap[x.id];
+      if (!m) logMap[x.id] = m = { n: 0, last: '' };
+      m.n++;
+      if ((x.d || '') > m.last) m.last = x.d || '';
     });
-    /* 합성 재료로 써서 카드가 0장이 되어도 이미 해금한 도감은 남긴다 */
-    Object.keys(S.dexSeen).forEach(function (id) {
-      if (!map[id]) { map[id] = { n: 0, last: '', dex: true }; learned.push(id); }
+    var learnedFigs = [], metFigs = [], lockedFigs = [];
+    FIGURES.forEach(function (f) {
+      if (logMap[f.id]) learnedFigs.push(f);
+      else if ((S.cards && S.cards[f.id]) || (S.dexSeen && S.dexSeen[f.id])) metFigs.push(f);
+      else lockedFigs.push(f);
     });
-    var seen = {};
-    var learnedFigs = learned.map(function (id) {
-      seen[id] = 1;
-      return FIGURES.filter(function (f) { return f.id === id; })[0];
-    }).filter(Boolean);
-    learnedFigs.sort(function (a, b) { return map[a.id].last < map[b.id].last ? 1 : -1; });
-    var lockedFigs = FIGURES.filter(function (f) { return !seen[f.id]; });
+    learnedFigs.sort(function (a, b) {
+      var la = logMap[a.id].last, lb = logMap[b.id].last;
+      return la < lb ? 1 : (la > lb ? -1 : 0);
+    });
+    return { logMap: logMap, learnedFigs: learnedFigs, metFigs: metFigs, lockedFigs: lockedFigs };
+  }
+  function renderArchive() {
+    var idx = arcIndex();
+    var map = idx.logMap, learnedFigs = idx.learnedFigs;
+    var metFigs = idx.metFigs, lockedFigs = idx.lockedFigs;
+    var unseenTotal = metFigs.length + lockedFigs.length;
 
     var q = arcQuery.toLowerCase();
     var learnedTotal = learnedFigs.length;
     var byGrade = function (f) { return (gradeFilter === 'all' || f.grade === gradeFilter) && figMatches(f, q); };
     var mLearned = learnedFigs.filter(byGrade);
+    var mMet = metFigs.filter(byGrade);
     var mLockedAll = lockedFigs.filter(byGrade);
     var mLocked = q ? mLockedAll : mLockedAll.slice(0, arcLimit);
     var moreLocked = q ? 0 : mLockedAll.length - mLocked.length;
 
 
     var learnedCard = function (f) {
-      var m = map[f.id], d = m.last ? isoToDate(m.last) : null;
+      var m = map[f.id] || { n: 1, last: '' }, d = m.last ? isoToDate(m.last) : null;
       var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
       var c = S.cards[f.id];
       var st = c ? (c.star || 0) : 0, fr = c ? fragOf(c) : 0;
@@ -7376,8 +7490,22 @@ function portraitSVG(fig, fit, alt) {
     };
     var learnedHtml = mLearned.map(learnedCard).join('');
 
+    /* 카드로만 만난 인물 — 배운 인물 탭에는 절대 들어가지 않고 '미학습' 탭에만 보인다 */
+    var metCard = function (f) {
+      var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
+      var c = S.cards[f.id];
+      var st = c ? (c.star || 0) : 0, fr = c ? fragOf(c) : 0;
+      var ready = canEvolve(f.id);
+      var evo = c ? '<span class="evo-mini' + (ready ? ' ready' : '') + '"' + (ready ? ' data-evolve="' + f.id + '" role="button" tabindex="0"' : '') + '>★' + st + ' · ' + (st >= MAX_STAR ? 'MAX' : fr + '/5') + (ready ? ' ✨' : '') + '</span>' : '';
+      return '<button class="arc-card met ' + gi.cls + '" type="button" data-fig="' + f.id + '">' +
+        '<span class="arc-badge">카드 보유</span>' +
+        '<span class="ph">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
+        '<span class="body"><b>' + esc(f.name) + '</b><p>' + esc(f.title) + '</p>' +
+        '<span class="when">' + (c ? '카드 ' + (c.n || 1) + '장 · 아직 미학습' : '합성 재료 · 아직 미학습') + (S.ratings[f.id] ? '<span class="rt">★' + S.ratings[f.id] + '</span>' : '') + '</span>' + evo + '</span></button>';
+    };
+
     var lockCard = function (f) {
-      /* 검색 중에는 이름을 보여 준다 (찾은 인물이 무엇인지 알 수 있도록) */
+      /* 검색 중에는 이름을 보여 준다 (찾은 인물이 무엇인지 알 수 있도록) — 미학습 탭 한정 */
       if (q) {
         return '<div class="arc-card locked found" data-locked="1" data-fig-open="' + f.id + '" role="button" tabindex="0" aria-label="검색으로 찾은 인물">' +
           '<span class="arc-badge">미학습</span>' +
@@ -7390,27 +7518,39 @@ function portraitSVG(fig, fit, alt) {
         '<span class="body"><b>???</b><p>아직 배우지 않은 인물</p><span class="when">LOCKED</span></span></div>';
     };
     var lockedHtml = mLocked.map(lockCard).join('');
+    var metHtml = mMet.map(metCard).join('');
 
     var emptyAll = '<div class="arc-empty" style="grid-column:1/-1">아직 배운 인물이 없습니다.<br>오늘의 인물을 읽고 체크하면 이름과 한 줄 소개가 이곳에 남습니다.</div>';
-    var emptyFiltered = q
+    var emptyLearned = q
+      ? '<div class="arc-empty" style="grid-column:1/-1">🔍 배운 인물 중에 검색 결과가 없습니다.<br>아직 배우지 않은 인물은 「미학습」 탭에서 찾아볼 수 있습니다.</div>'
+      : '<div class="arc-empty" style="grid-column:1/-1">' + ((GRADE_INFO[gradeFilter] || {}).name || '') + ' 등급에서 아직 배운 인물이 없습니다.<br>인물을 체크하면 이곳에 기록됩니다.</div>';
+    var emptyLocked = q
       ? '<div class="arc-empty" style="grid-column:1/-1">🔍 검색 결과가 없습니다.<br>인물 이름·시대·나라로 다시 찾아보세요.</div>'
-      : '<div class="arc-empty" style="grid-column:1/-1">' + (GRADE_INFO[gradeFilter] || {}).name + ' 등급에서 아직 배운 인물이 없습니다.<br>인물을 체크하거나 카드팩에서 만나면 이곳에 기록됩니다.</div>';
+      : '<div class="arc-empty" style="grid-column:1/-1">' + ((GRADE_INFO[gradeFilter] || {}).name || '') + ' 등급에서 미학습 인물이 없습니다.</div>';
 
     var moreHtml = moreLocked > 0
       ? '<button class="arc-card locked more" type="button" data-arclimit="1"><span class="body" style="text-align:center;padding:18px 8px">' +
-        '<b style="font-size:15px;color:#6f7885">+' + moreLocked + '</b><p>잠긴 인물 더 보기</p></span></button>'
+        '<b style="font-size:15px;color:#6f7885">+' + moreLocked + '</b><p>미학습 인물 더 보기</p></span></button>'
       : '';
-    var cardsHtml = ((mLearned.length + mLocked.length) ? '' : emptyFiltered) + learnedHtml + lockedHtml + moreHtml;
-    if (shelfView === 'all') $('#arcGrid').innerHTML = cardsHtml;
+    if (shelfView !== 'mine') {
+      if (shelfView === 'locked') {
+        /* 미학습 탭: 카드로 만난 인물 + 아직 보지 못한 인물만 */
+        $('#arcGrid').innerHTML = ((mMet.length + mLocked.length) ? '' : emptyLocked) + metHtml + lockedHtml + moreHtml;
+      } else {
+        /* 배운 인물 탭: 직접 체크한 인물만 (미학습·미보유 인물은 절대 섞지 않는다) */
+        $('#arcGrid').innerHTML = (mLearned.length ? '' : emptyLearned) + learnedHtml;
+      }
+    }
     var pageGrid = $('#pageArcGrid');
     if (pageGrid) {
-      var rest = lockedFigs.length - 6;
-      pageGrid.innerHTML = (learnedFigs.length ? '' : emptyAll) + learnedFigs.map(learnedCard).join('') +
-        lockedFigs.slice(0, 6).map(lockCard).join('') +
-        (rest > 0 ? '<button class="arc-card locked" type="button" data-more="1"><span class="body" style="text-align:center;padding:18px 8px"><b style="font-size:15px;color:#6f7885">+' + rest + '</b><p>잠긴 인물 더 보기</p></span></button>' : '');
+      var moreLink = unseenTotal > 0
+        ? '<button class="arc-more-link" type="button" data-arc-locked="1">아직 배우지 않은 인물 ' + unseenTotal + '명 둘러보기 →</button>'
+        : '';
+      pageGrid.innerHTML = (learnedFigs.length ? '' : emptyAll) + learnedFigs.map(learnedCard).join('') + moreLink;
     }
-    $('#arcCount').textContent = '배운 인물 ' + learnedTotal + ' / ' + N +
-      (q ? ' · 🔍 "' + arcQuery + '" ' + (mLearned.length + mLocked.length) + '명' : '');
+    $('#arcCount').textContent = (shelfView === 'locked'
+      ? '미학습 인물 ' + unseenTotal + ' / ' + N + (metFigs.length ? ' · 카드 보유 ' + metFigs.length : '') + (q ? ' · 🔍 "' + arcQuery + '" ' + (mMet.length + mLocked.length) + '명' : '')
+      : '배운 인물 ' + learnedTotal + ' / ' + N + (q ? ' · 🔍 "' + arcQuery + '" ' + mLearned.length + '명' : ''));
     if ($('#pageArcCount')) $('#pageArcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N;
     renderPageShelves();
     renderTabs();
@@ -8192,7 +8332,7 @@ function portraitSVG(fig, fit, alt) {
     var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
     var rc = gradeRc(gi);
     return '<span class="pks-rays"></span>' +
-      '<span class="pks-frame" style="--rc:' + rc + '">' +
+      '<span class="pks-frame ' + gi.cls + '" style="--rc:' + rc + '">' +
       '<span class="pks-art">' + photoHtml(f, { fit: 'slice', eager: true, alt: f.name + ' 카드' }) + '</span>' +
       '</span>' +
       '<span class="pks-tag' + (gi.color === 'rainbow' ? ' rb' : '') + (isMono(gi) ? ' mono' : '') + '" style="--rc:' + rc + '">' + esc(tag) + ' · ' + gi.name + '</span>' +
@@ -8676,11 +8816,14 @@ function portraitSVG(fig, fit, alt) {
 
   function gradeChipsHtml() {
     var counts = {};
-    FIGURES.forEach(function (f) {
+    /* 칩 숫자는 지금 보고 있는 탭 기준 — '배운 인물' 탭이면 배운 인물의 등급 분포만 센다 */
+    var idx = arcIndex();
+    var pool = (shelfView === 'locked') ? idx.metFigs.concat(idx.lockedFigs) : idx.learnedFigs;
+    pool.forEach(function (f) {
       var g = f.grade || 'basic';
       counts[g] = (counts[g] || 0) + 1;
     });
-    var h = '<button type="button" class="gfchip' + (gradeFilter === 'all' ? ' on' : '') + '" data-gf="all">전체 <b>' + N + '</b></button>';
+    var h = '<button type="button" class="gfchip' + (gradeFilter === 'all' ? ' on' : '') + '" data-gf="all">전체 <b>' + pool.length + '</b></button>';
     GRADE_ORDER.forEach(function (g) {
       var gi = GRADE_INFO[g];
       if (!gi || !counts[g]) return;
@@ -8697,14 +8840,18 @@ function portraitSVG(fig, fit, alt) {
   function renderTabs() {
     if (!$('#arcTabs')) return;
     $('#shelfCount').textContent = S.shelves.length;
+    if ($('#lockCount')) {
+      var idx = arcIndex();
+      $('#lockCount').textContent = idx.metFigs.length + idx.lockedFigs.length;
+    }
     document.querySelectorAll('#arcTabs .arc-tab[data-tab]').forEach(function (b) {
-      b.classList.toggle('on', b.getAttribute('data-tab') === (shelfView === 'all' ? 'all' : 'mine'));
+      b.classList.toggle('on', b.getAttribute('data-tab') === shelfView);
     });
     var p = $('#shelfPanel');
     if (p) p.hidden = shelfView !== 'mine';
     var gb = $('#arcGrade');
     if (gb) {
-      gb.hidden = shelfView !== 'all';
+      gb.hidden = shelfView === 'mine';
       if (!gb.hidden) gb.innerHTML = gradeChipsHtml();
     }
   }
@@ -9292,7 +9439,7 @@ function portraitSVG(fig, fit, alt) {
       arcQuery = this.value.trim();
       arcLimit = 36;
       if ($('#arcSearchClear')) $('#arcSearchClear').hidden = !arcQuery;
-      shelfView = 'all';
+      if (shelfView === 'mine') shelfView = 'all';
       renderArchive();
     });
   }
@@ -9321,11 +9468,22 @@ function portraitSVG(fig, fit, alt) {
 
     var tab = e.target.closest('#arcTabs .arc-tab');
     if (tab) {
-      shelfView = tab.getAttribute('data-tab') === 'mine' ? 'mine' : 'all';
+      var tv = tab.getAttribute('data-tab');
+      if (tv === 'mine') shelfView = 'mine';
+      else if (tv === 'locked') shelfView = 'locked';
+      else shelfView = 'all';
       renameShelf = null;
-      if (!tab.getAttribute('data-tab')) shelfView = 'mine';
+      if (!tv) shelfView = 'mine';
       renderShelves();
-      if (shelfView === 'all') renderArchive();
+      if (shelfView !== 'mine') renderArchive();
+      return;
+    }
+    if (e.target.closest('[data-arc-locked]')) {
+      shelfView = 'locked';
+      gradeFilter = 'all';
+      arcLimit = 36;
+      renderArchive();
+      openModal('#mArchive');
       return;
     }
     if (e.target.closest('[data-arclimit]')) {
@@ -9336,7 +9494,7 @@ function portraitSVG(fig, fit, alt) {
     var gf = e.target.closest('[data-gf]');
     if (gf) {
       gradeFilter = gf.getAttribute('data-gf');
-      shelfView = 'all';
+      if (shelfView !== 'locked') shelfView = 'all';
       renderArchive();
       return;
     }
