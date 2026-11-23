@@ -8482,7 +8482,6 @@ function portraitSVG(fig, fit, alt) {
         allyAct(act, idx);
         return;
       }
-    });
 
       /* ── 🐉 보스 레이드 · 🏟️ 친구 대결 ── */
       if (t.closest && t.closest('[data-bmode]')) {
@@ -8539,6 +8538,7 @@ function portraitSVG(fig, fit, alt) {
         startPvpWith(parsed.units, parsed.name + ' 덱');
         return;
       }
+    });
 
     var closeBtn = $('#battleClose');
     if (closeBtn) closeBtn.addEventListener('click', function (e) {
