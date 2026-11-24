@@ -31,11 +31,68 @@
   function say(s) { OUT.textContent = s; }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
+  /* 강제 동기 레이아웃(Forced Reflow) 계수기 — 비파괴 후킹 */
+  var LAY = { gbcr: 0, gbcrMs: 0, off: 0, offMs: 0, on: false };
+  function hookLayout(win) {
+    if (LAY.on || !win.Element) return;
+    LAY.on = true;
+    var P = win.performance;
+    var ep = win.Element.prototype;
+    var d = Object.getOwnPropertyDescriptor(ep, 'getBoundingClientRect');
+    if (d && d.value) {
+      ep.getBoundingClientRect = function () {
+        var t = P.now();
+        var r = d.value.call(this);
+        LAY.gbcr++; LAY.gbcrMs += P.now() - t;
+        return r;
+      };
+    }
+    var hp = win.HTMLElement.prototype;
+    ['offsetWidth', 'offsetHeight'].forEach(function (k) {
+      var g = Object.getOwnPropertyDescriptor(hp, k);
+      if (!g || !g.get) return;
+      Object.defineProperty(hp, k, {
+        configurable: true, enumerable: g.enumerable,
+        get: function () {
+          var t = P.now();
+          var v = g.get.call(this);
+          LAY.off++; LAY.offMs += P.now() - t;
+          return v;
+        }
+      });
+    });
+  }
+  function layOut() {
+    return {
+      reflowCalls: LAY.gbcr + LAY.off,
+      rectCalls: LAY.gbcr,
+      offsetReads: LAY.off,
+      layoutMs: Math.round(LAY.gbcrMs + LAY.offMs)
+    };
+  }
+  function layReset() { LAY.gbcr = 0; LAY.gbcrMs = 0; LAY.off = 0; LAY.offMs = 0; }
+
+  /* 50ms 이상 메인스레드 작업 */
+  function taskObserver(win) {
+    var acc = { n: 0, ms: 0, worst: 0 };
+    if (!win.PerformanceObserver) return acc;
+    try {
+      var po = new win.PerformanceObserver(function (list) {
+        list.getEntries().forEach(function (e) {
+          acc.n++; acc.ms += e.duration;
+          if (e.duration > acc.worst) acc.worst = e.duration;
+        });
+      });
+      po.observe({ entryTypes: ['longtask'] });
+    } catch (err) { acc.unsupported = 1; }
+    return acc;
+  }
+
   function ready() {
     return new Promise(function (resolve) {
       function go() {
         W = F.contentWindow; D = F.contentDocument;
-        if (W && W.LegacyBattle && D && D.querySelector('#bView')) resolve();
+        if (W && W.LegacyBattle && D && D.querySelector('#bView')) { hookLayout(W); resolve(); }
         else setTimeout(go, 100);
       }
       if (F.contentDocument && F.contentDocument.readyState === 'complete' && F.contentWindow.LegacyBattle) go();
@@ -160,12 +217,13 @@
         st.click();
         return wait(200);
       }).then(function () {
-        var sp = D.querySelector('#bSpeed'), guard = 0;
+        var guard = 0;
         function setSpeed() {
+          var sp = D.querySelector('#bSpeed');
           if (!sp) return resolve('ok');
-          if (+(sp.getAttribute('data-speed') || 1) === speed || guard++ > 6) return resolve('ok');
+          if (+(sp.getAttribute('data-speed') || 1) === speed || guard++ > 10) return resolve('ok');
           sp.click();
-          setTimeout(setSpeed, 120);
+          setTimeout(setSpeed, 150);
         }
         setSpeed();
       });
@@ -178,13 +236,24 @@
       if (r !== 'ok') return { label: label, error: r };
       return wait(900).then(function () {
         var loaf = loafObserver(W);
+        var tasks = taskObserver(W);
         var dom = domWatch(W, D, ms);
         var dom0 = D.getElementsByTagName('*').length;
+        layReset();
         return collectFrames(W, ms).then(function (frames) {
           dom.stop();
           var st = stats(frames, label);
           var o = loafOut(loaf);
+          var l = layOut();
           st.speed = speed;
+          st.reflowPerSec = +(l.reflowCalls / (ms / 1000)).toFixed(1);
+          st.reflowCalls = l.reflowCalls;
+          st.rectCalls = l.rectCalls;
+          st.offsetReads = l.offsetReads;
+          st.layoutMsPerSec = +(l.layoutMs / (ms / 1000)).toFixed(1);
+          st.longTasks = tasks.n;
+          st.longTaskMs = Math.round(tasks.ms);
+          st.longTaskWorst = Math.round(tasks.worst);
           st.domStart = dom0;
           st.domEnd = D.getElementsByTagName('*').length;
           st.domMax = Math.max.apply(null, dom.samples.concat([dom0]));
@@ -212,9 +281,11 @@
         var sc = modal ? modal.querySelector('.sheet') : null;
         var grid = D.querySelector('#arcGrid');
         var loaf = loafObserver(W);
+        var tasks = taskObserver(W);
         var cards = D.querySelectorAll('#arcGrid .arc-card').length;
         var t0 = W.performance.now(), step = 0;
         var frames = [];
+        layReset();
         function tick(t) {
           frames.push(t);
           var el = W.performance.now() - t0;
@@ -226,7 +297,11 @@
         W.requestAnimationFrame(tick);
         function post(frames) {
           var st = stats(frames, 'codex');
+          var l = layOut();
           st.cards = cards;
+          st.reflowPerSec = +(l.reflowCalls / (ms / 1000)).toFixed(1);
+          st.longTasks = tasks.n;
+          st.longTaskMs = Math.round(tasks.ms);
           st.hasGrid = !!grid;
           st.scroller = !!sc;
           st.loaf = loafOut(loaf);
