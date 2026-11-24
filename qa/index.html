@@ -95,6 +95,10 @@
         W = F.contentWindow; D = F.contentDocument;
         if (W && W.LegacyBattle && D && D.querySelector('#bView')) {
           hookLayout(W);
+          try {
+            W.addEventListener('error', function (e) { QA.errors.push(String(e.message || e.type)); });
+            W.addEventListener('unhandledrejection', function (e) { QA.errors.push('reject: ' + String(e.reason).slice(0, 120)); });
+          } catch (e0) { /* noop */ }
           if (params.get('nocv')) {
             var st = D.createElement('style');
             st.textContent = '.arc-card{content-visibility:visible!important;contain-intrinsic-size:auto!important}';
