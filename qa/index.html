@@ -277,27 +277,40 @@
     });
   }
 
-  /* 도감 스크롤 측정 */
+  /* 도감 스크롤 측정 — 미학습 탭(카드 그리드 최대)으로 전환 후 스크롤 */
   function measureCodex(ms) {
     return new Promise(function (resolve) {
       var btn = D.querySelector('#archiveBtn');
       if (!btn) return resolve({ label: 'codex', error: 'no-btn' });
       btn.click();
-      wait(700).then(function () {
+      wait(600).then(function () {
+        var tab = D.querySelector('#arcTabs .arc-tab[data-tab="locked"]');
+        if (tab) tab.click();
+        return wait(700);
+      }).then(function () {
         var modal = D.querySelector('#mArchive');
-        var sc = modal ? modal.querySelector('.sheet') : null;
         var grid = D.querySelector('#arcGrid');
+        var cands = [D.querySelector('#mArchive .sheet'), modal, D.querySelector('#arcGrid')];
+        var sc = null;
+        for (var i = 0; i < cands.length; i++) {
+          var c = cands[i];
+          if (c && c.scrollHeight > c.clientHeight + 40) { sc = c; break; }
+        }
         var loaf = loafObserver(W);
         var tasks = taskObserver(W);
         var cards = D.querySelectorAll('#arcGrid .arc-card').length;
-        var t0 = W.performance.now(), step = 0;
-        var frames = [];
+        var t0 = W.performance.now();
+        var frames = [], scrolled = 0;
         layReset();
         function tick(t) {
           frames.push(t);
           var el = W.performance.now() - t0;
           if (el < ms) {
-            if (sc) sc.scrollTop = (sc.scrollTop + 26) % Math.max(1, sc.scrollHeight - sc.clientHeight);
+            if (sc) {
+              var before = sc.scrollTop;
+              sc.scrollTop = (sc.scrollTop + 30) % Math.max(1, sc.scrollHeight - sc.clientHeight);
+              scrolled += Math.abs(sc.scrollTop - before);
+            }
             W.requestAnimationFrame(tick);
           } else resolve(post(frames));
         }
@@ -306,11 +319,12 @@
           var st = stats(frames, 'codex');
           var l = layOut();
           st.cards = cards;
+          st.scrolledPx = Math.round(scrolled);
+          st.scroller = sc ? (sc.id || sc.className || sc.tagName) : 'none';
           st.reflowPerSec = +(l.reflowCalls / (ms / 1000)).toFixed(1);
           st.longTasks = tasks.n;
           st.longTaskMs = Math.round(tasks.ms);
           st.hasGrid = !!grid;
-          st.scroller = !!sc;
           st.loaf = loafOut(loaf);
           st.dom = D.getElementsByTagName('*').length;
           return st;
