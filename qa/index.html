@@ -116,6 +116,28 @@
     return watch;
   }
 
+  /* 덱을 6명으로 채운다 (성능 최악 조건) */
+  function fillDeck() {
+    return new Promise(function (resolve) {
+      W.LegacyBattle.open();
+      wait(300).then(function () {
+        var cards = [].slice.call(D.querySelectorAll('#bView .bstage:not(.locked)'));
+        var card = cards[cards.length - 1] || cards[0];
+        if (card) card.click();
+        return wait(400);
+      }).then(function () {
+        var guard = 0;
+        function add() {
+          var b = D.querySelector('.bcard[data-pick-fig]:not(.on)');
+          if (!b || guard++ > 12) { resolve('deck-done'); return; }
+          b.click();
+          setTimeout(add, 160);
+        }
+        add();
+      });
+    });
+  }
+
   /* 전투 시작 */
   function startBattle(stageSel, speed) {
     return new Promise(function (resolve) {
@@ -241,7 +263,39 @@
       say('fatal ' + QA.fatal);
     });
   }
+  /* 전체 시나리오: 덱 채우기 → 1x → 3x → 다시 3x → 도감 스크롤 */
+  function runFull(cfg) {
+    cfg = cfg || {};
+    var per = cfg.seconds || 12000;
+    QA.runs = [];
+    return ready().then(fillDeck).then(function () {
+      QA.errors = [];
+      W.addEventListener('error', function (e) { QA.errors.push(String(e.message)); });
+      return measureBattle('battle-1x', 1, per);
+    }).then(function (a) {
+      QA.runs.push(a); say('1/4 battle-1x');
+      return measureBattle('battle-3x', 3, per);
+    }).then(function (b) {
+      QA.runs.push(b); say('2/4 battle-3x');
+      return measureBattle('battle2-3x', 3, per);
+    }).then(function (c) {
+      QA.runs.push(c); say('3/4 battle2-3x');
+      return measureCodex(per);
+    }).then(function (d) {
+      QA.runs.push(d);
+      QA.userAgent = navigator.userAgent;
+      window.__QAready = true;
+      say(JSON.stringify(QA.runs.map(function (r) { return r.label + ' fps=' + r.fps + ' jank=' + r.jankPct + '%'; })));
+    }).catch(function (e) {
+      QA.fatal = String((e && e.stack) || e);
+      window.__QAready = true;
+      say('fatal ' + QA.fatal);
+    });
+  }
+
   window.__QA_run = runAll;
+  window.__QA_full = runFull;
+  window.__QA_fill = fillDeck;
   window.__QA_start = startBattle;
   window.__QA_measureBattle = measureBattle;
   window.__QA_measureCodex = measureCodex;
