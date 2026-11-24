@@ -19,8 +19,9 @@
   var F = document.getElementById('frame');
   var OUT = document.getElementById('out');
   var params = new URLSearchParams(location.search);
-  var SRC = params.get('src');
-  if (SRC) F.src = SRC;
+  var SRC = params.get('src') || '/legacy/';
+  /* 매번 새로 받게 캐시 버스터를 붙인다 */
+  F.src = SRC + (SRC.indexOf('?') < 0 ? '?' : '&') + 'qa=' + Date.now();
   var W = null, D = null;
   var log = [];
   var QA = { version: 1, runs: [], errors: [] };
