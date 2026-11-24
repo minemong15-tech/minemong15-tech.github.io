@@ -414,7 +414,15 @@
     });
   }
 
+  /* AUTO 끄기 — 예약 선택 상태에서 멈춰 구도를 확인할 수 있다 */
+  function pauseBattle() {
+    var b = D.querySelector('#bAuto');
+    if (b) b.click();
+    return !!b;
+  }
+
   window.__QA_boss = startBoss;
+  window.__QA_pause = pauseBattle;
   window.__QA_run = runAll;
   window.__QA_full = runFull;
   window.__QA_fill = fillDeck;
