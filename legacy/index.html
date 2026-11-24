@@ -8280,10 +8280,15 @@ function portraitSVG(fig, fit, alt) {
   }
 
   var ART_CACHE = {};
+  /* 전투 카드·컷인 초상화는 320px 썸네일로 충분 — 원본 960px 디코딩을 피한다 */
+  function artThumb(u, w) {
+    if (!u || !w) return u;
+    return u.replace(/\/(\d+)px-/, '/' + w + 'px-');
+  }
   function figArt(f, fit) {
     var img = '';
     if (f.photo && (f.photo.inline || f.photo.url)) {
-      img = '<img class="ph-img" src="' + (f.photo.inline || f.photo.url) + '" alt="' + esc(f.name) + '" loading="lazy" decoding="async" onerror="this.style.display=&#39;none&#39;">';
+      img = '<img class="ph-img" src="' + artThumb(f.photo.inline || f.photo.url, 320) + '" alt="' + esc(f.name) + '" loading="lazy" decoding="async" onerror="this.style.display=&#39;none&#39;">';
     }
     var svg = '', key = f.id + '|' + (fit || 'slice');
     if (ART_CACHE[key] !== undefined) svg = ART_CACHE[key];
@@ -11440,7 +11445,7 @@ function portraitSVG(fig, fit, alt) {
     rc.style.setProperty('--rc', gradeRc(gi));
     $('#figOrigin').innerHTML = '<span class="pin">📍</span><span class="fl">' + esc(f.flag) + '</span> ' + esc(f.birthplace);
 
-    $('#todayPortrait').innerHTML = photoHtml(f, { eager: true });
+    $('#todayPortrait').innerHTML = photoHtml(f, { eager: true, big: true, bg: true });
 
     $('#vidTitle').textContent = f.name + ' · ' + f.era;
     var frame = $('#videoFrame'), meta = $('#videoMeta');
@@ -11501,16 +11506,22 @@ function portraitSVG(fig, fit, alt) {
   function photoSrc(f) {
     return (f && f.photo && (f.photo.inline || f.photo.url)) || '';
   }
+  /* 위키미디어 썸네일 폭 바꾸기 — 카드용은 320px로 받아 디코딩·메모리를 9배 줄인다 */
+  function thumbUrl(u, w) {
+    if (!u || !w) return u;
+    return u.replace(/\/(\d+)px-/, '/' + w + 'px-');
+  }
 
   function photoHtml(f, opts) {
     opts = opts || {};
     var alt = opts.alt || (f.name + ' 사진');
-    var img = '', bg = '', pu = photoSrc(f);
+    var img = '', bg = '', pu = photoSrc(f), w = opts.big ? 720 : 320, pth = thumbUrl(pu, w);
     if (pu) {
-      img = '<img class="ph-img" src="' + pu + '" alt="' + esc(alt) + '"' +
+      img = '<img class="ph-img" src="' + pth + '" alt="' + esc(alt) + '"' +
         ' loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async"' +
         ' onerror="this.style.display=&#39;none&#39;">';
-      bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(pu) + '&quot;)"></span>';
+      /* 배경 블리드는 큰 초상화에서만 — 카드에서는 같은 사진을 한 번 더 받고 블러까지 걸렸다 */
+      if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(thumbUrl(pu, 160)) + '&quot;)"></span>';
     }
     return '<span class="ph-svg">' + portraitSVG(f, opts.fit, alt) + '</span>' + bg + img;
   }
@@ -11904,7 +11915,7 @@ function portraitSVG(fig, fit, alt) {
     var f = FIGURES.filter(function (y) { return y.id === id; })[0];
     if (!f) return;
     var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
-    var body = '<div class="reader-hero"><div class="arch">' + photoHtml(f) + '</div>' +
+    var body = '<div class="reader-hero"><div class="arch">' + photoHtml(f, { big: true, bg: true }) + '</div>' +
       '<div><span class="kicker">' + esc(f.era) + '</span>' +
       '<div style="margin-top:8px"><span class="' + chipClsOf(gi) + '" style="--rc:' + gradeRc(gi) + '">' + gi.name + '</span></div>' +
       '<h3>' + esc(f.name) + '</h3>' +
