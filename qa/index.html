@@ -93,7 +93,15 @@
     return new Promise(function (resolve) {
       function go() {
         W = F.contentWindow; D = F.contentDocument;
-        if (W && W.LegacyBattle && D && D.querySelector('#bView')) { hookLayout(W); resolve(); }
+        if (W && W.LegacyBattle && D && D.querySelector('#bView')) {
+          hookLayout(W);
+          if (params.get('nocv')) {
+            var st = D.createElement('style');
+            st.textContent = '.arc-card{content-visibility:visible!important;contain-intrinsic-size:auto!important}';
+            D.head.appendChild(st);
+          }
+          resolve();
+        }
         else setTimeout(go, 100);
       }
       if (F.contentDocument && F.contentDocument.readyState === 'complete' && F.contentWindow.LegacyBattle) go();
