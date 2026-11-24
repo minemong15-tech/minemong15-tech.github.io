@@ -4314,7 +4314,7 @@
   /* ── 시네마틱 필드 프레임 ── */
   .cin3 .field{
     position:relative; overflow:hidden; isolation:isolate;
-    padding:0; border-radius:18px; min-height:470px;
+    padding:0; border-radius:18px; min-height:440px;
     display:flex; flex-direction:column;
     border:1px solid color-mix(in srgb, var(--ec2) 34%, rgba(255,255,255,.07));
     background:#04060a;
@@ -4334,7 +4334,7 @@
   .cin3 .f-scene>*{ position:absolute; display:block }
 
   /* 지구 · 여명 전장 */
-  .cin3 .th-earth{ --sky1:#0a1726; --sky2:#1d2c3a; --glow:#e8b06a; --grid:rgba(200,168,106,.26) }
+  .cin3 .th-earth{ --sky1:#0a1726; --sky2:#1d2c3a; --glow:#e8b06a; --grid:rgba(200,168,106,.52) }
   .cin3 .th-earth .sc-glow{ left:50%; bottom:34%; width:120%; height:60%; transform:translate(-50%,32%);
     background:radial-gradient(ellipse at 50% 60%, color-mix(in srgb, var(--glow) 46%, transparent), transparent 64%) }
   .cin3 .th-earth .sc-far{ left:-6%; right:-6%; bottom:36%; height:38%;
@@ -4347,7 +4347,7 @@
     opacity:.95 }
 
   /* 태양계 · 코로나 */
-  .cin3 .th-solar{ --sky1:#1c0a06; --sky2:#3c1608; --glow:#ff9a3c; --grid:rgba(255,150,80,.26) }
+  .cin3 .th-solar{ --sky1:#1c0a06; --sky2:#3c1608; --glow:#ff9a3c; --grid:rgba(255,150,80,.52) }
   .cin3 .th-solar .sc-glow{ right:-14%; top:-26%; width:86%; height:80%;
     background:radial-gradient(circle at 60% 40%, #ffd68a 0%, #ff8a2c 26%, rgba(255,90,20,.42) 48%, transparent 70%);
     filter:blur(2px) }
@@ -4359,7 +4359,7 @@
     filter:blur(6px) }
 
   /* 우주 · 성운 */
-  .cin3 .th-space{ --sky1:#06040f; --sky2:#150c2a; --glow:#9b7bff; --grid:rgba(150,130,255,.24) }
+  .cin3 .th-space{ --sky1:#06040f; --sky2:#150c2a; --glow:#9b7bff; --grid:rgba(150,130,255,.46) }
   .cin3 .th-space .sc-glow{ left:-20%; top:-20%; width:120%; height:90%;
     background:
       radial-gradient(ellipse 60% 50% at 26% 34%, rgba(126,92,255,.34), transparent 66%),
@@ -4383,7 +4383,7 @@
     filter:blur(.4px); opacity:.5 }
 
   /* 무한의 탑 · 내부 */
-  .cin3 .th-tower{ --sky1:#05080f; --sky2:#0f1a2a; --glow:#6ec8ff; --grid:rgba(110,200,255,.22) }
+  .cin3 .th-tower{ --sky1:#05080f; --sky2:#0f1a2a; --glow:#6ec8ff; --grid:rgba(110,200,255,.46) }
   .cin3 .th-tower .sc-glow{ left:50%; top:-30%; width:70%; height:90%; transform:translateX(-50%);
     background:radial-gradient(ellipse at 50% 0%, rgba(110,200,255,.34), transparent 68%) }
   .cin3 .th-tower .sc-far{ left:6%; right:6%; top:0; bottom:34%;
@@ -4397,7 +4397,7 @@
     animation:towerPulse 3.4s ease-in-out infinite }
 
   /* 보스 레이드 · 피의 하늘 */
-  .cin3 .th-boss{ --sky1:#1a0305; --sky2:#3d070d; --glow:#ff4a4a; --grid:rgba(255,80,80,.26) }
+  .cin3 .th-boss{ --sky1:#1a0305; --sky2:#3d070d; --glow:#ff4a4a; --grid:rgba(255,90,80,.48) }
   .cin3 .th-boss .sc-glow{ left:50%; top:-24%; width:110%; height:100%; transform:translateX(-50%);
     background:radial-gradient(ellipse at 50% 10%, rgba(255,70,60,.42), rgba(120,10,16,.28) 42%, transparent 72%);
     animation:bossGlow 3.2s ease-in-out infinite }
@@ -4408,7 +4408,7 @@
     filter:blur(3px) }
 
   /* 친구 대결 · 아레나 */
-  .cin3 .th-pvp{ --sky1:#04121a; --sky2:#082a38; --glow:#5fe0ff; --grid:rgba(95,224,255,.24) }
+  .cin3 .th-pvp{ --sky1:#04121a; --sky2:#082a38; --glow:#5fe0ff; --grid:rgba(95,224,255,.46) }
   .cin3 .th-pvp .sc-glow{ left:50%; top:-40%; width:80%; height:100%; transform:translateX(-50%);
     background:radial-gradient(ellipse at 50% 0%, rgba(95,224,255,.4), transparent 70%) }
   .cin3 .th-pvp .sc-far{ left:-4%; right:-4%; bottom:34%; height:26%;
@@ -4477,8 +4477,8 @@
   /* ── 본문(카드 무대) ── */
   .cin3 .f-body{
     position:relative; z-index:3; flex:1; min-height:0;
-    display:flex; flex-direction:column; justify-content:space-between;
-    padding:46px 14px 16px; gap:8px;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:52px 14px 20px; gap:12px;
   }
   .cin3 .erow{ margin:0 auto; width:100%; max-width:540px; gap:9px; align-items:end }
   .cin3 .arow{ margin:0 auto; width:100%; max-width:760px; gap:8px; align-items:end }
@@ -4503,7 +4503,13 @@
   .cin3 .bu .bu-art{ border-radius:11px 11px 0 0; max-height:150px }
   .cin3 .bu .bu-art::after{ /* 인물 위 조명 */
     content:""; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(180deg, rgba(255,255,255,.14) 0%, transparent 34%, rgba(0,0,0,.34) 100%) }
+    background:linear-gradient(180deg, rgba(255,255,255,.07) 0%, transparent 30%, rgba(0,0,0,.42) 100%) }
+  .cin3 .bu::after{ /* 바닥 그림자 — 무대 위에 선 느낌 */
+    content:""; position:absolute; left:7%; right:7%; bottom:-7px; height:10px; z-index:-1;
+    border-radius:50%; pointer-events:none;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.6), transparent 72%) }
+  .cin3 .bu-icon{ font-size:clamp(26px,4.6vw,46px);
+    background:radial-gradient(circle at 50% 42%, rgba(239,90,70,.26), rgba(8,10,14,.94) 68%) }
   .cin3 .bu.ally .bu-art::before{
     content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
     box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--rc,#9ca3af) 60%, transparent),
@@ -4527,10 +4533,10 @@
   /* 궁극기 게이지 */
   .cin3 .ult3{
     position:relative; display:flex; align-items:center; gap:4px;
-    margin:0 4px 5px; height:12px;
+    margin:0 4px 5px; height:13px;
   }
   .cin3 .ult3 em{ font-style:normal; font-size:6.5px; letter-spacing:.12em; color:#8d8b98; flex:0 0 auto }
-  .cin3 .ult3 .u3bar{ position:relative; flex:1; height:4px; border-radius:3px; overflow:hidden;
+  .cin3 .ult3 .u3bar{ position:relative; flex:1; height:5px; border-radius:3px; overflow:hidden;
     background:rgba(255,255,255,.12) }
   .cin3 .ult3 .u3bar i{
     position:absolute; left:0; top:0; bottom:0; width:0%; border-radius:3px;
