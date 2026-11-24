@@ -8283,7 +8283,9 @@ function portraitSVG(fig, fit, alt) {
   /* 전투 카드·컷인 초상화는 320px 썸네일로 충분 — 원본 960px 디코딩을 피한다 */
   function artThumb(u, w) {
     if (!u || !w) return u;
-    return u.replace(/\/(\d+)px-/, '/' + w + 'px-');
+    var m = /\/(\d+)px-/.exec(u);
+    if (!m || +m[1] < 330) return u;
+    return u.replace(/\/\d+px-/, '/330px-');
   }
   function figArt(f, fit) {
     var img = '';
@@ -11508,20 +11510,23 @@ function portraitSVG(fig, fit, alt) {
   }
   /* 위키미디어 썸네일 폭 바꾸기 — 카드용은 320px로 받아 디코딩·메모리를 9배 줄인다 */
   function thumbUrl(u, w) {
+    /* 위키미디어는 정해진 폭(250/330/500/960...)만 익명 요청에 내어준다 — 330px 고정 */
     if (!u || !w) return u;
-    return u.replace(/\/(\d+)px-/, '/' + w + 'px-');
+    var m = /\/(\d+)px-/.exec(u);
+    if (!m || +m[1] < 330) return u;
+    return u.replace(/\/\d+px-/, '/330px-');
   }
 
   function photoHtml(f, opts) {
     opts = opts || {};
     var alt = opts.alt || (f.name + ' 사진');
-    var img = '', bg = '', pu = photoSrc(f), w = opts.big ? 720 : 320, pth = thumbUrl(pu, w);
+    var img = '', bg = '', pu = photoSrc(f), pth = opts.big ? pu : thumbUrl(pu, 330);
     if (pu) {
       img = '<img class="ph-img" src="' + pth + '" alt="' + esc(alt) + '"' +
         ' loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async"' +
         ' onerror="this.style.display=&#39;none&#39;">';
       /* 배경 블리드는 큰 초상화에서만 — 카드에서는 같은 사진을 한 번 더 받고 블러까지 걸렸다 */
-      if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(thumbUrl(pu, 160)) + '&quot;)"></span>';
+      if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(thumbUrl(pu, 330)) + '&quot;)"></span>';
     }
     return '<span class="ph-svg">' + portraitSVG(f, opts.fit, alt) + '</span>' + bg + img;
   }
