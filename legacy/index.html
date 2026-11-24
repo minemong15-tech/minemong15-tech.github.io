@@ -4429,6 +4429,7 @@
       repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 48px),
       repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 48px);
     animation:floorRun 3.6s linear infinite;
+    will-change:transform; backface-visibility:hidden;
   }
   .cin3 .sc-floor::after{ /* 지평선 라이트 */
     content:""; position:absolute; left:0; right:0; top:-2px; height:3px;
