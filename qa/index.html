@@ -231,6 +231,7 @@
   }
 
   /* 전투 한 판 측정 */
+  /* 전투 한 판 측정 (끝난 전투는 자동으로 다시 시작해 계속 부하를 간다) */
   function measureBattle(label, speed, ms) {
     return startBattle(null, speed).then(function (r) {
       if (r !== 'ok') return { label: label, error: r };
@@ -239,13 +240,19 @@
         var tasks = taskObserver(W);
         var dom = domWatch(W, D, ms);
         var dom0 = D.getElementsByTagName('*').length;
+        var restarts = 0;
         layReset();
+        var ka = setInterval(function () {
+          if (D.querySelector('#arena .bres')) { restarts++; startBattle(null, speed); }
+        }, 1200);
         return collectFrames(W, ms).then(function (frames) {
+          clearInterval(ka);
           dom.stop();
           var st = stats(frames, label);
           var o = loafOut(loaf);
           var l = layOut();
           st.speed = speed;
+          st.restarts = restarts;
           st.reflowPerSec = +(l.reflowCalls / (ms / 1000)).toFixed(1);
           st.reflowCalls = l.reflowCalls;
           st.rectCalls = l.rectCalls;
