@@ -240,6 +240,18 @@
   }
 
   /* 전투 한 판 측정 */
+  /* 보스 레이드 시작 (긴 전투 — 연출 확인용) */
+  function startBoss(no) {
+    return new Promise(function (resolve) {
+      W.LegacyBattle.openBoss(no || 1);
+      wait(450).then(function () {
+        var b = D.querySelector('[data-boss-start]');
+        if (b) b.click();
+        wait(320).then(function () { resolve(b ? 'ok' : 'no-start'); });
+      });
+    });
+  }
+
   /* 전투 한 판 측정 (끝난 전투는 자동으로 다시 시작해 계속 부하를 간다) */
   function measureBattle(label, speed, ms) {
     return startBattle(null, speed).then(function (r) {
@@ -402,6 +414,7 @@
     });
   }
 
+  window.__QA_boss = startBoss;
   window.__QA_run = runAll;
   window.__QA_full = runFull;
   window.__QA_fill = fillDeck;
