@@ -18,9 +18,13 @@
 (function () {
   var F = document.getElementById('frame');
   var OUT = document.getElementById('out');
+  var params = new URLSearchParams(location.search);
+  var SRC = params.get('src');
+  if (SRC) F.src = SRC;
   var W = null, D = null;
   var log = [];
   var QA = { version: 1, runs: [], errors: [] };
+  QA.src = SRC || '/legacy/';
   window.__QA = QA;
   window.__QAready = false;
 
