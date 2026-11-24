@@ -20,6 +20,8 @@
   var OUT = document.getElementById('out');
   var params = new URLSearchParams(location.search);
   var SRC = params.get('src') || '/legacy/';
+  if (params.get('w')) { F.style.width = params.get('w') + 'px'; }
+  if (params.get('h')) { F.style.height = params.get('h') + 'px'; }
   /* 매번 새로 받게 캐시 버스터를 붙인다 */
   F.src = SRC + (SRC.indexOf('?') < 0 ? '?' : '&') + 'qa=' + Date.now();
   var W = null, D = null;
