@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEGACY perf QA (temp)</title>
+<style>
+  html,body{margin:0;padding:0;background:#111;color:#ddd;font:12px/1.5 ui-monospace,Menlo,monospace}
+  #stage{display:flex;gap:8px;padding:8px}
+  iframe{width:390px;height:844px;border:1px solid #333;background:#000}
+  #out{white-space:pre-wrap;padding:8px}
+</style>
+</head>
+<body>
+<div id="stage"><iframe id="frame" src="/legacy/"></iframe></div>
+<div id="out">idle</div>
+<script>
+(function () {
+  var F = document.getElementById('frame');
+  var OUT = document.getElementById('out');
+  var W = null, D = null;
+  var log = [];
+  var QA = { version: 1, runs: [], errors: [] };
+  window.__QA = QA;
+  window.__QAready = false;
+
+  function say(s) { OUT.textContent = s; }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  function ready() {
+    return new Promise(function (resolve) {
+      function go() {
+        W = F.contentWindow; D = F.contentDocument;
+        if (W && W.LegacyBattle && D && D.querySelector('#bView')) resolve();
+        else setTimeout(go, 100);
+      }
+      if (F.contentDocument && F.contentDocument.readyState === 'complete' && F.contentWindow.LegacyBattle) go();
+      else F.addEventListener('load', function () { setTimeout(go, 300); });
+    });
+  }
+
+  /* iframe 안에서 프레임 간격 수집 */
+  function collectFrames(win, ms) {
+    return new Promise(function (resolve) {
+      var frames = [], t0 = win.performance.now();
+      function tick(t) {
+        frames.push(t);
+        if (t - t0 < ms) win.requestAnimationFrame(tick);
+        else resolve(frames);
+      }
+      win.requestAnimationFrame(tick);
+    });
+  }
+
+  function stats(frames, label) {
+    var d = [], i;
+    for (i = 1; i < frames.length; i++) d.push(frames[i] - frames[i - 1]);
+    d.sort(function (a, b) { return a - b; });
+    var n = d.length;
+    var sum = d.reduce(function (a, b) { return a + b; }, 0);
+    var pct = function (p) { return n ? +d[Math.min(n - 1, Math.floor(n * p))].toFixed(2) : 0; };
+    var over = function (v) { return d.filter(function (x) { return x > v; }).length; };
+    return {
+      label: label,
+      seconds: +((frames[frames.length - 1] - frames[0]) / 1000).toFixed(2),
+      frames: n,
+      fps: +(n / ((frames[frames.length - 1] - frames[0]) / 1000)).toFixed(1),
+      avgMs: +(sum / Math.max(1, n)).toFixed(2),
+      p50: pct(0.5), p95: pct(0.95), max: n ? +d[n - 1].toFixed(2) : 0,
+      over33: over(33.4), over50: over(50), over100: over(100),
+      jankPct: +(over(33.4) / Math.max(1, n) * 100).toFixed(1)
+    };
+  }
+
+  /* LoAF(긴 애니메이션 프레임) 수집 */
+  function loafObserver(win) {
+    var acc = { n: 0, duration: 0, blocking: 0, styleLayout: 0, worst: 0 };
+    if (!win.PerformanceObserver) return acc;
+    try {
+      var po = new win.PerformanceObserver(function (list) {
+        list.getEntries().forEach(function (e) {
+          acc.n++;
+          acc.duration += e.duration || 0;
+          acc.blocking += e.blockingDuration || 0;
+          acc.styleLayout += e.styleAndLayoutDuration || 0;
+          if ((e.duration || 0) > acc.worst) acc.worst = e.duration;
+        });
+      });
+      po.observe({ type: 'long-animation-frame', buffered: false });
+      acc._po = po;
+    } catch (err) { acc.unsupported = String(err).slice(0, 60); }
+    return acc;
+  }
+  function loafOut(a) {
+    var f = function (v) { return +(v / 1000).toFixed(3); };
+    return { loafCount: a.n, loafTotalS: f(a.duration), blockingS: f(a.blocking), styleLayoutS: f(a.styleLayout), worstMs: +a.worst.toFixed(1) };
+  }
+
+  /* DOM 노드 감시 */
+  function domWatch(win, doc, ms) {
+    var watch = { samples: [], fxMax: 0, fxAdds: 0, floatMax: 0 };
+    var mo = null;
+    if (win.MutationObserver) {
+      mo = new win.MutationObserver(function (recs) {
+        recs.forEach(function (r) { if (r.addedNodes && r.addedNodes.length) watch.fxAdds += r.addedNodes.length; });
+      });
+      var fx0 = doc.querySelector('#bFx');
+      if (fx0) mo.observe(fx0, { childList: true });
+    }
+    var t = setInterval(function () {
+      watch.samples.push(doc.getElementsByTagName('*').length);
+      var fx = doc.querySelector('#bFx'); if (fx) watch.fxMax = Math.max(watch.fxMax, fx.children.length);
+      var fl = doc.querySelector('#bFloats'); if (fl) watch.floatMax = Math.max(watch.floatMax, fl.children.length);
+    }, 250);
+    watch.stop = function () { clearInterval(t); if (mo) mo.disconnect(); };
+    return watch;
+  }
+
+  /* 전투 시작 */
+  function startBattle(stageSel, speed) {
+    return new Promise(function (resolve) {
+      W.LegacyBattle.open();
+      wait(250).then(function () {
+        var card = D.querySelector('#bView .bstage' + (stageSel ? stageSel : ''));
+        if (!card) {
+          var cards = [].slice.call(D.querySelectorAll('#bView .bstage:not(.locked)'));
+          card = cards[cards.length - 1] || cards[0];
+        }
+        card.click();
+        return wait(300);
+      }).then(function () {
+        var st = D.querySelector('[data-start]');
+        if (!st) { resolve('no-start'); return; }
+        st.click();
+        return wait(200);
+      }).then(function () {
+        var sp = D.querySelector('#bSpeed'), guard = 0;
+        function setSpeed() {
+          if (!sp) return resolve('ok');
+          if (+(sp.getAttribute('data-speed') || 1) === speed || guard++ > 6) return resolve('ok');
+          sp.click();
+          setTimeout(setSpeed, 120);
+        }
+        setSpeed();
+      });
+    });
+  }
+
+  /* 전투 한 판 측정 */
+  function measureBattle(label, speed, ms) {
+    return startBattle(null, speed).then(function (r) {
+      if (r !== 'ok') return { label: label, error: r };
+      return wait(900).then(function () {
+        var loaf = loafObserver(W);
+        var dom = domWatch(W, D, ms);
+        var dom0 = D.getElementsByTagName('*').length;
+        return collectFrames(W, ms).then(function (frames) {
+          dom.stop();
+          var st = stats(frames, label);
+          var o = loafOut(loaf);
+          st.speed = speed;
+          st.domStart = dom0;
+          st.domEnd = D.getElementsByTagName('*').length;
+          st.domMax = Math.max.apply(null, dom.samples.concat([dom0]));
+          st.fxMax = dom.fxMax; st.floatMax = dom.floatMax;
+          st.fxAdds = dom.fxAdds;
+          st.fxAddsPerSec = +(dom.fxAdds / (ms / 1000)).toFixed(1);
+          st.loaf = o;
+          st.speedNow = (D.querySelector('#bSpeed') || {}).textContent || '';
+          st.wave = (D.querySelector('#bWaveTxt') || {}).textContent || '';
+          st.phase = (D.querySelector('#arena') ? 'fighting' : 'no-arena');
+          return st;
+        });
+      });
+    });
+  }
+
+  /* 도감 스크롤 측정 */
+  function measureCodex(ms) {
+    return new Promise(function (resolve) {
+      var btn = D.querySelector('#archiveBtn');
+      if (!btn) return resolve({ label: 'codex', error: 'no-btn' });
+      btn.click();
+      wait(700).then(function () {
+        var modal = D.querySelector('#mArchive');
+        var sc = modal ? modal.querySelector('.sheet') : null;
+        var grid = D.querySelector('#arcGrid');
+        var loaf = loafObserver(W);
+        var cards = D.querySelectorAll('#arcGrid .arc-card').length;
+        var t0 = W.performance.now(), step = 0;
+        var frames = [];
+        function tick(t) {
+          frames.push(t);
+          var el = W.performance.now() - t0;
+          if (el < ms) {
+            if (sc) sc.scrollTop = (sc.scrollTop + 26) % Math.max(1, sc.scrollHeight - sc.clientHeight);
+            W.requestAnimationFrame(tick);
+          } else resolve(post(frames));
+        }
+        W.requestAnimationFrame(tick);
+        function post(frames) {
+          var st = stats(frames, 'codex');
+          st.cards = cards;
+          st.hasGrid = !!grid;
+          st.scroller = !!sc;
+          st.loaf = loafOut(loaf);
+          st.dom = D.getElementsByTagName('*').length;
+          return st;
+        }
+      });
+    });
+  }
+
+  /* 시나리오 */
+  function runAll(cfg) {
+    cfg = cfg || {};
+    var per = cfg.seconds || 12000;
+    return ready().then(function () {
+      QA.errors = [];
+      W.addEventListener('error', function (e) { QA.errors.push(String(e.message)); });
+      return measureBattle('battle-1x', 1, per);
+    }).then(function (a) {
+      QA.runs.push(a); say('battle-1x done');
+      return measureBattle('battle-3x', 3, per);
+    }).then(function (b) {
+      QA.runs.push(b); say('battle-3x done');
+      return measureBattle('battle2-3x', 3, per);
+    }).then(function (c) {
+      if (c && !c.error) QA.runs.push(c);
+      say('boss done');
+      return measureCodex(per);
+    }).then(function (d) {
+      QA.runs.push(d);
+      QA.userAgent = navigator.userAgent;
+      QAready = true;
+      window.__QAready = true;
+      say(JSON.stringify(QA.runs.map(function (r) { return r.label + ' fps=' + r.fps + ' jank=' + r.jankPct + '%'; })));
+    }).catch(function (e) {
+      QA.fatal = String(e && e.stack || e);
+      window.__QAready = true;
+      say('fatal ' + QA.fatal);
+    });
+  }
+  window.__QA_run = runAll;
+  window.__QA_start = startBattle;
+  window.__QA_measureBattle = measureBattle;
+  window.__QA_measureCodex = measureCodex;
+  ready().then(function () { say('ready — call __QA_run()'); });
+})();
+</script>
+</body>
+</html>
