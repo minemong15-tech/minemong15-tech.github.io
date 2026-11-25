@@ -11357,8 +11357,8 @@ function portraitSVG(fig, fit, alt) {
     CV.canvas.height = Math.round(h * dpr);
     CV.canvas.style.width = w + 'px';
     CV.canvas.style.height = h + 'px';
-    CV.ground = Math.round(h * 0.80);
-    CV.world = Math.max(720, Math.round(w * (w < 520 ? 1.34 : 1.42)));
+    CV.ground = Math.round(h * 0.78);
+    CV.world = Math.max(1080, Math.round(w * 1.75));
     CV.bg = null; CV.bgKey = '';
     CV.amb = [];
     if (oldWorld) {
@@ -11371,7 +11371,7 @@ function portraitSVG(fig, fit, alt) {
     return true;
   }
   function cvRowOff(row) { return [0, -34, -66][row] || 0; }
-  function cvHomeX(side) { return side === 'a' ? CV.world * 0.20 : CV.world * 0.80; }
+  function cvHomeX(side) { return side === 'a' ? CV.world * 0.255 : CV.world * 0.745; }
 
   /* ── 초상화 이미지 캐시 ── */
   function cvThumb(u, w) {
@@ -11465,12 +11465,12 @@ function portraitSVG(fig, fit, alt) {
     var i = (idx === undefined || idx === null) ? list.indexOf(u) : idx;
     if (i < 0) i = 0;
     var row = i % 3, col = Math.floor(i / 3);
-    var gap = u.boss ? 0 : 50;
+    var gap = u.boss ? 0 : Math.round(CV.H * 0.135) + 34;
     var x = cvHomeX(u.side) + (u.side === 'a' ? col * gap : -col * gap);
     if (u.boss) x = cvHomeX(u.side) + (u.side === 'a' ? -10 : -10);
     var y = CV.ground + cvRowOff(row);
     if (u.boss) { y = CV.ground - 4; row = 0; }
-    var r = u.boss ? Math.max(38, Math.min(56, CV.H * 0.115)) : Math.max(22, Math.min(30, CV.H * 0.062));
+    var r = u.boss ? Math.max(44, Math.min(68, CV.H * 0.15)) : Math.max(26, Math.min(40, CV.H * 0.076));
     u.cv = {
       x: x, y: y, r: r, row: row, dir: u.side === 'a' ? 1 : -1,
       cd: 0.3 + Math.random() * 0.6, anim: 0, flash: 0, kx: 0, walk: 0,
@@ -11658,7 +11658,7 @@ function portraitSVG(fig, fit, alt) {
   }
   function cvCamTarget() {
     var max = Math.max(0, CV.world - CV.W);
-    return Math.max(0, Math.min(max, cvFocus() - CV.W * 0.5));
+    return Math.max(0, Math.min(max, cvFocus() - CV.W * 0.48));
   }
   function cvCamSnap() { CV.camT = cvCamTarget(); CV.cam = CV.camT; }
 
