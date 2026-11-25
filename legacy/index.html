@@ -12822,6 +12822,21 @@ function portraitSVG(fig, fit, alt) {
 
   /* DEBUG-ONLY (QA) */
   try {
+    window.__CVSPR = function (i) {
+      if (!B || !B.allies.length) return 'no B';
+      var u = B.allies[i || 0];
+      var s = cvSprite(u);
+      if (!s) return 'sprite null';
+      var e = document.getElementById('dbgspr');
+      if (e) e.parentNode.removeChild(e);
+      s.id = 'dbgspr';
+      s.style.cssText = 'position:fixed;left:2px;top:2px;z-index:999999;width:180px;height:180px;background:#000';
+      document.body.appendChild(s);
+      return 'ok ' + (u.__sprImg ? 'img' : 'noimg') + ' ' + (u.__spr ? 'spr' : 'nospr');
+    };
+  } catch (e) {}
+
+  try {
     window.__CVD = function () {
       return {
         W: CV.W, H: CV.H, world: Math.round(CV.world), cam: Math.round(CV.cam),
