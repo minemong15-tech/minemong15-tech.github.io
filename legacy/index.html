@@ -4825,6 +4825,7 @@
 
   /* 전장은 모달 본문을 꽉 채운다 (지도/덱 화면은 그대로) */
   .b-body:has(> .arena.cv4){ padding:0; overflow:hidden; display:flex; flex-direction:column }
+  .bsheet:has(.arena.cv4){ height:min(94dvh, 960px) }
   .arena.cv4{
     display:flex; flex-direction:column; gap:6px; flex:1 1 auto; min-height:0;
     padding:8px 12px 10px; width:100%;
@@ -4954,6 +4955,7 @@
     .arena.cv4 .cv-top .a-ctrl .actrl{ padding:4px 7px; font-size:8.5px }
     .arena.cv4 .cv-top .a-wave b{ font-size:7.5px }
     .cv-stage{ min-height:250px; border-radius:13px }
+    .bsheet:has(.arena.cv4){ height:100dvh }
     .cvsc-p{ width:30px; height:30px }
     .cvsc-n{ font-size:7.5px }
     .cvsc-v{ font-size:6.5px }
@@ -11366,11 +11368,22 @@ function portraitSVG(fig, fit, alt) {
       var all = (B ? B.allies.concat(B.enemies || []) : []);
       for (var i = 0; i < all.length; i++) if (all[i].cv) { all[i].cv.x *= k; }
     }
-    if (B) cvHomeAll();
+    if (B) { cvHomeAll(); cvRelayout(); }
     cvCamSnap();
     return true;
   }
   function cvRowOff(row) { return [0, -34, -66][row] || 0; }
+  function cvRelayout() {
+    if (!B) return;
+    var all = (B.allies || []).concat(B.enemies || []);
+    for (var i = 0; i < all.length; i++) {
+      var u = all[i], c = u.cv;
+      if (!c) continue;
+      c.r = u.boss ? Math.max(52, Math.min(96, CV.H * 0.20)) : Math.max(28, Math.min(58, CV.H * 0.115));
+      c.y = u.boss ? CV.ground - 4 : CV.ground - c.row * Math.round(c.r * 1.05);
+      c.x = Math.max(CV.world * 0.04, Math.min(CV.world * 0.96, c.x));
+    }
+  }
   function cvHomeX(side) { return side === 'a' ? CV.world * 0.34 : CV.world * 0.66; }
 
   /* ── 초상화 이미지 캐시 ── */
@@ -11470,8 +11483,8 @@ function portraitSVG(fig, fit, alt) {
     if (u.boss) { row = 0; col = 0; }
     var y = CV.ground;
     if (u.boss) { y = CV.ground - 4; }
-    var r = u.boss ? Math.max(44, Math.min(68, CV.H * 0.15)) : Math.max(26, Math.min(40, CV.H * 0.076));
-    var gap = Math.round(r * 1.95);
+    var r = u.boss ? Math.max(52, Math.min(96, CV.H * 0.20)) : Math.max(28, Math.min(58, CV.H * 0.115));
+    var gap = Math.round(r * 1.85);
     if (!u.boss) {
       x += (u.side === 'a' ? 1 : -1) * col * gap;
       y = CV.ground - row * Math.round(r * 1.05);
@@ -12595,7 +12608,7 @@ function portraitSVG(fig, fit, alt) {
     }
     /* 이름 */
     if (u.boss || u.side === 'a') {
-      ctx.font = (u.boss ? 700 : 600) + ' ' + (u.boss ? Math.round(r * 0.3) : 9) + 'px system-ui,sans-serif';
+      ctx.font = (u.boss ? 700 : 600) + ' ' + Math.round(u.boss ? Math.max(11, r * 0.26) : Math.max(9, r * 0.24)) + 'px system-ui,sans-serif';
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       ctx.fillStyle = u.boss ? '#ffd9cf' : 'rgba(240,235,225,0.9)';
       var nm = String(u.name || '');
