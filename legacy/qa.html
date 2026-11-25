@@ -117,6 +117,15 @@ async function pollUlt() {
   await sleep(300);
   ready.click();
   setPhase('ult-cut');
+  /* QA: 컷인 애니메이션을 그 프레임에 고정해 캡처한다 */
+  try {
+    var cd = q('#bCut');
+    if (cd) {
+      cd.style.animationPlayState = 'paused';
+      var kids = cd.querySelectorAll('*');
+      for (var ci2 = 0; ci2 < kids.length; ci2++) kids[ci2].style.animationPlayState = 'paused';
+    }
+  } catch (e3) {}
   var cut = await waitFor(function () { var c = q('#bCut'); return c && c.classList.contains('go') ? c : null; }, 4000, '컷인');
   QA.results.ultCut = !!cut;
   if (cut) {
