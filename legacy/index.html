@@ -11375,7 +11375,7 @@ function portraitSVG(fig, fit, alt) {
     shots: [], parts: [], floats: [], rings: [], lanes: [],
     shakeT: 0, shakeP: 0, flash: 0, flashC: '255,240,200', slow: 0,
     combo: 0, comboT: 0, lastSfx: 0, fps: 60, maxFrame: 0, frameN: 0, acc: 0, accN: 0, cpuMs: 0, cpuMax: 0,
-    cmd: { g: 0, fire: 0 }, hud: {}, imgs: {}, arts: {}, ready: 0
+    cmd: { g: 0, fire: 0 }, hud: {}, imgs: {}, arts: {}, imgN: 0, ready: 0
   };
   var LZ_CAP = { part: 25, float: 10, shot: 6, ring: 6, lane: 4 };
 
@@ -11416,31 +11416,86 @@ function portraitSVG(fig, fit, alt) {
     if (u.figs && u.figs.length) return figById(u.figs[0]);
     return null;
   }
-  /* 위키미디어 썸네일 URL을 만들어 원본 대형 JPEG 디코딩을 피한다 */
+  /* ── 위키미디어 썸네일 ──
+     익명 요청에 생성되는 폭은 정해져 있다(120·250·330·500·960·1280).
+     그 밖의 폭(240·400·480 등)은 전부 400 Bad Request 이므로, 요청 폭을
+     허용 폭으로 올림해서 쓴다. SVG는 썸네일 이름이 `...svg.png` 형식이어야 한다. */
+  var LZ_W = [120, 250, 330, 500, 960, 1280];
+  function lzFitPx(px) {
+    px = Math.round(px || 330);
+    for (var i = 0; i < LZ_W.length; i++) if (LZ_W[i] >= px) return LZ_W[i];
+    return LZ_W[LZ_W.length - 1];
+  }
   function lzThumb(url, px) {
     if (!url) return '';
-    if (url.indexOf('upload.wikimedia.org') < 0) return url;
-    if (url.indexOf('/thumb/') >= 0) return url.replace(/\/\d+px-/, '/' + px + 'px-');
-    var m = /^(https:\/\/upload\.wikimedia\.org\/wikipedia\/[a-z-]+)\/([0-9a-f])\/([0-9a-f]{2})\/([^/]+)$/.exec(url);
+    if (url.indexOf('wikimedia.org') < 0) return url;
+    var w = lzFitPx(px);
+    if (url.indexOf('/thumb/') >= 0) {
+      return /\/\d+px-/.test(url) ? url.replace(/\/\d+px-/, '/' + w + 'px-') : url;
+    }
+    var m = /^(https:\/\/upload\.wikimedia\.org\/wikipedia\/[a-z-]+)\/([0-9a-f])\/([0-9a-f]{2})\/([^\/]+)$/.exec(url);
     if (!m) return url;
-    return m[1] + '/thumb/' + m[2] + '/' + m[3] + '/' + m[4] + '/' + px + 'px-' + m[4];
+    var svg = /\.svg$/i.test(m[4]);
+    return m[1] + '/thumb/' + m[2] + '/' + m[3] + '/' + m[4] + '/' + w + 'px-' + m[4] + (svg ? '.png' : '');
   }
+  /* 원본 → 960px → 요청 폭 순으로 실패 시 즉시 다음 후보로 넘어간다 */
+  function lzCands(url, want) {
+    var out = [], add = function (u) { if (u && out.indexOf(u) < 0) out.push(u); };
+    add(lzThumb(url, want));
+    add(lzThumb(url, Math.max(want, 960)));
+    add(url);
+    return out;
+  }
+  /* 이미지 캐시 — 로드가 끝나면 그 유닛의 카드 스프라이트만 즉시 무효화해 다시 굽는다 */
   function lzImage(url, px) {
     if (!url) return null;
-    var key = lzThumb(url, px || 240);
-    var im = LZ.imgs[key];
-    if (im === undefined) {
-      im = LZ.imgs[key] = new Image();
-      im.__ok = 0;
-      im.onload = function () { im.__ok = 1; lzReload(); };
-      im.onerror = function () {
-        if (im.__fb) { im.__ok = 0; return; }
-        im.__fb = 1;
-        im.src = url;              /* 썸네일이 없으면 원본으로 */
-      };
-      im.src = key;
+    var want = lzFitPx(px);
+    var e = LZ.imgs[url + '|' + want];
+    if (e) {
+      if (e.ok) return e.img;
+      /* 아직 고해상도가 안 왔으면 이미 받아둔 저해상도라도 바로 그린다 */
+      for (var i = LZ_W.length - 1; i >= 0; i--) {
+        var lo = LZ.imgs[url + '|' + LZ_W[i]];
+        if (lo && lo.ok && LZ_W[i] < want) return lo.img;
+      }
+      return null;
     }
-    return im.__ok ? im : null;
+    if (LZ.imgN > 160) { LZ.imgs = {}; LZ.arts = {}; LZ.imgN = 0; }
+    e = LZ.imgs[url + '|' + want] = { img: new Image(), ok: 0, bad: 0, step: 0, cands: lzCands(url, want) };
+    LZ.imgN++;
+    try { e.img.decoding = 'async'; } catch (e0) { }
+    e.img.onload = function () {
+      e.ok = 1; e.bad = 0;
+      lzDropFor(url);
+    };
+    e.img.onerror = function () {
+      e.ok = 0;
+      e.step++;
+      if (e.step < e.cands.length) e.img.src = e.cands[e.step];
+      else { e.bad = 1; lzDropFor(url); }   /* 끝까지 실패 → 이모지 카드로 확정 */
+    };
+    e.img.src = e.cands[0];
+    return null;
+  }
+  /* 사진이 도착한 유닛의 스프라이트만 버린다 — 다음 프레임에 사진으로 다시 베이크 */
+  function lzDropFor(url) {
+    if (!B) return;
+    var all = (B.allies || []).concat(B.enemies || []), hit = 0;
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].lz && lzFaceUrl(all[i]) === url) { all[i].lz.spr = null; hit++; }
+    }
+    if (!hit) lzReload();
+  }
+  /* 전투 시작 시 카드에 필요한 해상도로 미리 받아 둔다 */
+  function lzWarm() {
+    if (!B) return;
+    var all = (B.allies || []).concat(B.enemies || []), d = LZ.dpr || 1;
+    for (var i = 0; i < all.length; i++) {
+      var u = all[i], url = lzFaceUrl(u);
+      if (!url) continue;
+      var c = u.lz;
+      lzImage(url, c ? Math.max(c.w * d, c.h * d) : 330);
+    }
   }
   function lzArtImg(svg) {
     if (!svg) return null;
@@ -11467,7 +11522,8 @@ function portraitSVG(fig, fit, alt) {
     if (!f || !f.photo) return '';
     var u = f.photo.url || f.photo.inline;
     if (!u) return '';
-    return '<img src="' + lzThumb(u, px || 120) + '" alt="" loading="lazy" decoding="async">';
+    return '<img src="' + lzThumb(u, px || 120) + '" data-orig="' + esc(u) + '" alt="" loading="lazy" decoding="async"' +
+      ' onerror="if(this.dataset.fb){this.style.display=&#39;none&#39;}else{this.dataset.fb=1;this.src=this.dataset.orig;}">';
   }
   function lzFaceUrl(u) {
     var f = lzFig(u);
@@ -11519,8 +11575,8 @@ function portraitSVG(fig, fit, alt) {
     if (!box || !LZ.canvas) return false;
     var w = Math.round(box.clientWidth), h = Math.round(box.clientHeight);
     if (!w || !h) return false;
-    var dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
-    if (perfLite() && dpr > 1.25) dpr = 1.25;
+    /* 레티나 화질 — 모바일에서도 2배 해상도로 그린다(1.25 상한은 글자·사진을 뭉갰다) */
+    var dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
     if (!force && LZ.L && w === LZ.W && h === LZ.H && dpr === LZ.dpr) return true;
     LZ.W = w; LZ.H = h; LZ.dpr = dpr;
     LZ.canvas.width = Math.max(1, Math.round(w * dpr));
@@ -11654,6 +11710,7 @@ function portraitSVG(fig, fit, alt) {
     }
     /* 그리기 순서: 뒤 → 앞, 위 레인 → 아래 레인 */
     LZ.order = al.concat(en).filter(function (x) { return !!x.lz; });
+    lzWarm();
     LZ.order.sort(function (a, b) {
       return (b.lz.col - a.lz.col) || (a.lz.lane - b.lz.lane) || (a.side === 'a' ? -1 : 1);
     });
@@ -11727,13 +11784,16 @@ function portraitSVG(fig, fit, alt) {
     if (c.spr && c.spr.key === key) return c.spr.canvas;
     var f = lzFig(u);
     var url = lzFaceUrl(u);
-    var img = url ? lzImage(url, pw > 150 ? 400 : 240) : null;
+    /* 카드의 실제 픽셀(높이 기준)만큼 원본을 받아 확대 없이 크롭한다 */
+    var img = url ? lzImage(url, Math.max(pw, ph)) : null;
     var art = (!img && u.art) ? lzArtImg(u.art) : null;
     var cv = document.createElement('canvas');
     cv.width = pw; cv.height = ph;
     var g = cv.getContext('2d');
     var W = pw, H = ph, r = Math.max(4, Math.round(Math.min(W, H) * 0.12));
     g.clearRect(0, 0, W, H);
+    g.imageSmoothingEnabled = true;
+    try { g.imageSmoothingQuality = 'high'; } catch (e0) { }
     /* 카드 몸통 */
     g.save();
     lzRound(g, 0, 0, W, H, r);
@@ -12210,7 +12270,8 @@ function portraitSVG(fig, fit, alt) {
       if (kk) kk.textContent = 'ULTIMATE';
       if (face) {
         var fu = lzFaceUrl(a), f0 = lzFig(a);
-        face.innerHTML = fu ? '<img src="' + lzThumb(fu, 480) + '" alt="">'
+        face.innerHTML = fu ? '<img src="' + lzThumb(fu, 500) + '" data-orig="' + esc(fu) + '" alt=""' +
+            ' onerror="if(this.dataset.fb){this.style.display=&#39;none&#39;}else{this.dataset.fb=1;this.src=this.dataset.orig;}">'
           : (f0 ? figArt(f0) : '<i class="lzcut-em">' + (a.icon || '⚡') + '</i>');
       }
       cut.style.setProperty('--rc', lzGradeRc(a));
@@ -12954,7 +13015,18 @@ function portraitSVG(fig, fit, alt) {
     ar.classList.toggle('spd3', B.speed === 3);
   }, 700);
 
-  /* ── QA 진단(겹침·프레임) ── */
+  /* QA 진단(겹침·프레임) ── */
+  function lzPhotoState(u) {
+    var url = lzFaceUrl(u);
+    if (!url) return 'none';
+    var d = LZ.dpr || 1, c = u.lz;
+    var want = lzFitPx(c ? Math.max(c.w * d, c.h * d) : 330);
+    var e = LZ.imgs[url + '|' + want];
+    if (!e) return 'idle';
+    if (e.ok) return 'ok';
+    if (e.bad) return 'bad';
+    return 'loading';
+  }
   window.__lzDiag = function () {
     var out = { w: LZ.W, h: LZ.H, dpr: LZ.dpr, fps: LZ.fps, maxFrameMs: Math.round(LZ.maxFrame * 1000),
       frames: LZ.frameN, parts: LZ.parts.length, floats: LZ.floats.length,
@@ -12964,14 +13036,20 @@ function portraitSVG(fig, fit, alt) {
       stageW: (LZ.canvas ? LZ.canvas.parentNode.clientWidth : 0),
       stageH: (LZ.canvas ? LZ.canvas.parentNode.clientHeight : 0),
       boss: !!(LZ.L && LZ.L.boss), cw: LZ.L ? Math.round(LZ.L.cw) : 0, ch: LZ.L ? Math.round(LZ.L.ch) : 0,
-      cpuMs: Math.round(LZ.cpuMs * 10) / 10, cpuMaxMs: Math.round(LZ.cpuMax * 10) / 10, errN: LZ.errN };
+      cpuMs: Math.round(LZ.cpuMs * 10) / 10, cpuMaxMs: Math.round(LZ.cpuMax * 10) / 10, errN: LZ.errN,
+      imgN: LZ.imgN || 0, imgOk: 0, imgBad: 0 };
     if (!B) return out;
     var all = B.allies.concat(B.enemies), i, j;
     for (i = 0; i < all.length; i++) {
       var c = all[i].lz;
       if (!c) continue;
       out.units.push({ n: all[i].name, side: all[i].side, lane: c.lane, col: c.col,
-        x: Math.round(c.x), y: Math.round(c.y), w: Math.round(c.w), h: Math.round(c.h), alive: !!all[i].alive });
+        x: Math.round(c.x), y: Math.round(c.y), w: Math.round(c.w), h: Math.round(c.h), alive: !!all[i].alive,
+        photo: lzPhotoState(all[i]) });
+    }
+    for (i = 0; i < out.units.length; i++) {
+      if (out.units[i].photo === 'ok') out.imgOk++;
+      if (out.units[i].photo === 'bad') out.imgBad++;
     }
     for (i = 0; i < out.units.length; i++) {
       for (j = i + 1; j < out.units.length; j++) {
@@ -13378,25 +13456,38 @@ function portraitSVG(fig, fit, alt) {
   function photoSrc(f) {
     return (f && f.photo && (f.photo.inline || f.photo.url)) || '';
   }
-  /* 위키미디어 썸네일 폭 바꾸기 — 카드용은 320px로 받아 디코딩·메모리를 9배 줄인다 */
-  function thumbUrl(u, w) {
-    /* 위키미디어는 정해진 폭(250/330/500/960...)만 익명 요청에 내어준다 — 330px 고정 */
-    if (!u || !w) return u;
-    var m = /\/(\d+)px-/.exec(u);
-    if (!m || +m[1] < 330) return u;
-    return u.replace(/\/\d+px-/, '/330px-');
+  /* 위키미디어는 정해진 폭(120·250·330·500·960·1280)만 내어준다 —
+     그 밖의 폭(240·330 사이 아무 값·400·480 등)은 400 오류로 사진이 안 나왔다.
+     SVG는 썸네일 이름이 `...svg.png` 형식이라야 한다. */
+  var PH_W = [120, 250, 330, 500, 960, 1280];
+  var PH_DPR = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
+  var PH_CARD = PH_DPR >= 1.5 ? 500 : 330;
+  function wikiThumb(u, px) {
+    if (!u || u.indexOf('wikimedia.org') < 0) return u;
+    var w = PH_W[PH_W.length - 1];
+    for (var i = 0; i < PH_W.length; i++) if (PH_W[i] >= (px || 330)) { w = PH_W[i]; break; }
+    if (u.indexOf('/thumb/') >= 0) return /\/\d+px-/.test(u) ? u.replace(/\/\d+px-/, '/' + w + 'px-') : u;
+    var m = /^(https:\/\/upload\.wikimedia\.org\/wikipedia\/[a-z-]+)\/([0-9a-f])\/([0-9a-f]{2})\/([^\/]+)$/.exec(u);
+    if (!m) return u;
+    var svg = /\.svg$/i.test(m[4]);
+    return m[1] + '/thumb/' + m[2] + '/' + m[3] + '/' + m[4] + '/' + w + 'px-' + m[4] + (svg ? '.png' : '');
   }
+  function thumbUrl(u, w) { return wikiThumb(u, w || PH_CARD); }
+  function bigUrl(u) { return wikiThumb(u, 960); }
 
   function photoHtml(f, opts) {
     opts = opts || {};
     var alt = opts.alt || (f.name + ' 사진');
-    var img = '', bg = '', pu = photoSrc(f), pth = opts.big ? pu : thumbUrl(pu, 330);
+    var img = '', bg = '', pu = photoSrc(f);
+    var pth = pu ? (opts.big ? bigUrl(pu) : thumbUrl(pu)) : '';
     if (pu) {
+      /* 카드 썸네일이 실패하면 원본으로 한 번 더, 그것도 실패하면 초상화 그림을 남긴다 */
       img = '<img class="ph-img" src="' + pth + '" alt="' + esc(alt) + '"' +
+        ' data-orig="' + esc(pu) + '"' +
         ' loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async"' +
-        ' onerror="this.style.display=&#39;none&#39;">';
+        ' onerror="if(this.dataset.fb){this.style.display=&#39;none&#39;}else{this.dataset.fb=1;this.src=this.dataset.orig;}">';
       /* 배경 블리드는 큰 초상화에서만 — 카드에서는 같은 사진을 한 번 더 받고 블러까지 걸렸다 */
-      if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(thumbUrl(pu, 330)) + '&quot;)"></span>';
+      if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(opts.big ? bigUrl(pu) : thumbUrl(pu)) + '&quot;)"></span>';
     }
     return '<span class="ph-svg">' + portraitSVG(f, opts.fit, alt) + '</span>' + bg + img;
   }
