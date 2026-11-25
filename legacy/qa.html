@@ -272,11 +272,52 @@ async function go() {
   QA.errs.forEach(function (e) { out('  ' + e, 'bad'); });
 }
 
+async function goLive() {
+  var w = W(), d = D();
+  installHooks(w);
+  await sleep(1500);
+  out('LIVE 모드 · ' + w.innerWidth + 'x' + w.innerHeight);
+  setPhase('open');
+  click('#warEnter', '전투 열기');
+  await waitFor(function () { return q('[data-bmode="boss"]'); }, 8000, '전장 탭');
+  await sleep(400);
+  click('[data-bmode="boss"]', '보스 레이드');
+  var bc = await waitFor(function () { return q('[data-boss]'); }, 8000, '보스 카드');
+  if (bc) { bc.click(); await sleep(400); }
+  var bs = await waitFor(function () { return q('[data-boss-start]'); }, 8000, '보스 준비');
+  if (bs) { bs.click(); out('→ 보스 레이드 시작', 'ok'); }
+  await waitFor(function () { return q('#bCanvas'); }, 9000, '아레나');
+  await sleep(500);
+  for (var i = 0; i < 3; i++) {
+    var sb = q('#bSpeed');
+    if (!sb || /1x/.test(sb.textContent)) break;
+    sb.click(); await sleep(200);
+  }
+  QA.results.arena = arenaInfo();
+  out('아레나 ' + JSON.stringify(QA.results.arena) + ' · ' + (q('#bSpeed') ? q('#bSpeed').textContent : ''));
+  setPhase('live');
+  await sleep(9000);
+  var au = q('#bAuto');
+  if (au) { au.click(); out('AUTO 수동', 'ok'); }
+  var ready = await waitFor(function () { return q('.cvsc.ready'); }, 120000, 'ULT READY');
+  if (ready) {
+    ready.click();
+    setPhase('ult');
+    QA.shot = 'ult';
+    out('ULT 발동', 'ok');
+    await sleep(30000);
+    QA.shot = '';
+  }
+  setPhase('idle');
+  while (true) { await sleep(2000); }
+}
+
 fr.addEventListener('load', function () {
   if (QA.started) return;
   QA.started = true;
+  var live = P.get('live');
   setTimeout(function () {
-    go().catch(function (e) { out('QA 예외: ' + (e && e.stack ? e.stack.split('\n')[0] : e), 'bad'); QA.done = true; });
+    (live ? goLive() : go()).catch(function (e) { out('QA 예외: ' + (e && e.stack ? e.stack.split('\n')[0] : e), 'bad'); QA.done = true; });
   }, 900);
 });
 fr.src = './index.html?vip=hs2026&qab=' + Date.now();
