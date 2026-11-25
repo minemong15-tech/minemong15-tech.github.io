@@ -21,10 +21,12 @@
 <script>
 var P = new URLSearchParams(location.search);
 var VW = parseInt(P.get('w') || '0', 10), VH = parseInt(P.get('h') || '0', 10);
-var QA = window.QA = { log: [], results: {}, errs: [], phase: 'boot', done: false, fps: 0, jank: 0, frames: 0, shots: [] };
+var HOLD = parseInt(P.get('hold') || '0', 10);
+var QA = window.QA = { log: [], results: {}, errs: [], phase: 'boot', done: false, fps: 0, jank: 0, frames: 0, shots: [], shot: '' };
 var fr = document.getElementById('fr');
 var LOG = document.getElementById('log');
 if (VW && VH) { fr.style.width = VW + 'px'; fr.style.height = VH + 'px'; }
+if (P.get('solo')) { document.getElementById('bar').style.display = 'none'; LOG.style.display = 'none'; document.body.style.background = '#000'; }
 document.getElementById('sz').textContent = (VW || 'auto') + 'x' + (VH || 'auto');
 function out(s, cls) {
   QA.log.push(s);
@@ -98,7 +100,12 @@ function arenaInfo() {
     res: qa('.bres').length
   };
 }
-function shot(tag) { QA.shots.push({ tag: tag, t: Date.now() }); QA.shotWanted = tag; }
+async function shot(tag) {
+  QA.shots.push(tag); QA.shot = tag;
+  out('📷 ' + tag);
+  if (HOLD > 0) await sleep(HOLD * 1000);
+  QA.shot = '';
+}
 async function pollUlt() {
   /* AUTO 를 끄고 게이지 100% 카드가 뜨면 직접 터치 발동 */
   var off = q('#bAuto');
@@ -116,8 +123,8 @@ async function pollUlt() {
     var ci = cut.querySelector('.ci-s'), cn = cut.querySelector('.ci-n'), cf = cut.querySelector('#bCutFace img');
     QA.results.ultName = ci ? ci.textContent : '';
     out('컷인: ' + (ci ? ci.textContent : '?') + ' / ' + (cn ? cn.textContent : '?') + ' / 초상화 ' + (cf ? 'O' : 'X'), 'ok');
-    shot('ult');
-    await sleep(2500);
+    await shot('ult');
+    await sleep(1500);
   }
   var on = q('#bAuto');
   if (on) { on.click(); out('→ AUTO 다시 켜기', 'ok'); }
@@ -153,7 +160,7 @@ async function go() {
   await sleep(1000);
   QA.results.arena = arenaInfo();
   out('아레나 ' + JSON.stringify(QA.results.arena));
-  shot('battle');
+  await shot('battle');
 
   var ultJob = pollUlt();
 
@@ -180,8 +187,8 @@ async function go() {
     out('결과 ' + kind + ' · MVP 행 ' + QA.results.mvpRows + ' · 버튼 ' + QA.results.acts, 'ok');
     out('리포트: ' + ov.textContent.replace(/\s+/g, ' ').slice(0, 180));
     await ultJob;
-    shot('report');
-    await sleep(1500);
+    await shot('report');
+    await sleep(1200);
   }
   await ultJob;
 
@@ -211,7 +218,7 @@ async function go() {
     QA.results.tower = !!a3;
     await sleep(3000);
     out('탑 ' + (a3 ? 'O · ' + JSON.stringify(arenaInfo()) : 'X'), a3 ? 'ok' : 'bad');
-    shot('tower');
+    await shot('tower');
     await sleep(2500);
   }
 
@@ -220,7 +227,9 @@ async function go() {
   click('#bRetreat', '나가기');
   await sleep(800);
   click('[data-bmode="boss"]', '보스 레이드');
-  var bs = await waitFor(function () { return q('[data-boss-start]'); }, 8000, '보스 목록');
+  var bc = await waitFor(function () { return q('[data-boss]'); }, 8000, '보스 카드');
+  if (bc) { bc.click(); out('→ 보스 선택', 'ok'); await sleep(500); }
+  var bs = await waitFor(function () { return q('[data-boss-start]'); }, 8000, '보스 준비 화면');
   if (bs) {
     bs.click(); out('→ 보스 레이드 시작', 'ok');
     var a4 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 9000, '보스 아레나');
@@ -230,7 +239,7 @@ async function go() {
     out('보스 ' + (a4 ? 'O' : 'X') + ' · WARNING ' + (wn ? 'O' : 'X'), a4 ? 'ok' : 'bad');
     await sleep(2000);
     out('보스 HUD ' + (q('#bBossBar') && q('#bBossBar').classList.contains('on') ? 'O' : 'X') + ' ' + (q('#bBossNum') ? q('#bBossNum').textContent : ''));
-    shot('boss');
+    await shot('boss');
     await sleep(1500);
   }
 
