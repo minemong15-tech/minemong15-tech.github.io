@@ -12,11 +12,15 @@
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="box"><span>mobile 390×844</span><div class="ph" id="bp" style="width:390px;height:844px">loading…</div></div>
-  <div class="box"><span>landscape 844×390</span><div class="ph" id="bl" style="width:844px;height:390px">loading…</div></div>
+<div class="wrap" id="wrap">
+  <div class="box"><span id="lbm">mobile 390×844</span><div class="ph" id="bp"></div></div>
+  <div class="box" id="boxl"><span>landscape 844×390</span><div class="ph" id="bl"></div></div>
 </div>
 <script>
+var Q = new URLSearchParams(location.search);
+var MODE = Q.get('m') || '0';
+var LAST = (Q.get('st') || 'first') === 'last';
+
 function mk(id, w, h){
   var box = document.getElementById(id);
   box.style.width = w + 'px'; box.style.height = h + 'px';
@@ -24,7 +28,7 @@ function mk(id, w, h){
   var f = document.createElement('iframe');
   f.width = w; f.height = h;
   f.setAttribute('scrolling', 'no');
-  f.src = './?vip=hs2026&v=qa3';
+  f.src = './?vip=hs2026&v=qa' + (Q.get('v') || '4');
   box.appendChild(f);
   return f;
 }
@@ -40,7 +44,8 @@ function boot(f){
           if (w.LegacyBattle) w.LegacyBattle.open();
         } else if (!d.querySelector('#arena')) {
           if (!f.__staged) {
-            var s = d.querySelector('[data-stage]');
+            var list = d.querySelectorAll('[data-stage]');
+            var s = list.length ? list[LAST ? list.length - 1 : 0] : null;
             if (s) { s.click(); f.__staged = 1; }
           } else {
             var b = d.querySelector('[data-start]');
@@ -50,13 +55,16 @@ function boot(f){
       }
     } catch (e) { try { document.title = 'QA ERR ' + e.message; } catch (e2) {} }
     if (tries > 70) clearInterval(t);
-  }, 300);
+  }, 260);
 }
-setTimeout(function () {
-  var a = mk('bp', 390, 844);
-  var c = mk('bl', 844, 390);
-  setTimeout(function () { boot(a); boot(c); }, 2600);
-}, 5200);
+function go(){
+  var a, c;
+  if (MODE === '1') { a = mk('bp', 390, 844); boot(a); }
+  else if (MODE === '2') { a = mk('bp', 844, 390); document.getElementById('lbm').textContent = 'landscape 844×390'; document.getElementById('boxl').style.display = 'none'; boot(a); }
+  else if (MODE === '3') { a = mk('bp', 1180, 920); document.getElementById('lbm').textContent = 'desktop 1180×920'; document.getElementById('boxl').style.display = 'none'; boot(a); }
+  else { a = mk('bp', 390, 844); c = mk('bl', 844, 390); boot(a); boot(c); }
+}
+setTimeout(go, 5200);
 </script>
 </body>
 </html>
