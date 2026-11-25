@@ -11464,13 +11464,19 @@ function portraitSVG(fig, fit, alt) {
     var list = u.side === 'a' ? B.allies : B.enemies;
     var i = (idx === undefined || idx === null) ? list.indexOf(u) : idx;
     if (i < 0) i = 0;
-    var row = i % 3, col = Math.floor(i / 3);
-    var gap = u.boss ? 0 : Math.round(CV.H * 0.135) + 34;
-    var x = cvHomeX(u.side) + (u.side === 'a' ? col * gap : -col * gap);
-    if (u.boss) x = cvHomeX(u.side) + (u.side === 'a' ? -10 : -10);
-    var y = CV.ground + cvRowOff(row);
-    if (u.boss) { y = CV.ground - 4; row = 0; }
+    var n = Math.max(1, list.length);
+    var rows = n <= 3 ? 1 : 2;
+    var row = i % rows, col = Math.floor(i / rows);
+    var x = cvHomeX(u.side);
+    if (u.boss) { row = 0; col = 0; }
+    var y = CV.ground;
+    if (u.boss) { y = CV.ground - 4; }
     var r = u.boss ? Math.max(44, Math.min(68, CV.H * 0.15)) : Math.max(26, Math.min(40, CV.H * 0.076));
+    var gap = Math.round(r * 1.95);
+    if (!u.boss) {
+      x += (u.side === 'a' ? 1 : -1) * col * gap;
+      y = CV.ground - row * Math.round(r * 1.05);
+    }
     u.cv = {
       x: x, y: y, r: r, row: row, dir: u.side === 'a' ? 1 : -1,
       cd: 0.3 + Math.random() * 0.6, anim: 0, flash: 0, kx: 0, walk: 0,
