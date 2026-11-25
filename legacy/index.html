@@ -12018,7 +12018,7 @@ function portraitSVG(fig, fit, alt) {
       c.kx += (dx >= 0 ? 1 : -1) * (crit ? 16 : 9);
     }
     cvBurstAt(c.x, c.y - c.r, crit || weak ? 8 : 4, crit ? '255,190,120' : '255,240,210');
-    cvComboAdd(1);
+    cin3ComboAdd(1);
     if (tgt.side === 'a') cvGainUlt(tgt, 0.35);
     if (crit || weak || tgt.boss) shake(crit ? 'big' : 'sm');
     if (tgt.alive && dmg) { /* 수치 표기는 floatDmg 담당 */ }
@@ -12223,6 +12223,13 @@ function portraitSVG(fig, fit, alt) {
   }
   function cvLoop(ts) {
     CV.raf = 0;
+    try { cvFrame(ts); } catch (err) {
+      CV.errN = (CV.errN || 0) + 1;
+      if (CV.errN < 4 && window.console && console.error) console.error('cv frame:', err);
+    }
+    if (B && CV.ctx && CV.raf === 0) CV.raf = window.requestAnimationFrame(cvLoop);
+  }
+  function cvFrame(ts) {
     if (!B || !CV.ctx) { cvStop(); return; }
     var modal = document.getElementById('mBattle');
     if (!modal || !modal.classList.contains('open')) { cvStop(); return; }
@@ -12238,10 +12245,9 @@ function portraitSVG(fig, fit, alt) {
     if (CV.paused) dt = 0;
     if (dt > 0) cvStep(dt);
     cvFx(dt || raw);
-    if (B.phase === 'done' && (CV.frames % 2) === 1) { CV.raf = window.requestAnimationFrame(cvLoop); return; }
+    if (B.phase === 'done' && (CV.frames % 2) === 1) return;
     cvRender();
     if ((CV.frames % 4) === 0) { cvHud(); cvDockAll(); }
-    CV.raf = window.requestAnimationFrame(cvLoop);
   }
   function cvFx(dt) {
     var i, o;

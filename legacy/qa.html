@@ -15,7 +15,7 @@
 </head>
 <body>
 <div id="bar"><b>LEGACY BATTLE QA</b><span id="phase">boot</span><span id="ver"></span></div>
-<iframe id="fr" src="./index.html?vip=hs2026&qab=1"></iframe>
+<iframe id="fr" src="about:blank"></iframe>
 <div id="log"></div>
 <script>
 var QA = window.QA = { log: [], results: {}, errs: [], phase: 'boot', done: false, fps: 0, jank: 0 };
@@ -238,8 +238,11 @@ async function go() {
 }
 
 fr.addEventListener('load', function () {
+  if (QA.started) return;
+  QA.started = true;
   setTimeout(function () { go().catch(function (e) { out('QA 예외: ' + e, 'bad'); QA.done = true; }); }, 1200);
 });
+fr.src = './index.html?vip=hs2026&qab=' + Date.now();
 </script>
 </body>
 </html>
