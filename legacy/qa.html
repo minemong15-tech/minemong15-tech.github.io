@@ -44,7 +44,7 @@ function boot(f){
           if (w.LegacyBattle) w.LegacyBattle.open();
         } else if (!d.querySelector('#arena')) {
           if (!f.__staged) {
-            var list = d.querySelectorAll('[data-stage]');
+            var list = d.querySelectorAll('[data-stage]:not(.locked)');
             var s = list.length ? list[LAST ? list.length - 1 : 0] : null;
             if (s) { s.click(); f.__staged = 1; }
           } else {
