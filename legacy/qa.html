@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEGACY QA · 화면 크기 검증</title>
+<style>
+  html,body{margin:0;padding:0;background:#0b0b0d;color:#888;font:12px/1.4 -apple-system,system-ui,sans-serif}
+  #wrap{padding:8px;display:inline-block}
+  #bar{margin:0 0 6px;display:flex;gap:8px;align-items:center}
+  #bar a{color:#c8a86a;text-decoration:none;border:1px solid #333;padding:3px 8px;border-radius:6px}
+  iframe{border:1px solid #2a2a2e;background:#000;display:block}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="bar">
+    <span id="lab">390 × 844</span>
+    <a href="?w=390&h=844">모바일</a>
+    <a href="?w=1180&h=920">데스크톱</a>
+    <a href="?w=1920&h=920">와이드</a>
+  </div>
+  <iframe id="dev" width="390" height="844" src="./?vip=hs2026&v=f2032&qa=1"></iframe>
+</div>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var w = parseInt(q.get('w') || '390', 10), h = parseInt(q.get('h') || '844', 10);
+    var f = document.getElementById('dev');
+    f.width = w; f.height = h;
+    document.getElementById('lab').textContent = w + ' × ' + h;
+  })();
+</script>
+</body>
+</html>
