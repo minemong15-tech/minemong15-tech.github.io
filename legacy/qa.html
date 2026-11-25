@@ -282,8 +282,15 @@ async function goLive() {
   await waitFor(function () { return q('[data-bmode="boss"]'); }, 8000, '전장 탭');
   await sleep(400);
   click('[data-bmode="boss"]', '보스 레이드');
-  var bc = await waitFor(function () { return q('[data-boss]'); }, 8000, '보스 카드');
-  if (bc) { bc.click(); await sleep(400); }
+  var all = qa('[data-boss]');
+  out('보스 카드 ' + all.length);
+  var picked = false;
+  if (all.length) {
+    all[all.length - 1].click();
+    var pre = await waitFor(function () { return q('[data-boss-start]'); }, 3000, '');
+    if (pre) { picked = true; out('→ 보스 ' + all[all.length - 1].getAttribute('data-boss') + ' 선택', 'ok'); }
+    else { all[0].click(); await sleep(500); out('→ 보스 1 선택(폴백)', 'ok'); }
+  }
   var bs = await waitFor(function () { return q('[data-boss-start]'); }, 8000, '보스 준비');
   if (bs) { bs.click(); out('→ 보스 레이드 시작', 'ok'); }
   await waitFor(function () { return q('#bCanvas'); }, 9000, '아레나');
