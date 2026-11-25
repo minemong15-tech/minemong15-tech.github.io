@@ -11762,16 +11762,25 @@ function portraitSVG(fig, fit, alt) {
     ng.addColorStop(0.55, 'rgba(3,5,9,0.72)');
     ng.addColorStop(1, 'rgba(3,5,9,0.94)');
     g.fillStyle = ng; g.fillRect(0, H * 0.60, W, H * 0.40);
-    /* 이름 — 카드 폭에 맞춰 글자를 줄이고, 그래도 넘치면 줄임표 */
+    /* 이름 — 실제 글자 폭을 재서 카드 안에 꼭 맞춘다 */
     var nm = String(u.name || '');
     var fsMax = Math.max(7.5 * dpr, Math.min(W * 0.155, 12 * dpr));
-    var fs = Math.min(fsMax, W / Math.max(1, nm.length) / 1.02);
-    if (fs < 7 * dpr) fs = 7 * dpr;
+    var fs = fsMax, fit = W * 0.93, guard = 0;
+    var fam = '%px system-ui, "Apple SD Gothic Neo", sans-serif';
+    g.font = '800 ' + Math.round(fs) + fam.replace('%', '');
+    var tw = g.measureText(nm).width;
+    while (tw > fit && fs > 6.5 * dpr && guard++ < 14) {
+      fs -= 0.55 * dpr;
+      g.font = '800 ' + Math.round(fs) + fam.replace('%', '');
+      tw = g.measureText(nm).width;
+    }
+    if (tw > fit) {
+      guard = 0;
+      while (nm.length > 2 && guard++ < 20 && g.measureText(nm + '…').width > fit) nm = nm.slice(0, -1);
+      nm += '…';
+    }
     g.textAlign = 'center';
     g.textBaseline = 'alphabetic';
-    g.font = '800 ' + Math.round(fs) + 'px system-ui, "Apple SD Gothic Neo", sans-serif';
-    var maxCh = Math.max(3, Math.floor(W / (fs * 0.95)));
-    if (nm.length > maxCh) nm = nm.slice(0, maxCh - 1) + '…';
     g.fillStyle = u.side === 'a' ? 'rgba(246,238,220,0.97)' : 'rgba(255,226,222,0.97)';
     g.fillText(nm, W / 2, H - Math.max(3, fs * 0.34));
     g.restore();
