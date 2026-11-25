@@ -11351,7 +11351,7 @@ function portraitSVG(fig, fit, alt) {
     order: [], paused: 0, started: 0, errN: 0,
     shots: [], parts: [], floats: [], rings: [], lanes: [],
     shakeT: 0, shakeP: 0, flash: 0, flashC: '255,240,200', slow: 0,
-    combo: 0, comboT: 0, lastSfx: 0, fps: 60, maxFrame: 0, frameN: 0, acc: 0, accN: 0,
+    combo: 0, comboT: 0, lastSfx: 0, fps: 60, maxFrame: 0, frameN: 0, acc: 0, accN: 0, cpuMs: 0, cpuMax: 0,
     cmd: { g: 0, fire: 0 }, hud: {}, imgs: {}, arts: {}, ready: 0
   };
   var LZ_CAP = { part: 25, float: 10, shot: 6, ring: 6, lane: 4 };
@@ -12620,11 +12620,18 @@ function portraitSVG(fig, fit, alt) {
     var dt = raw * sp;
     if (LZ.slow > 0) { dt = raw * 0.28 * sp; LZ.slow = Math.max(0, LZ.slow - raw); }
     if (LZ.paused) dt = 0;
+    var t0 = nowMs();
     if (dt > 0) lzStep(dt);
     lzFx(dt || raw);
     lzRender();
     if (LZ.frames % 4 === 0) { lzHud(); lzDockAll(); }
     if (B.phase === 'done') LZ.slow = 0;
+    /* CPU 비용 계측 (렌더·시뮬 전체) */
+    var cost = nowMs() - t0;
+    if (LZ.frameN > 12) {
+      LZ.cpuMs = LZ.cpuMs ? LZ.cpuMs * 0.9 + cost * 0.1 : cost;
+      if (cost > LZ.cpuMax) LZ.cpuMax = cost;
+    }
   }
   function lzFx(dt) {
     var i, o;
@@ -12916,7 +12923,8 @@ function portraitSVG(fig, fit, alt) {
       canvasW: LZ.canvas ? LZ.canvas.width : 0, canvasH: LZ.canvas ? LZ.canvas.height : 0,
       stageW: (LZ.canvas ? LZ.canvas.parentNode.clientWidth : 0),
       stageH: (LZ.canvas ? LZ.canvas.parentNode.clientHeight : 0),
-      boss: !!(LZ.L && LZ.L.boss), cw: LZ.L ? Math.round(LZ.L.cw) : 0, ch: LZ.L ? Math.round(LZ.L.ch) : 0 };
+      boss: !!(LZ.L && LZ.L.boss), cw: LZ.L ? Math.round(LZ.L.cw) : 0, ch: LZ.L ? Math.round(LZ.L.ch) : 0,
+      cpuMs: Math.round(LZ.cpuMs * 10) / 10, cpuMaxMs: Math.round(LZ.cpuMax * 10) / 10 };
     if (!B) return out;
     var all = B.allies.concat(B.enemies), i, j;
     for (i = 0; i < all.length; i++) {
