@@ -12527,7 +12527,7 @@ function portraitSVG(fig, fit, alt) {
       ctx.fillText(icon, x, cy);
       ctx.restore();
       /* 이름 첫 글자 보조 */
-      if (!u.boss && !im) {
+      if (!u.boss) {
         ctx.fillStyle = 'rgba(255,255,255,0.55)';
         ctx.font = '700 ' + Math.round(r * 0.34) + 'px system-ui,sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
