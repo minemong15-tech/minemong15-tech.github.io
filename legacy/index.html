@@ -5016,6 +5016,26 @@
     object-fit:cover; object-position:50% 18%; display:block;
   }
   .lane5 .cut-face .lzcut-em{ display:grid; place-items:center; height:100%; font-size:36px }
+
+  /* ── 일시정지 · 독 초상화 비율 ── */
+  .lzd-p{ height:46px; width:auto; aspect-ratio:4 / 5 }
+  .lz-pause{
+    position:absolute; inset:0; z-index:14; display:none;
+    align-items:center; justify-content:center; background:rgba(2,4,8,.66);
+  }
+  .lz-pause.on{ display:flex }
+  .lzp-box{
+    text-align:center; padding:16px 26px; border-radius:14px;
+    border:1px solid rgba(200,168,106,.38); background:rgba(10,14,20,.94);
+  }
+  .lzp-box b{ display:block; font-family:var(--serif); font-size:18px; letter-spacing:.22em; color:#f4ebd9 }
+  .lzp-box span{ display:block; margin-top:5px; font-size:9.5px; color:#9a9384 }
+  .lzp-go{
+    margin-top:11px; padding:8px 22px; border-radius:10px; cursor:pointer; font:inherit;
+    border:1px solid rgba(200,168,106,.5); background:rgba(200,168,106,.14); color:#f2e6cc; font-size:11px;
+  }
+  @media (max-width:640px){ .lzd-p{ height:40px } }
+  @media (max-height:560px){ .lzd-p{ height:26px; width:22px; aspect-ratio:auto } }
   /* <<EXT5_CSS:END>> */
 </style>
 </head>
@@ -11331,7 +11351,7 @@ function portraitSVG(fig, fit, alt) {
     order: [], paused: 0, started: 0, errN: 0,
     shots: [], parts: [], floats: [], rings: [], lanes: [],
     shakeT: 0, shakeP: 0, flash: 0, flashC: '255,240,200', slow: 0,
-    combo: 0, comboT: 0, lastSfx: 0, fps: 60, maxFrame: 0, frameN: 0,
+    combo: 0, comboT: 0, lastSfx: 0, fps: 60, maxFrame: 0, frameN: 0, acc: 0, accN: 0,
     cmd: { g: 0, fire: 0 }, hud: {}, imgs: {}, arts: {}, ready: 0
   };
   var LZ_CAP = { part: 25, float: 10, shot: 6, ring: 6, lane: 4 };
@@ -11567,7 +11587,6 @@ function portraitSVG(fig, fit, alt) {
 
     LZ.bg = cv; LZ.bgKey = key;
   }
-
   /* ── 슬롯 배치 ── */
   function lzSlot(u, side, lane, col) {
     var L = LZ.L;
@@ -12590,8 +12609,12 @@ function portraitSVG(fig, fit, alt) {
     if (raw < 0) raw = 0;
     LZ.t += raw;
     LZ.frameN++;
-    if (raw > LZ.maxFrame) LZ.maxFrame = raw;
-    if (LZ.frameN % 20 === 0) LZ.fps = Math.round(1 / Math.max(0.0001, raw));
+    /* 프레임 계측 — 워밍업 12프레임은 제외하고 평균·최장을 잡는다 */
+    if (LZ.frameN > 12) {
+      LZ.acc += raw; LZ.accN++;
+      if (raw > LZ.maxFrame) LZ.maxFrame = raw;
+      if (LZ.accN >= 30) { LZ.fps = Math.round(LZ.accN / Math.max(0.001, LZ.acc)); LZ.acc = 0; LZ.accN = 0; }
+    }
     if (LZ.frames++ % 30 === 0) lzLayout(false);
     var sp = B.speed || 1;
     var dt = raw * sp;
@@ -12638,6 +12661,7 @@ function portraitSVG(fig, fit, alt) {
     if (!ctx || !B) return;
     if (!LZ.W || !LZ.H) { if (!lzLayout(true)) return; }
     var W = LZ.W, H = LZ.H;
+    if (!LZ.bg || LZ.bg.width !== Math.round(W * LZ.dpr) || LZ.bg.height !== Math.round(H * LZ.dpr)) lzBgBuild();
     ctx.setTransform(LZ.dpr, 0, 0, LZ.dpr, 0, 0);
     var sx = 0, sy = 0;
     if (LZ.shakeT > 0) {
@@ -12887,7 +12911,12 @@ function portraitSVG(fig, fit, alt) {
   window.__lzDiag = function () {
     var out = { w: LZ.W, h: LZ.H, dpr: LZ.dpr, fps: LZ.fps, maxFrameMs: Math.round(LZ.maxFrame * 1000),
       frames: LZ.frameN, parts: LZ.parts.length, floats: LZ.floats.length,
-      cmd: Math.round(LZ.cmd.g), units: [], overlaps: 0 };
+      cmd: Math.round(LZ.cmd.g), units: [], overlaps: 0,
+      bgW: LZ.bg ? LZ.bg.width : 0, bgH: LZ.bg ? LZ.bg.height : 0,
+      canvasW: LZ.canvas ? LZ.canvas.width : 0, canvasH: LZ.canvas ? LZ.canvas.height : 0,
+      stageW: (LZ.canvas ? LZ.canvas.parentNode.clientWidth : 0),
+      stageH: (LZ.canvas ? LZ.canvas.parentNode.clientHeight : 0),
+      boss: !!(LZ.L && LZ.L.boss), cw: LZ.L ? Math.round(LZ.L.cw) : 0, ch: LZ.L ? Math.round(LZ.L.ch) : 0 };
     if (!B) return out;
     var all = B.allies.concat(B.enemies), i, j;
     for (i = 0; i < all.length; i++) {
