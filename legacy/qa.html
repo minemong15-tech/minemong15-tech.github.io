@@ -161,6 +161,8 @@ async function go() {
   QA.results.arena = arenaInfo();
   out('아레나 ' + JSON.stringify(QA.results.arena));
   await shot('battle');
+  await sleep(4200);
+  if (!qa('.bres').length) await shot('fight');
 
   var ultJob = pollUlt();
 
