@@ -157,11 +157,19 @@ async function go() {
   click('[data-start]', '전투 시작');
   var a1 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 9000, '아레나');
   if (!a1) { QA.done = true; return; }
-  await sleep(1000);
+  await sleep(600);
+  /* 배속을 1x 로 내려 연출을 관찰할 수 있게 한다 */
+  for (var si = 0; si < 3; si++) {
+    var sb = q('#bSpeed');
+    if (!sb || /1x/.test(sb.textContent)) break;
+    sb.click(); await sleep(250);
+  }
+  QA.results.speed = q('#bSpeed') ? q('#bSpeed').textContent : '';
+  await sleep(600);
   QA.results.arena = arenaInfo();
   out('아레나 ' + JSON.stringify(QA.results.arena));
   await shot('battle');
-  await sleep(4200);
+  await sleep(6500);
   if (!qa('.bres').length) await shot('fight');
 
   var ultJob = pollUlt();
