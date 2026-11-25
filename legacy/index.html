@@ -12435,6 +12435,44 @@ function portraitSVG(fig, fit, alt) {
     ctx.fillRect(0, CV.ground - 2, CV.W, 3);
   }
 
+  /* 초상화 원형 스프라이트 — 1회만 그려 캐시 (매 프레임 clip/계산 제거) */
+  function cvSprite(u) {
+    if (u.__spr && u.__sprImg) return u.__spr;
+    var url = cvFaceUrl(u);
+    var im = url ? cvImg(url) : null;
+    var art = (!im && u.art) ? cvArtImg(u.art) : null;
+    var src = im || art;
+    if (!src) { u.__sprImg = 0; return null; }
+    var S = 128, c = u.__spr || document.createElement('canvas');
+    c.width = S; c.height = S;
+    var g = c.getContext('2d');
+    g.clearRect(0, 0, S, S);
+    g.save();
+    g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, 6.2832); g.clip();
+    g.fillStyle = '#0b1016'; g.fillRect(0, 0, S, S);
+    var iw = src.naturalWidth || src.width || 0;
+    var ih = src.naturalHeight || src.height || 0;
+    if (iw && ih) {
+      var k = Math.max(S / iw, S / ih);
+      var sw = S / k, sh = S / k;
+      var sx = (iw - sw) * 0.5, sy = (ih - sh) * 0.16;
+      try { g.drawImage(src, sx, sy, sw, sh, 0, 0, S, S); } catch (e) { /* noop */ }
+    }
+    g.restore();
+    /* 위쪽을 살짝 어둡게 — 얼굴 강조 */
+    var vg = g.createLinearGradient(0, 0, 0, S);
+    vg.addColorStop(0, 'rgba(0,0,0,0.18)');
+    vg.addColorStop(0.5, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.42)');
+    g.save();
+    g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, 6.2832); g.clip();
+    g.fillStyle = vg; g.fillRect(0, 0, S, S);
+    g.restore();
+    u.__spr = c;
+    u.__sprImg = 1;
+    return c;
+  }
+
   function cvDrawUnit(ctx, u) {
     var c = u.cv;
     if (!c) return;
@@ -12471,28 +12509,20 @@ function portraitSVG(fig, fit, alt) {
     ctx.arc(x, cy, r, 0, 6.2832);
     ctx.fillStyle = u.side === 'a' ? '#0c1219' : '#160a0c';
     ctx.fill();
-    /* 초상화 (이미지 캐시 — 로드 전에는 이모지로 대체) */
-    if (!c.img) c.img = cvImg(cvFaceUrl(u));
-    var im = c.img;
-    var art = null;
-    if (!im && u.art) art = cvArtImg(u.art);
-    var drawable = im || art;
-    if (drawable) {
+    /* 초상화 (원형 스프라이트 캐시) */
+    var spr = cvSprite(u);
+    if (spr) {
       ctx.save();
       ctx.beginPath();
-      ctx.arc(x, cy, r * 0.93, 0, 6.2832);
+      ctx.arc(x, cy, r * 0.94, 0, 6.2832);
       ctx.clip();
-      var iw = drawable.naturalWidth || drawable.width || 100;
-      var ih = drawable.naturalHeight || drawable.height || 100;
-      var sc = Math.max((r * 1.86) / iw, (r * 1.86) / ih);
-      var dw = iw * sc, dh = ih * sc;
-      ctx.drawImage(drawable, x - dw / 2, cy - dh * 0.52, dw, dh);
+      ctx.drawImage(spr, x - r * 0.94, cy - r * 0.94, r * 1.88, r * 1.88);
       ctx.restore();
     } else {
       /* 이모지 · 이니셜 */
       var icon = u.icon || (u.boss ? '👑' : '⚔');
       ctx.save();
-      ctx.font = (r * (u.boss ? 1.15 : 1.05)) + 'px system-ui, "Noto Color Emoji", sans-serif';
+      ctx.font = (r * (u.boss ? 1.5 : 1.3)) + 'px system-ui, "Noto Color Emoji", sans-serif';
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(icon, x, cy);
       ctx.restore();
