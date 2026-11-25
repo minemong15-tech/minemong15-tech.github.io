@@ -123,6 +123,7 @@ async function pollUlt() {
     var cd = q('#bCut');
     if (cd) {
       cd.style.animationPlayState = 'paused';
+      cd.style.opacity = '1';
       var kids = cd.querySelectorAll('*');
       for (var ci2 = 0; ci2 < kids.length; ci2++) kids[ci2].style.animationPlayState = 'paused';
     }
@@ -158,8 +159,8 @@ async function go() {
   if (cards.length) { cards[idx].click(); out('→ STAGE 카드 ' + (idx + 1), 'ok'); }
   await waitFor(function () { return q('[data-start]'); }, 8000, '덱 화면');
   await sleep(300);
-  var easy = q('[data-diff="easy"]');
-  if (easy) { easy.click(); out('→ 난이도 쉬움', 'ok'); await sleep(320); }
+  var easy = q('[data-diff="hard"]');
+  if (easy) { easy.click(); out('→ 난이도 어려움', 'ok'); await sleep(320); }
   out('출격 덱 ' + qa('[data-unpick]').length + '명');
 
   /* 2) 전투 */
