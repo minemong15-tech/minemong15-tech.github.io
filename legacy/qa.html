@@ -26,6 +26,7 @@
   (function () {
     var q = new URLSearchParams(location.search);
     var w = parseInt(q.get('w') || '390', 10), h = parseInt(q.get('h') || '844', 10);
+    if (q.get('app')) f.src = './' + q.get('app') + '?vip=hs2026&v=f2032&qa=1';
     var f = document.getElementById('dev');
     f.width = w; f.height = h;
     document.getElementById('lab').textContent = w + ' × ' + h;
