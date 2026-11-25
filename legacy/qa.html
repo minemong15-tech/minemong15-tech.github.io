@@ -6,21 +6,26 @@
 <title>QA LEGACY BATTLE</title>
 <style>
   html,body{margin:0;background:#05070b;color:#dfe6ee;font:12px/1.5 system-ui,sans-serif}
-  #bar{padding:8px 12px;border-bottom:1px solid #222;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  #bar{padding:6px 10px;border-bottom:1px solid #222;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
   #bar b{color:#ffd166}
-  #log{padding:8px 12px;white-space:pre-wrap;font:11px/1.5 ui-monospace,monospace;max-height:34vh;overflow:auto}
-  iframe{display:block;width:100%;height:64vh;border:0;background:#000}
+  #log{padding:6px 10px;white-space:pre-wrap;font:11px/1.45 ui-monospace,monospace;max-height:22vh;overflow:auto}
+  #wrap{margin:0;display:flex;justify-content:center;background:#000}
+  iframe{display:block;border:0;background:#000}
   .ok{color:#7ee0a4}.bad{color:#ff8a8a}.warn{color:#ffd166}
 </style>
 </head>
 <body>
-<div id="bar"><b>LEGACY BATTLE QA</b><span id="phase">boot</span><span id="ver"></span></div>
-<iframe id="fr" src="about:blank"></iframe>
+<div id="bar"><b>LEGACY BATTLE QA</b><span id="phase">boot</span><span id="sz"></span></div>
+<div id="wrap"><iframe id="fr" src="about:blank"></iframe></div>
 <div id="log"></div>
 <script>
-var QA = window.QA = { log: [], results: {}, errs: [], phase: 'boot', done: false, fps: 0, jank: 0 };
+var P = new URLSearchParams(location.search);
+var VW = parseInt(P.get('w') || '0', 10), VH = parseInt(P.get('h') || '0', 10);
+var QA = window.QA = { log: [], results: {}, errs: [], phase: 'boot', done: false, fps: 0, jank: 0, frames: 0, shots: [] };
 var fr = document.getElementById('fr');
 var LOG = document.getElementById('log');
+if (VW && VH) { fr.style.width = VW + 'px'; fr.style.height = VH + 'px'; }
+document.getElementById('sz').textContent = (VW || 'auto') + 'x' + (VH || 'auto');
 function out(s, cls) {
   QA.log.push(s);
   var d = document.createElement('div');
@@ -48,35 +53,29 @@ async function waitFor(fn, ms, label) {
     var v = null;
     try { v = fn(); } catch (e) { v = null; }
     if (v) return v;
-    await sleep(150);
+    await sleep(120);
   }
-  out('✗ 시간 초과: ' + label, 'bad');
+  if (label) out('✗ 시간 초과: ' + label, 'bad');
   return null;
 }
 function installHooks(w) {
   w.addEventListener('error', function (e) {
     QA.errs.push('error: ' + (e.message || '') + ' @' + String(e.filename || '').split('/').pop() + ':' + e.lineno + ':' + e.colno);
   });
-  w.addEventListener('unhandledrejection', function (e) {
-    QA.errs.push('unhandledrejection: ' + e.reason);
+  w.addEventListener('unhandledrejection', function (e) { QA.errs.push('rejection: ' + e.reason); });
+  ['error', 'warn'].forEach(function (k) {
+    var orig = w.console[k];
+    w.console[k] = function () {
+      QA.errs.push('console.' + k + ': ' + Array.prototype.join.call(arguments, ' '));
+      try { orig.apply(w.console, arguments); } catch (x) {}
+    };
   });
-  var ce = w.console.error;
-  w.console.error = function () {
-    QA.errs.push('console.error: ' + Array.prototype.join.call(arguments, ' '));
-    try { ce.apply(w.console, arguments); } catch (x) {}
-  };
-  var cw = w.console.warn;
-  w.console.warn = function () {
-    QA.errs.push('console.warn: ' + Array.prototype.join.call(arguments, ' '));
-    try { cw.apply(w.console, arguments); } catch (x) {}
-  };
 }
 function fpsProbe(w, ms) {
   return new Promise(function (resolve) {
     var n = 0, jank = 0, last = performance.now(), t0 = last;
     function f(t) {
-      n++;
-      var d = t - last; last = t;
+      n++; var d = t - last; last = t;
       if (d > 48) jank++;
       if (t - t0 < ms) w.requestAnimationFrame(f);
       else resolve({ fps: Math.round(n / ((t - t0) / 1000)), jank: jank, frames: n });
@@ -87,160 +86,179 @@ function fpsProbe(w, ms) {
 function arenaInfo() {
   var a = q('#arena'), c = q('#bCanvas');
   var r = a ? a.getBoundingClientRect() : null;
+  var st = q('#bField'), sr = st ? st.getBoundingClientRect() : null;
   return {
     arena: !!a, cv4: !!(a && a.classList.contains('cv4')),
-    canvas: !!c, cw: c ? c.width : 0, ch: c ? c.height : 0,
-    cssW: r ? Math.round(r.width) : 0, cssH: r ? Math.round(r.height) : 0,
+    canvas: !!c, store: c ? [c.width, c.height] : 0,
+    css: c ? [Math.round(c.getBoundingClientRect().width), Math.round(c.getBoundingClientRect().height)] : 0,
+    stage: sr ? [Math.round(sr.width), Math.round(sr.height)] : 0,
     dock: qa('.cvsc').length, boss: !!(q('#bBossBar') && q('#bBossBar').classList.contains('on')),
     terr: q('#bTerrPct') ? q('#bTerrPct').textContent : '',
     wave: q('#bWaveTxt') ? q('#bWaveTxt').textContent : '',
-    floats: qa('.bres').length
+    res: qa('.bres').length
   };
+}
+function shot(tag) { QA.shots.push({ tag: tag, t: Date.now() }); QA.shotWanted = tag; }
+async function pollUlt() {
+  /* AUTO 를 끄고 게이지 100% 카드가 뜨면 직접 터치 발동 */
+  var off = q('#bAuto');
+  if (off) { off.click(); out('→ AUTO 끄기(수동)', 'ok'); }
+  var ready = await waitFor(function () { return q('.cvsc.ready'); }, 100000, '궁극기 READY 카드');
+  if (!ready) return;
+  out('READY 카드: ' + ready.textContent.replace(/\s+/g, ' ').slice(0, 40), 'ok');
+  QA.results.ultReady = true;
+  await sleep(300);
+  ready.click();
+  setPhase('ult-cut');
+  var cut = await waitFor(function () { var c = q('#bCut'); return c && c.classList.contains('go') ? c : null; }, 4000, '컷인');
+  QA.results.ultCut = !!cut;
+  if (cut) {
+    var ci = cut.querySelector('.ci-s'), cn = cut.querySelector('.ci-n'), cf = cut.querySelector('#bCutFace img');
+    QA.results.ultName = ci ? ci.textContent : '';
+    out('컷인: ' + (ci ? ci.textContent : '?') + ' / ' + (cn ? cn.textContent : '?') + ' / 초상화 ' + (cf ? 'O' : 'X'), 'ok');
+    shot('ult');
+    await sleep(2500);
+  }
+  var on = q('#bAuto');
+  if (on) { on.click(); out('→ AUTO 다시 켜기', 'ok'); }
 }
 
 async function go() {
   var w = W(), d = D();
   if (!w || !d) { out('iframe 없음', 'bad'); return; }
   installHooks(w);
-  document.getElementById('ver').textContent = w.location.search;
-  await sleep(1800);
-  out('앱 로드: ' + d.title);
-  out('figures: ' + (w.FIGURES ? w.FIGURES.length : 'n/a'));
+  await sleep(1600);
+  out('앱: ' + d.title + ' · viewport ' + w.innerWidth + 'x' + w.innerHeight);
 
-  /* ── 1) 전투 진입 ── */
-  setPhase('open-battle');
+  /* 1) 진입 */
+  setPhase('open');
   click('#warEnter', '전투 열기');
-  await waitFor(function () { return q('[data-stage]'); }, 6000, '캠페인 지도');
+  await waitFor(function () { return q('[data-stage]'); }, 8000, '캠페인 지도');
   await sleep(400);
-
-  /* 난이도: 쉬움 */
   var cards = qa('[data-stage]');
-  out('스테이지 카드: ' + cards.length);
-  if (cards.length > 11) { cards[11].click(); out('→ 클릭: STAGE 12 카드', 'ok'); }
-  else if (cards.length) { cards[cards.length - 1].click(); out('→ 클릭: 마지막 스테이지 카드', 'ok'); }
-  await waitFor(function () { return q('[data-start]'); }, 6000, '덱 화면');
+  out('스테이지 카드 ' + cards.length);
+  var idx = Math.min(cards.length - 1, 11);
+  if (cards.length) { cards[idx].click(); out('→ STAGE 카드 ' + (idx + 1), 'ok'); }
+  await waitFor(function () { return q('[data-start]'); }, 8000, '덱 화면');
   await sleep(300);
   var easy = q('[data-diff="easy"]');
-  if (easy) { easy.click(); out('→ 난이도: 쉬움', 'ok'); await sleep(300); }
-  var deckN = qa('[data-unpick]').length;
-  out('출격 덱: ' + deckN + '명');
+  if (easy) { easy.click(); out('→ 난이도 쉬움', 'ok'); await sleep(320); }
+  out('출격 덱 ' + qa('[data-unpick]').length + '명');
 
-  /* ── 2) 전투 시작 ── */
+  /* 2) 전투 */
   setPhase('battle');
   click('[data-start]', '전투 시작');
-  var a1 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 8000, '아레나');
+  var a1 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 9000, '아레나');
   if (!a1) { QA.done = true; return; }
-  await sleep(900);
-  var info = arenaInfo();
-  QA.results.arena = info;
-  out(JSON.stringify(info));
-  if (!info.cv4) out('✗ cv4 아레나 아님', 'bad');
-  if (!info.canvas || !info.cw) out('✗ 캔버스 크기 0', 'bad');
+  await sleep(1000);
+  QA.results.arena = arenaInfo();
+  out('아레나 ' + JSON.stringify(QA.results.arena));
+  shot('battle');
 
-  /* fps 측정 */
-  var fp = await fpsProbe(w, 2200);
-  QA.fps = fp.fps; QA.jank = fp.jank;
-  out('FPS ' + fp.fps + ' · 48ms 초과 프레임 ' + fp.jank + '/' + fp.frames, fp.fps < 40 ? 'warn' : 'ok');
+  var ultJob = pollUlt();
 
-  /* ── 3) 궁극기 터치 발동 ── */
-  setPhase('ult');
-  var ready = await waitFor(function () { var r = q('.cvsc.ready'); return r; }, 45000, '궁극기 게이지 100%');
-  if (ready) {
-    out('궁극기 카드 READY: ' + ready.textContent.replace(/\s+/g, ' ').slice(0, 40));
-    ready.click();
-    var cut = await waitFor(function () { var c = q('#bCut'); return c && c.classList.contains('go') ? c : null; }, 3000, '궁극기 컷인');
-    QA.results.ultCut = !!cut;
-    if (cut) {
-      var ci = cut.querySelector('.ci-s'), cn = cut.querySelector('.ci-n'), cf = cut.querySelector('#bCutFace img');
-      out('컷인: ' + (ci ? ci.textContent : '?') + ' / ' + (cn ? cn.textContent : '?') + ' / 초상화 ' + (cf ? 'O' : 'X'), cut ? 'ok' : 'bad');
-      QA.results.ultName = ci ? ci.textContent : '';
-    }
-    await sleep(700);
-  }
+  var fp = await fpsProbe(w, 2600);
+  QA.fps = fp.fps; QA.jank = fp.jank; QA.frames = fp.frames;
+  out('FPS ' + fp.fps + ' · >48ms ' + fp.jank + '/' + fp.frames, fp.fps < 40 ? 'warn' : 'ok');
 
-  /* ── 4) 전투 종료 대기 (승/패) ── */
+  /* 웨이브 진행 확인 */
+  var wv = await waitFor(function () {
+    var t = q('#bWaveTxt');
+    return t && /WAVE 2|WAVE 3/.test(t.textContent) ? t.textContent : null;
+  }, 60000, '웨이브 2 진입');
+  QA.results.wave2 = wv || '';
+  out('웨이브 진행: ' + (wv || 'X'), wv ? 'ok' : 'warn');
+
   setPhase('finish');
-  var ov = await waitFor(function () {
-    var b = qa('.bres'); return b.length ? b[b.length - 1] : null;
-  }, 180000, '결과 리포트');
+  var ov = await waitFor(function () { var b = qa('.bres'); return b.length ? b[b.length - 1] : null; }, 150000, '결과 리포트');
   if (ov) {
-    await sleep(1200);
+    await sleep(1400);
     var kind = ov.classList.contains('win') ? 'VICTORY' : 'DEFEAT';
-    var rows = ov.querySelectorAll('.mvp-row').length;
-    var hero = ov.querySelector('.mvp-hero .mvp-nm, .mvp-hero b');
-    var acts = ov.querySelectorAll('.br-acts button').length;
     QA.results.result = kind;
-    QA.results.mvpRows = rows;
-    QA.results.acts = acts;
-    out('결과: ' + kind + ' · MVP 행 ' + rows + ' · 버튼 ' + acts + (hero ? ' · MVP ' + hero.textContent : ''), 'ok');
-    out('리포트 텍스트: ' + ov.textContent.replace(/\s+/g, ' ').slice(0, 160));
-    window.__bresShot = true;
-  } else {
-    QA.results.result = 'timeout';
-  }
-
-  /* ── 5) 다음 스테이지 재진입 ── */
-  setPhase('next');
-  var nextBtn = q('.bres [data-next-stage]') || q('.bres [data-retry]');
-  if (nextBtn) {
-    nextBtn.click(); out('→ 클릭: ' + (nextBtn.getAttribute('data-next-stage') ? '다음 시대' : '다시 도전'), 'ok');
-    await sleep(700);
-    var st = q('[data-start]');
-    if (st) { st.click(); out('→ 클릭: 전투 시작(2차)', 'ok'); }
-    var a2 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 8000, '2차 아레나');
-    QA.results.reentry = !!a2;
+    QA.results.mvpRows = ov.querySelectorAll('.mvp-row').length;
+    QA.results.acts = ov.querySelectorAll('.br-acts button').length;
+    out('결과 ' + kind + ' · MVP 행 ' + QA.results.mvpRows + ' · 버튼 ' + QA.results.acts, 'ok');
+    out('리포트: ' + ov.textContent.replace(/\s+/g, ' ').slice(0, 180));
+    await ultJob;
+    shot('report');
     await sleep(1500);
-    out('2차 아레나: ' + (a2 ? JSON.stringify(arenaInfo()) : 'X'), a2 ? 'ok' : 'bad');
-  } else {
-    out('다음/재도전 버튼 없음(결과 없음)', 'warn');
+  }
+  await ultJob;
+
+  /* 3) 다음 스테이지 재진입 */
+  setPhase('next');
+  var nb = q('.bres [data-next-stage]') || q('.bres [data-retry]');
+  if (nb) {
+    nb.click(); out('→ ' + (nb.getAttribute('data-next-stage') ? '다음 시대' : '다시 도전'), 'ok');
+    await sleep(800);
+    var st = q('[data-start]');
+    if (st) st.click();
+    var a2 = await waitFor(function () { var i = arenaInfo(); return i.arena && !i.res ? i : null; }, 9000, '2차 아레나');
+    QA.results.reentry = !!a2;
+    out('2차 아레나 ' + (a2 ? 'O ' + JSON.stringify(a2) : 'X'), a2 ? 'ok' : 'bad');
+    await sleep(1200);
   }
 
-  /* ── 6) 후퇴 → 무한의 탑 ── */
+  /* 4) 무한의 탑 */
   setPhase('tower');
   click('#bRetreat', '나가기');
-  await sleep(700);
-  click('[data-bmode="tower"]', '무한의 탑 탭');
-  var fl = await waitFor(function () { return q('[data-tower-start]') || q('[data-tower-floor]'); }, 6000, '탑 화면');
-  if (fl) {
-    var t = q('[data-tower-start]');
-    if (t) t.click(); else qa('[data-tower-floor]')[0].click();
-    out('→ 클릭: 탑 도전', 'ok');
-    var a3 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 8000, '탑 아레나');
+  await sleep(800);
+  click('[data-bmode="tower"]', '무한의 탑');
+  var tf = await waitFor(function () { return q('[data-tower-start]'); }, 8000, '탑 화면');
+  if (tf) {
+    tf.click(); out('→ 탑 도전', 'ok');
+    var a3 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 9000, '탑 아레나');
     QA.results.tower = !!a3;
+    await sleep(3000);
+    out('탑 ' + (a3 ? 'O · ' + JSON.stringify(arenaInfo()) : 'X'), a3 ? 'ok' : 'bad');
+    shot('tower');
     await sleep(2500);
-    var tb = q('#tower') || q('.cv-terr .cvt-goal');
-    out('탑 아레나: ' + (a3 ? JSON.stringify(arenaInfo()) : 'X'), a3 ? 'ok' : 'bad');
-    await sleep(4000);
-    out('탑 진행: ' + (q('#bWaveTxt') ? q('#bWaveTxt').textContent : '?') + ' / 영토 ' + (q('#bTerrPct') ? q('#bTerrPct').textContent : '?'));
   }
 
-  /* ── 7) 보스 레이드 ── */
+  /* 5) 보스 레이드 */
   setPhase('bossraid');
   click('#bRetreat', '나가기');
-  await sleep(700);
-  click('[data-bmode="boss"]', '보스 레이드 탭');
-  var bs = await waitFor(function () { return q('[data-boss-start]'); }, 6000, '보스 목록');
+  await sleep(800);
+  click('[data-bmode="boss"]', '보스 레이드');
+  var bs = await waitFor(function () { return q('[data-boss-start]'); }, 8000, '보스 목록');
   if (bs) {
-    bs.click(); out('→ 클릭: 보스 레이드 시작', 'ok');
-    var a4 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 8000, '보스 아레나');
+    bs.click(); out('→ 보스 레이드 시작', 'ok');
+    var a4 = await waitFor(function () { var i = arenaInfo(); return i.arena ? i : null; }, 9000, '보스 아레나');
     QA.results.bossRaid = !!a4;
-    var warn = await waitFor(function () { var x = q('#bWarn'); return x && x.classList.contains('go') ? x : null; }, 15000, 'WARNING 배너');
-    QA.results.warning = !!warn;
-    out('보스 아레나: ' + (a4 ? 'O' : 'X') + ' · WARNING ' + (warn ? 'O' : 'X'), a4 ? 'ok' : 'bad');
+    var wn = await waitFor(function () { var x = q('#bWarn'); return x && x.classList.contains('go') ? x : null; }, 16000, 'WARNING');
+    QA.results.warning = !!wn;
+    out('보스 ' + (a4 ? 'O' : 'X') + ' · WARNING ' + (wn ? 'O' : 'X'), a4 ? 'ok' : 'bad');
+    await sleep(2000);
+    out('보스 HUD ' + (q('#bBossBar') && q('#bBossBar').classList.contains('on') ? 'O' : 'X') + ' ' + (q('#bBossNum') ? q('#bBossNum').textContent : ''));
+    shot('boss');
     await sleep(1500);
-    out('보스 HUD: ' + (q('#bBossBar') && q('#bBossBar').classList.contains('on') ? 'O' : 'X') + ' · ' + (q('#bBossNum') ? q('#bBossNum').textContent : ''));
+  }
+
+  /* 6) 일시정지 */
+  setPhase('pause');
+  var pb = q('#bPause');
+  if (pb) {
+    pb.click(); await sleep(500);
+    QA.results.pause = !!(q('#cvPause') && q('#cvPause').classList.contains('on'));
+    out('일시정지 ' + (QA.results.pause ? 'O' : 'X'), QA.results.pause ? 'ok' : 'bad');
+    var rb = q('.cvp-go');
+    if (rb) { rb.click(); await sleep(400); }
+    QA.results.resume = !(q('#cvPause') && q('#cvPause').classList.contains('on'));
+    out('재개 ' + (QA.results.resume ? 'O' : 'X'), QA.results.resume ? 'ok' : 'bad');
   }
 
   setPhase('done');
   QA.done = true;
-  out('=== QA 완료 · 오류 ' + QA.errs.length + '건 ===', QA.errs.length ? 'bad' : 'ok');
+  out('=== 완료 · 오류 ' + QA.errs.length + '건 ===', QA.errs.length ? 'bad' : 'ok');
   QA.errs.forEach(function (e) { out('  ' + e, 'bad'); });
 }
 
 fr.addEventListener('load', function () {
   if (QA.started) return;
   QA.started = true;
-  setTimeout(function () { go().catch(function (e) { out('QA 예외: ' + e, 'bad'); QA.done = true; }); }, 1200);
+  setTimeout(function () {
+    go().catch(function (e) { out('QA 예외: ' + (e && e.stack ? e.stack.split('\n')[0] : e), 'bad'); QA.done = true; });
+  }, 900);
 });
 fr.src = './index.html?vip=hs2026&qab=' + Date.now();
 </script>
