@@ -12820,6 +12820,19 @@ function portraitSVG(fig, fit, alt) {
     ar.classList.toggle('spd3', B.speed === 3);
   }, 600);
 
+  /* DEBUG-ONLY (QA) */
+  try {
+    window.__CVD = function () {
+      return {
+        W: CV.W, H: CV.H, world: Math.round(CV.world), cam: Math.round(CV.cam),
+        ground: CV.ground, theme: CV.theme, sprites: (B ? B.allies.concat(B.enemies) : []).map(function (u) {
+          return [u.name, u.side, u.cv ? Math.round(u.cv.x) : -1, u.cv ? Math.round(u.cv.y) : -1,
+                  u.cv ? Math.round(u.cv.r) : 0, u.alive ? 1 : 0, u.__sprImg ? 1 : 0, u.cv ? (u.cv.row) : -1];
+        })
+      };
+    };
+  } catch (e) {}
+
   /* <<EXT4_BATTLE:END>> */
   window.LegacyBattle = {
     init: init, open: openBattle, renderBanner: renderBanner, progress: chapterProgress, refresh: refresh,
