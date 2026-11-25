@@ -12944,7 +12944,7 @@ function portraitSVG(fig, fit, alt) {
       stageW: (LZ.canvas ? LZ.canvas.parentNode.clientWidth : 0),
       stageH: (LZ.canvas ? LZ.canvas.parentNode.clientHeight : 0),
       boss: !!(LZ.L && LZ.L.boss), cw: LZ.L ? Math.round(LZ.L.cw) : 0, ch: LZ.L ? Math.round(LZ.L.ch) : 0,
-      cpuMs: Math.round(LZ.cpuMs * 10) / 10, cpuMaxMs: Math.round(LZ.cpuMax * 10) / 10 };
+      cpuMs: Math.round(LZ.cpuMs * 10) / 10, cpuMaxMs: Math.round(LZ.cpuMax * 10) / 10, errN: LZ.errN };
     if (!B) return out;
     var all = B.allies.concat(B.enemies), i, j;
     for (i = 0; i < all.length; i++) {
