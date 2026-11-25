@@ -11359,7 +11359,7 @@ function portraitSVG(fig, fit, alt) {
     CV.canvas.height = Math.round(h * dpr);
     CV.canvas.style.width = w + 'px';
     CV.canvas.style.height = h + 'px';
-    CV.ground = Math.round(h * 0.78);
+    CV.ground = Math.round(h * 0.74);
     CV.world = Math.max(1080, Math.round(w * 1.75));
     CV.bg = null; CV.bgKey = '';
     CV.amb = [];
@@ -11379,7 +11379,7 @@ function portraitSVG(fig, fit, alt) {
     for (var i = 0; i < all.length; i++) {
       var u = all[i], c = u.cv;
       if (!c) continue;
-      c.r = u.boss ? Math.max(42, Math.min(74, CV.H * 0.15)) : Math.max(28, Math.min(54, CV.H * 0.108));
+      c.r = u.boss ? Math.max(46, Math.min(88, CV.H * 0.19)) : Math.max(30, Math.min(64, CV.H * 0.13));
       c.y = u.boss ? CV.ground - 4 : CV.ground - c.row * Math.round(c.r * 1.05);
       c.x = Math.max(CV.world * 0.04, Math.min(CV.world * 0.96, c.x));
     }
@@ -11483,7 +11483,7 @@ function portraitSVG(fig, fit, alt) {
     if (u.boss) { row = 0; col = 0; }
     var y = CV.ground;
     if (u.boss) { y = CV.ground - 4; }
-    var r = u.boss ? Math.max(42, Math.min(74, CV.H * 0.15)) : Math.max(28, Math.min(54, CV.H * 0.108));
+    var r = u.boss ? Math.max(46, Math.min(88, CV.H * 0.19)) : Math.max(30, Math.min(64, CV.H * 0.13));
     var gap = Math.round(r * 1.85);
     if (!u.boss) {
       x += (u.side === 'a' ? 1 : -1) * col * gap;
