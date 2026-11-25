@@ -29,27 +29,28 @@ function mk(id, w, h){
   return f;
 }
 function boot(f){
-  var n = 0;
+  var tries = 0;
   var t = setInterval(function () {
-    n++;
+    tries++;
     try {
       var w = f.contentWindow, d = f.contentDocument;
-      if (w && w.LegacyBattle && d && d.querySelector('#mBattle')) {
-        clearInterval(t);
-        w.LegacyBattle.open();
-        setTimeout(function () {
-          try {
+      var m = d && d.querySelector('#mBattle');
+      if (w && m) {
+        if (!m.classList.contains('open')) {
+          if (w.LegacyBattle) w.LegacyBattle.open();
+        } else if (!d.querySelector('#arena')) {
+          if (!f.__staged) {
             var s = d.querySelector('[data-stage]');
-            if (s) s.click();
-            setTimeout(function () {
-              try { var b = d.querySelector('[data-start]'); if (b) b.click(); } catch (e) {}
-            }, 700);
-          } catch (e) {}
-        }, 500);
+            if (s) { s.click(); f.__staged = 1; }
+          } else {
+            var b = d.querySelector('[data-start]');
+            if (b) { b.click(); clearInterval(t); }
+          }
+        } else { clearInterval(t); }
       }
-    } catch (e) {}
-    if (n > 80) clearInterval(t);
-  }, 250);
+    } catch (e) { try { document.title = 'QA ERR ' + e.message; } catch (e2) {} }
+    if (tries > 70) clearInterval(t);
+  }, 300);
 }
 setTimeout(function () {
   var a = mk('bp', 390, 844);
