@@ -12704,14 +12704,14 @@ function portraitSVG(fig, fit, alt) {
     var pop = Math.max(0, 1 - (CV.t - CV.comboT) * 4);
     ctx.save();
     ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-    ctx.font = '900 ' + Math.round(34 + pop * 8) + 'px system-ui,sans-serif';
+    ctx.font = '900 ' + Math.round(28 + pop * 6) + 'px system-ui,sans-serif';
     ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(0,0,0,.45)';
     ctx.strokeText(String(CV.combo), x, y);
     ctx.fillStyle = hot ? '#ffd166' : '#fff4e0';
     ctx.fillText(String(CV.combo), x, y);
     ctx.font = '700 9px system-ui,sans-serif';
     ctx.fillStyle = 'rgba(255,240,210,.75)';
-    ctx.fillText('HIT COMBO', x, y + 24);
+    ctx.fillText('HIT COMBO', x, y + 30);
     ctx.restore();
   }
   function cvDrawAmb(ctx) {
