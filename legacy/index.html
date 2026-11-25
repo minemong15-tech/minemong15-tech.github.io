@@ -11906,7 +11906,7 @@ function portraitSVG(fig, fit, alt) {
       if (nm) nm.textContent = sk.n;
       if (nn) nn.textContent = a.name + ' · 궁극기';
       if (kk) kk.textContent = 'ULTIMATE';
-      if (face) face.innerHTML = cvFaceImg(a.fig);
+      if (face) face.innerHTML = figArt(a.fig);
       cut.style.setProperty('--rc', cvGradeRc(a));
       cut.classList.remove('go');
       replayClass(cut, 'go', 1400);
