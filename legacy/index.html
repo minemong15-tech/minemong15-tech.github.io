@@ -11472,7 +11472,16 @@ function portraitSVG(fig, fit, alt) {
       e.ok = 0;
       e.step++;
       if (e.step < e.cands.length) e.img.src = e.cands[e.step];
-      else { e.bad = 1; lzDropFor(url); }   /* 끝까지 실패 → 이모지 카드로 확정 */
+      else {
+        e.bad = 1; lzDropFor(url);   /* 끝까지 실패 → 이모지 카드로 확정 */
+        /* 위키미디어 속도 제한(429)일 수 있으니 1.5초 뒤 한 번만 다시 시도한다 */
+        if (!e.retry) {
+          e.retry = 1;
+          setTimeout(function () {
+            if (!e.ok && e.img) { e.bad = 0; e.step = 0; e.img.src = e.cands[0]; }
+          }, 1500);
+        }
+      }
     };
     e.img.src = e.cands[0];
     return null;
