@@ -5036,6 +5036,18 @@
   }
   @media (max-width:640px){ .lzd-p{ height:40px } }
   @media (max-height:560px){ .lzd-p{ height:26px; width:22px; aspect-ratio:auto } }
+
+  /* ── 보스 바 컴팩트 ── */
+  .lane5 .f-bossbar{ top:24px; padding:3px 8px 4px; gap:6px; border-radius:8px; left:8px; right:8px }
+  .lane5 .f-bossbar .bb-k{ font-size:6px; letter-spacing:.18em }
+  .lane5 .f-bossbar .bb-name{ font-size:9px; max-width:42% }
+  .lane5 .f-bossbar .bb-hp{ height:5px }
+  .lane5 .f-bossbar .bb-num{ font-size:7px }
+  @media (max-height:560px){
+    .lane5 .lz-hud{ display:none }
+    .lane5 .f-bossbar{ top:2px; padding:2px 7px }
+    .lane5 .f-bossbar .bb-name{ font-size:8px }
+  }
   /* <<EXT5_CSS:END>> */
 </style>
 </head>
@@ -11455,7 +11467,7 @@ function portraitSVG(fig, fit, alt) {
   /* ── 기하: 3레인 × 전열/후열 ── */
   function lzGeom() {
     var W = LZ.W, H = LZ.H;
-    var padX = 4, padT = 7, padB = 6, gap = 5;
+    var padX = 4, padT = (H < 320 ? 16 : 7), padB = 6, gap = 5;
     var laneH = (H - padT - padB) / 3;
     var ch = Math.min(laneH * 0.84, H * 0.30);
     var cw = ch * 0.76;
