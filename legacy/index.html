@@ -11463,7 +11463,7 @@ function portraitSVG(fig, fit, alt) {
     /* 한쪽에 두 열이 들어가는 최대 폭 */
     var maxCw = ((W * 0.5 - padX * 2 - gap) / 2) * 0.94;
     if (cw > maxCw) { cw = maxCw; ch = cw / 0.76; }
-    var dB = Math.min(side - padX - cw / 2, cw * 1.70 + gap);
+    var dB = Math.min(side - padX - cw / 2, Math.max(cw * 1.70 + gap, side * 0.60));
     var dF = Math.max(cw * 0.58, dB - cw - gap);
     if (dF > dB - cw * 0.9) dF = Math.max(cw * 0.55, dB - cw * 0.95);
     var L = {
@@ -11750,13 +11750,15 @@ function portraitSVG(fig, fit, alt) {
     ng.addColorStop(0.55, 'rgba(3,5,9,0.72)');
     ng.addColorStop(1, 'rgba(3,5,9,0.94)');
     g.fillStyle = ng; g.fillRect(0, H * 0.60, W, H * 0.40);
-    /* 이름 */
-    var fs = Math.max(7 * dpr, Math.min(W * 0.155, 12 * dpr));
+    /* 이름 — 카드 폭에 맞춰 글자를 줄이고, 그래도 넘치면 줄임표 */
+    var nm = String(u.name || '');
+    var fsMax = Math.max(7.5 * dpr, Math.min(W * 0.155, 12 * dpr));
+    var fs = Math.min(fsMax, W / Math.max(1, nm.length) / 1.02);
+    if (fs < 7 * dpr) fs = 7 * dpr;
     g.textAlign = 'center';
     g.textBaseline = 'alphabetic';
     g.font = '800 ' + Math.round(fs) + 'px system-ui, "Apple SD Gothic Neo", sans-serif';
-    var nm = String(u.name || '');
-    var maxCh = Math.max(3, Math.floor(W / (fs * 0.92)));
+    var maxCh = Math.max(3, Math.floor(W / (fs * 0.95)));
     if (nm.length > maxCh) nm = nm.slice(0, maxCh - 1) + '…';
     g.fillStyle = u.side === 'a' ? 'rgba(246,238,220,0.97)' : 'rgba(255,226,222,0.97)';
     g.fillText(nm, W / 2, H - Math.max(3, fs * 0.34));
@@ -12105,6 +12107,7 @@ function portraitSVG(fig, fit, alt) {
     if (src.lz) {
       src.lz.anim = 1;
       src.lz.dir = (tgt.lz && tgt.lz.x < src.lz.x) ? -1 : 1;
+      if (tgt.lz) src.lz.aimx = tgt.lz.x;
     }
     if (k === 'slash' || k === 'slam') {
       lzSfx('swing');
@@ -12715,8 +12718,13 @@ function portraitSVG(fig, fit, alt) {
     var pop = c.born < 1 ? (0.86 + c.born * 0.14) : 1;
     var scale = pop * (dead ? (1 - k * 0.16) : 1);
     var w = c.w * scale, h = c.h * scale;
-    var lunge = c.anim > 0 ? Math.sin(Math.min(1, c.anim) * Math.PI) * (c.w * 0.42) : 0;
-    var x = c.x + c.dir * lunge + c.kx;
+    var lunge = 0;
+    if (c.anim > 0) {
+      var ax = (c.aimx === undefined ? c.x + c.dir * c.w : c.aimx);
+      var dist = Math.abs(ax - c.x);
+      lunge = Math.sin(Math.min(1, c.anim) * Math.PI) * Math.min(c.w * 1.15, dist * 0.34) * (ax >= c.x ? 1 : -1);
+    }
+    var x = c.x + lunge + c.kx;
     var y = c.y + (dead ? k * h * 0.16 : 0) + (c.anim > 0 ? -Math.sin(c.anim * Math.PI) * 3 : 0) +
       Math.sin(LZ.t * 2.2 + c.bob) * 0.9;
     /* 그림자 */
