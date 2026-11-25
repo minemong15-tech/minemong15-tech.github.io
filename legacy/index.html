@@ -11379,7 +11379,7 @@ function portraitSVG(fig, fit, alt) {
     for (var i = 0; i < all.length; i++) {
       var u = all[i], c = u.cv;
       if (!c) continue;
-      c.r = u.boss ? Math.max(52, Math.min(96, CV.H * 0.20)) : Math.max(28, Math.min(58, CV.H * 0.115));
+      c.r = u.boss ? Math.max(42, Math.min(74, CV.H * 0.15)) : Math.max(28, Math.min(54, CV.H * 0.108));
       c.y = u.boss ? CV.ground - 4 : CV.ground - c.row * Math.round(c.r * 1.05);
       c.x = Math.max(CV.world * 0.04, Math.min(CV.world * 0.96, c.x));
     }
@@ -11483,7 +11483,7 @@ function portraitSVG(fig, fit, alt) {
     if (u.boss) { row = 0; col = 0; }
     var y = CV.ground;
     if (u.boss) { y = CV.ground - 4; }
-    var r = u.boss ? Math.max(52, Math.min(96, CV.H * 0.20)) : Math.max(28, Math.min(58, CV.H * 0.115));
+    var r = u.boss ? Math.max(42, Math.min(74, CV.H * 0.15)) : Math.max(28, Math.min(54, CV.H * 0.108));
     var gap = Math.round(r * 1.85);
     if (!u.boss) {
       x += (u.side === 'a' ? 1 : -1) * col * gap;
@@ -12608,7 +12608,7 @@ function portraitSVG(fig, fit, alt) {
     }
     /* 이름 */
     if (u.boss || u.side === 'a') {
-      ctx.font = (u.boss ? 700 : 600) + ' ' + Math.round(u.boss ? Math.max(11, r * 0.26) : Math.max(9, r * 0.24)) + 'px system-ui,sans-serif';
+      ctx.font = (u.boss ? 700 : 600) + ' ' + Math.round(u.boss ? Math.min(14, Math.max(11, r * 0.22)) : Math.max(9, Math.min(13, r * 0.24))) + 'px system-ui,sans-serif';
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       ctx.fillStyle = u.boss ? '#ffd9cf' : 'rgba(240,235,225,0.9)';
       var nm = String(u.name || '');
@@ -12841,33 +12841,6 @@ function portraitSVG(fig, fit, alt) {
     ar.classList.toggle('spd3', B.speed === 3);
   }, 600);
 
-  /* DEBUG-ONLY (QA) */
-  try {
-    window.__CVSPR = function (i) {
-      if (!B || !B.allies.length) return 'no B';
-      var u = B.allies[i || 0];
-      var s = cvSprite(u);
-      if (!s) return 'sprite null';
-      var e = document.getElementById('dbgspr');
-      if (e) e.parentNode.removeChild(e);
-      s.id = 'dbgspr';
-      s.style.cssText = 'position:fixed;left:2px;top:2px;z-index:999999;width:180px;height:180px;background:#000';
-      document.body.appendChild(s);
-      return 'ok ' + (u.__sprImg ? 'img' : 'noimg') + ' ' + (u.__spr ? 'spr' : 'nospr');
-    };
-  } catch (e) {}
-
-  try {
-    window.__CVD = function () {
-      return {
-        W: CV.W, H: CV.H, world: Math.round(CV.world), cam: Math.round(CV.cam),
-        ground: CV.ground, theme: CV.theme, sprites: (B ? B.allies.concat(B.enemies) : []).map(function (u) {
-          return [u.name, u.side, u.cv ? Math.round(u.cv.x) : -1, u.cv ? Math.round(u.cv.y) : -1,
-                  u.cv ? Math.round(u.cv.r) : 0, u.alive ? 1 : 0, u.__sprImg ? 1 : 0, u.cv ? (u.cv.row) : -1];
-        })
-      };
-    };
-  } catch (e) {}
 
   /* <<EXT4_BATTLE:END>> */
   window.LegacyBattle = {
