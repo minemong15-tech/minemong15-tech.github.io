@@ -1329,7 +1329,29 @@
     border:1px solid rgba(255,240,205,.26); background:rgba(0,0,0,.45); color:#f6e6bd;
     -webkit-tap-highlight-color:transparent}
   .pf-tip{position:absolute; left:0; right:0; bottom:8%; text-align:center; font-size:10.5px; letter-spacing:.22em;
-    color:rgba(255,240,205,.5); z-index:2}
+    color:rgba(255,240,205,.5); z-index:2; padding:0 18px; pointer-events:none}
+  /* ── 터치 승격 안내 · 스킵 버튼 · 최종 팡 ── */
+  .pf-tip.tap{font-size:12.5px; letter-spacing:.06em; line-height:1.6; color:#ffeec2;
+    text-shadow:0 0 16px rgba(255,214,130,.6); animation:pfTapHint 1.25s ease-in-out infinite}
+  .pf-tip.tap b{color:#fff; font-weight:700}
+  .pf-skip{position:absolute; right:14px; bottom:calc(13.5% + env(safe-area-inset-bottom, 0px)); z-index:5;
+    display:inline-flex; align-items:center; gap:4px; padding:9px 13px; border-radius:999px; cursor:pointer;
+    font-family:inherit; font-size:11px; letter-spacing:.04em; color:#f6e6bd;
+    border:1px solid rgba(255,240,205,.28); background:rgba(0,0,0,.55);
+    -webkit-tap-highlight-color:transparent; transition:transform .12s, background .12s}
+  .pf-skip:active{transform:scale(.94); background:rgba(0,0,0,.75)}
+  .pullfx.pf-final{cursor:default}
+  .pullfx.pf-final .pf-machine{animation:pfFinalZoom .58s cubic-bezier(.2,.9,.3,1.2) both}
+  .pullfx.pf-final .pf-burst{animation:pfFinalBurst .68s cubic-bezier(.15,.7,.3,1) both}
+  .pullfx.pf-final .pf-flash{animation:pfFinalFlash .44s ease-out both}
+  .pullfx.pf-final .pf-beams{opacity:1; animation:pfSpin 1.8s linear infinite}
+  @keyframes pfTapHint{0%,100%{opacity:.74; transform:translateY(0)} 50%{opacity:1; transform:translateY(-3px)}}
+  @keyframes pfFinalFlash{0%{opacity:0} 16%{opacity:1} 100%{opacity:0}}
+  @keyframes pfFinalBurst{0%{opacity:.6; transform:scale(.25)} 34%{opacity:1; transform:scale(1.25)} 100%{opacity:0; transform:scale(3.4)}}
+  @keyframes pfFinalZoom{0%{transform:translate(-50%,-50%) scale(var(--s0))}
+    38%{transform:translate(-50%,-50%) scale(calc(var(--s0) * .88))}
+    64%{transform:translate(-50%,-50%) scale(calc(var(--s0) * 1.32))}
+    100%{transform:translate(-50%,-50%) scale(calc(var(--s0) * 1.7)); opacity:0}}
 
   .pf-machine.pf-in{animation:pfDrop .5s cubic-bezier(.2,.9,.3,1.25) both}
   .pf-machine.pf-k{animation:pfKick .36s cubic-bezier(.25,.9,.35,1.1) both}
@@ -5988,7 +6010,8 @@
     <i data-g="basic"></i><i data-g="rare"></i><i data-g="special"></i><i data-g="heroic"></i><i data-g="mythic"></i><i data-g="legend"></i><i data-g="legendary"></i><i data-g="transcendent"></i>
   </div>
   <button class="pf-mute" type="button" id="pfMute" aria-label="뽑기 연출음 끄기">🔊</button>
-  <div class="pf-tip">탭하면 바로 결과를 봅니다</div>
+  <button class="pf-skip" type="button" id="pfSkip" aria-label="바로 열기">⏭️ 바로 열기</button>
+  <div class="pf-tip tap" id="pfTip">👆 눌러서 승격!</div>
 </div>
 
 <div id="fx"></div>
@@ -15276,6 +15299,7 @@ function portraitSVG(fig, fit, alt) {
   /* 한 단계마다 반음씩 올라가는 승격음 (도 · 미 · 솔 · 시♭ …) */
   var PF_TONE = [261.63, 329.63, 392.00, 466.16, 523.25, 659.25, 783.99, 987.77];
   var PF_TIMERS = [], PULLFX_T = null, PF_FIN = true, PF_DONE = null;
+  var PF_IDX = 0, PF_TARGET = 0, PF_READY = false, PF_OPENING = false, PF_TAP_AT = 0;
   var PF_MUTE_KEY = 'legacy.sfx.mute';
 
   function pfSoundOff() { try { return localStorage.getItem(PF_MUTE_KEY) === '1'; } catch (e) { return false; } }
@@ -15370,6 +15394,8 @@ function portraitSVG(fig, fit, alt) {
     if (fl) fl.classList.remove('pf-f');
     var pips = f.querySelectorAll('.pf-steps i');
     for (i = 0; i < pips.length; i++) pips[i].classList.remove('on');
+    f.classList.remove('pf-final');
+    PF_IDX = 0; PF_READY = false; PF_OPENING = false;
     var gn = $('#pfGradeName');
     if (gn) { gn.className = 'pf-gn'; gn.textContent = ''; }
     var gk = $('#pfGradeKicker');
@@ -15386,12 +15412,18 @@ function portraitSVG(fig, fit, alt) {
     pfReset();
     PF_DONE = done || null;
     PF_FIN = false;
+    PF_OPENING = false;
+    PF_IDX = 0;
+    PF_TARGET = target;
+    PF_READY = false;
+    PF_TAP_AT = 0;
     el.className = 'pullfx';
     el.hidden = false;
     el.setAttribute('data-g', 'basic');
     el.style.setProperty('--pi', '0');
     el.style.setProperty('--s0', '1');
     el.style.setProperty('--shk', '2px');
+    el.removeAttribute('aria-hidden');
     pfPaintMute();
     void el.offsetWidth;
     el.classList.add('on');
@@ -15401,11 +15433,17 @@ function portraitSVG(fig, fit, alt) {
     var flash = el.querySelector('.pf-flash');
     var gn = $('#pfGradeName'), gk = $('#pfGradeKicker');
     var pips = el.querySelectorAll('.pf-steps i');
-    /* 한 단계 0.38초 — 너무 늘어지지 않게 쫄깃한 리듬 */
-    var stepMs = DEMO ? 900 : 380;
-    var holdMs = DEMO ? 1200 : (target >= 6 ? 780 : 560);
     var i;
 
+    function hint(html) {
+      var tp = $('#pfTip');
+      if (tp) tp.innerHTML = html;
+    }
+    function buzz(pattern) {
+      try { if (navigator.vibrate) navigator.vibrate(pattern); } catch (e) {}
+    }
+
+    /* 한 단계 승격 — 색 · 빛 · 배지 · 진동이 함께 오른다 */
     function applyStep(idx) {
       var g = GRADE_LADDER[idx];
       var t = idx / (GRADE_LADDER.length - 1);
@@ -15419,43 +15457,113 @@ function portraitSVG(fig, fit, alt) {
         pfKick(gn, 'pop');
       }
       if (gk) gk.textContent = 'GRADE ' + (idx + 1) + ' / ' + GRADE_LADDER.length + (GRADE_INFO[g] ? ' · ' + GRADE_INFO[g].en : '');
-      if (pips[idx]) pips[idx].classList.add('on');
+      for (i = 0; i < pips.length; i++) pips[i].classList.toggle('on', i <= idx);
       if (machine) {
         if (idx === 0) { machine.classList.remove('pf-k'); pfKick(machine, 'pf-in'); }
         else pfKick(machine, 'pf-k');
       }
-      if (idx >= 2 && flash) pfKick(flash, 'pf-f');
       if (burst) pfKick(burst, 'pf-b');
+      if (idx >= 2 && flash) pfKick(flash, 'pf-f');
       pfStepSound(idx, idx === target);
     }
 
     function finish() {
       if (PF_FIN) return;
       PF_FIN = true;
+      PF_OPENING = false;
       pfReset();
       el.classList.remove('on');
-      setTimeout(function () { if (!el.classList.contains('on')) { el.hidden = true; el.className = 'pullfx'; } }, 240);
+      el.setAttribute('aria-hidden', 'true');
+      setTimeout(function () {
+        if (!el.classList.contains('on')) {
+          el.hidden = true;
+          el.className = 'pullfx';
+          el.setAttribute('data-g', 'basic');
+          el.style.setProperty('--pi', '0');
+        }
+      }, 240);
       var cb = PF_DONE; PF_DONE = null;
       if (cb) cb();
     }
 
-    applyStep(0);
-    for (i = 1; i <= target; i++) {
-      PF_TIMERS.push((function (idx) {
-        return setTimeout(function () { if (!PF_FIN) applyStep(idx); }, idx * stepMs);
-      })(i));
+    /* 최종 오픈 — 팡! 하고 터진 뒤 결과 카드가 열린다 */
+    function openFinal() {
+      if (PF_FIN || PF_OPENING) return;
+      PF_OPENING = true;
+      var top = Math.min(GRADE_LADDER.length - 1, Math.max(PF_IDX, PF_TARGET));
+      el.classList.add('pf-final');
+      el.setAttribute('data-g', GRADE_LADDER[top]);
+      el.style.setProperty('--pi', '1');
+      el.style.setProperty('--s0', (1 + top * 0.055).toFixed(3));
+      if (machine) pfKick(machine, 'pf-k');
+      if (burst) pfKick(burst, 'pf-b');
+      if (flash) pfKick(flash, 'pf-f');
+      pfStepSound(top, true);
+      buzz([26, 45, 110]);
+      hint('✨ <b>결과 확인!</b>');
+      if (PULLFX_T) clearTimeout(PULLFX_T);
+      PULLFX_T = setTimeout(finish, 560);
     }
-    PULLFX_T = setTimeout(finish, target * stepMs + holdMs);
 
-    function chromeHit(t) { return !!(t && t.closest && t.closest('.pf-mute')); }
-    el.onclick = function (e) {
+    /* 터치 1번 = 1단계 승격. 목표 등급에 도달한 다음 한 번 더 누르면 팡! */
+    function tap() {
+      if (PF_FIN || PF_OPENING) return;
+      var now = Date.now();
+      if (now - PF_TAP_AT < 80) return;
+      PF_TAP_AT = now;
+      if (PF_IDX < PF_TARGET) {
+        PF_IDX++;
+        applyStep(PF_IDX);
+        buzz(PF_IDX >= 6 ? [18, 40, 26] : 14);
+        if (PF_IDX < PF_TARGET) {
+          hint('👆 계속 눌러서 승격 · <b>' + (PF_TARGET - PF_IDX) + '단계</b> 남음');
+        } else {
+          PF_READY = true;
+          hint('🎉 <b>' + (PF_LABEL[GRADE_LADDER[PF_IDX]] || '') + '</b> 도달 · 한 번 더 누르면 열립니다!');
+        }
+        return;
+      }
+      if (!PF_READY) {
+        /* 목표가 기본(0) — 첫 터치로 한 번 울린 뒤 두 번째 터치에 열린다 */
+        PF_READY = true;
+        applyStep(PF_IDX);
+        buzz(16);
+        hint('🎉 <b>' + (PF_LABEL[GRADE_LADDER[PF_IDX]] || '') + '</b> · 한 번 더 누르면 열립니다!');
+        return;
+      }
+      openFinal();
+    }
+
+    applyStep(0);
+    if (target > 0) hint('👆 <b>캡슐을 눌러서 승격!</b> 누를 때마다 등급이 1단계씩 오릅니다');
+    else hint('👆 <b>캡슐을 눌러서 열기!</b> 화면을 터치하세요');
+
+    function chromeHit(t) { return !!(t && t.closest && t.closest('.pf-mute, .pf-skip')); }
+    function onTap(e) {
       if (chromeHit(e.target)) return;
-      e.preventDefault(); e.stopPropagation(); finish();
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+      tap();
+    }
+    el.onclick = null;
+    el.ontouchstart = null;
+    if ('onpointerdown' in el) {
+      el.onpointerdown = onTap;
+    } else {
+      el.onclick = onTap;
+      el.ontouchstart = function (e) { onTap(e); };
+    }
+    el.onkeydown = function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { onTap(e); }
     };
-    el.ontouchstart = function (e) {
-      if (chromeHit(e.target)) return;
-      e.preventDefault(); finish();
-    };
+    var sk = $('#pfSkip');
+    if (sk) {
+      sk.onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openFinal();
+      };
+    }
   }
 
   function pullPack(count, useTicket) {
