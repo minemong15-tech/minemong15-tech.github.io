@@ -30,9 +30,13 @@
     e.className = n ? 'bad' : '';
     document.getElementById('qaMsgs').textContent = msgs.slice(0, 6).join(' || ');
   }
-  fr.addEventListener('load', function () {
+  var hooked = false;
+  function setup() {
+    if (hooked) return;
     try {
       var w = fr.contentWindow;
+      if (!w || !w.document || w.document.readyState !== 'complete') return;
+      hooked = true;
       document.getElementById('qaSize').textContent = w.innerWidth + 'x' + w.innerHeight + ' dpr' + w.devicePixelRatio;
       w.addEventListener('error', function (ev) {
         n++; msgs.push((ev.message || 'error') + ' @' + String(ev.filename || '').split('/').pop() + ':' + ev.lineno); upd();
@@ -47,7 +51,11 @@
       };
       upd();
     } catch (err) { msgs.push('hook failed: ' + err.message); upd(); }
-  });
+  }
+  fr.addEventListener('load', setup);
+  setup();
+  var tries = 0;
+  var iv = setInterval(function () { setup(); if (hooked || ++tries > 40) clearInterval(iv); }, 250);
   upd();
 })();
 </script>
