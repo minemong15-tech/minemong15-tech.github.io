@@ -1209,8 +1209,8 @@
   .pf-aura{position:absolute; inset:0; pointer-events:none; opacity:calc(var(--pi) * .52);
     background:radial-gradient(circle at 50% 47%, var(--gc) 0%, rgba(0,0,0,0) 56%);
     mix-blend-mode:screen; transition:opacity .22s, background .22s}
-  .pullfx[data-g="legendary"] .pf-aura{opacity:calc(var(--pi) * .48);
-    background:radial-gradient(circle at 50% 47%, #fff 0%, #ffd166 20%, #7bf1a8 38%, #7ad7ff 56%, #b78aff 72%, rgba(0,0,0,0) 88%)}
+  .pullfx[data-g="legendary"] .pf-aura{opacity:calc(var(--pi) * .42);
+    background:radial-gradient(circle at 50% 47%, #fff 0%, #ffd166 18%, #7bf1a8 33%, #7ad7ff 49%, #b78aff 63%, rgba(0,0,0,0) 74%)}
   .pullfx[data-g="transcendent"] .pf-aura{opacity:calc(var(--pi) * .92);
     background:radial-gradient(circle at 50% 47%, #fff 0%, #b9bec8 30%, #23252b 58%, rgba(0,0,0,0) 78%)}
   .pf-stage{position:absolute; inset:0}
@@ -1251,14 +1251,14 @@
     background:radial-gradient(circle at 50% 56%, #ffffff 0%, #ffffff 7%, var(--gc) 34%, rgba(0,0,0,0) 78%);
     opacity:calc(.14 + var(--pi) * .76); mix-blend-mode:screen; filter:blur(1px);
     animation:pfCorePulse 2.6s ease-in-out infinite}
-  .cr-crack{left:50%; top:13%; width:3px; height:44%; margin-left:-1.5px; border-radius:2px;
-    transform-origin:50% 100%;
-    background:linear-gradient(180deg, rgba(255,255,255,0), #ffffff 22%, var(--gc) 74%, rgba(255,255,255,0));
-    box-shadow:0 0 7px 1px rgba(4,10,20,.5);
-    filter:drop-shadow(0 0 5px #e2f8ff) drop-shadow(0 0 12px var(--gc)); transition:opacity .2s}
-  .cr-crack.c1{transform:rotate(-26deg); opacity:clamp(0, calc((var(--pi) - .08) * 3.4), .92)}
-  .cr-crack.c2{transform:rotate(41deg) translateY(11%); opacity:clamp(0, calc((var(--pi) - .34) * 3.4), .92)}
-  .cr-crack.c3{transform:rotate(-79deg) translateY(3%); opacity:clamp(0, calc((var(--pi) - .6) * 3.4), .95)}
+  .cr-cracks{position:absolute; inset:2px; pointer-events:none;
+    clip-path:polygon(50% 0%,78% 11%,100% 43%,86% 84%,50% 100%,14% 84%,0% 43%,22% 11%)}
+  .cr-cracks svg{position:absolute; inset:0; width:100%; height:100%}
+  .crk{fill:none; stroke:#ffffff; stroke-width:1.5; stroke-linejoin:round; vector-effect:non-scaling-stroke;
+    filter:drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 5px var(--gc)); transition:opacity .2s}
+  .crk.a{opacity:clamp(0, calc((var(--pi) - .06) * 3.6), .96)}
+  .crk.b{opacity:clamp(0, calc((var(--pi) - .3) * 3.6), .9)}
+  .crk.c{opacity:clamp(0, calc((var(--pi) - .56) * 3.6), .95)}
   .pf-shards{position:absolute; inset:0; pointer-events:none}
   .pf-shards i{position:absolute; left:50%; top:50%; width:11px; height:17px; margin:-9px 0 0 -5.5px;
     clip-path:polygon(50% 0%,100% 64%,16% 100%); opacity:0;
@@ -6210,9 +6210,15 @@
         <i class="cr-body"></i>
         <i class="cr-facet"></i>
         <i class="cr-core"></i>
-        <i class="cr-crack c1"></i>
-        <i class="cr-crack c2"></i>
-        <i class="cr-crack c3"></i>
+        <i class="cr-cracks">
+          <svg viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true">
+            <polyline class="crk a" points="52,2 47,18 55,30 45,44 53,58 46,72 51,88 48,104 50,118"/>
+            <polyline class="crk b" points="49,48 36,54 27,68 16,76 6,82"/>
+            <polyline class="crk c" points="53,56 66,63 72,78 84,88 94,94"/>
+            <polyline class="crk b" points="50,74 40,82 34,96 26,106"/>
+            <polyline class="crk c" points="50,86 60,92 66,104"/>
+          </svg>
+        </i>
       </span>
       <!-- 마지막 팡! — 부서져 날아가는 파편 -->
       <span class="pf-shards"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
