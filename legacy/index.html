@@ -15983,16 +15983,18 @@ function portraitSVG(fig, fit, alt) {
       el.style.setProperty('--pi', '1');
       el.style.setProperty('--s0', (1 + top * 0.055).toFixed(3));
       if (machine) pfKick(machine, 'pf-k');
+      var bare = !PF_GRADE_SOUND;   /* 바로 열기로 건너뛰어 확정음이 아직 안 울렸으면 여기서 1회 울린다 */
+      if (bare) PF_GRADE_SOUND = true;
       if (GRADE_LADDER[top] === 'transcendent') {
         /* 초월 오픈도 글자 없이 이펙트만 · 소리는 확정 때 이미 울렀으니 부서지는 소리만 */
         if (gn) { gn.textContent = ''; gn.className = 'pf-gn'; }
         hint('');
         pfTransFx();
-        pfCrackSound();
+        if (bare) pfTransSound(); else pfCrackSound();
       } else {
         if (burst) pfKick(burst, 'pf-b');
         if (flash) pfKick(flash, 'pf-f');
-        pfCrackSound();
+        if (bare) pfStepSound(top, true); else pfCrackSound();
         buzz([26, 45, 110]);
         hint('✨ <b>결과 확인!</b>');
       }
