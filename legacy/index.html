@@ -1477,46 +1477,62 @@
     70%{opacity:.7} 100%{opacity:0; transform:scale(1.35) rotate(70deg)}}
   @keyframes stRing{0%{opacity:0; transform:scale(.25)} 20%{opacity:.9} 100%{opacity:0; transform:scale(2.2)}}
 
-  /* ── NEW · 화면을 꽉 채우는 신규 인물 연출 ── */
-  .newfx{position:fixed; inset:0; z-index:214; overflow:hidden; background:#05060a; opacity:0;
-    pointer-events:none; -webkit-tap-highlight-color:transparent; --nc:#9ca3af}
+  /* ── NEW · 카드팩 모달 안쪽 크기의 큰 카드 팝업 ──
+     화면 전체 덮개가 아니라 인물 카드팩 모달 내용 영역만큼의 둥근 카드로 뜬다. */
+  .newfx{position:fixed; inset:0; z-index:214; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(ellipse at 50% 46%, rgba(3,4,8,.16) 0%, rgba(3,4,8,.52) 72%, rgba(3,4,8,.62) 100%);
+    opacity:0; pointer-events:none; -webkit-tap-highlight-color:transparent; --nc:#9ca3af}
   .newfx[hidden]{display:none}
-  .newfx.on{opacity:1; pointer-events:auto; animation:nfIn .3s cubic-bezier(.2,.9,.2,1) both}
+  .newfx.on{opacity:1; pointer-events:auto; animation:nfFade .2s linear both}
   .newfx.out{opacity:0; transition:opacity .2s}
+  .newfx .nf-card{position:relative; display:block; width:min(78vw,332px); height:min(62vh,506px);
+    border-radius:20px; overflow:hidden; background:#05060a; border:1.5px solid var(--nc);
+    box-shadow:0 0 0 1px rgba(255,255,255,.09) inset, 0 0 30px -5px var(--nc), 0 0 72px -20px var(--nc),
+      0 26px 60px -22px rgba(0,0,0,.95);
+    animation:nfCard .44s cubic-bezier(.2,.9,.2,1) both}
+  .newfx.mono .nf-card{border-color:#fff;
+    box-shadow:0 0 0 1px rgba(255,255,255,.22) inset, 0 0 34px -6px #fff, 0 0 76px -18px #fff,
+      0 26px 60px -22px rgba(0,0,0,.95)}
+  .newfx.rb .nf-card{border-color:#ecd9a8;
+    box-shadow:0 0 0 1px rgba(255,255,255,.16) inset, 0 0 30px -4px #ffd166, 0 0 66px -12px #b78aff,
+      0 26px 60px -22px rgba(0,0,0,.95)}
   .newfx .nf-bg{position:absolute; inset:0;
-    background:radial-gradient(circle at 50% 30%, var(--nc) 0%, rgba(0,0,0,0) 58%),
-      linear-gradient(180deg, #0a0b10 0%, #05060a 70%, #000 100%)}
-  .newfx .nf-rays{position:absolute; left:50%; top:34%; width:150vmax; height:150vmax;
-    margin:-75vmax 0 0 -75vmax; opacity:.45;
+    background:radial-gradient(circle at 50% 26%, var(--nc) 0%, rgba(0,0,0,0) 62%),
+      linear-gradient(180deg,#0b0d13 0%,#05060a 72%,#000 100%)}
+  .newfx .nf-rays{position:absolute; left:50%; top:34%; width:180%; height:180%;
+    margin:-90% 0 0 -90%; opacity:.42;
     background:conic-gradient(from 0deg, rgba(255,255,255,.18) 0deg, rgba(0,0,0,0) 26deg,
       rgba(255,255,255,.13) 52deg, rgba(0,0,0,0) 78deg, rgba(255,255,255,.18) 104deg,
       rgba(0,0,0,0) 130deg, rgba(255,255,255,.12) 156deg, rgba(0,0,0,0) 182deg,
       rgba(255,255,255,.18) 208deg, rgba(0,0,0,0) 234deg, rgba(255,255,255,.13) 260deg,
       rgba(0,0,0,0) 286deg, rgba(255,255,255,.18) 312deg, rgba(0,0,0,0) 338deg);
-    animation:nfSpin 16s linear infinite; will-change:transform}
-  .newfx .nf-art{position:absolute; left:0; right:0; top:0; height:64%; overflow:hidden;
-    animation:nfArt .72s cubic-bezier(.2,.9,.2,1) both}
+    animation:nfSpin 18s linear infinite; will-change:transform}
+  .newfx .nf-art{position:absolute; left:0; right:0; top:0; height:55%; overflow:hidden;
+    animation:nfArt .62s cubic-bezier(.2,.9,.2,1) both}
   .newfx .nf-art .ph-svg,.newfx .nf-art .ph-img{position:absolute; inset:0; width:100%; height:100%}
-  .newfx .nf-art .ph-img{object-fit:cover; object-position:50% 24%}
+  .newfx .nf-art .ph-img{object-fit:cover; object-position:50% 20%}
   .newfx .nf-scrim{position:absolute; left:0; right:0; bottom:0; height:54%;
-    background:linear-gradient(180deg, rgba(5,6,10,0) 0%, rgba(5,6,10,.74) 54%, #05060a 100%)}
-  .newfx .nf-copy{position:absolute; left:0; right:0; bottom:calc(5% + env(safe-area-inset-bottom, 0px));
-    display:block; text-align:center; padding:0 18px; animation:nfCopy .5s .12s cubic-bezier(.2,.9,.2,1) both}
-  .newfx .nf-new{display:block; font-family:var(--serif); font-size:clamp(34px,13vw,64px); line-height:1;
-    letter-spacing:.06em; color:#fff; text-shadow:0 0 26px var(--nc), 0 0 68px rgba(255,255,255,.55)}
-  .newfx .nf-k{display:block; margin-top:8px; font-style:normal; font-size:11.5px; letter-spacing:.34em; color:#e8dcc0}
-  .newfx .nf-name{display:block; margin-top:6px; font-family:var(--serif); font-size:clamp(24px,8.4vw,40px);
-    color:#fff; letter-spacing:.02em; word-break:keep-all}
-  .newfx .nf-grade{display:inline-block; margin-top:10px; padding:4px 14px; border-radius:999px;
-    font-size:10.5px; letter-spacing:.2em; color:#0a0c10; background:var(--nc);
+    background:linear-gradient(180deg, rgba(5,6,10,0) 0%, rgba(5,6,10,.74) 50%, #05060a 100%)}
+  .newfx .nf-copy{position:absolute; left:0; right:0; bottom:11px;
+    display:block; text-align:center; padding:0 12px; animation:nfCopy .42s .1s cubic-bezier(.2,.9,.2,1) both}
+  .newfx .nf-new{display:block; font-family:var(--serif); font-size:clamp(27px,8.4vw,37px); line-height:1;
+    letter-spacing:.05em; color:#fff; text-shadow:0 0 20px var(--nc), 0 0 46px rgba(255,255,255,.5)}
+  .newfx .nf-k{display:block; margin-top:6px; font-style:normal; font-size:9.5px; letter-spacing:.28em; color:#e8dcc0}
+  .newfx .nf-name{display:block; margin-top:4px; font-family:var(--serif); font-size:clamp(18px,5.4vw,23px);
+    line-height:1.2; color:#fff; letter-spacing:.01em; word-break:keep-all}
+  .newfx .nf-grade{display:inline-block; margin-top:7px; padding:3px 11px; border-radius:999px;
+    font-size:9px; letter-spacing:.18em; color:#0a0c10; background:var(--nc);
     border:1px solid rgba(255,255,255,.35)}
   .newfx .nf-grade.mono{background:#fff; color:#050507}
   .newfx .nf-grade.rb{background:linear-gradient(100deg,#ffd166,#7bf1a8,#7ad7ff,#b78aff); color:#050507}
-  .newfx .nf-tip{display:block; margin-top:12px; font-style:normal; font-size:9.5px; letter-spacing:.24em;
+  .newfx .nf-tip{display:block; margin-top:7px; font-style:normal; font-size:8.5px; letter-spacing:.2em;
     color:rgba(246,230,189,.6)}
+  @keyframes nfFade{from{opacity:0} to{opacity:1}}
+  @keyframes nfCard{0%{opacity:0; transform:scale(.84) translateY(12px)} 62%{opacity:1; transform:scale(1.015)}
+    100%{opacity:1; transform:none}}
   @keyframes nfIn{0%{opacity:0; transform:scale(1.06)} 100%{opacity:1; transform:none}}
   @keyframes nfArt{0%{opacity:0; transform:scale(1.14)} 100%{opacity:1; transform:none}}
-  @keyframes nfCopy{0%{opacity:0; transform:translateY(18px)} 100%{opacity:1; transform:none}}
+  @keyframes nfCopy{0%{opacity:0; transform:translateY(14px)} 100%{opacity:1; transform:none}}
   @keyframes nfSpin{to{transform:rotate(360deg)}}
 
   /* 순차 공개 중에는 닫기·다른 뽑기를 잠근다 (결과를 놓치지 않게) */
@@ -6156,16 +6172,18 @@
   <span class="st-sparks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
 </div>
 <div class="newfx" id="newFx" hidden aria-hidden="true">
-  <span class="nf-bg"></span>
-  <span class="nf-rays"></span>
-  <span class="nf-art" id="nfArt"></span>
-  <span class="nf-scrim"></span>
-  <span class="nf-copy">
-    <b class="nf-new">NEW!</b>
-    <i class="nf-k">새로운 인물 획득</i>
-    <strong class="nf-name" id="nfName"></strong>
-    <span class="nf-grade" id="nfGrade"></span>
-    <em class="nf-tip" id="nfTip">터치하면 이어집니다</em>
+  <span class="nf-card">
+    <span class="nf-bg"></span>
+    <span class="nf-rays"></span>
+    <span class="nf-art" id="nfArt"></span>
+    <span class="nf-scrim"></span>
+    <span class="nf-copy">
+      <b class="nf-new">NEW!</b>
+      <i class="nf-k">새로운 인물 획득</i>
+      <strong class="nf-name" id="nfName"></strong>
+      <span class="nf-grade" id="nfGrade"></span>
+      <em class="nf-tip" id="nfTip">터치하면 이어집니다</em>
+    </span>
   </span>
 </div>
 
@@ -15461,64 +15479,191 @@ function portraitSVG(fig, fit, alt) {
     b.setAttribute('aria-label', off ? '뽑기 연출음 켜기' : '뽑기 연출음 끄기');
   }
 
-  /* 단계 승격음 — 쿵(낮은 타격) + 띠링(한 음씩 올라가는 종), 마지막 단계엔 팡! */
+  /* ── 승격음 합성 도구 ────────────────────────────────────────────
+     Web Audio 로 그때그때 합성한다. 모든 노드는 예약 시점에 스스로 멈춘다. */
+  function pfSpace(ctx, out) {
+    /* 짧은 잔향 — 몽환적인 공간감을 더한다. 소리를 보낼 입력 노드를 돌려준다. */
+    var inp = ctx.createGain();
+    try {
+      inp.connect(out);
+      var dly = ctx.createDelay(0.8), fb = ctx.createGain(), lp = ctx.createBiquadFilter(), wet = ctx.createGain();
+      dly.delayTime.value = 0.135;
+      fb.gain.value = 0.33;
+      lp.type = 'lowpass'; lp.frequency.value = 2300;
+      wet.gain.value = 0.26;
+      inp.connect(dly); dly.connect(lp); lp.connect(fb); fb.connect(dly);
+      dly.connect(wet); wet.connect(out);
+    } catch (e) {}
+    return inp;
+  }
+
+  /* o = {type,f,to,slide,detune,t,dur,peak,atk,pan,hp,lp,lpTo} */
+  function pfTone(ctx, dest, o) {
+    try {
+      var t = o.t, atk = o.atk || 0.008, dur = o.dur || 0.25;
+      var osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = o.type || 'sine';
+      osc.frequency.setValueAtTime(Math.max(20, o.f), t);
+      if (o.to) osc.frequency.exponentialRampToValueAtTime(Math.max(18, o.to), t + (o.slide || dur));
+      if (o.detune) osc.detune.setValueAtTime(o.detune, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0004, o.peak), t + atk);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      var node = osc;
+      if (o.hp) {
+        var hf = ctx.createBiquadFilter();
+        hf.type = 'highpass'; hf.frequency.setValueAtTime(o.hp, t); hf.Q.value = 0.7;
+        node.connect(hf); node = hf;
+      }
+      if (o.lp) {
+        var lf = ctx.createBiquadFilter();
+        lf.type = 'lowpass'; lf.Q.value = 2.4;
+        lf.frequency.setValueAtTime(o.lp, t);
+        if (o.lpTo) lf.frequency.exponentialRampToValueAtTime(o.lpTo, t + dur * 0.8);
+        node.connect(lf); node = lf;
+      }
+      if (o.pan && ctx.createStereoPanner) {
+        var pn = ctx.createStereoPanner();
+        pn.pan.setValueAtTime(o.pan, t);
+        node.connect(pn); node = pn;
+      }
+      node.connect(g); g.connect(dest);
+      osc.start(t); osc.stop(t + dur + 0.04);
+      return osc;
+    } catch (e) { return null; }
+  }
+
+  /* 차원문이 열리는 듯한 노이즈 휘슬 (밴드패스 상승 스윕) */
+  function pfWhoosh(ctx, dest, t, dur, f0, f1, peak) {
+    try {
+      var n = Math.max(1, Math.floor(ctx.sampleRate * dur));
+      var buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0), i;
+      for (i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 1.7);
+      var src = ctx.createBufferSource(); src.buffer = buf;
+      var bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.7;
+      bp.frequency.setValueAtTime(f0, t);
+      bp.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + dur * 0.32);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(bp); bp.connect(g); g.connect(dest);
+      src.start(t); src.stop(t + dur + 0.03);
+    } catch (e) {}
+  }
+
+  /* 마지막 팡 — 등급이 높을수록 화음이 넓고 길게 터진다 */
+  function pfFinalBurst(ctx, dest, t0, tier, f) {
+    var k, st;
+    /* 상승 스윕 */
+    pfTone(ctx, dest, { type: 'sawtooth', f: 240 + tier * 20, to: 1980 + tier * 260, slide: 0.28,
+      t: t0 + 0.05, dur: 0.4, peak: 0.035 + tier * 0.005, lp: 5200 });
+    /* 터지는 화음 — 위로 갈수록 음이 늘고 길어진다 */
+    var chord = [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98, 2093.0];
+    var n = 4 + tier;
+    for (k = 0; k < n; k++) {
+      st = t0 + 0.3 + k * (0.04 - tier * 0.004);
+      pfTone(ctx, dest, { type: 'triangle', f: chord[k % chord.length], t: st, dur: 0.62 + tier * 0.16,
+        peak: 0.05 + tier * 0.004, pan: ((k % 3) - 1) * 0.4 });
+      pfTone(ctx, dest, { type: 'sine', f: chord[k % chord.length] * 2, t: st + 0.01, dur: 0.5 + tier * 0.12,
+        peak: 0.016 + tier * 0.003, pan: ((k % 2) ? 0.3 : -0.3) });
+    }
+    /* 낮은 울림 */
+    pfTone(ctx, dest, { type: 'sine', f: 120 + tier * 8, to: 36, slide: 0.55, t: t0 + 0.3,
+      dur: 0.72 + tier * 0.1, peak: 0.16 + tier * 0.018 });
+    if (tier >= 3) {
+      pfWhoosh(ctx, dest, t0 + 0.26, 0.7, 2400, 9000, 0.03);
+      pfTone(ctx, dest, { type: 'sine', f: 48, to: 26, slide: 0.9, t: t0 + 0.32, dur: 1.2, peak: 0.1 });
+    }
+    if (tier >= 4) {
+      /* 크리스탈 잔향이 길게 남는다 */
+      for (k = 0; k < 5; k++) {
+        pfTone(ctx, dest, { type: 'sine', f: 2093.0 * Math.pow(1.12, k), t: t0 + 0.5 + k * 0.05,
+          dur: 1.1, peak: 0.012, pan: (k % 2 ? 0.42 : -0.42) });
+      }
+    }
+  }
+
+  /* 단계 승격음 — 등급이 오를수록 신기하고 입체적으로.
+     1~2 기본·희귀 : 맑은 크리스탈·마림바 톡
+     3~4 특별·영웅 : 반짝이는 듀얼 톤 + 하모닉 쉬머
+     5~6 신화·전설 : 신비로운 신스 패드 + 상승 아르페지오 + 저음 펀치
+     7~8 레전더리·초월 : 디튠 코러스 + 크리스탈 글리산도 + 웅장한 베이스 붐 */
   function pfStepSound(idx, last) {
     if (pfSoundOff()) return;
     var ctx = audioCtxGet();
     if (!ctx) return;
     try {
-      var t0 = ctx.currentTime;
-      var f = PF_TONE[Math.min(idx, PF_TONE.length - 1)];
-      var bo = ctx.createOscillator(), bg = ctx.createGain();
-      bo.type = 'sine';
-      bo.frequency.setValueAtTime(150 + idx * 12, t0);
-      bo.frequency.exponentialRampToValueAtTime(54, t0 + 0.2);
-      bg.gain.setValueAtTime(0.0001, t0);
-      bg.gain.exponentialRampToValueAtTime(0.13 + idx * 0.012, t0 + 0.01);
-      bg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.3);
-      bo.connect(bg); bg.connect(ctx.destination);
-      bo.start(t0); bo.stop(t0 + 0.32);
-      [f, f * 2].forEach(function (fr, k) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.type = k ? 'sine' : 'triangle';
-        o.frequency.setValueAtTime(fr, t0 + 0.01);
-        g.gain.setValueAtTime(0.0001, t0 + 0.01);
-        g.gain.exponentialRampToValueAtTime(k ? 0.034 : 0.07, t0 + 0.03);
-        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.28);
-        o.connect(g); g.connect(ctx.destination);
-        o.start(t0 + 0.01); o.stop(t0 + 0.32);
-      });
-      if (!last) return;
-      /* 팡 — 상승 스윕 + 터지는 화음 + 낮은 울림 */
-      var sw = ctx.createOscillator(), sg = ctx.createGain();
-      sw.type = 'sawtooth';
-      sw.frequency.setValueAtTime(240, t0 + 0.05);
-      sw.frequency.exponentialRampToValueAtTime(1980, t0 + 0.3);
-      sg.gain.setValueAtTime(0.0001, t0 + 0.05);
-      sg.gain.exponentialRampToValueAtTime(0.05, t0 + 0.09);
-      sg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.42);
-      sw.connect(sg); sg.connect(ctx.destination);
-      sw.start(t0 + 0.05); sw.stop(t0 + 0.46);
-      [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, k) {
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        var st = t0 + 0.3 + k * 0.035;
-        o.type = 'triangle';
-        o.frequency.setValueAtTime(fr, st);
-        g.gain.setValueAtTime(0.0001, st);
-        g.gain.exponentialRampToValueAtTime(0.08, st + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, st + 0.7);
-        o.connect(g); g.connect(ctx.destination);
-        o.start(st); o.stop(st + 0.74);
-      });
-      var bm2 = ctx.createOscillator(), bg2 = ctx.createGain();
-      bm2.type = 'sine';
-      bm2.frequency.setValueAtTime(120, t0 + 0.3);
-      bm2.frequency.exponentialRampToValueAtTime(38, t0 + 0.9);
-      bg2.gain.setValueAtTime(0.0001, t0 + 0.3);
-      bg2.gain.exponentialRampToValueAtTime(0.18, t0 + 0.34);
-      bg2.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.0);
-      bm2.connect(bg2); bg2.connect(ctx.destination);
-      bm2.start(t0 + 0.3); bm2.stop(t0 + 1.04);
+      var t0 = ctx.currentTime + 0.004;
+      var i = Math.min(Math.max(idx || 0, 0), PF_TONE.length - 1);
+      var f = PF_TONE[i];
+      var tier = i <= 1 ? 1 : (i <= 3 ? 2 : (i <= 5 ? 3 : 4));
+      var master = ctx.createGain();
+      master.gain.value = 0.9;
+      master.connect(ctx.destination);
+      var bus = tier >= 2 ? pfSpace(ctx, master) : master;
+      var k, st;
+
+      /* ── 모든 단계 공통: 톡 하고 맑게 튀는 크리스탈 몸통 ── */
+      pfTone(ctx, bus, { type: 'sine', f: f, t: t0, dur: 0.26 + tier * 0.04, peak: 0.075, atk: 0.006 });
+      pfTone(ctx, bus, { type: 'triangle', f: f * 2, t: t0 + 0.004, dur: 0.16 + tier * 0.03, peak: 0.042 });
+      pfTone(ctx, bus, { type: 'sine', f: f * 3.01, t: t0 + 0.006, dur: 0.12 + tier * 0.05,
+        peak: 0.018, hp: 900, pan: 0.22 });
+      pfTone(ctx, bus, { type: 'square', f: f * 4.02, t: t0, dur: 0.035, peak: 0.009, hp: 2400, pan: -0.18 });
+
+      if (tier >= 2) {
+        /* ── 듀얼 톤(완전5도) + 하모닉 쉬머 ── */
+        pfTone(ctx, bus, { type: 'triangle', f: f * 1.5, t: t0 + 0.02, dur: 0.34, peak: 0.05, pan: -0.28 });
+        pfTone(ctx, bus, { type: 'sine', f: f * 1.5, t: t0 + 0.022, dur: 0.42, peak: 0.032, pan: -0.28 });
+        pfTone(ctx, bus, { type: 'sine', f: f * 3.02, t: t0 + 0.03, dur: 0.52, peak: 0.021, pan: 0.32 });
+        pfTone(ctx, bus, { type: 'sine', f: f * 5.03, t: t0 + 0.045, dur: 0.46, peak: 0.013, pan: -0.34 });
+        for (k = 0; k < 3; k++) {
+          pfTone(ctx, bus, { type: 'sine', f: f * (1 + k * 0.25), t: t0 + 0.03 + k * 0.045,
+            dur: 0.3, peak: 0.026, pan: (k - 1) * 0.32 });
+        }
+      }
+
+      if (tier >= 3) {
+        /* ── 신비로운 신스 패드 (디튠 3성부 · 로우패스 상승) ── */
+        for (k = 0; k < 3; k++) {
+          pfTone(ctx, bus, { type: 'sawtooth', f: f, detune: (k - 1) * 9, t: t0,
+            dur: 0.9, peak: 0.02, atk: 0.16, lp: 520, lpTo: 2800, pan: (k - 1) * 0.5 });
+        }
+        pfTone(ctx, bus, { type: 'sine', f: f / 2, t: t0 + 0.01, dur: 0.8, peak: 0.05, atk: 0.1 });
+        /* 상승 아르페지오 — 위로 훑고 올라가는 벨 */
+        for (k = 0; k < 6; k++) {
+          st = t0 + 0.05 + k * 0.042;
+          pfTone(ctx, bus, { type: 'sine', f: f * Math.pow(2, k * 0.42), t: st, dur: 0.5,
+            peak: 0.028 - k * 0.0015, pan: (k % 2 ? 0.34 : -0.34) });
+        }
+        /* 종 공명 + 저음 펀치 */
+        pfTone(ctx, bus, { type: 'sine', f: f * 6.02, t: t0 + 0.03, dur: 0.6, peak: 0.011, hp: 1800 });
+        pfTone(ctx, bus, { type: 'sine', f: 132, to: 46, slide: 0.2, t: t0, dur: 0.32, peak: 0.1 });
+      }
+
+      if (tier >= 4) {
+        /* ── 차원문: 노이즈 휘슬 + 디튠 코러스 ── */
+        pfWhoosh(ctx, bus, t0, 0.8, 200, 5200, 0.05);
+        var choir = [-13, -6, 0, 7, 14];
+        for (k = 0; k < choir.length; k++) {
+          pfTone(ctx, bus, { type: 'sawtooth', f: f * (k % 2 ? 2 : 1), detune: choir[k], t: t0 + 0.02,
+            dur: 1.15, peak: 0.016, atk: 0.2, lp: 420, lpTo: 3200, pan: (k - 2) * 0.34 });
+        }
+        /* 크리스탈 글리산도 — 반짝이며 위로 흐르는 음 */
+        for (k = 0; k < 9; k++) {
+          st = t0 + 0.06 + k * 0.033;
+          pfTone(ctx, bus, { type: 'sine', f: f * Math.pow(2, 1 + k * 0.17), t: st, dur: 0.36,
+            peak: 0.024 - k * 0.0012, pan: (k % 2 ? 0.5 : -0.5) });
+        }
+        /* 웅장한 베이스 붐 */
+        pfTone(ctx, bus, { type: 'sine', f: 98, to: 27, slide: 0.85, t: t0, dur: 1.25, peak: 0.16 });
+        pfTone(ctx, bus, { type: 'triangle', f: 49, to: 22, slide: 0.7, t: t0 + 0.02, dur: 1.0, peak: 0.05 });
+        /* 꼬리에 남는 반짝임 */
+        pfTone(ctx, bus, { type: 'sine', f: f * 8.03, t: t0 + 0.3, dur: 1.2, peak: 0.009, hp: 2600, pan: 0.4 });
+        pfTone(ctx, bus, { type: 'sine', f: f * 10.1, t: t0 + 0.36, dur: 1.0, peak: 0.007, hp: 3200, pan: -0.4 });
+      }
+
+      if (last) pfFinalBurst(ctx, bus, t0, tier, f);
     } catch (e) {}
   }
 
