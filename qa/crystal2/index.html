@@ -140,6 +140,17 @@
     var tr = d.querySelector('.pcard.sq-in.tr');
     return { seqTransAt: first, cards: maxCards, trCard: !!tr, errs: QA.errs.slice(0, 6) };
   };
+  /* 촬영용: 앱 타이머 배율 (1 = 원래 속도) */
+  QA.slow = function (k) {
+    var w = QA.win();
+    if (!w.__origST) w.__origST = w.setTimeout;
+    var o = w.__origST;
+    w.setTimeout = function (fn, ms) {
+      var rest = [].slice.call(arguments, 2);
+      return o.apply(w, [fn, (ms || 0) * (k || 1)].concat(rest));
+    };
+    return { factor: k };
+  };
   QA.clear = function () {
     var d = QA.doc();
     d.getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
