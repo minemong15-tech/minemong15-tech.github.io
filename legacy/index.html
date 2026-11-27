@@ -1330,7 +1330,12 @@
   @keyframes pfRing{0%{opacity:.5; transform:translate(-50%,-50%) scale(.68)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.78)}}
 
   /* ── 🃏 뽑기 결과 카드 순차 공개 ── */
-  .pcard.sq-w{animation:none; opacity:0; transform:translateY(12px) scale(.9)}
+  .pcard.sq-w{animation:none; opacity:1; transform:none; background:#070a0f;
+    border-color:rgba(246,230,189,.16); box-shadow:none}
+  .pcard.sq-w > *{visibility:hidden}
+  .pcard.sq-w::before{content:'✦'; position:absolute; inset:0; z-index:4; display:grid; place-items:center;
+    font-size:22px; color:rgba(246,230,189,.3); border-radius:inherit;
+    background:linear-gradient(160deg,#101520 0%,#070a0f 58%,#0b0f16 100%)}
   .pcard.sq-in{animation:sqPop .46s cubic-bezier(.2,1.05,.35,1) both}
   .pcard.sq-in.sq-fast{animation-duration:.24s}
   .pcard::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0;
@@ -15774,6 +15779,7 @@ function portraitSVG(fig, fit, alt) {
     var card = SQ.cards[i], r = SQ.data[i];
     if (!card || !r) { sqFinish(); return; }
     SQ.idx = i;
+    card.classList.remove('sq-w');
     card.classList.add('sq-in');
     if (sqIsLegend(r.f.grade)) { card.classList.add('hi'); sqLegendFx(r); }
     sqCardSound(r.f.grade);
@@ -15796,6 +15802,7 @@ function portraitSVG(fig, fit, alt) {
     if (fx) { fx.className = 'newfx'; fx.hidden = true; }
     for (var i = 0; i < SQ.cards.length; i++) {
       if (!SQ.cards[i].classList.contains('sq-in')) {
+        SQ.cards[i].classList.remove('sq-w');
         SQ.cards[i].style.animationDelay = (i * 0.05).toFixed(2) + 's';
         SQ.cards[i].classList.add('sq-in', 'sq-fast');
       }
@@ -15844,7 +15851,17 @@ function portraitSVG(fig, fit, alt) {
     if (bar) bar.hidden = false;
     sqCount(0);
     setTimeout(function () {
-      try { wrap.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { try { wrap.scrollIntoView(); } catch (e2) {} }
+      /* 모달 시트 안에서 결과 그리드가 바로 보이도록 스크롤 */
+      try {
+        var sheet = wrap.closest && wrap.closest('.sheet');
+        if (sheet) {
+          var top = sheet.scrollTop + (wrap.getBoundingClientRect().top - sheet.getBoundingClientRect().top) - 10;
+          if (sheet.scrollTo) sheet.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+          else sheet.scrollTop = Math.max(0, top);
+        } else {
+          wrap.scrollIntoView({ block: 'center' });
+        }
+      } catch (e) {}
     }, 30);
     var all = sqEl('seqAll');
     if (all) all.onclick = function (e) { e.preventDefault(); e.stopPropagation(); sqSkipAll(); };

@@ -100,7 +100,7 @@
     tap: function () {
       var el = q('#reveal .pcard');
       var mp = q('#mPack');
-      mp.dispatchEvent(new W().PointerEvent('pointerdown', { bubbles: true }));
+      mp.dispatchEvent(new (W().PointerEvent)('pointerdown', { bubbles: true }));
       log('tap · counter=' + (q('#seqCount') && q('#seqCount').textContent) +
         ' · shown=' + D().querySelectorAll('#reveal .pcard.sq-in').length);
     },
