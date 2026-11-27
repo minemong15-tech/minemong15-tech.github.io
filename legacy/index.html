@@ -14419,7 +14419,8 @@ function portraitSVG(fig, fit, alt) {
   }
   function fragOf(c) {
     if (!c) return 0;
-    return Math.max(0, Math.min(FRAG_PER_STAR, (c.n - 1) - (c.star * FRAG_PER_STAR)));
+    var n = c.n || 1, st = c.star || 0;
+    return Math.max(0, Math.min(FRAG_PER_STAR, (n - 1) - (st * FRAG_PER_STAR)));
   }
 
   function starHtml(st) {
