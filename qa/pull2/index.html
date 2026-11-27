@@ -33,6 +33,9 @@
     <button data-act="txt">화면 문구 수집</button>
     <button data-act="trans">🌟 초월 강제(천장 49)</button>
     <button data-act="transrun">🌟 초월 풀 시나리오</button>
+    <button data-act="shot1">📸 초월 터치 정지</button>
+    <button data-act="shot2">📸 초월 카드 정지</button>
+    <button data-act="resume">▶ 재생</button>
     <div id="out"></div>
   </div>
 </div>
@@ -68,6 +71,8 @@
   function txt(el) { return el ? (el.textContent || '').replace(/\s+/g, ' ').trim() : '-'; }
   function pfSnap() {
     var el = q('#pullFx');
+    var gr = q('#pfGradeName');
+    var grBox = gr ? gr.closest('.pf-grade') : null;
     return {
       tip: txt(q('#pfTip')),
       grade: txt(q('#pfGradeName')),
@@ -75,7 +80,7 @@
       dg: el ? el.getAttribute('data-g') : '-',
       tr: el ? el.classList.contains('pf-tr') : false,
       tipShown: !!(q('#pfTip') && q('#pfTip').offsetParent !== null),
-      gradeShown: !!(q('#pfGrade') && q('#pfGrade').offsetParent !== null)
+      gradeShown: !!(grBox && grBox.offsetParent !== null)
     };
   }
   function tapFx() {
@@ -156,13 +161,6 @@
       var all = D().body.innerText.replace(/\s+/g, ' ');
       log('화면에 "남음" 포함: ' + /남음/.test(all) + ' / "/ 8" 포함: ' + /\/\s*8/.test(all));
     },
-    trans: async function () {
-      /* 천장까지 1회 남긴 상태로 초기화 → 다음 5회 뽑기에 초월 확정 */
-      var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [] };
-      W().localStorage.setItem('legacy.vip.state.v1', JSON.stringify(st));
-      fr.src = '/legacy/?vip=hs2026&v=f2036&qa=' + Date.now();
-      log('pity=49 로 초기화 · 재로딩');
-    },
     transrun: async function () {
       log('=== 초월 풀 시나리오 ===');
       var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [] };
@@ -194,7 +192,38 @@
       var trc = D().querySelector('#reveal .pcard.tr');
       log('초월 카드 tr 클래스: ' + !!trc + ' · seqTrans.on=' + !!(q('#seqTrans') && q('#seqTrans').classList.contains('on')));
       log('errors: ' + errN);
-    }
+    },
+    /* 초월 터치 단계에서 애니 정지 */
+    shot1: async function () {
+      for (var i = 0; i < 9; i++) {
+        tapFx();
+        await sleep(150);
+        if (pfSnap().tr) break;
+      }
+      await sleep(130);
+      var n = 0;
+      D().getAnimations().forEach(function (a) { try { a.pause(); n++; } catch (e) {} });
+      log('paused@tr · anims=' + n + ' · ' + JSON.stringify(pfSnap()));
+    },
+    /* 초월 오픈 → 카드 공개 중 초월 카드에서 애니 정지 */
+    shot2: async function () {
+      D().getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
+      await sleep(300);
+      tapFx();
+      await sleep(760);
+      var found = false;
+      for (var k = 0; k < 120; k++) {
+        if (q('#reveal .pcard.tr')) { found = true; break; }
+        await sleep(50);
+      }
+      await sleep(170);
+      var n = 0;
+      D().getAnimations().forEach(function (a) { try { a.pause(); n++; } catch (e) {} });
+      log('paused@seq · tr card=' + found + ' · anims=' + n +
+        ' · seqTrans=' + (q('#seqTrans') && q('#seqTrans').className) +
+        ' · plaque=' + (q('#seqPlaque') && q('#seqPlaque').className) +
+        ' · count=' + (q('#seqCount') && q('#seqCount').textContent));
+    },
   };
 
   document.querySelectorAll('button[data-act]').forEach(function (b) {
