@@ -1275,7 +1275,7 @@
     opacity:calc(.5 + var(--pi) * .5); transition:opacity .25s}
   .pf-sigil .sg-lay{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
     opacity:0; transition:opacity .42s ease;
-    filter:drop-shadow(0 0 1px rgba(2,4,8,.95)) drop-shadow(0 0 4px rgba(255,255,255,.92)) drop-shadow(0 0 10px var(--gc))}
+    filter:drop-shadow(0 0 1px rgba(2,4,8,.95)) drop-shadow(0 0 7px var(--gc))}
   .pf-sigil .sg-lay.on{opacity:1}
   .pf-sigil .sg-lay path, .pf-sigil .sg-lay circle,
   .pf-sigil .sg-lay line, .pf-sigil .sg-lay polygon{
@@ -1284,10 +1284,9 @@
   .pf-sigil .sg-lay .ds{opacity:.7}
   .pf-sigil .sg-lay.on .draw{stroke-dasharray:100; stroke-dashoffset:100;
     animation:sgDraw .6s cubic-bezier(.32,.86,.3,1) forwards}
-  .pf-sigil .l1, .pf-sigil .l6{animation:sgSpin 44s linear infinite}
-  .pf-sigil .l2, .pf-sigil .l5{animation:sgSpin 36s linear infinite reverse}
-  .pf-sigil .l3, .pf-sigil .l7{animation:sgSpin 28s linear infinite}
-  .pf-sigil .l4, .pf-sigil .l8{animation:sgSpin 20s linear infinite reverse}
+  /* 회전은 눈에 보이는 겹만 — 원형 겹은 대칭이라 돌려도 화면 비용만 든다 */
+  .pf-sigil .l2, .pf-sigil .l7{animation:sgSpin 34s linear infinite reverse}
+  .pf-sigil .l3, .pf-sigil .l8{animation:sgSpin 24s linear infinite}
   .pf-sigil .l9{animation:sgGlow 3.2s ease-in-out infinite}
   @keyframes sgDraw{from{stroke-dashoffset:100} to{stroke-dashoffset:0}}
   @keyframes sgSpin{to{transform:rotate(360deg)}}
