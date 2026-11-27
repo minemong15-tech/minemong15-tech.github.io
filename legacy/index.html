@@ -9124,7 +9124,7 @@ function portraitSVG(fig, fit, alt) {
       '<div class="bprep-row"><span>추천 전투력</span><b>' + Math.round((stage.hp * 2.2 + stage.atk * 30) * curDiff().hp) + '</b></div>' +
       '<button type="button" class="bitem-btn" data-items="1">⚔️ 전용 아이템 — 장착해서 전투력 올리기</button>' +
       '<button type="button" class="bgo big" data-start="1"' + (deck.length ? '' : ' disabled') + '>⚔️ 전투 시작</button>' +
-      '<p class="bprep-note">' + (deck.length ? '10번 공격하면 궁극기가 자동 발동합니다.' : '인물을 1명 이상 선택하세요.') + '</p>' +
+      '<p class="bprep-note">' + (deck.length ? '10번 공격하면 궁극기가 자동 발동합니다. 승리하면 🎟️ 뽑기권 +10장.' : '인물을 1명 이상 선택하세요.') + '</p>' +
       '</div>';
 
     $('#bView').innerHTML = stageBar + targetPanel(stage) + bossCard(stage) + diffBar + presetBarHtml() +
@@ -9245,7 +9245,7 @@ function portraitSVG(fig, fit, alt) {
       '<div class="bprep-row"><span>적 ATK</span><b>' + towerStage(next).atk.toLocaleString() + '</b></div>' +
       '<div class="bprep-row"><span>웨이브</span><b>' + towerStage(next).waves.length + ' 단계</b></div>' +
       '<button type="button" class="bgo big" data-tower-start="' + next + '"' + (owned ? '' : ' disabled') + '>🗼 ' + next + '층 도전</button>' +
-      '<p class="bprep-note">' + (deck.length ? '층을 오를 때마다 코인 · 보석 · 뽑기권을 받습니다.'
+      '<p class="bprep-note">' + (deck.length ? '층을 오를 때마다 🪙 코인 +100 · 🎟️ 뽑기권 +5장을 받습니다.'
         : (owned ? '덱이 비어 있으면 전투력 높은 인물 6명으로 자동 편성합니다.' : '인물을 먼저 모아야 도전할 수 있습니다.')) + '</p>' +
       '</div></div></div>';
   }
@@ -11307,7 +11307,7 @@ function portraitSVG(fig, fit, alt) {
       '<div class="bprep-row"><span>약점 적중</span><b class="' + (hit.length ? 'ok' : 'off') + '">' + (hit.length ? '✅ ' + hit.length + '명' : '✕ 없음') + '</b></div>' +
       '<button type="button" class="bitem-btn" data-items="1">⚔️ 전용 아이템 — 장착해서 전투력 올리기</button>' +
       '<button type="button" class="bgo big" data-boss-start="' + x.no + '"' + (deck.length ? '' : ' disabled') + '>🐉 ' + esc(x.n) + ' 레이드 시작</button>' +
-      '<p class="bprep-note">' + (deck.length ? '약점 인물은 스킬·일반 공격 모두 2.2배 피해를 줍니다.' : '인물을 1명 이상 선택하세요.') + '</p></div>';
+      '<p class="bprep-note">' + (deck.length ? '약점 인물은 스킬·일반 공격 모두 2.2배 피해를 줍니다. 격파하면 🎟️ 뽑기권 +25장.' : '인물을 1명 이상 선택하세요.') + '</p></div>';
 
     var right = '<div class="bsec-h"><span class="kicker">OWNED FIGURES</span><b>' + ownedFigures().length + '명 보유</b></div>' +
       '<div class="bcards">' + (ownedFigures().length ? ownedPickHtml(deck) : '<div class="bempty"><div class="em">🎴</div><h4>아직 출격할 인물이 없습니다</h4><p>카드팩에서 인물을 먼저 모아보세요.</p></div>') + '</div>';
