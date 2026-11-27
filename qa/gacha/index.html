@@ -30,6 +30,7 @@
     <button data-act="all">6 전부 보기</button>
     <button data-act="holdfx">7 신규연출 멈춤</button>
     <button data-act="state">상태</button>
+    <button data-act="duplicatecheck">1회 ×8 신규연출 검사</button>
     <button data-act="batch">5회 ×12 자동(보장 확인)</button>
     <div id="out"></div>
   </div>
@@ -118,6 +119,36 @@
         ' · shown=' + D().querySelectorAll('#reveal .pcard.sq-in').length + '/' + cards.length +
         ' · newfx=' + (q('#newFx') && !q('#newFx').hidden) +
         ' · lock=' + (q('#mPack') && q('#mPack').classList.contains('seq-lock')));
+    },
+    duplicatecheck: async function () {
+      log('1회씩 8번 · 신규연출 표시 여부 기록');
+      ranges([]);
+      var rows = [];
+      for (var i = 0; i < 8; i++) {
+        q('#pull1').click();
+        await sleep(320);
+        var sk = q('#pfSkip'); if (sk) sk.click();
+        await sleep(700);
+        var sawFx = false, cls = '';
+        for (var k = 0; k < 20; k++) {
+          var fx = q('#newFx');
+          if (fx && !fx.hidden && fx.classList.contains('on')) sawFx = true;
+          var c = D().querySelector('#reveal .pcard.sq-in');
+          if (c && !cls) cls = c.className;
+          await sleep(90);
+        }
+        var all = q('#seqAll'); if (all) all.click();
+        await sleep(320);
+        rows.push({ cls: cls, fx: sawFx });
+      }
+      var bad = 0;
+      rows.forEach(function (r, i) {
+        var isNew = /\bnew\b/.test(r.cls);
+        var ok = isNew === r.fx;
+        if (!ok) bad++;
+        log((i + 1) + '회: ' + (r.cls || '?') + ' · 신규연출=' + r.fx + (ok ? '' : '   ← 불일치'));
+      });
+      log('불일치: ' + bad + ' / ' + rows.length);
     },
     batch: async function () {
       log('batch start');
