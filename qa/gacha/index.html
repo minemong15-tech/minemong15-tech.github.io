@@ -16,7 +16,7 @@
 </style></head>
 <body>
 <div class="wrap">
-  <iframe id="fr" src="/legacy/?vip=hs2026&amp;v=f2035&amp;qa=seq1" title="LEGACY mobile"></iframe>
+  <iframe id="fr" title="LEGACY mobile"></iframe>
   <div id="panel">
     <div><b>viewport</b> <span id="qaSize">…</span></div>
     <div id="qaErr">errors: 0</div>
@@ -48,8 +48,7 @@
   }
   fr.addEventListener('load', function () {
     try {
-      var w = fr.contentWindow;
-      document.getElementById('qaSize').textContent = w.innerWidth + 'x' + w.innerHeight + ' dpr' + w.devicePixelRatio;
+      var w = fr.contentWindow;      document.getElementById('qaSize').textContent = w.innerWidth + 'x' + w.innerHeight + ' dpr' + w.devicePixelRatio;
       w.addEventListener('error', function (ev) {
         errN++; msgs.push((ev.message || 'error') + ' @' + String(ev.filename || '').split('/').pop() + ':' + ev.lineno); upd();
       });
@@ -144,6 +143,7 @@
     });
   });
   window.__qa = { acts: acts, log: log };
+  fr.src = '/legacy/?vip=hs2026&v=f2035&qa=' + Date.now();
 })();
 </script>
 </body></html>
