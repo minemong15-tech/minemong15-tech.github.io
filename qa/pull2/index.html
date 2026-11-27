@@ -172,7 +172,11 @@
     },
     /* 초월 준비 — 천장까지 1회 남기고 새로 열어 5회 뽑기까지 */
     flow: async function () {
-      var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [] };
+      var cards = {};
+      try {
+        (W().FIGURES || []).forEach(function (f) { if (f.grade === 'transcendent') cards[f.id] = 1; });
+      } catch (e) {}
+      var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [], cards: cards };
       W().localStorage.setItem('legacy.vip.state.v1', JSON.stringify(st));
       fr.src = '/legacy/?vip=hs2026&v=f2036&qa=' + Date.now() + 'f';
       await sleep(2400);
