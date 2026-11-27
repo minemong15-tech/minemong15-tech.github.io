@@ -5393,7 +5393,7 @@
   .pf-trans .pt-ring.c{border-color:rgba(9,9,13,.95)}
   .pf-trans .pt-sparks i:nth-child(even){--pc:#ffffff}
   .pf-trans .pt-sparks i:nth-child(odd){--pc:#09090d}
-  .pf-trans .pt-flash{background:linear-gradient(90deg,#ffffff 0 50%,#09090d 50% 100%); mix-blend-mode:screen}
+  .pf-trans .pt-flash{background:radial-gradient(circle at 50% 50%, #ffffff 0%, rgba(255,255,255,.92) 12%, rgba(210,214,222,.55) 26%, rgba(9,9,13,.88) 52%, rgba(9,9,13,0) 78%)}
   .pcard.tr, .pcard.r-transcendent{
     box-shadow:0 0 0 2px rgba(255,255,255,.85), 0 0 0 4px rgba(9,9,13,.9), 0 0 42px -6px rgba(255,255,255,.55)}
   .seqtrans.on, .seqtrans{
@@ -5428,11 +5428,10 @@
       rgba(9,9,13,.9) 25% 50%,rgba(255,255,255,.65) 50% 75%,rgba(9,9,13,.9) 75% 100%)}
   /* <<V2_CSS:END>> */
 
-body{margin:0;background:#05060a;color:#c9d2e0;font-family:system-ui,sans-serif}
-.qa{position:relative;width:390px;height:844px;margin:0 auto;overflow:hidden;background:#05060a}
-.pullfx{position:absolute!important;inset:0!important}
-.seqtrans{position:absolute!important;inset:0!important}
-</style></head><body><div class="qa"><div class="pullfx on pf-tr" id="pullFx" data-g="transcendent" style="--pi:1;--s0:1.4">
+html,body{margin:0;height:100%;background:#05060a;overflow:hidden}
+.pullfx{position:fixed!important;inset:0!important;display:block!important}
+.seqtrans{position:fixed!important;inset:0!important}
+</style></head><body><div class="pullfx on pf-tr" id="pullFx" data-g="transcendent" style="--pi:1;--s0:1.4">
   <div class="pf-bg"></div>
   <div class="pf-aura"></div>
   <div class="pf-stage">
@@ -5510,14 +5509,10 @@ body{margin:0;background:#05060a;color:#c9d2e0;font-family:system-ui,sans-serif}
   <i class="st-halo"></i>
   <i class="st-ring a"></i><i class="st-ring b"></i>
   <span class="st-sparks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-</div></div></div>
+</div></div>
 <script>
-document.querySelectorAll('.pt-flash').forEach(function(e){e.style.opacity='.85';e.style.animation='none'});
-document.querySelectorAll('.pt-rays').forEach(function(e){e.style.opacity='.9';e.style.transform='rotate(30deg) scale(.95)';e.style.animation='none'});
-document.querySelectorAll('.pt-ring').forEach(function(e){e.style.opacity='.9';e.style.transform='scale(1.1)';e.style.animation='none'});
-document.querySelectorAll('.pt-sparks i').forEach(function(e){e.style.opacity='.95';e.style.animation='none';e.style.transform='rotate(var(--a)) translateY(calc(var(--r) * -0.55))'});
-document.querySelectorAll('.st-flash').forEach(function(e){e.style.opacity='.6';e.style.animation='none'});
-document.querySelectorAll('.st-halo').forEach(function(e){e.style.opacity='.9';e.style.transform='scale(1.05) rotate(20deg)';e.style.animation='none'});
-document.querySelectorAll('.st-ring').forEach(function(e){e.style.opacity='.9';e.style.transform='scale(1.15)';e.style.animation='none'});
-document.querySelectorAll('.st-sparks i').forEach(function(e){e.style.opacity='.95';e.style.animation='none';e.style.transform='rotate(var(--a)) translateY(calc(var(--r) * -0.6))'});
+document.querySelectorAll('.pt-flash').forEach(function(e){e.style.opacity='.8';e.style.animation='none'});
+document.querySelectorAll('.pt-rays').forEach(function(e){e.style.opacity='.85';e.style.transform='rotate(30deg) scale(.9)';e.style.animation='none'});
+document.querySelectorAll('.pt-ring').forEach(function(e){e.style.opacity='.85';e.style.animation='none'});
+document.querySelectorAll('.pt-sparks i').forEach(function(e){e.style.opacity='.9';e.style.animation='none';e.style.transform='rotate(var(--a)) translateY(calc(var(--r) * -0.5))'});
 </script></body></html>
