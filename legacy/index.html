@@ -1391,12 +1391,12 @@
   .pullfx.pf-final .pf-sigil .sg-lay polygon{stroke:#ffffff}
   .pullfx.pf-final .cr-marks .cmk.on{opacity:1;
     filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 12px var(--gc)) brightness(2.1)}
-  .pullfx.pf-final .pf-burst{animation:pfFinalBurst .68s cubic-bezier(.15,.7,.3,1) both}
+  .pullfx.pf-final .pf-burst{animation:pfBurstOut .68s cubic-bezier(.15,.7,.3,1) both}
   .pullfx.pf-final .pf-flash{animation:pfFinalFlash .44s ease-out both}
   .pullfx.pf-final .pf-beams{opacity:1; animation:pfSpin 1.8s linear infinite}
   @keyframes pfTapHint{0%,100%{opacity:.74; transform:translateY(0)} 50%{opacity:1; transform:translateY(-3px)}}
   @keyframes pfFinalFlash{0%{opacity:0} 16%{opacity:1} 100%{opacity:0}}
-  @keyframes pfFinalBurst{0%{opacity:.6; transform:scale(.25)} 34%{opacity:1; transform:scale(1.25)} 100%{opacity:0; transform:scale(3.4)}}
+  @keyframes pfBurstOut{0%{opacity:.6; transform:scale(.25)} 34%{opacity:1; transform:scale(1.25)} 100%{opacity:0; transform:scale(3.4)}}
   @keyframes pfFinalZoom{0%{transform:translate(-50%,-50%) scale(var(--s0))}
     38%{transform:translate(-50%,-50%) scale(calc(var(--s0) * .88))}
     64%{transform:translate(-50%,-50%) scale(calc(var(--s0) * 1.32))}
