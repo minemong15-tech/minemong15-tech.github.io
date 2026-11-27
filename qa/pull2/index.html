@@ -174,7 +174,7 @@
     flow: async function () {
       var cards = {};
       try {
-        (W().FIGURES || []).forEach(function (f) { if (f.grade === 'transcendent') cards[f.id] = 1; });
+        (W().FIGURES || []).forEach(function (f) { if (f.grade === 'transcendent') cards[f.id] = { n: 1 }; });
       } catch (e) {}
       var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [], cards: cards };
       W().localStorage.setItem('legacy.vip.state.v1', JSON.stringify(st));
