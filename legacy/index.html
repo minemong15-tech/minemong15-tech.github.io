@@ -5440,6 +5440,210 @@
   .pcard.sq-in.tr::after{background:conic-gradient(from 0deg,rgba(255,255,255,.65) 0 25%,
       rgba(9,9,13,.9) 25% 50%,rgba(255,255,255,.65) 50% 75%,rgba(9,9,13,.9) 75% 100%)}
   /* <<V2_CSS:END>> */
+  /* <<EXT6_CSS:START>> */
+  /* ═══════════════════════════════════════════════════════════════
+     EXT6 · 🧭 원정 파견 · 🏆 도감 마일스톤 · 🏅 테마 컬렉션
+     + 사진 즉시 표시 · 1,000명 렉 제거용 성능 규칙
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── 사진: 로딩 중에는 등급색 프레임만, 실패했을 때만 그림 폴백 ── */
+  .ph-fallback[hidden]{ display:none !important }
+  .ph-fallback.on{ display:block }
+  .pcard .ph, .arc-card .ph{ background:radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.06), rgba(5,7,11,.98) 62%) }
+  .newfx .nf-art{ background:radial-gradient(120% 90% at 50% 10%, rgba(255,255,255,.05), rgba(4,5,9,.98) 70%) }
+
+  /* ── 연출·도감 창이 덮고 있는 동안 뒤쪽 페이지는 그리지 않는다 ── */
+  body.perf-lock > header.top,
+  body.perf-lock > main,
+  body.perf-lock > footer.ft,
+  body.perf-lock > .side-dock{ visibility:hidden }
+
+  /* ── 도감 40장씩 이어 그리기 ── */
+  .arc-sentinel{ grid-column:1/-1; display:flex; align-items:center; justify-content:center; padding:14px 0 6px }
+  .arc-sentinel[hidden]{ display:none }
+  .arc-sen-t{ font-size:10.5px; letter-spacing:.06em; color:#7f8798 }
+
+  /* ── 🏆 도감 수집 마일스톤 ── */
+  .arc-mile{
+    margin:10px 0 4px; padding:11px 12px 10px; border-radius:14px;
+    border:1px solid var(--line); background:linear-gradient(160deg, rgba(200,168,106,.09), rgba(10,13,18,.9));
+  }
+  .mile-top{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap }
+  .mile-k{ font-size:10px; letter-spacing:.14em; color:var(--gold-hi); font-weight:800 }
+  .mile-own{ font-family:var(--serif); font-size:15px; color:#f4ead6 }
+  .mile-next{ margin-left:auto; font-size:10px; color:#9aa1ad }
+  .mile-bar{ position:relative; height:6px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; margin:7px 0 9px }
+  .mile-bar i{ position:absolute; inset:0 auto 0 0; border-radius:999px; background:linear-gradient(90deg,#8d7648,#ecd9a8); transition:width .25s }
+  .mile-chips{ display:flex; gap:5px; flex-wrap:wrap }
+  .mile-chip{
+    display:flex; flex-direction:column; align-items:center; gap:1px; padding:5px 8px; border-radius:9px;
+    border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); color:#8b93a1;
+    font-family:inherit; font-size:9px; line-height:1.2; cursor:default;
+  }
+  .mile-chip b{ font-size:11px; color:#c2cad6 }
+  .mile-chip em{ font-style:normal; font-size:8.5px }
+  .mile-chip.now{ border-color:rgba(200,168,106,.5); background:rgba(200,168,106,.1) }
+  .mile-chip.now b{ color:var(--gold-hi) }
+  .mile-chip.done{ border-color:rgba(127,240,176,.32) }
+  .mile-chip.done b{ color:#7ff0b0 }
+  .mile-chip.claimed{ opacity:.5 }
+  .mile-chip.ready{
+    cursor:pointer; border-color:rgba(255,214,10,.6);
+    background:linear-gradient(180deg, rgba(255,214,10,.2), rgba(255,214,10,.06));
+    animation:milePulse 2.2s ease-in-out infinite;
+  }
+  .mile-chip.ready b{ color:#ffe58a }
+  .mile-chip.ready em{ color:#ffd166; font-weight:800 }
+  @keyframes milePulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,214,10,.28) } 50%{ box-shadow:0 0 0 5px rgba(255,214,10,0) } }
+
+  /* ── 🧭 원정 파견 ── */
+  .exp-sum{ display:flex; gap:8px; flex-wrap:wrap; margin:2px 0 12px }
+  .exp-sum-i{ padding:8px 12px; border-radius:11px; border:1px solid var(--line); background:rgba(200,168,106,.06) }
+  .exp-sum-i span{ display:block; font-size:9.5px; color:#8b93a1; letter-spacing:.05em }
+  .exp-sum-i b{ font-family:var(--serif); font-size:14.5px; color:var(--gold-hi) }
+  .exp-sum-i b.hot{ color:#ff8a8a }
+  .exp-slots{ display:flex; flex-direction:column; gap:10px }
+  .exp-slot{
+    border:1px solid var(--line2); border-radius:16px; padding:12px 13px;
+    background:linear-gradient(165deg, rgba(18,22,30,.94), rgba(9,12,17,.97));
+  }
+  .exp-slot.empty{ border-style:dashed; border-color:rgba(200,168,106,.28); background:rgba(12,16,23,.7) }
+  .exp-slot.run{ border-color:rgba(122,168,255,.3) }
+  .exp-slot.ready{ border-color:rgba(255,214,10,.55); background:linear-gradient(165deg, rgba(255,214,10,.1), rgba(9,12,17,.97)) }
+  .exp-s-top{ display:flex; align-items:center; gap:7px; margin-bottom:9px }
+  .exp-ic{ font-size:16px }
+  .exp-s-top b{ font-family:var(--serif); font-size:14px; color:#f0e8d8; font-weight:600 }
+  .exp-note{ margin-left:auto; font-style:normal; font-size:9.5px; color:#7f8798 }
+  .exp-cd{ margin-left:auto; font-style:normal; font-family:ui-monospace,Menlo,monospace; font-size:13px; color:#9ad8ff; font-weight:700 }
+  .exp-done{ margin-left:auto; font-style:normal; font-size:10.5px; font-weight:800; color:#7ff0b0 }
+  .exp-choices{ display:grid; grid-template-columns:repeat(3,1fr); gap:7px }
+  .exp-ch{
+    display:flex; flex-direction:column; align-items:center; gap:2px; padding:10px 6px; cursor:pointer;
+    border-radius:12px; border:1px solid rgba(200,168,106,.24); background:rgba(255,255,255,.03);
+    color:#e9e2d2; font-family:inherit; transition:.14s;
+  }
+  .exp-ch:hover{ border-color:rgba(200,168,106,.6); background:rgba(200,168,106,.1); transform:translateY(-1px) }
+  .exp-ch b{ font-size:12px }
+  .exp-ch em{ font-style:normal; font-size:9.5px; color:#9aa1ad }
+  .ech-ic{ font-size:19px; line-height:1.1 }
+  .ech-rew{ margin-top:3px; font-size:8.5px; color:#c9b98a; font-weight:700; text-align:center; line-height:1.25 }
+  .exp-mem{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px }
+  .exp-m{ display:flex; flex-direction:column; align-items:center; width:52px }
+  .exp-mp{ position:relative; display:block; width:44px; height:44px; border-radius:50%; overflow:hidden; background:#0b0e13; border:1px solid rgba(200,168,106,.3) }
+  .exp-mp .ph-svg, .exp-mp .ph-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center }
+  .exp-m em{ font-style:normal; margin-top:3px; font-size:8.5px; color:#aab2bf; max-width:52px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .exp-bar{ position:relative; height:5px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden }
+  .exp-bar i{ position:absolute; inset:0 auto 0 0; border-radius:999px; background:linear-gradient(90deg,#4b7fd1,#9ad8ff) }
+  .exp-slot.ready .exp-bar i{ background:linear-gradient(90deg,#ffb020,#ffe066) }
+  .exp-foot{ display:flex; align-items:center; gap:8px; margin-top:8px }
+  .exp-rew{ font-size:10.5px; color:#c9b98a; font-weight:700 }
+  .exp-wait{ margin-left:auto; font-size:10px; color:#8b93a1 }
+  .exp-claim{
+    margin-left:auto; cursor:pointer; border:none; border-radius:9px; padding:7px 12px; font-family:inherit;
+    font-size:11.5px; font-weight:800; color:#1a1206; background:linear-gradient(180deg,#ffe08a,#d8b45a);
+    box-shadow:0 4px 14px rgba(255,214,10,.2); animation:milePulse 2.2s ease-in-out infinite;
+  }
+  .exp-pick-head{ display:flex; align-items:center; gap:10px; margin:2px 0 10px }
+  .exp-back{
+    cursor:pointer; border:1px solid var(--line2); background:rgba(255,255,255,.04); color:#c9d1dd;
+    border-radius:9px; padding:6px 10px; font-family:inherit; font-size:11px;
+  }
+  .exp-pick-head b{ display:block; font-family:var(--serif); font-size:14px; color:#f0e8d8 }
+  .exp-pick-head em{ display:block; font-style:normal; font-size:10px; color:#8b93a1; margin-top:2px }
+  .exp-pick-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:7px;
+    max-height:46vh; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:2px;
+  }
+  .exp-pc{
+    position:relative; display:flex; flex-direction:column; align-items:center; gap:3px; padding:5px 4px 6px;
+    cursor:pointer; border-radius:11px; border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.03); color:#e9e2d2; font-family:inherit;
+  }
+  .exp-pc.on{ border-color:rgba(255,214,10,.7); background:rgba(255,214,10,.12) }
+  .exp-pcp{ position:relative; display:block; width:100%; aspect-ratio:1/1; border-radius:9px; overflow:hidden; background:#0b0e13 }
+  .exp-pcp .ph-svg, .exp-pcp .ph-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center }
+  .exp-pc em{ font-style:normal; font-size:9px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .exp-chk{
+    position:absolute; top:3px; right:3px; width:17px; height:17px; border-radius:50%;
+    background:rgba(8,10,14,.8); border:1px solid rgba(255,255,255,.25);
+    font-size:11px; line-height:15px; text-align:center; color:#ffe066; font-weight:900;
+  }
+  .exp-pc.on .exp-chk{ background:#ffe066; color:#1a1206; border-color:#ffe066 }
+  .exp-more{
+    grid-column:1/-1; cursor:pointer; padding:9px; border-radius:10px; font-family:inherit; font-size:11px;
+    border:1px dashed rgba(200,168,106,.35); background:transparent; color:#c9b98a;
+  }
+  .exp-empty{ grid-column:1/-1; padding:16px 4px; text-align:center; font-size:11.5px; color:#7f8798; line-height:1.7 }
+  .exp-pick-foot{ margin-top:11px }
+  .exp-go{
+    width:100%; height:46px; border-radius:13px; cursor:pointer; font-family:inherit; font-size:14px; font-weight:800;
+    border:1px solid var(--line2); background:rgba(255,255,255,.05); color:#8b93a1;
+  }
+  .exp-go.on{ border:none; color:#1a1206; background:linear-gradient(180deg,#ffe08a,#d8b45a); box-shadow:0 6px 20px rgba(255,214,10,.22) }
+
+  /* ── 🏅 테마 컬렉션 ── */
+  .set-sum{ display:flex; gap:8px; flex-wrap:wrap; margin:2px 0 12px }
+  .set-sum-i{ padding:8px 12px; border-radius:11px; border:1px solid var(--line); background:rgba(200,168,106,.06) }
+  .set-sum-i span{ display:block; font-size:9.5px; color:#8b93a1; letter-spacing:.05em }
+  .set-sum-i b{ font-family:var(--serif); font-size:14.5px; color:var(--gold-hi) }
+  .set-sum-i b.hot{ color:#ff8a8a }
+  .set-list{ display:flex; flex-direction:column; gap:8px }
+  .set-row{
+    border:1px solid var(--line2); border-left:3px solid var(--rc, #c8a86a); border-radius:14px; padding:11px 12px;
+    background:linear-gradient(165deg, rgba(18,22,30,.94), rgba(9,12,17,.97));
+  }
+  .set-row.done{ border-color:rgba(255,214,10,.45); background:linear-gradient(120deg, rgba(255,214,10,.1), rgba(255,255,255,.02)) }
+  .set-row.claimed{ opacity:.6 }
+  .set-top{ display:flex; align-items:center; gap:9px }
+  .set-ic{ font-size:19px; line-height:1 }
+  .set-t{ min-width:0; flex:1 }
+  .set-t b{ display:block; font-family:var(--serif); font-size:14px; color:#f0e8d8; font-weight:600 }
+  .set-t em{ display:block; font-style:normal; font-size:10px; color:#8b93a1; margin-top:1px }
+  .set-pct{ font-family:var(--serif); font-size:15px; color:var(--gold-hi) }
+  .set-bar{ position:relative; height:5px; border-radius:999px; background:rgba(255,255,255,.07); overflow:hidden; margin:8px 0 7px }
+  .set-bar i{ position:absolute; inset:0 auto 0 0; border-radius:999px; background:linear-gradient(90deg,#8d7648,#ecd9a8); transition:width .25s }
+  .set-row.done .set-bar i{ background:linear-gradient(90deg,#ffb020,#ffe066) }
+  .set-bot{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+  .set-rew{ font-size:10.5px; color:#c9b98a; font-weight:700 }
+  .set-claim{
+    margin-left:auto; cursor:pointer; border:none; border-radius:9px; padding:7px 12px; font-family:inherit;
+    font-size:11.5px; font-weight:800; color:#1a1206; background:linear-gradient(180deg,#ffe08a,#d8b45a);
+    box-shadow:0 4px 14px rgba(255,214,10,.2);
+  }
+  .set-got{ margin-left:auto; font-size:10px; color:#7ff0b0; font-weight:700 }
+  .set-wait{ margin-left:auto; font-size:10px; color:#7f8798 }
+  .set-miss{ margin-top:6px; font-size:9.5px; color:#78808e; line-height:1.5 }
+  .set-help{
+    display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%;
+    border:1px solid var(--line); background:rgba(200,168,106,.1); color:var(--gold-hi);
+    font-size:10px; font-family:inherit; cursor:pointer; vertical-align:middle;
+  }
+  .sd-btn[data-sd="exp"]{ --c:#7ad7ff }
+  .sd-btn[data-sd="set"]{ --c:#ffd166 }
+
+  /* ── 짧은 화면(가로 390 높이)에서 독 9개가 화면 밖으로 밀리지 않게 ── */
+  @media (max-height:620px){
+    .side-dock{ gap:4px; padding:5px 5px; border-radius:12px; max-height:calc(100vh - 12px); overflow-y:auto; -webkit-overflow-scrolling:touch }
+    .sd-btn{ width:36px; height:36px; border-radius:10px }
+    .sd-ic{ font-size:15px }
+    .sd-lb{ font-size:7px }
+    .sd-badge{ min-width:14px; height:14px; font-size:8.5px; line-height:14px; top:-4px; right:-4px }
+  }
+  @media (max-width:640px){
+    .exp-choices{ grid-template-columns:1fr; gap:6px }
+    .exp-ch{ flex-direction:row; gap:8px; padding:9px 11px; text-align:left }
+    .exp-ch .ech-rew{ margin:0 0 0 auto; text-align:right }
+    .exp-pick-grid{ max-height:42vh; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)) }
+    .mile-next{ width:100%; margin-left:0 }
+    .set-miss{ display:none }
+  }
+  /* 성능: 모바일에서 남은 백드롭 필터·큰 블러 제거 */
+  @media (max-width:820px), (pointer:coarse){
+    .lz-terr{ -webkit-backdrop-filter:none; backdrop-filter:none; background:rgba(6,9,14,.86) }
+    .ph-bg{ filter:blur(9px) brightness(.42) saturate(.85) }
+  }
+  .acct-chip.fresh{ color:#bff5cd; border-color:rgba(122,215,160,.45); background:rgba(122,215,160,.12) }
+  /* <<EXT6_CSS:END>> */
 </style>
 </head>
 
@@ -5754,6 +5958,7 @@
       <span class="arc-count" id="arcCount">0 / 100</span>
       <span class="pill" id="arcStreak">연속 기록 —</span>
     </div>
+    <div class="arc-mile" id="arcMile"></div>
     <div class="arc-search">
       <input id="arcSearch" type="text" placeholder="🔍 인물 이름 검색..." autocomplete="off" spellcheck="false" aria-label="인물 이름 검색">
       <button type="button" class="arc-search-x" id="arcSearchClear" aria-label="검색 지우기" hidden>✕</button>
@@ -6445,6 +6650,54 @@
     <span class="sd-ic" aria-hidden="true">🏆</span><span class="sd-lb">업적</span>
     <b class="sd-badge" id="sdAchBadge" hidden>0</b>
   </button>
+  <button class="sd-btn" id="sdExp" type="button" data-sd="exp" aria-label="역사 원정 파견 열기" title="원정 · 파견 보상">
+    <span class="sd-ic" aria-hidden="true">🧭</span><span class="sd-lb">원정</span>
+    <b class="sd-badge" id="sdExpBadge" hidden>0</b>
+  </button>
+  <button class="sd-btn" id="sdSet" type="button" data-sd="set" aria-label="테마 컬렉션 열기" title="컬렉션 · 세트 보상">
+    <span class="sd-ic" aria-hidden="true">🏅</span><span class="sd-lb">컬렉션</span>
+    <b class="sd-badge" id="sdSetBadge" hidden>0</b>
+  </button>
+</div>
+
+<!-- 🧭 역사 원정 파견 -->
+<div class="modal" id="mExp" role="dialog" aria-modal="true" aria-labelledby="expTitle">
+  <div class="sheet wide">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">EXPEDITION · 파견</span>
+        <h2 id="expTitle">🧭 역사 원정</h2>
+        <p>보유한 인물을 최대 <b>3명</b>까지 원정에 보내세요. 앱을 꺼 두어도 시간은 흐르고, <b>1분 정찰 · 5분 유물 탐색 · 15분 대원정</b>이 끝나면 🪙 코인 · 💎 보석 · XP를 받습니다.</p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="exp-sum" id="expSum"></div>
+    <div class="exp-slots" id="expSlots"></div>
+    <div class="exp-pick" id="expPickWrap" hidden>
+      <div class="exp-pick-head">
+        <button type="button" class="exp-back" id="expBack">← 뒤로</button>
+        <div><b id="expPickTitle">원정</b><em id="expPickSub"></em></div>
+      </div>
+      <div class="exp-pick-grid" id="expPickGrid"></div>
+      <div class="exp-pick-foot"><button type="button" class="exp-go" id="expGo" disabled>🧭 파견</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 🏅 테마 컬렉션 -->
+<div class="modal" id="mSet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="sheet wide">
+    <div class="sheet-head">
+      <div>
+        <span class="kicker">THEME COLLECTION · 16</span>
+        <h2 id="setTitle">🏅 테마 컬렉션</h2>
+        <p>축구선수·조선 27대 임금·마블 군단·장군·과학자… 분야별 인물을 <b>전부</b> 모으면 뽑기권·코인·보석을 받습니다. <button type="button" class="set-help" id="setHelp" aria-label="설명">?</button></p>
+      </div>
+      <button class="close" type="button" data-close aria-label="닫기">✕</button>
+    </div>
+    <div class="set-sum" id="setSum"></div>
+    <div class="set-list" id="setList"></div>
+  </div>
 </div>
 
 <script>var WORLD_GEO = {"view":{"w":1000,"h":400,"latTop":84.0,"latBot":-60.0,"scale":2.0},"regions":[{"id":"namerica","n":"북아메리카","c":[243.4,76.7]},{"id":"samerica","n":"남아메리카","c":[331.0,275.6]},{"id":"britain","n":"브리튼 제도","c":[488.8,83.9]},{"id":"europe_w","n":"서·중부 유럽","c":[521.8,108.5]},{"id":"europe_n","n":"북·동부 유럽","c":[747.3,62.2]},{"id":"italy","n":"이탈리아","c":[533.5,114.3]},{"id":"greece","n":"에게 해","c":[563.5,124.1]},{"id":"africa","n":"아프리카","c":[550.8,215.5]},{"id":"mideast","n":"중동","c":[628.8,151.2]},{"id":"asia","n":"동·중앙 아시아","c":[755.3,121.7]},{"id":"india","n":"인도 아대륙","c":[716.7,165.6]},{"id":"seasia","n":"동남아시아","c":[804.2,210.4]},{"id":"korea","n":"한반도","c":[854.2,126.0]},{"id":"japan","n":"일본 열도","c":[883.7,128.6]},{"id":"australia","n":"오스트레일리아","c":[873.6,304.8]},{"id":"oceania","n":"오세아니아","c":[936.7,293.7]},{"id":"pacific","n":"태평양 해역","c":[47.2,166.7]}],"countries":[{"id":"124","n":"Canada","r":"namerica","d":"M263 166l3 1l-2 2l5 -3l-2 5l-4 0l1 -1l-3 -3zM268 171l1 2l-2 0l3 1l1 3l-7 -6zM293 185l10 2l12 11l-9 -2l-1 0l2 -3l-4 2l-3 -3l-3 0l2 -1l-9 -3l-1 -2l3 0l-3 0l-2 -2zM278 156l-10 -4l-9 -10l-12 -8l-11 5l-9 -6l0 -2l-10 1l0 -52l32 5l-4 -2l8 -3l3 1l-1 1l25 -5l-17 5l-4 2l1 1l8 -4l4 1l5 -3l7 -1l-2 1l2 0l7 -3l-3 -1l1 0l14 6l5 -4l2 2l-1 2l13 -2l27 5l12 0l6 3l-7 1l-1 1l1 1l15 1l13 -2l12 4l-3 1l7 4l-3 -3l4 0l-5 -5l13 -4l-14 2l-3 -1l2 -2l12 -1l10 5l12 1l18 0l3 0l-1 -2l7 3l1 -1l-6 -1l-2 -2l7 -1l5 1l-1 2l4 -1l-2 4l5 2l-6 0l4 3l-2 -2l4 0l1 -2l-2 -3l1 -1l11 -4l-2 -2l-5 1l3 -1l-1 -1l4 -1l-13 -2l-3 -2l3 -2l-3 -2l0 -2l5 -1l1 -1l-2 0l6 -2l9 3l0 3l8 4l-4 -1l2 2l-5 2l14 1l-5 1l4 2l0 2l2 1l5 -5l7 2l1 3l-3 0l0 2l6 4l4 -1l5 -7l5 0l-4 -6l17 1l-2 1l8 1l-3 2l4 1l-8 1l7 6l-1 2l-10 4l-7 -3l-3 0l5 1l2 3l-16 -2l4 2l-8 5l-13 -4l-9 0l25 4l-6 6l-11 0l1 1l-2 0l0 2l-4 0l-16 -3l1 2l16 3l0 2l-9 1l2 1l-3 0l-1 1l1 1l-4 -1l2 1l-4 2l2 1l-8 7l-2 8l4 1l0 3l1 -3l5 0l4 8l-2 2l13 -1l27 9l3 1l-1 2l8 -2l8 2l1 11l4 3l-2 2l7 2l1 2l-2 2l4 -1l4 3l-2 -4l2 -1l3 2l-1 -3l3 -3l-3 -9l-4 -4l11 -4l7 -5l-2 -8l-9 -5l4 -6l2 1l1 -3l-2 0l0 -4l-3 0l3 -4l-3 -4l4 -2l15 3l6 -2l5 2l0 1l3 0l0 2l3 -1l-1 1l2 2l11 1l-1 5l-6 0l6 1l0 3l2 0l-1 3l-4 0l10 0l0 4l-4 1l6 -3l0 2l2 -2l0 2l7 -4l2 2l0 -2l4 -1l-2 -1l1 -2l3 1l-3 -2l6 -3l-2 1l3 0l3 3l-1 1l3 1l-3 1l4 0l2 2l-4 2l5 -1l-3 2l7 1l0 2l-3 0l6 3l0 2l-6 -1l6 3l-2 0l2 0l0 2l6 1l1 1l-3 3l5 -2l2 1l-2 2l3 -2l10 3l-17 6l2 1l-1 1l13 -5l-2 0l5 0l2 2l-3 1l1 1l5 -2l3 2l1 4l-3 1l4 2l-8 4l-8 1l-9 5l-35 1l-5 5l-5 0l-8 6l-8 -2l7 2l-8 8l-17 7l2 1l-8 3l-8 6l-11 1l-2 0l1 4l-20 6l-3 -2l6 -8l-3 -10l-8 -4l0 -3l-3 1l-2 -3l-19 -8l-6 2l-11 0l-9 -3l-9 -1l-3 -4l0 2l-155 1l-1 -2l2 -1l-2 1l1 -2l-2 1l-3 -1l2 0l-1 -1l0 -2l-2 2l-3 -1l-2 -2l1 -3l-1 2l-6 0l-1 0l3 -1l-4 0l0 -2l-3 1l-3 -2l1 -2l4 -1l-6 2l0 -4l3 -1l3 1l-3 -2l1 -2l-6 6l-1 -2l2 -2l-2 1l2 -3l-2 0l-5 -4l2 -1l5 3l-4 -2l1 -2l-6 4l-4 -3l4 -3l-5 -1l5 -5l-1 -1l-1 3zM390 30l2 2l-21 -1zM386 33l5 0l-7 1l4 1l-3 1l-9 1l-5 -3zM358 37l-4 1l3 1l-3 0l2 1l-7 3l-5 -1l1 -2l-6 4l-3 -1l0 2l-2 0l-5 -2l-12 1l21 -7zM398 44l8 2l1 -2l6 1l1 1l-3 3l-16 1l-20 3l-10 -1l18 -3l-15 1l-1 -1l3 -1l-3 0l-3 2l-7 0l-10 -2l13 -2l-11 0l12 -1l-9 0l10 -2l-5 0l4 -1l13 1l9 4l11 0l1 -1l-5 -1l2 -1l-5 -2l8 -2l2 0zM364 63l10 -2l8 2l-2 2l8 -2l-3 -2l4 0l7 3l5 5l3 -2l-5 -7l9 0l6 2l6 7l-1 3l19 5l1 2l-14 1l2 2l5 -1l3 1l-7 2l-12 0l-9 -3l-4 2l-11 2l-20 1l-4 -4l-15 -1l-4 -4l31 -1l-12 -2l-21 0l-4 -2l16 -3l-14 1l-2 0l3 -1l-7 -1l4 -3l-1 -1l10 -3l13 -2l1 2zM335 55l12 -1l12 4l-21 5l-6 2l-2 4l-14 3l-5 -4l-10 -1l11 -10l-5 -3l18 -1zM614 5l17 1l-11 1l26 0l3 2l11 1l-42 5l22 -1l-26 6l-7 -1l3 2l-10 1l8 0l-5 2l-16 -1l5 2l-19 0l13 2l-23 0l23 2l-11 1l7 2l-4 1l-11 1l-1 2l-2 1l-18 -1l2 1l-3 1l22 2l-15 3l-10 -3l1 2l-11 -1l0 1l-5 1l-7 -2l-11 1l-1 -2l0 2l-6 0l1 -2l15 -2l-6 -2l-1 -1l1 -1l17 3l12 -3l-12 2l-4 -2l7 -2l-4 0l1 -2l-4 3l-4 0l2 -2l-9 1l4 -3l28 -1l-15 0l5 -1l-16 -4l-1 -2l16 0l18 3l-14 -4l34 -3l-10 0l10 -3l-23 5l-23 0l-7 -1l17 -2l-24 3l-8 -2l23 -2l-26 1l-2 0l4 -1l-2 0l11 -1l-22 -1l20 -2l17 0l-9 -1l9 -1l31 3l-17 -3l9 -1l-1 -1l13 0l-7 -1l22 2l2 0l-8 -2l24 1l-4 -1l3 -1zM470 34l13 1l-16 1l-1 -1zM480 50l0 2l-5 0l-12 -2l10 -3zM444 56l16 1l-2 1l2 1l-7 2l11 2l-2 2l1 3l-9 -1l0 3l-5 0l-8 -4l-11 -3l2 -2l5 2l7 -1l-3 -2l4 0l-9 -2l6 1l-3 -2zM528 104l3 -1l13 5l2 2l-1 1l9 1l-4 2l-13 -4l-11 6l-2 -3l-8 0l5 -3l-1 -2l3 -7l3 0zM457 42l1 2l-2 2l3 2l-3 0l1 1l-1 1l-13 0l-1 -1l2 0l-4 -1l9 -2l-20 1l10 -1l-6 -3l2 -1l10 3l-1 -1l3 0l-7 -2zM425 26l5 2l5 -1l9 2l6 4l-5 1l-7 -2l-20 -1l-1 -1l9 -1l-5 -1l-4 1l1 -1l-4 -1l0 -1zM490 16l16 5l7 -1l-1 2l5 1l-2 2l9 -1l4 2l-15 4l-2 -2l-1 2l1 0l-4 0l0 2l-7 -2l3 2l-18 -1l5 -1l-13 -2l16 -2l-21 0l-3 -1l7 -1l-9 0l-5 -3l14 0l-12 -1l5 0l-3 -1l1 -1l11 1l-9 -1l13 -2l-5 -1zM476 39l6 1l-2 2l13 -1l4 1l-5 0l12 1l-12 0l12 3l-2 1l4 0l16 1l22 -3l13 3l1 1l-5 1l6 0l-14 3l-9 -2l0 1l-5 1l-22 0l-1 -2l-6 1l-11 0l-4 -3l1 -4l-5 -3l-12 1l-9 -3l6 -1zM466 30l7 1l-3 1l3 1l-12 1l-4 -1l4 -1l-6 0l-1 -3zM482 55l16 2l-10 5l-11 0l3 2l-2 3l-7 0l-2 -10l5 0l-3 -1l1 -1zM459 80l12 4l-8 2l-15 -2l5 -3l0 -1l2 1l-1 -2zM661 211l2 1l2 -3l3 2l-5 2l-4 0l0 -3l5 -4l0 4zM627 216l-4 -3l0 -8l-8 -2l-9 12l-3 2l-18 0l6 -3l3 -3l5 -3l9 -3l10 -7l18 -5l7 2l-1 0l1 3l-6 2l-8 0l12 2l-4 3l3 0l1 5l10 3l5 -1l5 3l-14 5l-4 -1l-7 6l-3 -2l1 -4l-1 0l9 -4l2 2l4 -2l-8 0l3 -3l-2 -1l-7 4zM692 180l-3 2l1 1l-6 8l4 -3l4 1l-4 2l5 1l-1 2l5 -2l5 1l-3 3l3 0l-3 2l6 -2l-4 4l1 2l4 -3l-1 4l2 -2l0 2l-2 4l-3 1l0 -3l-3 1l2 -3l-2 -2l-2 2l-7 3l6 -4l-25 0l-1 -2l6 -3l-5 0l3 0l2 -3l2 1l-1 -3l2 0l4 -9zM519 72l10 0l0 -3l-6 -2l3 -2l6 1l-8 -3l8 -1l-7 -1l22 -4l7 5l-5 3l3 -1l-2 3l6 -1l-1 -1l1 -1l7 3l-1 -1l1 -1l6 1l-5 -3l7 0l11 1l1 1l-5 3l9 -2l-5 2l3 0l-2 3l7 -3l-2 2l2 -1l3 2l0 -2l2 -1l7 1l2 2l-8 2l11 -1l-6 3l3 0l-1 2l5 -3l8 0l4 1l-9 3l7 -1l-1 1l1 0l4 -2l5 3l-12 1l15 2l-14 1l7 0l0 2l-8 -1l14 2l-1 3l4 -2l-1 3l3 -2l3 3l2 -2l0 1l6 1l-4 1l9 1l-4 2l9 -1l4 2l-4 0l3 2l-2 0l-4 0l4 2l-4 0l1 1l-1 1l-5 -1l0 5l-4 -1l0 -2l-2 2l-4 -4l5 -3l-8 2l1 -1l-7 -2l-2 0l1 1l-4 -1l3 3l-8 -1l3 1l2 2l4 1l-1 1l3 3l7 0l0 1l2 1l-2 0l6 4l-1 2l-3 -3l3 5l-3 0l0 2l-15 -6l1 1l-7 -2l16 9l-1 2l-28 -7l-4 -2l3 -1l-6 -1l-5 -3l1 -1l-4 1l-4 -2l-1 0l1 1l-12 2l-7 -2l0 -2l4 -3l9 1l2 2l-2 -2l12 -1l-4 -4l12 -6l-6 -6l-3 0l0 -2l-6 -1l1 -1l-10 2l0 -2l5 -1l-5 -2l1 0l-4 0l1 -1l-4 0l-1 -3l-7 -2l-2 2l3 2l-15 -1l3 2l-44 -4l-3 -3l13 0l-15 -3l0 -5l3 -3l9 -4l15 0l-9 5l2 5l7 3zM657 194l-7 -1l-8 -3l9 1zM645 209l10 0l-2 2l-3 0l0 -2l-4 1l-4 -2l2 -3zM544 117l-5 4l-5 -1l3 -3zM558 120l2 1l-3 3l-3 -1l1 -2zM580 87l3 1l-2 4l-8 1l-2 -2l3 -4zM558 57l13 1l6 4l-20 0l-6 -3l0 -2zM551 174l-7 -2l5 -1zM561 154l-1 2l0 -2l-4 2l3 -3l-1 2l2 -3zM501 37l-8 -1l6 0zM451 22l-1 2l-6 -2zM415 62l-9 -4l13 0l0 1zM432 44l-6 2l2 -1l-8 -1l9 -1zM422 41l6 1l-8 1l-1 -2zM343 47l-6 0l9 -3zM286 173l-1 3l0 -2l-3 -2l1 -1zM567 114l2 1l-2 1l-3 -2zM559 79l-3 1l-5 0zM519 90l-2 -2l1 -1l2 1zM422 50l-5 -1l5 -1l2 1z"},{"id":"643","n":"Russia","r":"europe_n","d":"M1726 232l-1 -3l3 -1l1 -2l-1 -8l5 -3l7 1l5 -12l4 -2l-1 -3l-20 3l-3 -7l-16 -5l0 -2l-9 -14l-13 -5l-15 2l-5 2l3 2l0 3l-8 9l1 2l-8 3l-20 -5l-8 5l-12 2l-12 -1l-3 -4l-7 -2l-19 1l-6 -2l-1 -5l-18 -4l-5 6l2 3l-1 2l-4 2l-15 -1l-2 -3l-11 -2l-27 10l-4 -4l-3 2l-5 -1l-11 -8l-10 2l-4 -3l-5 3l-11 -14l-8 -4l2 -3l-14 6l-5 0l1 -4l-14 -1l-2 -6l-10 0l-21 6l-22 2l-1 2l3 0l-2 2l5 1l-6 0l-1 2l1 2l-6 2l9 4l-3 3l-5 -1l-3 2l-10 -3l-7 0l-5 3l-5 -3l-1 3l-7 -5l-14 -2l-12 6l1 4l-8 -2l-3 4l1 3l-2 4l4 3l5 1l4 5l-2 1l4 1l-10 4l-4 6l4 6l1 -2l-1 5l6 6l-6 4l-10 -6l0 -2l-5 -1l-6 1l-5 -3l-16 -2l-18 -9l0 -2l5 1l2 -4l3 0l-4 -3l8 -3l0 -1l-6 1l0 -1l4 -3l5 0l1 -2l-2 -2l2 -2l-2 -1l3 -3l-12 -2l-3 -2l-10 0l-2 -4l-6 -1l0 -2l1 -1l-4 -3l-11 1l-2 -5l8 -2l-6 -2l-5 -6l1 -4l-15 -3l-3 -4l1 -3l-3 -1l2 -2l-2 -5l4 -3l0 -2l12 -1l-9 -3l-1 -1l-4 0l21 -13l-8 -4l3 -2l-6 -5l1 -4l2 -1l-6 -6l6 -4l-8 -3l-1 -2l2 -2l-2 0l20 -6l5 1l-4 1l1 1l6 0l-2 2l3 -1l12 0l29 8l2 3l-1 2l-14 5l-38 -6l16 6l-2 3l4 6l13 3l3 -1l-8 -4l2 -2l16 3l4 -1l-4 -5l14 -5l10 3l2 -5l-4 -2l3 -6l-5 -2l14 1l4 4l-10 2l9 4l7 -1l1 -4l5 0l0 -2l18 -3l2 1l2 -1l-2 0l8 -3l4 0l-4 1l1 2l-4 1l9 1l3 -2l9 0l11 -3l2 2l-2 1l4 1l1 -2l6 -2l-5 -3l4 -1l19 1l24 7l3 -3l-3 0l-5 -4l-4 0l2 -6l-4 -2l9 -4l7 -7l11 1l8 1l-2 4l-4 3l5 2l-1 12l6 2l-3 4l-10 5l1 1l-14 0l17 3l15 -9l-2 -3l4 -3l8 -1l4 3l0 4l9 1l-7 -1l2 -3l-2 -3l-21 -2l-1 -3l4 -4l-7 -5l11 -4l-2 -4l5 1l-2 7l3 1l18 2l-14 -4l-3 -2l12 0l-4 -1l6 -2l26 4l-5 3l-1 3l5 -1l-2 4l3 0l3 -2l-3 -3l2 -4l-15 -4l0 -3l-2 -1l1 -2l35 -2l-6 3l5 2l-5 -2l10 -2l-9 -3l7 0l-8 -2l7 -1l2 -1l-3 -1l40 -4l-7 0l2 -1l18 1l12 -2l6 1l-1 2l2 -2l-6 -2l15 0l-3 -1l0 -2l17 -4l11 2l-10 1l18 1l-6 3l26 -2l16 5l-2 2l-6 -2l7 2l-5 3l-31 8l-12 4l31 -5l-6 0l4 -2l7 0l-2 1l1 1l4 0l5 -1l2 3l-1 3l2 1l-2 -1l4 -3l-2 -1l3 0l24 0l3 0l-3 2l7 1l16 1l6 -2l-1 -2l6 -1l25 3l-3 2l4 1l-5 1l5 0l0 2l-8 -2l6 4l2 -1l1 1l-3 1l5 3l7 2l9 -7l6 3l13 -1l10 2l2 -2l10 0l-4 -2l5 -1l-6 -1l11 -2l-2 -1l31 2l-11 2l14 -1l-4 2l0 -1l-2 -1l0 2l-4 0l1 1l11 -3l13 1l2 1l-5 1l9 1l-3 2l8 0l5 2l35 0l6 2l0 4l6 1l2 4l-2 2l4 -2l-1 -3l10 -2l20 2l6 -2l9 6l5 -1l3 -1l-5 -3l2 -3l30 1l17 3l5 2l0 22l-2 2l-5 1l-12 -3l4 2l-14 0l8 -1l2 1l-1 1l6 -1l2 2l3 0l3 3l-2 1l7 5l-3 2l-12 -2l1 1l-24 6l-12 6l-2 3l-6 -4l-11 1l-5 3l0 -3l-8 3l-6 -1l-10 11l2 2l5 0l-3 3l3 5l-2 1l-2 -1l3 -1l-2 0l-4 2l-2 3l3 4l-12 4l0 6l-9 0l-2 7l-7 5l-7 -24l3 -9l4 -3l1 -2l7 -2l21 -13l9 -3l3 -7l7 -2l-12 0l-1 6l-4 -1l-12 6l1 -2l-3 0l3 -5l-18 1l-16 10l-1 2l6 2l-21 2l-1 -2l5 -1l-15 -2l-4 2l-30 0l-13 5l-3 3l-29 17l9 1l0 5l5 -3l-2 1l3 1l-3 2l7 -2l-1 2l1 -4l6 0l9 6l-3 1l4 5l-5 7l0 4l-3 10l-27 27l-11 4l-5 -1l0 -2l-2 1l0 -1l-4 4l-3 0zM1264 17l6 2l-21 0zM1279 17l8 1l-16 2l1 1l-13 0zM1376 43l-35 5l-16 5l1 1l-11 5l-13 0l-3 -2l13 -4l-3 -1l5 -2l-3 -1l29 -6l18 -1l18 -3l7 2zM1307 59l6 1l-5 4l-1 3l13 7l-22 -1l-1 0l1 -1l3 0l-4 -3l-9 0l-2 -1l6 -3l2 -2l-2 -1l4 0l0 -2zM1536 16l8 2l-4 1l1 1l-1 1l-20 1l-12 -2l11 -4zM1543 21l2 1l-2 2l5 -2l8 1l-2 3l-4 0l5 2l-3 1l-24 -2l-11 -2l11 -3zM1572 26l-3 3l8 -2l7 2l1 2l-33 2l12 -7zM1778 45l4 1l4 -2l22 3l-8 3l-7 -1l1 -3l-3 0l-1 2l5 2l-19 0l-3 2l-12 -3l2 -3l8 -3zM1816 48l22 1l-6 2l-8 0l-12 -2l2 -2zM1793 164l3 8l-1 6l9 18l-4 -3l-5 0l-3 8l6 8l-1 2l-1 -3l-4 -1l-3 5l-1 -3l2 -9l-2 -4l2 -14l-3 -6l1 -6l4 0l1 -3l-2 -2zM1 69l13 2l-13 1zM1294 70l2 1l-1 1l-5 -2zM1326 16l1 2l-1 0l-8 -1zM1279 82l-7 3l-4 -2l4 -2zM1352 18l-5 0l10 -2l7 1zM1322 22l-5 -3l12 1zM1345 18l-6 2l-10 -1l3 -1zM1317 20l0 2l-7 0zM1321 14l4 0l-6 2l-11 -1zM1304 16l17 2l-17 0l-4 -1zM1515 24l-9 -2l15 1zM1790 56l6 2l1 2l-21 -1zM1755 48l-2 0l1 -3l2 2zM1766 161l2 0l-3 2l-3 -1l2 -2zM1940 80l-8 -1l9 -1zM1909 141l1 -2l4 -1l1 2zM1866 187l-3 2l-1 -2l5 -2zM1826 215l-10 5l6 -5l5 -1zM1812 219l2 1l-6 4zM1630 53l-3 2l-8 -1zM1393 61l-5 0l3 -3l7 2zM1431 65l-4 0l5 -2l3 1zM1336 78l-5 1l-6 -3l3 -1zM1116 160l-2 1l2 1l2 -2l7 1l1 4l-17 -1zM1187 211l6 0l4 4l6 -1l-1 2l-5 0l-9 4l-2 -1l0 -3l-5 -2z"},{"id":"840","n":"United States of America","r":"namerica","d":"M47 113l16 2l-6 2l-6 -3l-5 1l0 -2zM77 131l3 3l-3 1l-7 -3zM151 145l3 2l-4 0l2 1l-7 3l1 -1l-3 0l-2 -2l3 -2l2 2l-1 -3zM278 156l0 3l-3 3l-3 -2l2 -1l-2 -4l-6 3l3 -4l-10 -5l-1 -3l2 1l-2 -2l2 0l-5 -1l1 -2l-2 1l-3 -1l-3 -5l2 6l-5 -1l0 -3l-1 0l-1 1l-4 -1l5 3l-3 1l-18 -7l2 -2l1 1l2 -1l-3 -1l-5 2l-6 -2l-15 0l-4 -2l1 -1l-3 1l-7 -2l1 -2l-11 0l-1 2l1 1l-2 1l4 0l-3 2l-5 0l-1 2l-12 3l-1 -1l5 -2l-5 0l3 -6l5 -1l8 0l-6 -1l4 -2l-20 7l2 1l-9 5l5 2l-18 10l-10 3l-1 2l-14 4l-2 -1l-3 2l-3 0l-4 2l9 -6l7 1l-1 -1l1 -2l16 -7l-1 -3l3 -1l-2 -1l4 -4l-8 3l-2 -1l3 -1l-4 0l-1 3l-8 -3l-10 2l3 -3l-2 0l1 -2l-3 -4l2 -2l-4 2l1 1l-8 1l-8 -4l3 -2l6 2l2 -1l-3 0l2 -1l-8 0l1 -1l-4 0l-3 -3l8 -5l-1 -2l3 -2l6 1l13 -3l0 -3l-3 -1l3 -2l-10 2l-3 -2l1 2l-17 -1l-4 -3l4 -1l-11 -2l20 -5l5 0l-2 2l2 1l14 -1l-5 -1l-3 -2l1 -1l4 2l8 1l-9 -2l1 -2l-11 0l-3 -3l-15 -4l3 0l1 -3l13 -1l11 -7l9 -2l2 2l3 -1l-4 -1l2 -1l10 0l8 -3l5 2l-3 1l6 -1l15 1l-1 1l3 1l48 2l13 3l0 52l10 -1l0 2l9 6l11 -5l12 8l9 10zM92 161l2 2l-10 1l2 -2zM272 158l-1 2l-3 -1l3 -3zM259 150l2 2l-2 -1l1 2l-2 0l-2 -3zM250 148l2 6l-5 -5l-2 1l3 -3zM252 144l2 0l3 3l-3 -3l2 4l-3 2zM246 143l4 1l-2 2l2 1l-5 1l-4 -3zM258 154l8 4l-3 0l4 2l0 3l-10 -6l3 -1l-3 0zM256 151l1 1l-2 3l-2 -4zM67 170l-6 3l4 -4zM74 167l3 0l-2 1l1 0l-8 2l5 -1l-1 -2zM136 361l-2 0l-1 -4l1 -3l6 4zM585 217l18 0l3 -2l9 -12l8 2l0 8l5 5l-9 3l-1 -2l-2 3l-6 2l-3 5l1 1l-3 1l4 4l2 -1l0 -1l0 2l-6 1l-2 -2l0 3l-8 0l-6 3l0 -2l-2 4l2 0l-1 4l-4 4l-4 -3l3 -2l-3 1l3 7l-5 7l2 -4l-4 -4l2 -5l-3 2l1 5l-2 -1l2 2l-5 -2l1 -2l-1 1l5 4l-1 1l-3 -2l4 4l-2 -1l2 3l-5 -2l7 3l2 6l-2 -5l1 3l-5 -1l0 2l3 0l0 1l2 0l-2 2l-5 -1l3 2l-3 1l3 1l-5 1l-3 4l0 -1l-5 2l-10 8l-1 -1l-3 6l1 9l6 17l-2 9l-4 0l-3 -5l-1 -4l-1 1l0 -2l-1 0l-3 -3l2 -2l-2 0l1 -6l-6 -6l-3 0l-6 2l-2 -4l-8 0l1 -1l-6 2l1 -1l-1 -2l-1 2l-12 0l5 2l-1 2l3 2l-2 2l-4 -3l0 2l-6 -1l0 -2l-4 -1l-2 1l-8 0l0 -2l-5 3l1 0l-3 -1l1 1l-2 3l-6 2l2 0l-4 -1l1 2l-4 1l-1 5l-2 -1l3 8l-1 1l-10 -3l-2 -6l-10 -13l-6 0l-5 5l-6 -4l-3 -5l-8 -7l-10 0l0 3l-16 0l-21 -7l1 -1l-14 1l-2 -4l-5 -4l-12 -3l0 -3l-7 -7l0 -3l-4 -4l1 -1l2 1l-2 -2l5 -1l-8 1l-8 -13l2 -7l-3 -7l2 -5l1 -14l4 0l-4 0l-1 -4l2 0l-2 0l-3 -8l11 1l1 2l-3 3l3 -4l0 4l-2 1l1 0l3 -5l-3 -6l153 0l2 -1l1 3l9 1l9 3l11 0l6 -2l19 8l2 3l3 -1l0 3l8 4l3 10l-6 8l3 2l20 -6l-1 -4l2 0l11 -1z"},{"id":"304","n":"Greenland","r":"namerica","d":"M834 2l23 2l-35 2l38 -1l19 2l-7 2l-38 2l26 0l5 2l16 -2l1 2l-10 5l19 -5l12 1l18 -2l15 2l-29 5l4 1l-3 1l-20 1l4 2l0 2l2 1l-11 3l-4 5l13 0l-7 0l1 1l12 1l0 2l-24 2l16 3l2 3l0 2l-16 0l7 1l1 2l5 -2l4 4l-10 1l-5 -1l0 -2l-2 3l11 1l-2 3l-9 1l-18 -4l4 2l-7 2l-7 -1l5 1l-6 0l19 -1l12 3l-2 4l-10 -2l-3 -3l-11 2l10 -1l1 1l-3 2l18 3l-3 2l4 0l1 5l-4 0l-1 -2l-1 2l-4 0l-6 -4l-14 -2l6 1l1 1l-15 1l2 2l-6 1l14 0l-4 3l10 -2l18 2l-23 7l-25 4l-8 -3l1 3l-5 2l-8 7l-7 0l1 1l-12 3l-1 0l4 -4l-5 0l2 1l-2 2l-2 -1l2 2l-11 0l3 2l-8 1l5 3l-8 1l5 1l1 3l-5 3l-4 0l3 1l-2 1l-6 0l5 1l0 4l-3 1l2 0l-4 6l-5 0l4 1l0 2l-4 1l-3 0l1 -2l-2 1l-4 -1l3 -2l-7 0l1 -3l-13 2l3 -1l-4 0l-5 -4l0 -1l3 -1l-5 0l1 -1l-5 -1l3 -4l-3 2l-6 -7l7 -1l-8 0l5 -3l4 2l0 -2l-5 -3l1 3l-6 3l-4 -6l8 -3l-8 2l-4 -1l1 -2l-2 0l12 -5l-13 4l1 -3l6 -1l-7 0l-1 -3l7 -2l11 2l-10 -2l-8 1l4 -3l8 1l3 -2l-13 0l2 -2l11 1l2 -2l-3 1l1 -2l5 -1l-5 0l4 -4l-10 -1l-13 -3l21 2l-6 -4l5 0l-11 -1l6 -3l-9 1l2 -1l-3 -3l-2 0l3 2l-3 3l-9 -1l4 -4l-4 1l2 -1l-2 -1l5 -2l-5 -1l2 -2l-5 -1l2 -1l-2 -2l-6 0l5 -2l-12 -5l1 -1l-1 -1l-27 -4l-28 2l-6 -2l8 -1l-17 -3l26 -1l1 -1l-17 0l-20 -4l7 -2l32 -3l9 -5l-14 0l-2 -1l1 -1l14 -3l8 0l-1 -1l1 0l9 0l2 -2l-1 -1l4 -1l21 3l-14 -4l26 -2l5 1l0 3l3 -1l0 -3l20 3l-8 -3l5 -1l30 4l2 -4l-7 -1l23 0l-26 -2l32 -1l12 2l1 -1l-4 -2l5 0zM707 78l5 2l-10 2l-7 -3l3 -1l-3 -1l3 -1zM751 11l-14 -3l13 0zM859 73l0 1l-5 1l-10 0l3 -2zM902 23l-8 0l6 -1l3 0zM900 48l3 2l-8 0l0 -2z"},{"id":"360","n":"Indonesia","r":"seasia","d":"M1542 459l2 2l-1 3l-4 -5zM1648 515l0 1l-4 -1l3 -3zM1641 512l2 1l-3 3l-4 -4zM1589 476l2 4l2 1l0 3l-4 -2l-1 -3l-4 -1l2 -3zM1684 492l0 4l-3 2l2 -6zM1601 483l-3 1l0 -3l3 1zM1536 438l6 0l4 6l8 5l4 6l2 1l1 -2l8 8l3 1l-2 2l4 -1l2 1l-1 5l5 3l2 5l-1 3l5 -1l3 4l-2 15l-6 -2l0 2l-17 -15l-7 -13l-6 -6l-3 -9l-5 -2l-4 -7l-9 -7l-1 -4zM1682 515l-10 1l-6 -1l4 -3l10 3l2 -3zM1667 519l4 4l-2 1l-8 -4l1 -1zM1657 513l4 0l1 2l-13 2l2 -4l4 2l2 -1l-3 -2zM1694 461l-6 4l-18 -1l-2 1l-1 5l3 4l3 0l2 -3l11 0l-12 6l5 6l0 4l4 4l-8 2l1 -4l-4 -3l1 -4l-3 -1l-2 2l1 15l-5 0l1 -9l-1 -3l-3 0l-1 -4l4 -10l2 -1l-1 -4l3 -6l2 1l3 -3l15 3l6 -5l2 1zM1597 500l5 2l2 2l9 1l3 -3l9 3l3 4l8 1l1 5l-8 -2l-10 0l-28 -5l1 -2l-7 -2l4 -4zM1609 455l0 3l5 4l7 -1l4 -3l6 2l5 -1l4 -8l1 -1l2 -7l8 0l3 3l-4 1l6 7l-2 1l7 6l-2 1l-4 -1l-2 4l0 6l-3 2l-1 -1l-3 5l2 2l-2 5l-2 3l-7 3l-2 -5l-3 1l-4 -3l-7 3l0 -3l-8 0l-2 -9l-4 -3l0 -5l-2 -1l1 -7zM1710 462l5 -4l-2 5l3 2l-6 0l3 7l-4 -4l-1 -8l3 -6zM1721 483l4 1l2 4l-6 -3l-7 1l-2 -2l-1 2l1 -3zM1705 484l2 2l-2 2l-5 -2l0 -2zM1694 516l1 1l-1 3l-7 4l0 -4zM1749 498l-1 4l-1 0l-1 -4l2 -1zM1770 513l-5 0l2 -4l4 -1l1 1zM1783 481l0 36l-5 -5l0 -1l-6 1l1 -3l-2 -2l2 0l-3 -2l1 0l-2 -7l-6 -4l-19 -6l-1 -2l1 -2l-3 4l-3 1l0 -4l-5 -3l7 -2l3 1l1 -3l-9 1l-2 -4l-5 -1l1 -3l7 -2l8 2l2 8l5 6l15 -10z"},{"id":"156","n":"China","r":"asia","d":"M1600 347l-7 -2l0 -5l-8 -3l-8 4l-1 -1l-4 2l-3 -2l-2 2l-2 0l0 7l-3 0l0 -3l-6 1l-1 -3l-4 0l2 -5l-4 -1l0 -5l-7 1l1 -8l5 -3l0 -10l-2 1l-3 -6l-2 2l-6 -1l2 -2l-1 -2l-2 1l1 -2l-1 -1l-4 2l-4 -1l-15 9l-12 -4l-5 6l-2 -4l-14 1l-22 -14l-5 2l-12 -8l-1 1l-3 -7l5 0l-3 -8l2 -2l-4 -2l-1 -4l-11 -2l-2 -5l-8 -3l4 -1l-1 -6l-6 -1l-1 -4l7 -6l8 0l3 -3l7 -1l12 -5l-1 -3l4 -3l-3 -5l1 -4l-3 -1l10 -2l4 1l-1 -3l4 -8l10 1l4 -1l1 -7l5 -1l3 -3l4 0l1 3l13 5l4 6l-2 6l1 2l15 1l10 4l5 8l29 1l19 6l10 -4l15 -1l14 -7l-3 -4l3 -4l9 2l5 -4l7 0l5 -4l4 -2l14 -1l-1 -2l-7 -5l-14 2l-2 -3l6 -9l7 2l8 -3l-1 -2l9 -10l-1 -2l-3 -2l5 -2l13 -2l13 3l4 4l7 14l16 5l3 7l8 0l10 -4l2 1l1 3l-4 2l-5 12l-7 -1l-5 3l1 8l-4 4l-3 -2l-1 3l-10 2l1 4l-8 -2l-4 4l-10 6l-17 6l4 -3l-3 -1l5 -5l-2 -3l-4 0l-12 10l-7 0l0 4l7 2l1 5l3 0l6 -4l10 3l-1 3l-3 -1l-6 2l-1 3l-2 0l-6 7l6 3l3 9l6 4l-10 0l4 0l6 5l-9 5l6 -1l4 3l-3 2l3 0l-1 2l-2 0l1 4l-5 2l-4 8l-3 -1l2 2l-4 2l3 0l0 4l-3 -1l-3 5l-4 1l1 1l-4 4l-3 -1l-2 4l-14 3l-2 -4l0 5l-18 5l-1 2l2 3l-1 1l-3 0l-1 -4l2 -3l-2 -1l-3 2l-3 -3l0 1zM1616 356l1 1l-6 7l-3 1l-4 -1l0 -5l3 -3z"},{"id":"578","n":"Norway","r":"europe_n","d":"M1115 83l-3 0l1 1l-2 3l-9 -1l-2 3l-7 0l-3 3l1 2l-5 4l-5 1l-1 5l-4 4l2 1l0 2l-7 0l-3 2l0 11l4 2l-4 2l1 5l-4 3l0 3l-5 -1l-1 -3l-2 4l-4 -1l-8 6l-6 0l-8 -4l0 -1l4 0l-2 -1l3 -2l-7 2l0 -3l6 -1l-3 0l2 -2l5 -2l-10 5l0 -2l3 0l-3 -2l2 -1l-3 0l0 -2l11 0l3 -1l-1 -2l-1 2l-12 0l0 -2l2 0l-3 -2l10 0l-8 -2l16 -3l-8 0l5 -2l6 2l-3 -2l3 -3l12 1l3 -3l-7 3l-3 -2l11 -6l7 -2l-4 0l5 -4l-1 -1l7 -1l-5 1l0 -3l5 -2l8 -1l-6 0l3 -2l4 2l-2 -3l-3 0l7 -2l2 2l-1 -3l8 0l-6 -1l9 -5l4 1l-2 -1l6 -2l0 2l4 -3l-1 3l3 -1l0 -2l7 1l-3 -3l7 0l4 2l7 -6l6 1l-4 4l1 0l7 -4l2 0l-1 3l2 -1l3 -3l5 0l-3 2l2 0l0 2l3 -3l12 3l-12 1l12 3l-4 0l-7 3l2 -2l-1 -1l-8 -3l-9 2l-2 4l-4 3l-14 -1l-5 -3zM1107 77l2 1l-5 2l-4 0zM1097 80l3 1l0 1l-7 1zM1088 86l-9 2l7 -3l3 -3zM1120 30l18 5l-11 2l-2 0l1 -1l-10 0l4 -2l-8 -3zM1116 21l8 1l1 -2l3 0l2 0l-2 1l8 -1l15 3l-9 3l-15 0l-16 -1l4 -1l-13 -1l3 -1l-5 -1l7 1l0 -2l3 1l-1 -1zM1093 23l6 0l-1 3l4 -2l2 2l15 3l-13 2l-13 10l-15 -5l16 -2l-16 1l-2 -2l18 -2l-3 0l2 -1l-7 1l-1 -2l-3 0l-2 2l1 0l-8 1l-10 -4l6 0l-2 -2l-5 1l-3 -3l17 -1l-6 2l8 1l3 -3l10 5l-3 -4l2 -2z"},{"id":"152","n":"Chile","r":"samerica","d":"M609 569l3 -1l2 -4l2 3l1 5l3 3l-2 5l3 5l2 8l5 1l-2 6l-7 4l0 10l1 3l-2 1l-5 7l-2 5l1 4l-4 6l3 11l1 1l0 5l-4 5l1 5l-5 4l2 10l-4 6l-1 13l-2 3l2 4l0 6l4 1l-5 1l4 3l-3 2l1 6l-5 7l1 2l-1 3l-6 4l3 7l4 -1l0 5l2 2l20 2l-5 0l-8 3l-1 5l-2 1l-6 -3l3 1l3 -4l-7 4l-3 -2l2 -2l7 -1l-7 0l-2 3l-3 -2l3 -2l-5 1l-2 -3l9 -1l1 2l0 -3l-3 -1l3 1l-5 2l-4 -2l1 -3l-6 -3l2 0l0 -2l5 4l1 -3l-2 2l-1 -1l1 -1l-4 -1l4 -2l-2 -2l3 0l-2 -1l1 -2l-2 2l0 -4l2 -1l-3 0l0 -3l6 1l-2 -3l-2 2l-3 -1l3 -1l-2 -1l2 -1l-1 -2l-4 -1l0 -1l-3 1l1 1l-2 -1l5 -3l-1 -1l5 -1l1 -2l0 4l-2 0l3 -2l0 4l0 -6l5 0l-3 -2l4 -3l-3 -2l3 -11l2 1l-3 -3l3 -2l-8 2l-1 -5l4 -9l-2 -11l2 -1l6 -11l4 -14l-1 -10l2 -7l-1 -4l5 -14l0 -17l3 -10zM619 759l0 12l-18 -1l6 -2l2 2l-3 -3l2 -2l0 2l7 3l1 -1l-6 -3l5 -3l-6 0l0 -1l1 -1l-1 -1zM590 707l-3 0l2 -8l3 2l-2 2l2 2zM586 740l0 4l-2 -1l1 -2l-2 3l-3 -1l4 -6l2 1zM586 737l-2 0l-2 -4l2 0zM595 764l4 2l-4 1l1 -1l-3 1l-3 -3zM613 772l7 0l-1 1l3 3l-6 -3l0 2l-2 0l-3 -2zM603 767l2 0l0 2l-6 -2zM590 713l-1 1l1 4l-2 0l-3 -3l4 -3zM595 715l-3 0l1 -2l3 1z"},{"id":"036","n":"Australia","r":"australia","d":"M1795 533l4 13l4 0l4 4l1 8l3 3l2 11l13 7l6 12l1 1l1 -2l3 1l1 6l6 4l7 10l0 7l2 8l-3 15l-3 6l-6 6l-7 13l-1 9l-11 2l-6 4l-4 1l1 2l-5 -3l0 -2l-4 1l2 -2l-1 -1l-8 5l-11 -2l-9 -6l-1 -5l-4 -5l2 -1l-6 2l1 -4l-2 -5l-2 6l-5 0l3 -1l3 -8l-1 -5l-3 5l-4 3l-3 5l-1 0l-3 -2l1 0l-1 -4l-5 -4l0 -4l-17 -5l-29 4l-10 4l-4 5l-20 0l-11 6l-8 0l-8 -4l0 -4l2 1l2 -3l0 -8l-4 -7l-1 -7l-9 -17l3 2l-2 -5l5 4l-5 -11l3 -14l1 4l14 -11l4 1l20 -6l8 -9l0 -6l3 -3l3 6l2 -3l-1 -4l6 1l-2 -1l1 -2l-1 -2l4 -1l-1 -1l2 0l-1 -3l3 -2l0 1l2 0l0 -3l3 1l2 -2l3 2l4 3l-1 4l3 -3l6 2l1 -2l-2 -2l7 -11l1 0l2 -2l8 0l0 -3l-4 -2l17 5l5 -2l-1 3l2 1l3 -3l2 2l-3 5l-3 1l-2 9l19 11l2 2l7 2l5 -9l0 -13l4 -16l2 -1l2 6zM1726 530l3 -1l2 1l-4 3l-2 -2l-1 -2zM1764 665l3 1l-3 1l-5 -1zM1806 693l7 2l10 -1l1 7l-1 -1l-1 1l0 5l-4 -2l-2 5l-5 0l1 -2l-4 -2l-1 -4l1 1l-4 -5l0 -4z"},{"id":"076","n":"Brazil","r":"samerica","d":"M628 460l3 2l4 -1l1 2l12 -8l0 -2l-4 0l-1 -6l-3 -4l11 4l2 -3l8 -3l2 -3l4 0l-1 3l3 4l-2 7l2 5l4 3l10 -5l6 1l0 -3l17 2l8 -12l4 12l4 2l1 3l-8 7l-4 7l-4 1l4 0l6 -3l3 6l6 -2l-2 5l3 -4l4 -2l2 -4l4 -1l10 4l1 2l2 -1l2 1l-1 3l2 1l-1 4l2 -4l0 2l5 -2l11 3l8 0l15 11l10 1l1 3l3 9l-1 6l-4 7l-10 9l-4 9l-4 0l-2 27l-2 3l-1 7l-7 10l0 4l-4 2l-2 3l-6 -1l0 1l-8 1l-5 4l-7 2l-8 7l-3 0l2 1l-2 4l0 12l-5 5l-7 10l-6 5l8 -9l-4 -2l0 4l-4 3l-4 10l-4 3l0 -3l2 -2l-4 -4l-10 -7l-2 1l-5 -5l-4 0l10 -11l11 -6l1 -4l-1 -4l-4 0l2 -9l-7 0l-2 -9l-12 -2l1 -6l-2 -4l2 -1l-2 -2l4 -8l-2 -4l-3 -2l0 -5l-10 0l-3 -6l2 -1l-1 -7l-7 -1l-18 -9l-2 -4l0 -8l-7 1l-11 6l-11 0l0 -9l-4 3l-5 0l-1 -2l-5 -1l2 -2l-6 -8l5 -6l1 -8l12 -5l4 1l3 -18l-3 -6l0 -4l5 0l-1 -2l-3 0l0 -4l9 0l0 -1l2 1l3 -2zM724 468l7 0l-2 6l-10 3l0 -9z"},{"id":"356","n":"India","r":"india","d":"M1379 334l3 0l0 -2l13 -1l-3 -7l-3 -1l1 -4l-4 -1l0 -2l5 -5l2 2l6 -2l16 -17l-1 -4l4 -2l-7 -6l2 -4l-2 -1l0 -3l10 1l11 -6l3 5l4 2l-2 2l3 8l-5 0l2 7l2 -1l11 7l-3 3l-2 4l15 8l7 0l7 4l15 2l1 -9l3 0l0 5l2 2l16 -1l1 -2l-3 -3l5 0l12 -8l4 1l4 -2l1 1l-1 2l2 -1l1 2l-2 2l6 1l-3 3l1 3l-5 -1l-6 4l-5 15l-5 -1l1 5l-3 7l-2 0l-2 -10l-1 0l-2 4l-3 -3l8 -8l-15 -2l-1 -5l-2 1l-5 -3l-2 4l5 3l-3 1l-2 3l4 2l-1 3l2 3l1 8l-2 1l-1 -3l0 2l-2 0l-1 -4l1 2l-1 1l-6 4l-1 5l-8 3l1 1l-8 7l-9 7l-1 3l-5 1l-2 3l-4 0l-1 4l1 9l-1 -1l1 1l-3 12l1 5l-3 1l-2 4l2 2l-5 0l-5 6l-6 -5l-18 -42l-3 -19l1 -4l-2 -5l3 -1l-3 0l1 -3l-3 0l-1 6l-8 2l-9 -8l7 -2l2 -3l-7 2l-5 -4l2 -2l-3 2zM1515 403l-1 -2l3 -10z"},{"id":"398","n":"Kazakhstan","r":"asia","d":"M1394 232l-10 5l-4 4l-3 -3l-6 0l-2 -5l-2 0l0 -5l-1 0l-5 -4l-17 1l-5 -5l-14 -6l-14 3l0 20l-3 0l-7 -6l-9 4l0 -6l-7 -2l-3 -6l-3 -1l7 -1l-3 -2l3 -2l10 0l-3 -2l2 -7l-11 -1l-10 4l-4 -1l2 -1l-4 -5l-5 -1l-4 -3l2 -4l-1 -2l4 -5l7 2l-1 -4l12 -6l14 2l7 5l1 -3l5 3l5 -3l7 0l10 3l3 -2l5 1l3 -3l-9 -4l6 -2l-1 -2l1 -2l6 0l-5 -1l2 -2l-3 0l1 -2l22 -2l21 -6l10 0l2 6l14 1l-1 4l5 0l14 -6l-2 3l8 4l11 14l5 -3l4 3l10 -2l11 8l5 1l3 -2l3 4l-9 4l-1 7l-4 1l-10 -1l-4 8l1 3l-4 -1l-10 2l3 1l-1 4l3 5l-3 2l0 3l-6 -3l-21 0l-7 -3l-3 2l-1 3l-9 -2l-3 0z"},{"id":"032","n":"Argentina","r":"samerica","d":"M680 634l-5 23l7 6l-1 3l4 3l0 3l-8 8l-17 3l-6 -1l1 3l-2 9l-6 1l-8 -2l0 8l3 1l4 -1l1 3l-8 0l4 1l-6 4l-2 8l-7 1l-4 5l5 5l5 1l1 2l-3 1l2 1l-9 6l-2 5l-4 -1l-2 1l3 1l-5 5l1 3l-2 0l6 4l-20 -2l-2 -2l0 -5l-4 1l-3 -7l6 -4l1 -3l-1 -2l5 -7l-1 -6l3 -2l-4 -3l5 -1l-4 -1l0 -6l-2 -2l0 -4l2 -1l-1 -7l3 -10l3 -2l-2 -10l5 -4l-1 -5l4 -5l0 -5l-1 -1l-3 -10l4 -7l-1 -4l2 -5l5 -7l2 -1l-1 -3l0 -11l7 -3l1 -7l5 -5l9 2l2 3l2 -4l6 0l10 10l19 8l-6 11l16 1l6 -5l1 -5l3 0l2 3l-1 5l-11 6zM619 771l0 -12l2 3l-1 1l6 4l12 3l-8 2z"},{"id":"608","n":"Philippines","r":"seasia","d":"M1673 363l4 2l2 -1l0 5l2 3l-7 10l2 6l3 1l2 -2l3 3l1 -1l3 1l-2 1l4 3l-1 3l-8 -8l0 4l-4 -4l-3 2l-4 -1l2 -5l-2 -1l-1 2l-2 -2l-2 -8l4 1l1 -13zM1652 420l10 -12l2 -4l1 4zM1681 402l3 1l0 1l-6 5l-1 -8zM1684 416l-4 -4l5 -6l1 1zM1692 404l3 0l1 5l-2 0l1 2l-2 -5l-2 0l0 -3zM1696 397l3 8l-3 0l-5 -7zM1671 392l4 2l-1 5l-5 -7zM1700 415l3 11l-2 6l-3 -6l-1 4l1 3l-2 3l0 -3l-2 1l-5 -3l1 -5l-3 -3l-2 3l-4 -2l-2 4l-2 -1l2 -4l7 -5l2 2l0 2l5 -3l1 -2l3 0l0 -5zM1685 414l4 -10l0 5zM1687 398l2 3l-3 -2l-2 1l1 -3z"},{"id":"392","n":"Japan","r":"japan","d":"M1799 222l5 1l4 -3l-2 4l1 2l3 0l-10 2l-4 5l-8 -3l-5 1l-3 -1l0 2l4 2l-6 2l-1 -6l3 -2l0 -2l5 0l3 -6l-1 -6l2 0zM1729 280l3 0l-1 2l2 2l-3 8l-4 2l1 -3l-2 2l-2 -1l2 -8l-1 -2l0 3l-3 1l-1 -3l2 1l-2 -2l6 -4zM1746 276l3 3l-4 3l-3 -2l-4 5l-2 -4l-2 0l5 -4zM1785 237l1 0l3 11l-3 5l-3 2l0 5l-2 5l2 3l-3 3l-3 1l1 -3l-1 0l-1 2l-2 0l-2 3l-1 -2l-3 2l-7 1l2 -2l-2 1l-1 -2l-1 2l1 2l-6 5l-3 -3l1 -4l-3 0l-14 2l-1 3l-7 -1l1 -2l10 -7l17 0l5 -10l3 -1l-2 2l1 2l6 -2l9 -9l1 -10l2 -3l4 2l1 -2l-3 -1z"},{"id":"484","n":"Mexico","r":"namerica","d":"M349 286l14 -1l-1 1l21 7l16 0l0 -3l10 0l8 7l3 5l6 4l4 -5l6 0l11 13l2 6l11 2l-4 20l4 10l7 10l8 4l11 -3l5 1l5 -5l2 -9l18 -3l2 2l-5 9l1 0l-2 7l-1 -3l-6 6l-10 0l-1 3l-2 0l6 5l0 1l-8 0l-2 9l-12 -10l2 2l-5 -3l0 2l-9 3l-39 -15l-11 -9l-1 -3l2 -1l-1 -1l2 -4l-4 -6l-12 -11l-2 -3l2 0l-6 -2l1 -1l-2 0l0 -5l-16 -14l-5 -12l-11 -4l2 10l10 10l6 9l1 0l5 13l2 2l0 -2l5 5l-3 3l-2 -3l-10 -7l-1 -8l-5 -4l-2 1l-8 -5l5 0l0 -4l-9 -8z"},{"id":"710","n":"South Africa","r":"africa","d":"M1163 590l11 1l4 11l-1 9l-4 -1l-2 5l5 3l2 -2l5 0l-3 9l-6 5l-6 9l-13 11l-13 6l-17 0l-14 4l-7 -4l-1 1l-4 -8l3 -2l-1 -4l-10 -17l3 -3l2 1l1 2l10 1l4 -2l0 -21l5 7l-1 5l6 0l7 -9l9 3l4 0l3 -6l5 -3l1 -3zM1160 634l1 0l0 -1l1 0l0 -1l0 -1l1 0l0 -1l0 -1l0 -1l-1 0l-1 0l0 -1l-1 0l0 -1l-1 0l0 -1l0 1l-1 0l-1 0l-1 1l-1 0l-1 0l0 1l-1 1l-1 1l0 1l-1 0l-1 0l1 1l0 1l1 1l0 1l1 0l0 1l1 0l0 1l1 0l1 0l0 -1l1 0l0 -1l1 -1l1 0z"},{"id":"826","n":"United Kingdom","r":"britain","d":"M985 180l-5 1l-9 -3l6 -2l0 -3l-3 0l2 -2l9 0l-2 -2l1 -3l-4 -2l3 -3l-12 1l3 -4l-1 -3l-3 0l-2 4l3 -8l-5 1l2 -1l0 -5l3 -1l-1 -1l2 -3l11 0l-6 6l13 0l-4 5l-4 2l3 0l-6 1l9 1l5 7l7 3l1 3l-5 -1l6 2l-2 3l10 1l-1 3l-7 4l6 0l-3 3l-22 1l-3 3l-11 1l8 -7l6 0zM993 130l1 1l-1 3l-2 -2zM966 142l-5 3l0 -2zM966 147l2 2l-1 1l-5 -2zM965 166l-10 -2l5 -3l6 -1l4 4z"},{"id":"792","n":"Turkey","r":"mideast","d":"M1231 236l7 0l4 3l1 5l6 2l-4 2l2 6l-1 2l3 4l-3 1l-1 -2l-7 0l-19 4l-15 -1l0 3l-3 3l-2 -3l2 -2l-1 -1l-3 1l-4 -1l-11 4l-12 -4l-1 3l-4 1l-4 -3l-8 0l4 -2l-6 0l2 -1l-3 -3l1 -1l-5 -2l1 -2l1 2l3 -1l-2 -1l1 -1l-2 -3l1 -1l-4 0l0 -2l4 -3l12 0l0 -1l5 -1l-4 -1l0 -1l12 0l11 -5l9 0l8 4l11 2l11 0zM1156 234l1 2l4 2l0 1l-8 0l-7 5l3 -3l-4 -1l3 -3l-2 -2z"},{"id":"250","n":"France","r":"europe_w","d":"M1053 229l-2 8l-3 -6l4 -3zM1042 202l-3 1l-6 7l5 -1l1 3l-1 1l2 1l-3 2l2 2l-1 2l4 1l0 3l-8 3l-12 -2l-5 3l1 3l-7 0l-7 -2l-4 1l-8 -3l-2 -1l4 -8l0 -4l3 3l-4 -4l1 -4l-5 -2l-1 -2l2 -1l-14 -3l-2 -1l2 -2l-2 -1l8 -2l3 2l7 -1l-2 -5l3 0l1 1l8 0l-1 -1l8 -4l0 -3l5 -1l9 5l0 1l4 -1l0 2l4 2l14 3zM697 454l3 -7l-3 -8l3 -4l6 2l5 5l1 -1l1 3l-6 10z"},{"id":"752","n":"Sweden","r":"europe_n","d":"M1106 145l-5 5l0 -3zM1063 139l2 0l0 -3l4 -3l-1 -5l4 -2l-4 -2l-1 -9l4 -4l8 -1l-3 -2l4 -4l1 -5l5 -1l5 -4l-1 -2l6 -4l4 1l1 -3l10 1l2 -3l-1 -1l19 6l-1 3l3 3l-1 4l2 2l-10 0l-5 3l1 1l-3 2l3 2l-5 3l-18 8l1 1l-3 4l1 4l4 1l6 4l-6 3l3 0l-1 1l-12 3l4 1l-1 0l-1 8l-4 5l-6 0l-3 1l0 3l-7 0l0 -2l-3 -3l2 0l1 -2l-10 -10l0 -3z"},{"id":"170","n":"Colombia","r":"samerica","d":"M604 401l-4 1l-4 4l-4 10l4 0l2 5l-1 4l3 3l10 0l4 5l11 -1l-2 10l3 6l-3 3l4 2l1 6l-1 1l-1 -5l-3 2l-2 -1l0 1l-9 0l0 4l3 0l1 2l-5 0l0 4l3 6l-3 17l-4 -2l4 -7l-5 -2l-11 1l-11 -12l-8 -4l-6 0l-9 -6l2 -1l0 -3l5 -2l4 -7l-3 -2l2 -3l-2 -4l2 -1l-4 -8l1 -3l1 1l2 -3l-1 -3l3 4l0 -4l7 -5l-1 -4l5 -5l3 1l0 1l1 -3l5 0l9 -6l2 0z"},{"id":"862","n":"Venezuela","r":"samerica","d":"M667 419l1 2l-5 4l2 3l-5 1l-1 5l4 5l-11 5l-1 3l-11 -4l3 4l1 6l4 1l-12 9l-1 -2l-3 1l-4 -2l-1 -7l-4 -2l3 -3l-3 -6l2 -10l-11 1l-4 -5l-10 0l-3 -3l1 -4l-2 -5l-4 0l4 -10l4 -4l4 -1l-4 1l2 5l-3 5l3 4l2 0l1 -3l-2 -6l9 -4l-2 -2l1 -2l2 4l7 2l1 3l11 0l6 3l8 -3l-3 0l13 -1l-6 1l4 4l1 -1l2 2l1 -1l4 3l-2 4l-2 0z"},{"id":"104","n":"Myanmar","r":"seasia","d":"M1556 354l-11 3l-2 6l-2 1l8 12l-3 7l5 7l2 11l-5 10l1 -9l-1 -1l0 -7l-5 -10l0 -9l-2 0l-3 -5l0 4l-2 1l-2 -1l1 1l-5 4l0 -2l-4 1l0 -3l-3 3l2 -9l-3 -9l0 2l-3 -3l3 0l-1 -3l-4 0l0 -3l-1 1l-4 -6l2 0l0 -3l4 -2l0 -10l5 1l5 -15l6 -4l5 1l-1 -3l4 -5l4 6l2 -1l1 5l-1 5l-6 6l0 5l7 -1l0 5l4 1l-2 5l4 0l2 3l5 -1z"},{"id":"554","n":"New Zealand","r":"oceania","d":"M1962 696l6 -1l-1 1l2 -1l-2 2l1 2l-9 8l2 3l-5 -1l1 2l-6 2l-2 9l-10 4l-14 -4l10 -10l15 -7l7 -12l4 -1l-2 1zM1934 727l1 1l-4 1l1 -3zM1963 661l5 1l3 9l4 2l0 -4l3 7l7 2l4 -3l3 1l-4 9l-4 0l-2 5l-8 8l-4 -2l3 -6l-8 -5l5 -3l2 -5l-2 -4l2 0l-3 -1l-1 -3l1 1l0 -2l-3 -2l1 3l-4 -5l2 -1l-2 1l-1 -2l-3 -4l2 0z"},{"id":"180","n":"Dem. Rep. Congo","r":"africa","d":"M1171 512l-10 2l-3 4l0 14l3 3l5 -1l-1 7l-3 0l-11 -10l-2 2l-4 0l-4 -2l-1 -2l-5 1l-2 -3l-9 2l0 -5l-3 -5l0 -12l-11 -2l-2 1l-1 5l-9 1l-7 -13l-21 1l-2 -1l1 -1l0 -3l2 -2l4 1l5 -3l0 3l2 0l7 -6l1 -9l9 -9l4 -27l3 -4l3 -1l5 4l11 2l2 -4l12 -1l3 -2l9 1l6 4l8 -1l7 6l-1 6l3 2l-8 7l-2 12l-4 6l2 4l2 18z"},{"id":"804","n":"Ukraine","r":"europe_n","d":"M1212 205l-13 3l-4 3l1 -2l-2 1l0 3l-6 -3l-11 0l1 -1l-3 -1l6 0l-3 0l-2 -4l1 3l-6 1l-3 4l-3 1l0 2l-5 0l-3 -1l4 -3l0 -2l6 0l-5 -6l0 -3l-9 -3l-15 5l-11 -2l-4 -3l4 -3l-1 -3l8 -5l-3 -6l4 -1l9 -1l10 3l8 -1l8 2l2 -4l15 -2l4 3l-1 1l0 2l6 1l2 4l10 0l3 2l12 2l-3 3l2 1l-2 2l2 2l-1 2l-8 1z"},{"id":"364","n":"Iran","r":"mideast","d":"M1300 259l4 -1l4 -3l10 -1l11 4l6 5l5 0l0 6l-4 10l2 2l-2 2l2 9l5 0l0 3l-5 6l6 7l5 2l0 5l3 1l-1 3l-7 2l-2 6l-23 -4l-4 -7l-11 3l-17 -7l-9 -13l-3 1l-3 -3l-1 3l-2 0l-2 -6l-2 0l1 -4l-3 -3l-7 -3l-4 -6l5 -10l-5 -1l-4 -10l-2 -1l1 -2l-2 -6l3 -2l5 4l3 1l11 -5l1 2l-1 3l4 2l2 4l11 6l16 -1z"},{"id":"300","n":"Greece","r":"greece","d":"M1130 250l7 5l-10 -4zM1133 269l10 3l3 -2l-1 2l-7 1l-7 -2zM1146 235l2 2l-3 3l-6 -1l-7 1l3 4l-3 -1l1 2l-7 -3l0 2l4 5l-3 -1l1 2l-3 1l8 3l1 3l-3 -2l-3 1l2 3l-4 -1l3 6l-3 -2l-1 2l-2 -3l-2 1l-1 -3l-3 -3l2 -2l10 1l-4 -2l-7 1l-3 -3l2 -1l-4 -2l-2 -2l4 -2l1 -4l18 -4l10 1z"},{"id":"586","n":"Pakistan","r":"india","d":"M1426 269l2 3l-2 2l-15 0l0 3l2 1l-2 4l8 5l-5 3l1 4l-16 17l-6 2l-2 -2l-5 5l0 2l4 1l-1 4l3 1l3 7l-13 1l0 2l-4 1l-3 -1l-7 -10l-9 3l-3 -1l-14 1l2 -6l7 -2l1 -3l-3 -1l0 -5l-5 -2l-6 -7l18 2l12 -2l1 -5l2 -3l14 -4l1 -6l4 -2l-2 -3l7 0l-1 -3l4 -4l-3 -5l6 -3l16 -2l5 2l1 5z"},{"id":"380","n":"Italy","r":"italy","d":"M1039 212l4 0l4 -3l3 3l2 -4l4 2l2 -4l10 -1l1 2l7 1l-2 2l3 3l-4 -1l-5 2l1 7l6 4l6 7l9 2l-2 2l12 5l2 4l-8 -3l-2 4l3 4l-8 6l3 -6l-3 -5l-25 -14l-6 -9l-7 -2l-7 4l0 -3l-4 -1l1 -2l-2 -2l3 -1l-2 -2zM1087 254l-3 5l0 4l-15 -6l2 -2zM1054 240l-1 9l-5 1l-2 -10l5 -3z"},{"id":"704","n":"Vietnam","r":"seasia","d":"M1600 347l-5 3l-2 0l-6 11l5 6l-1 1l14 13l3 16l-1 -1l-2 8l-9 5l-2 -2l-2 2l0 3l-2 -2l2 3l-4 -2l2 3l-8 5l2 -8l-4 -2l4 -3l6 1l-2 -5l9 -4l-1 -10l2 -6l-3 -3l2 -1l-4 -3l-9 -12l-7 -4l1 -2l3 1l2 -3l-3 -2l1 -1l-8 -1l-1 -5l-5 -4l2 -2l3 2l2 -2l3 1l8 -4l8 3l0 5z"},{"id":"860","n":"Uzbekistan","r":"asia","d":"M1394 232l2 0l-6 4l7 2l1 -2l3 3l5 1l-8 4l-6 -1l-1 -1l2 -2l-2 -1l-6 1l0 3l-4 1l2 0l-2 3l-6 0l-1 2l5 1l1 4l-4 6l-6 -1l0 -4l-16 -6l-7 -4l-3 -7l-10 -1l-1 -5l-8 -3l-2 1l2 2l-3 -1l-6 3l1 3l-6 0l0 -20l14 -3l14 6l5 5l17 -1l5 4l1 0l0 5l2 0l2 5l6 0l3 3l4 -4z"},{"id":"598","n":"Papua New Guinea","r":"oceania","d":"M1850 493l-4 -6l-8 -6l12 8zM1844 491l3 0l-2 6l-9 4l-5 1l-7 -4l8 -1l2 -2l0 2l3 0l6 -3l-1 -4zM1783 517l1 -36l19 7l7 5l0 4l10 3l1 4l-5 1l2 3l5 4l2 5l4 0l0 2l4 1l0 2l5 2l-3 2l-14 -3l-10 -11l-13 -4l2 3l-3 0l1 1l-8 0l5 2l1 2l-4 2zM1866 504l-3 0l-3 -7z"},{"id":"496","n":"Mongolia","r":"asia","d":"M1488 194l25 -10l11 2l2 3l15 1l4 -2l1 -2l-2 -3l5 -6l18 4l1 5l6 2l19 -1l7 2l3 4l12 1l12 -2l8 -5l11 2l2 1l-6 11l10 1l6 -2l8 7l-14 1l-4 2l-5 4l-7 0l-5 4l-9 -2l-3 4l3 4l-9 5l-20 3l-10 4l-19 -6l-29 -1l-5 -8l-10 -4l-15 -1l-1 -2l2 -6l-4 -6l-13 -5z"},{"id":"604","n":"Peru","r":"samerica","d":"M611 490l-4 0l-12 5l-1 8l-5 6l6 8l-2 2l5 1l1 2l5 0l4 -3l0 9l5 0l5 8l-4 18l4 3l-5 5l-1 6l-3 1l-6 -6l-20 -11l-5 -4l-2 -4l1 -3l-8 -12l-7 -14l-6 -11l-7 -4l2 -2l-3 -5l6 -8l1 3l-2 3l5 0l3 3l4 -8l9 -5l6 -6l2 -5l-2 -3l2 0l9 7l4 6l11 -1l5 2l-4 7z"},{"id":"795","n":"Turkmenistan","r":"asia","d":"M1311 237l6 0l-1 -3l6 -3l3 1l-2 -2l2 -1l8 3l1 5l10 1l3 7l7 4l16 6l0 4l-5 -1l-5 2l-2 5l-12 6l-6 -2l0 -6l-5 0l-6 -5l-11 -4l-10 1l-4 3l-4 1l-1 -9l-4 -1l1 -2l2 0l-1 -2l-3 0l1 1l-2 -4l1 -3l5 2l5 -3l-5 -5l-5 0l0 5l-2 -3l9 -4l7 6z"},{"id":"764","n":"Thailand","r":"seasia","d":"M1556 354l2 1l0 3l4 0l-1 11l6 -4l3 3l4 -4l3 1l5 5l0 5l5 5l-1 6l-2 2l-11 -1l-5 4l4 11l-6 -6l-5 0l0 -4l-5 0l-1 7l-4 14l0 2l4 0l3 12l6 2l3 3l-1 2l-4 1l-1 -3l-4 -2l-1 1l-3 -5l-7 -6l3 -13l4 -6l-2 -11l-5 -7l3 -7l-8 -12l2 -1l2 -6z"},{"id":"458","n":"Malaysia","r":"seasia","d":"M1556 431l1 -1l4 2l1 3l6 -3l5 5l2 4l0 9l4 9l-1 -1l-3 1l-12 -8zM1653 443l-9 0l-8 16l-5 1l-6 -2l-4 3l-7 1l-5 -6l9 3l0 -6l10 -4l5 -8l4 3l2 -5l2 3l-1 -3l2 -1l-1 -1l3 -2l5 -7l0 2l2 -2l3 3l-1 3l3 -1l-1 2l8 2l-6 2l2 3z"},{"id":"466","n":"Mali","r":"africa","d":"M937 398l-5 -14l4 -4l3 2l9 -2l21 1l1 -5l-1 -1l-6 -47l10 0l33 21l4 5l7 2l1 5l5 -1l0 15l-4 6l-18 3l-5 -1l-8 5l-2 0l-4 5l-4 -1l-2 2l-1 4l-4 3l-2 8l-3 1l-1 -3l-4 3l-3 -1l-2 1l-2 -4l-2 0l1 -2l-4 -6l-8 3l-2 -2l-2 1z"},{"id":"508","n":"Mozambique","r":"africa","d":"M1174 591l6 -6l3 -7l-1 -6l1 -3l0 -9l-14 -5l-1 -5l16 -5l3 3l4 -1l1 4l-2 4l6 7l-1 -3l4 -3l0 -7l-7 -8l-1 -7l1 -3l16 1l17 -7l0 14l2 9l-2 5l-4 5l-13 6l-6 7l-8 6l-2 -1l4 15l1 0l-1 11l-13 6l-2 3l2 1l0 4l-5 0l0 -13z"},{"id":"004","n":"Afghanistan","r":"asia","d":"M1370 259l8 2l5 -2l2 1l1 -2l4 0l4 -5l4 3l0 7l10 -4l8 1l-5 2l-10 1l-5 3l2 5l-4 4l1 3l-7 0l2 3l-4 2l-1 6l-14 4l-2 3l-1 5l-12 2l-18 -2l5 -6l0 -3l-5 0l-2 -9l2 -2l-2 -1l0 -3l2 -1l2 -7l8 2l3 -3l7 -3l2 -5l5 -2z"},{"id":"012","n":"Algeria","r":"africa","d":"M1048 261l-2 3l0 10l-4 5l4 7l4 2l3 11l-1 0l2 6l1 14l-3 2l5 9l7 2l2 4l-24 15l-10 7l-14 3l-1 -5l-7 -2l-4 -5l-54 -34l0 -8l2 -1l6 -4l10 -2l10 -5l-1 -4l5 -3l9 0l1 -2l-3 -4l-1 -8l-2 -2l19 -8l14 -2l8 1l7 -2z"},{"id":"682","n":"Saudi Arabia","r":"mideast","d":"M1289 361l-17 2l-4 3l-6 7l-2 -2l-19 -2l-3 7l-12 -19l-8 -7l-1 -9l-3 -6l-5 -3l-14 -21l-3 0l2 -7l6 0l4 -3l4 -1l3 -3l-6 -5l12 -4l7 1l10 5l14 10l16 2l1 2l4 0l2 5l8 6l-1 3l3 5l2 3l3 0l6 9l15 2l2 3l-4 12z"},{"id":"352","n":"Iceland","r":"europe_n","d":"M914 99l5 -1l-3 1l4 2l0 1l4 1l0 2l-7 4l-21 5l-14 -3l-8 1l0 -1l7 -2l-4 0l3 -1l-13 -2l11 -1l-3 -1l4 -1l-15 0l7 -2l-3 0l2 -2l5 2l-2 -2l2 0l-3 -1l1 0l8 2l-1 2l3 2l3 -2l2 -3l4 2l3 -2l4 2l-1 -2l4 1l8 -3z"},{"id":"246","n":"Finland","r":"europe_n","d":"M1134 101l-2 -2l1 -4l-3 -3l1 -3l-16 -6l5 -1l5 3l14 1l8 -8l8 -1l7 3l1 1l-5 3l2 0l-2 2l9 5l-6 4l6 6l-2 1l-1 4l6 5l-3 2l8 4l-21 13l-6 0l-20 4l1 -1l-4 0l0 -2l-6 -1l1 -6l-3 -5l3 -3l4 -1l12 -8l4 -1l1 -3z"},{"id":"276","n":"Germany","r":"europe_w","d":"M1053 203l-11 -1l3 -7l-10 -3l1 -2l-2 -2l1 -2l-2 -3l1 -2l-1 -2l6 -2l-2 -2l3 -3l0 -3l7 1l1 -3l3 0l3 2l-6 -4l2 -1l-2 -2l13 3l0 2l9 -3l6 2l3 2l1 3l-2 2l3 2l2 8l-16 4l10 10l-6 2l1 4l-4 -1l-11 2z"},{"id":"566","n":"Nigeria","r":"africa","d":"M1076 391l3 7l2 1l0 4l-5 3l-13 24l-1 1l-3 -4l-3 1l-6 5l-4 8l-7 -1l-1 2l0 -2l0 2l-4 1l-3 -2l0 -5l-2 0l1 -1l-5 -4l-6 0l2 -1l-6 1l0 -15l6 -7l-2 -6l1 -6l5 -6l6 -1l4 1l4 3l5 -1l9 2l5 -2l11 1z"},{"id":"024","n":"Angola","r":"africa","d":"M1073 492l-4 3l0 3l-1 1l-1 -5l4 -3zM1133 527l0 12l-11 0l0 18l8 8l-15 2l-10 -1l-3 -3l-24 0l-5 -2l-8 2l0 -8l5 -14l6 -6l1 -7l-5 -11l2 -4l-6 -12l23 -2l7 13l9 -1l1 -5l2 -1l11 2l0 12l3 5l-1 4z"},{"id":"724","n":"Spain","r":"europe_w","d":"M1017 246l2 0l-2 2l-4 -1zM990 226l10 4l18 1l0 3l-14 6l-6 7l3 4l-4 3l-1 4l-5 1l-3 3l-12 1l-7 4l-4 -4l0 -1l-3 -2l-3 0l0 -3l2 -2l-2 -2l2 -3l-3 -4l3 0l1 -7l3 -3l-2 -2l-12 0l1 -3l-3 -4l8 -3z"},{"id":"050","n":"Bangladesh","r":"india","d":"M1495 344l-3 -9l1 -3l-4 -2l2 -3l3 -1l-5 -3l2 -4l5 3l2 -1l1 5l15 2l-8 7l3 4l2 -4l1 0l3 13l-3 0l1 3l-3 -8l-2 -3l-3 1l-2 -5l-2 0l2 1l0 5l-2 3l-1 -3l-2 4l-1 -3l-1 3zM1504 344l-1 0l0 -4l2 2z"},{"id":"418","n":"Laos","r":"seasia","d":"M1567 342l5 4l1 5l8 1l-1 1l3 2l-2 3l-3 -1l-1 2l7 4l9 12l4 3l-2 1l3 3l-1 4l-7 0l-1 3l-4 -1l2 -8l-5 -5l0 -5l-5 -5l-3 -1l-4 4l-3 -3l-6 4l1 -11l-4 0l1 -3l-3 -1l1 -2l5 -5l0 2l4 0l-2 -6z"},{"id":"729","n":"Sudan","r":"africa","d":"M1189 414l-1 -4l-4 -3l0 -8l-2 0l-4 1l2 5l-7 7l-6 -2l-7 5l-12 -1l-5 -5l-4 0l-3 8l-5 1l0 -6l-4 -6l-3 -10l-3 0l6 -16l6 -1l0 -23l6 0l0 -12l66 0l2 5l1 13l6 5l-8 5l-5 24l-6 5l-1 5l-3 1z"},{"id":"894","n":"Zambia","r":"africa","d":"M1169 554l-8 1l-1 4l-11 8l-12 -3l-7 1l-8 -8l0 -18l11 0l0 -12l2 3l5 -1l1 2l4 2l4 0l2 -2l10 10l4 0l1 -7l-5 1l-3 -5l1 -5l-1 -7l3 -4l10 -2l13 8l3 5l-2 2l0 7l1 1l-3 2l-1 5l2 3l-16 5z"},{"id":"562","n":"Niger","r":"africa","d":"M1076 391l-7 3l-11 -1l-5 2l-9 -2l-5 1l-4 -3l-9 -1l-6 7l0 5l-4 -4l-3 1l0 2l-1 -5l-6 -2l1 -2l-6 -6l0 -2l6 -2l12 -1l4 -6l0 -15l9 -2l10 -7l24 -15l9 2l4 3l4 -2l1 8l5 7l-3 19l-11 14z"},{"id":"068","n":"Bolivia","r":"samerica","d":"M614 564l-1 -2l5 -5l-4 -3l4 -18l-5 -8l6 0l11 -6l7 -1l0 8l2 4l18 9l7 1l1 7l-2 1l3 6l10 0l0 5l3 2l2 4l-4 11l-5 -5l-15 2l-5 14l-7 -1l-2 4l-2 -3l-9 -2l-5 5l-3 1l-6 -14l2 -6l-3 -2z"},{"id":"231","n":"Ethiopia","r":"africa","d":"M1196 436l-3 -6l-10 -8l2 -2l4 -1l1 -11l4 -2l1 -5l6 -5l2 -9l4 -1l2 2l1 -4l4 3l3 -2l10 3l8 9l-3 5l0 4l6 0l-1 2l1 2l6 7l17 5l6 0l-17 17l-8 1l-9 5l-7 -2l-7 4l-19 -5l-1 -5z"},{"id":"434","n":"Libya","r":"africa","d":"M1053 299l4 -3l0 -5l7 -4l0 -5l20 5l3 5l19 7l6 -4l-1 -7l6 -3l6 -1l5 1l1 3l10 1l1 2l-3 8l2 6l0 51l-6 0l0 2l-44 -22l-10 5l-4 -3l-9 -2l-2 -4l-7 -2l-5 -9l3 -3l0 -13l-3 -6z"},{"id":"504","n":"Morocco","r":"africa","d":"M988 272l2 2l1 8l3 4l-1 2l-9 0l-5 3l1 4l-28 12l-1 9l-14 1l-6 12l-8 6l-5 12l-12 1l6 -14l5 -5l3 -8l5 -3l3 -6l8 -3l7 -6l3 -4l0 -7l3 -6l13 -8l5 -10l4 -1l3 4l9 -1z"},{"id":"324","n":"Guinea","r":"africa","d":"M943 420l-3 0l2 -2l-4 -7l-7 1l-5 4l-2 -4l-4 -2l-2 -4l-2 0l2 -3l6 -2l-1 -2l1 -3l13 2l0 2l2 -1l2 2l9 -3l3 6l-1 2l2 0l2 4l-1 4l2 6l-3 0l0 4l-2 0l-3 3l-2 -2l0 -5z"},{"id":"728","n":"S. Sudan","r":"africa","d":"M1189 443l-3 3l-7 1l-6 -1l-2 1l-7 -6l-8 1l-5 -7l-4 -2l-1 -3l-8 -9l-4 -1l5 -10l5 -1l4 5l7 -1l1 2l4 0l7 -5l6 2l7 -7l-2 -5l6 -1l0 8l4 3l1 8l-4 2l-2 3l10 7l3 6z"},{"id":"218","n":"Ecuador","r":"samerica","d":"M582 467l-2 0l2 3l-2 5l-6 6l-9 5l-4 8l-3 -3l-5 0l2 -3l-1 -3l3 -4l-1 -3l-2 4l-4 -3l1 -6l3 -3l-1 -1l2 -3l0 -4l7 -3l8 5l6 0zM493 467l3 4l-2 1l-2 -1l2 -1l-3 -3z"},{"id":"616","n":"Poland","r":"europe_n","d":"M1131 180l3 6l-8 5l1 3l-7 -2l-9 1l-3 -2l-3 1l-7 -5l-4 0l-2 1l-2 -3l-8 -1l1 -2l-2 -3l0 -4l-3 -2l2 -2l-1 -3l2 0l-2 -1l21 -5l5 3l22 -1l3 2l3 6l0 2l-4 2l2 2z"},{"id":"178","n":"Congo","r":"africa","d":"M1062 488l2 -2l2 1l-2 -7l5 0l1 -3l2 3l4 -1l2 2l2 -4l0 -7l-3 -2l3 -6l-1 -3l-6 1l1 -5l7 -1l8 3l3 -10l11 0l-4 23l-9 9l-2 10l-6 5l-2 0l0 -3l-5 3l-4 -3l-4 3z"},{"id":"762","n":"Tajikistan","r":"asia","d":"M1376 260l4 -6l-1 -4l-5 -1l1 -2l5 0l3 -3l-2 0l4 -1l0 -3l6 -1l2 1l-2 2l3 1l-8 1l-1 3l12 0l4 2l8 -1l1 4l6 1l1 6l-9 0l-10 4l0 -7l-4 -3l-4 5l-4 0l-1 2z"},{"id":"266","n":"Gabon","r":"africa","d":"M1074 455l-1 5l6 -1l1 3l-3 6l3 2l0 7l-2 4l-2 -2l-4 1l-2 -3l-1 3l-5 0l2 7l-2 -1l-2 2l-9 -8l-3 -6l3 1l-5 -5l4 -1l0 -4l4 1l-4 -2l1 -1l0 -2l10 0l0 -7z"},{"id":"450","n":"Madagascar","r":"africa","d":"M1275 536l2 3l3 14l-1 2l-3 -2l1 5l-3 11l-12 35l-11 5l-6 -3l-5 -15l2 -6l5 -8l-3 -14l3 -6l9 -3l2 1l0 -2l3 -2l1 1l1 -3l1 1l2 -2l0 -5l5 -3l0 -4l2 -2z"},{"id":"417","n":"Kyrgyzstan","r":"asia","d":"M1394 243l4 1l8 -4l-5 -1l-3 -3l-1 2l-7 -2l6 -4l-2 -1l3 -2l11 2l1 -3l3 -2l7 3l21 0l6 4l-12 5l-7 1l-3 3l-8 0l-5 2l-1 3l-9 2l-4 -2l-12 0l1 -3l6 1z"},{"id":"140","n":"Central African Rep.","r":"africa","d":"M1134 419l12 11l6 8l-10 -1l-3 2l-12 1l-2 4l-11 -2l-6 -4l-5 5l0 4l-11 0l-2 7l-1 -3l-7 -10l-2 -8l6 -8l17 -3l3 -3l-1 -2l10 -2l7 -8l5 -1l4 6l0 6z"},{"id":"478","n":"Mauritania","r":"africa","d":"M932 384l-6 -7l-7 -3l-9 1l-2 4l3 -14l-3 -6l2 -5l-4 -4l-1 1l1 -3l22 0l-1 -8l6 -4l0 -14l19 0l0 -7l21 13l-10 0l6 47l1 1l-1 5l-21 -1l-9 2l-3 -2z"},{"id":"148","n":"Chad","r":"africa","d":"M1133 358l0 21l-6 1l-6 16l4 1l2 9l-6 2l-8 8l-8 1l1 2l-3 3l-17 3l-2 -6l-6 -6l1 -2l8 0l-3 -3l-2 -11l-4 -3l-3 -7l11 -14l3 -19l-5 -7l-1 -8l6 -3z"},{"id":"120","n":"Cameroon","r":"africa","d":"M1048 440l2 -6l4 -5l5 -2l3 4l4 -4l9 -19l6 -5l0 -4l-2 -1l-1 -4l2 0l4 7l0 7l3 3l-8 0l-1 2l8 11l-6 9l4 12l5 6l1 6l-9 -3l-26 1l-1 -11l-4 0z"},{"id":"516","n":"Namibia","r":"africa","d":"M1130 565l7 -1l3 2l-9 3l-2 -2l-12 1l0 21l-6 0l0 36l-5 2l-5 0l-4 -1l-2 -4l-4 4l-6 -8l-4 -17l-1 -10l-15 -24l0 -4l8 -2l5 2l24 0l3 3l10 1z"},{"id":"408","n":"North Korea","r":"korea","d":"M1713 252l-2 2l-5 0l-2 3l-5 -1l-3 1l-2 -1l2 -1l-3 0l5 -3l-3 -1l1 -4l-4 0l-1 -3l9 -5l5 -4l7 2l-1 -4l5 0l7 -5l3 4l-5 3l0 5l-13 6l0 3z"},{"id":"208","n":"Denmark","r":"europe_n","d":"M1070 157l-4 5l-5 -5l4 -1l1 1l2 -2zM1054 162l-6 0l0 -3l-3 -1l0 -6l6 0l0 -2l-4 2l0 -2l12 -4l-2 6l4 1l-8 5l0 3zM1059 158l0 3l-4 -2z"},{"id":"372","n":"Ireland","r":"britain","d":"M960 161l-5 3l11 2l1 7l-2 3l-17 5l-4 -1l3 -2l-4 1l2 -2l-3 0l9 -3l-6 1l5 -4l-6 -1l3 -2l-3 -3l9 0l2 -2l-4 0l3 -3l3 0l0 1l2 -2l2 1z"},{"id":"368","n":"Iraq","r":"mideast","d":"M1235 261l3 -2l7 0l1 2l3 -1l3 7l5 1l-5 10l4 6l7 3l3 3l-1 4l2 0l0 3l3 3l-8 0l-3 5l-11 -1l-14 -10l-10 -5l-7 -1l-2 -7l13 -6l1 -10z"},{"id":"328","n":"Guyana","r":"samerica","d":"M663 438l-4 -4l1 -5l5 -1l-2 -3l5 -4l-1 -2l4 3l4 4l-1 5l2 -3l6 4l0 6l-4 2l-1 4l9 12l-4 0l-9 4l-2 -1l-4 -7l2 -7l-1 -3l-2 -1l0 -3z"},{"id":"834","n":"Tanzania","r":"africa","d":"M1183 519l-11 -5l-8 -12l-1 -11l3 0l5 -7l-2 -2l3 -3l-2 -6l19 -1l20 12l0 2l9 7l-2 7l4 6l-2 8l3 8l4 3l-2 1l-15 6l-14 -1l-3 -10z"},{"id":"591","n":"Panama","r":"namerica","d":"M570 419l1 3l-2 3l-1 -1l-1 3l-3 -5l2 -2l2 1l-7 -4l-8 4l2 4l-3 2l-2 -4l-1 1l-3 -3l-5 -1l-1 2l-1 -2l1 -7l4 4l1 -1l3 2l12 -4z"},{"id":"688","n":"Serbia","r":"europe_w","d":"M1126 221l-2 2l3 4l-2 2l0 3l-5 0l1 -2l-5 -4l-3 3l-6 -4l1 -1l-1 -2l2 0l-3 -2l1 -3l-1 0l2 -2l-3 -3l7 -2l7 6l0 2l7 1z"},{"id":"384","n":"Côte d'Ivoire","r":"africa","d":"M956 410l2 -1l3 1l4 -3l1 3l3 -1l5 4l8 -1l3 2l1 7l-4 9l2 8l-13 0l-13 4l1 -8l-7 -3l2 -3l-1 -3l3 -3l-2 -2l3 0l-2 -6z"},{"id":"887","n":"Yemen","r":"mideast","d":"M1295 374l-4 2l-1 4l-3 1l-13 4l-4 4l-26 8l-2 -1l-5 -14l4 -12l19 1l2 2l6 -7l7 -3l14 -2zM1299 396l4 1l-5 1l-2 -1z"},{"id":"031","n":"Azerbaijan","r":"mideast","d":"M1249 246l5 1l2 4zM1271 253l-4 -2l1 -3l-1 -2l-9 5l0 -4l-5 -2l2 -2l-5 -6l9 1l0 -1l-2 -2l1 -1l8 4l4 -3l10 8l-5 0z"},{"id":"642","n":"Romania","r":"europe_w","d":"M1157 214l8 1l-1 3l-3 -1l-2 7l-9 -3l-8 3l-15 -1l1 -1l-3 -2l1 -1l-7 -1l0 -2l-7 -5l5 -1l5 -7l7 -3l9 2l10 -3l8 7z"},{"id":"512","n":"Oman","r":"mideast","d":"M1295 374l-6 -13l16 -5l4 -12l-2 -5l1 -5l3 -1l-1 -4l3 -1l4 5l10 3l5 7l-7 10l-2 -1l-2 2l0 7l-5 1l-3 5l-5 1l-2 4z"},{"id":"112","n":"Belarus","r":"europe_n","d":"M1176 177l-5 1l-1 4l-27 -4l-12 2l0 -2l-2 -2l4 -2l-3 -7l13 -1l0 -4l6 -2l-2 -1l1 -2l8 -2l16 3l-1 4l5 6l6 2l-8 2z"},{"id":"706","n":"Somalia","r":"africa","d":"M1231 476l-3 -4l0 -21l5 -7l9 -4l8 -1l17 -17l5 -8l0 -10l10 -4l3 1l-1 8l1 0l-2 0l-1 5l-15 28l-11 11l-15 10z"},{"id":"072","n":"Botswana","r":"africa","d":"M1140 566l5 9l9 6l2 5l7 4l-13 8l-1 3l-5 3l-3 6l-6 0l-6 -3l-8 9l-6 0l1 -5l-5 -7l0 -15l6 0l0 -21l12 -1l2 2z"},{"id":"040","n":"Austria","r":"europe_w","d":"M1053 204l1 -2l3 2l11 -2l4 1l-1 -4l6 -3l5 1l1 -3l11 2l1 4l0 2l-4 0l2 1l-2 3l-2 1l-8 2l-12 -2l-1 -2l-12 1z"},{"id":"454","n":"Malawi","r":"africa","d":"M1184 545l-2 -3l1 -5l3 -2l-1 -1l0 -7l2 -2l-4 -6l6 0l3 3l2 9l-3 3l1 7l7 8l0 6l-3 2l-1 5l-5 -7l2 -7l-5 0z"},{"id":"818","n":"Egypt","r":"africa","d":"M1205 344l-66 0l-1 -51l2 -2l4 0l18 4l11 -4l4 0l1 3l12 -1l4 10l-4 9l-5 -4l-4 -8l-1 2l16 29l3 3l-2 1l1 4z"},{"id":"686","n":"Senegal","r":"africa","d":"M932 384l5 13l-5 1l-8 -2l-17 2l2 -1l-2 0l1 -3l8 -3l5 2l2 -1l-7 -2l-8 1l0 -2l-5 -4l3 -3l4 -7l7 -1l8 3z"},{"id":"404","n":"Kenya","r":"africa","d":"M1188 472l1 -6l5 -9l-5 -14l7 -7l3 1l1 5l5 0l7 4l7 1l7 -4l7 2l-5 6l0 21l3 4l-8 6l-4 10l-9 -5l-1 -3z"},{"id":"788","n":"Tunisia","r":"africa","d":"M1064 282l0 5l-7 4l0 5l-4 3l-3 -11l-4 -2l-4 -7l4 -5l0 -10l2 -3l6 -2l3 1l1 3l3 -2l-3 5l4 5l-6 6z"},{"id":"854","n":"Burkina Faso","r":"africa","d":"M1005 406l-21 0l1 8l-3 -2l-8 1l-5 -4l2 -8l4 -3l2 -5l4 0l5 -5l2 0l8 -5l5 1l1 5l5 3l-2 2l7 3l1 5z"},{"id":"620","n":"Portugal","r":"europe_w","d":"M951 234l12 0l2 2l-3 3l-1 7l-3 0l3 4l-2 3l2 2l-2 2l0 3l-3 1l-6 0l2 -8l-3 -1l2 -2l-4 1l5 -11z"},{"id":"716","n":"Zimbabwe","r":"africa","d":"M1174 591l-11 -1l-7 -4l-2 -5l-9 -6l-5 -9l10 0l5 -5l5 -2l1 -4l4 -1l18 6l0 9l-1 3l1 6l-3 7z"},{"id":"233","n":"Estonia","r":"europe_n","d":"M1152 147l-12 -3l-5 1l1 -3l-4 0l-1 -4l11 -3l14 1l-4 4l2 5zM1126 141l4 1l-8 3l1 -1l-2 -2z"},{"id":"410","n":"South Korea","r":"korea","d":"M1704 257l2 -3l5 0l2 -2l6 9l1 6l-2 4l-8 1l-3 3l0 -1l-4 2l-1 -5l2 -4l-1 -4l-2 -1l4 -1z"},{"id":"600","n":"Paraguay","r":"samerica","d":"M677 579l2 4l-1 6l12 2l2 9l7 0l-3 14l-6 5l-16 -1l6 -11l-19 -8l-9 -9l5 -14l15 -2l5 3z"},{"id":"268","n":"Georgia","r":"mideast","d":"M1241 238l-3 -2l-7 0l1 -3l-2 -3l-8 -5l16 2l5 3l6 -1l5 2l0 1l4 2l-1 1l2 2l0 1l-7 -2z"},{"id":"192","n":"Cuba","r":"namerica","d":"M545 338l12 2l31 15l-20 1l4 -3l-1 -1l-5 -1l-3 -4l-18 -4l-1 -1l1 -1l-5 0l-11 4l4 -4z"},{"id":"740","n":"Suriname","r":"samerica","d":"M699 437l-1 5l2 5l-2 6l-9 0l0 3l-4 -1l-3 -7l-4 -4l0 -4l4 -1l2 -6l5 2l1 -1l8 0l2 0z"},{"id":"232","n":"Eritrea","r":"africa","d":"M1203 387l-1 -4l4 -11l8 -5l7 16l0 -2l8 4l11 11l-5 1l-12 -11l-9 1l-4 -3l-1 4l-2 -2z"},{"id":"116","n":"Cambodia","r":"seasia","d":"M1597 385l0 13l-9 4l2 5l-6 -1l-4 3l-5 -1l0 -3l-2 1l-5 -15l4 -4l10 0l7 2l1 -3l4 1z"},{"id":"100","n":"Bulgaria","r":"europe_w","d":"M1156 234l-8 0l-4 3l-8 -1l-9 1l1 -2l-4 -3l4 -5l-4 -5l2 -1l1 2l15 1l8 -3l9 3l-6 7z"},{"id":"428","n":"Latvia","r":"europe_n","d":"M1148 157l-10 -4l-15 0l-6 2l0 -3l4 -5l4 -1l4 4l4 0l2 -1l0 -4l5 -1l15 4l-1 3l2 4z"},{"id":"288","n":"Ghana","r":"africa","d":"M1000 405l0 2l2 2l-1 5l2 0l-1 4l2 2l-1 9l4 4l-18 7l-6 -2l2 -2l-3 -7l4 -8l-2 -15z"},{"id":"760","n":"Syria","r":"mideast","d":"M1199 267l5 -2l0 -3l15 1l7 -2l9 0l-6 4l-1 10l-23 12l-6 -2l1 -6l3 -2l-1 -3l-2 0z"},{"id":"191","n":"Croatia","r":"europe_w","d":"M1075 214l10 0l2 -4l4 -2l8 4l6 -1l3 5l-3 1l-17 -1l-1 2l11 10l-9 -3l-8 -10l-4 3z"},{"id":"558","n":"Nicaragua","r":"namerica","d":"M538 383l-1 1l1 3l-2 11l0 -2l-1 1l0 10l-11 -2l-11 -10l4 -1l1 -4l4 -1l2 1l5 -6z"},{"id":"732","n":"W. Sahara","r":"africa","d":"M952 313l0 9l-19 0l0 14l-6 4l1 8l-22 0l-1 3l1 -3l12 -1l5 -12l8 -6l6 -12l14 -1z"},{"id":"238","n":"Falkland Is.","r":"samerica","d":"M673 752l3 1l2 -1l1 2l-10 3zM665 753l6 -1l-7 5l-3 -1l4 -2l-2 0l2 0l-1 -2z"},{"id":"340","n":"Honduras","r":"namerica","d":"M538 383l-10 2l-4 5l-2 -1l-4 1l-2 4l-4 -2l0 -3l-4 1l-4 -3l1 -4l8 -5l15 0z"},{"id":"320","n":"Guatemala","r":"namerica","d":"M488 386l2 -9l8 0l0 -1l-6 -5l2 0l1 -3l10 0l-1 10l6 1l-5 4l0 3l-6 4l-7 -1z"},{"id":"800","n":"Uganda","r":"africa","d":"M1188 472l-17 0l-7 2l2 -12l8 -7l-3 -2l1 -7l7 1l7 -1l3 -3l2 3l3 11l-5 9z"},{"id":"756","n":"Switzerland","r":"europe_w","d":"M1053 203l0 2l5 1l-2 4l-4 -2l-2 4l-3 -3l-4 3l-4 0l-1 -3l-5 1l6 -7l9 -2z"},{"id":"528","n":"Netherlands","r":"europe_w","d":"M1033 185l-5 -4l-9 -1l5 1l-2 -2l4 -6l12 -3l2 1l-3 4l2 1l-2 2l-4 1l1 2z"},{"id":"056","n":"Belgium","r":"europe_w","d":"M1023 181l9 2l-1 1l4 3l-3 2l0 2l-5 -1l0 -2l-4 1l-1 -2l-8 -3l0 -1l4 -2z"},{"id":"440","n":"Lithuania","r":"europe_n","d":"M1126 165l-1 -4l-7 -1l-1 -5l3 -1l18 -1l10 4l-1 2l2 1l-5 2l-1 4l-12 1z"},{"id":"203","n":"Czechia","r":"europe_w","d":"M1105 192l-11 5l-11 -3l-4 3l-9 -5l-3 -5l16 -4l8 2l-1 2l2 1l2 -1l4 0z"},{"id":"858","n":"Uruguay","r":"samerica","d":"M703 654l-2 4l-6 3l-17 -3l-3 -4l5 -19l4 -1l5 5l2 -1l10 7l4 4l-2 2z"},{"id":"768","n":"Togo","r":"africa","d":"M1005 406l-1 3l3 2l2 5l1 16l-3 1l-4 -4l0 -15l-2 0l1 -5l-3 -2l1 -2z"},{"id":"188","n":"Costa Rica","r":"namerica","d":"M541 413l-2 1l1 8l-12 -12l-2 0l2 2l-1 1l-3 -1l-1 -6l2 -1l9 2l1 -1z"},{"id":"090","n":"Solomon Is.","r":"oceania","d":"M1876 512l1 3l-4 -2l2 -2zM1887 518l6 3l-5 0zM1893 513l3 7l-3 -4z"},{"id":"348","n":"Hungary","r":"europe_w","d":"M1123 198l4 2l-12 10l-16 2l-10 -6l4 -3l-2 -1l4 0l0 -2l9 1l10 -4z"},{"id":"051","n":"Armenia","r":"mideast","d":"M1249 246l-6 -2l-2 -6l9 -1l3 3l-1 1l3 2l-2 2l5 2l0 4l-2 0l-2 -4z"},{"id":"694","n":"Sierra Leone","r":"africa","d":"M943 420l-7 8l-8 -5l-2 -3l2 -1l-1 0l-1 -3l5 -4l6 -1l4 4l-1 5z"},{"id":"332","n":"Haiti","r":"namerica","d":"M601 357l1 3l-2 3l1 3l-11 0l-4 -2l2 -1l10 0l-3 -2l1 -2l-3 -3z"},{"id":"070","n":"Bosnia and Herz.","r":"europe_w","d":"M1107 225l-4 3l0 2l-5 -2l-11 -10l1 -2l19 1l-1 3l3 2l-2 0l1 2z"},{"id":"524","n":"Nepal","r":"india","d":"M1489 312l0 8l-4 0l-12 -2l-6 -4l-7 0l-15 -8l3 -6l7 -2l23 14z"},{"id":"624","n":"Guinea-Bissau","r":"africa","d":"M907 398l17 -2l-1 3l1 2l-6 2l-2 3l-2 -3l2 -1l-2 0l2 -2l-5 1z"},{"id":"204","n":"Benin","r":"africa","d":"M1009 432l0 -16l-5 -9l4 -4l3 0l2 -4l3 -1l4 4l1 6l-6 8l0 15z"},{"id":"784","n":"United Arab Emirates","r":"mideast","d":"M1313 324l0 4l-3 1l1 4l-3 1l-2 7l-14 -2l-5 -6l12 0l13 -11z"},{"id":"703","n":"Slovakia","r":"europe_w","d":"M1125 194l-2 4l-9 -1l-10 4l-6 0l-4 -3l1 -3l13 -4l2 2l9 -1z"},{"id":"376","n":"Israel","r":"mideast","d":"M1199 281l-1 6l-2 -1l-2 2l2 2l-2 2l3 0l-3 11l-4 -10l5 -10z"},{"id":"242","n":"Fiji","r":"oceania","d":"M1999 557l-1 2l1 0l0 1l-7 0l7 -3zM1990 563l3 4l-8 0l1 -3z"},{"id":"214","n":"Dominican Rep.","r":"namerica","d":"M601 366l-1 -3l2 -7l9 1l2 2l2 1l-2 0l7 3l-2 2l-13 0l-2 4z"},{"id":"144","n":"Sri Lanka","r":"india","d":"M1444 412l4 3l7 11l-1 5l-6 2l-3 -1l-1 -3l-1 -8l2 -8l2 1z"},{"id":"430","n":"Liberia","r":"africa","d":"M936 428l7 -8l3 0l1 5l4 1l1 -2l2 3l-2 4l7 3l-1 8l-9 -3z"},{"id":"414","n":"Kuwait","r":"mideast","d":"M1269 308l-4 0l-1 -2l-5 -1l3 -5l3 0l2 2l-2 1l2 1z"},{"id":"270","n":"Gambia","r":"africa","d":"M908 391l8 -1l7 2l-2 1l-5 -2l-9 3l0 -2l7 0l-5 1z"},{"id":"","n":"Somaliland","r":"africa","d":"M1272 404l0 10l-5 8l-6 0l-16 -5l-8 -9l3 -5l7 6z"},{"id":"498","n":"Moldova","r":"europe_w","d":"M1148 199l5 -2l9 3l0 3l5 6l-6 0l0 2l-4 3l-1 -8z"},{"id":"400","n":"Jordan","r":"mideast","d":"M1199 285l6 2l10 -6l3 7l-13 4l6 5l-11 8l-6 -1z"},{"id":"108","n":"Burundi","r":"africa","d":"M1170 480l-1 3l2 2l-5 6l-3 0l-2 -10l4 1l1 -2z"},{"id":"262","n":"Djibouti","r":"africa","d":"M1240 403l-2 3l-6 0l0 -4l4 -5l4 -1l1 3l-5 3z"},{"id":"008","n":"Albania","r":"greece","d":"M1107 234l2 -4l5 2l0 5l3 4l-5 5l-5 -4l2 -7z"},{"id":"705","n":"Slovenia","r":"europe_w","d":"M1092 208l-5 2l-2 4l-9 0l1 -1l-3 -3l15 -4z"},{"id":"158","n":"Taiwan","r":"asia","d":"M1672 341l-1 4l-4 -7l0 -3l5 -7l4 -2l1 2z"},{"id":"748","n":"eSwatini","r":"africa","d":"M1177 611l1 7l-5 -1l-2 -2l2 -4l1 -1z"},{"id":"064","n":"Bhutan","r":"india","d":"M1509 312l3 3l-1 2l-12 1l-6 -2l7 -7z"},{"id":"548","n":"Vanuatu","r":"oceania","d":"M1926 549l1 2l1 -1l0 3l-2 -1l-1 -3z"},{"id":"499","n":"Montenegro","r":"europe_w","d":"M1107 225l6 4l-4 1l-2 4l-5 -4l1 -2z"},{"id":"807","n":"Macedonia","r":"europe_w","d":"M1120 232l4 -1l3 2l0 4l-12 2l-1 -5z"},{"id":"","n":"Kosovo","r":"europe_w","d":"M1113 229l3 -3l5 4l-1 2l-6 2l-3 -4z"},{"id":"275","n":"Palestine","r":"mideast","d":"M1198 287l-1 5l-3 0l2 -2l-2 0l1 -4z"},{"id":"646","n":"Rwanda","r":"africa","d":"M1164 474l5 -1l2 7l-5 0l-1 2l-4 0z"},{"id":"222","n":"El Salvador","r":"namerica","d":"M504 387l4 3l5 0l-1 3l-4 0l-9 -3z"},{"id":"084","n":"Belize","r":"namerica","d":"M505 368l4 -4l2 1l-2 9l-3 4l-2 0z"},{"id":"780","n":"Trinidad and Tobago","r":"namerica","d":"M661 410l-5 1l2 -1l-1 -3l4 -1z"},{"id":"634","n":"Qatar","r":"mideast","d":"M1285 330l-2 0l-1 -4l3 -5l2 6z"},{"id":"442","n":"Luxembourg","r":"europe_w","d":"M1034 188l2 2l-1 2l-3 -1l0 -2z"},{"id":"426","n":"Lesotho","r":"africa","d":"M1160 634l-6 3l-4 -6l9 -6l4 4z"},{"id":"630","n":"Puerto Rico","r":"namerica","d":"M633 364l2 1l-2 2l-6 0l0 -3z"},{"id":"226","n":"Eq. Guinea","r":"africa","d":"M1063 455l0 6l-11 -1l2 -6z"},{"id":"196","n":"Cyprus","r":"greece","d":"M1182 271l7 1l-6 3l-3 -3z"},{"id":"044","n":"Bahamas","r":"namerica","d":"M568 329l-2 3l-2 -2l2 -3z"},{"id":"388","n":"Jamaica","r":"namerica","d":"M571 364l6 3l-9 0l-3 -2z"},{"id":"422","n":"Lebanon","r":"mideast","d":"M1200 274l2 0l1 3l-8 6z"},{"id":"540","n":"New Caledonia","r":"oceania","d":"M1912 579l16 12l-12 -6z"},{"id":"","n":"N. Cyprus","r":"greece","d":"M1189 272l-7 -1l10 -2z"},{"id":"626","n":"Timor-Leste","r":"seasia","d":"M1695 520l0 -5l12 -2z"},{"id":"096","n":"Brunei","r":"seasia","d":"M1639 439l-2 5l-3 -3z"},{"id":"239","n":"S. Geo. and the Is.","r":"samerica","d":"M794 767l7 4l-12 -4z"},{"id":"480","n":"Mauritius","r":"africa","d":"M1320 580l-2 0l2 -2z"},{"id":"174","n":"Comoros","r":"africa","d":"M1247 534l0 1l-1 -1z"},{"id":"833","n":"Isle of Man","r":"britain","d":"M975 166l-2 0l2 -2z"},{"id":"248","n":"Åland","r":"europe_n","d":"M1111 131l1 1l-2 1z"},{"id":"234","n":"Faeroe Is.","r":"europe_n","d":"M963 121l0 1l-3 -1z"},{"id":"132","n":"Cabo Verde","r":"africa","d":"M870 383l-2 1l0 -2z"},{"id":"882","n":"Samoa","r":"oceania","d":"M43 541l0 2l-3 -1z"}],"grat":"M0 400.0H1000M0 316.7H1000M0 233.3H1000M0 150.0H1000M0 66.7H1000M0.0 0V400M83.3 0V400M166.7 0V400M250.0 0V400M333.3 0V400M416.7 0V400M500.0 0V400M583.3 0V400M666.7 0V400M750.0 0V400M833.3 0V400M916.7 0V400M1000.0 0V400","pac":"M109.2 166.7L107.1 173.2L100.9 179.3L91.1 184.6L78.2 188.6L63.3 191.1L47.2 192.0L31.2 191.1L16.2 188.6L3.4 184.6L-6.5 179.3L-12.7 173.2L-14.8 166.7L-12.7 160.1L-6.5 154.0L3.4 148.8L16.2 144.8L31.2 142.2L47.2 141.4L63.3 142.2L78.2 144.8L91.1 148.8L100.9 154.0L107.1 160.1L109.2 166.7Z","meta":{"source":"Natural Earth 1:50m — world-atlas@2 countries-50m","countries":183,"points":7821}};</script>
@@ -13612,14 +13865,17 @@ function portraitSVG(fig, fit, alt) {
   /* ── ♾️ 두 개의 계정(세이브) ──
      ?vip=hs2026          → 무한 계정 (뽑기권·유물 뽑기·레벨업·스킬 강화 전부 무료)
      ?mode=normal · 기본  → 일반 계정 (모든 재화 정상 소모)
+     ?mode=fresh          → 생처음 계정 (뽑기권 무한 없음 · 완전히 새 저장 키 · 0부터 시작)
      저장 키가 서로 달라 같은 폰에서 오가도 기록이 섞이지 않는다.
      무한 모드는 오직 ?vip=hs2026 로만 켜지고, 기본 주소에서는 절대 켜지지 않는다. */
-  var ACCOUNT = params.get('vip') === 'hs2026' ? 'vip' : 'normal';
+  var MODE = (params.get('mode') || '').toLowerCase();
+  var ACCOUNT = params.get('vip') === 'hs2026' ? 'vip' : (MODE === 'fresh' ? 'fresh' : 'normal');
   var VIP = ACCOUNT === 'vip';
   var KEY_NORMAL = 'legacy.v1';
   var KEY_VIP = 'legacy.vip.state.v1';
-  KEY = VIP ? KEY_VIP : KEY_NORMAL;
-  var AVA_KEY = VIP ? 'legacy.vip.avatar.v1' : 'legacy.avatar';
+  var KEY_FRESH = 'legacy.fresh.v1';
+  KEY = ACCOUNT === 'vip' ? KEY_VIP : (ACCOUNT === 'fresh' ? KEY_FRESH : KEY_NORMAL);
+  var AVA_KEY = ACCOUNT === 'vip' ? 'legacy.vip.avatar.v1' : (ACCOUNT === 'fresh' ? 'legacy.fresh.avatar.v1' : 'legacy.avatar');
   /* 예전에 켜 두었던 전역 무한 플래그는 지운다 (계정별로만 동작) */
   try { localStorage.removeItem('legacy.inf.vip'); } catch (e) {}
   var infOn = VIP;
@@ -13915,21 +14171,77 @@ function portraitSVG(fig, fit, alt) {
   function thumbUrl(u, w) { return wikiThumb(u, w || PH_CARD); }
   function bigUrl(u) { return wikiThumb(u, 960); }
 
+  /* ── 사진 후보 사슬 — 썸네일이 429 등으로 막히면 다른 폭 → 원본 순서로 다시 시도한다 ── */
+  function photoChain(u, big) {
+    if (!u) return [];
+    if (u.indexOf('wikimedia.org') < 0) return [u];
+    var out = [], widths = big ? [960, 500, 330] : [PH_CARD, 500, 330, 960], i, t;
+    for (i = 0; i < widths.length; i++) {
+      t = wikiThumb(u, widths[i]);
+      if (t && out.indexOf(t) < 0) out.push(t);
+    }
+    if (out.indexOf(u) < 0) out.push(u);
+    return out;
+  }
+  /* 사진이 실패하면 다음 후보로 넘어가고, 전부 실패했을 때만 초상화 그림을 드러낸다 */
+  function phFail(img) {
+    if (!img) return;
+    var chain = [];
+    try { chain = JSON.parse(img.getAttribute('data-phs') || '[]'); } catch (e) { chain = []; }
+    var i = parseInt(img.getAttribute('data-pi') || '0', 10) + 1;
+    if (chain && chain[i]) {
+      img.setAttribute('data-pi', String(i));
+      img.src = chain[i];
+      return;
+    }
+    img.style.display = 'none';
+    var box = img.parentNode;
+    var fb = (box && box.querySelector) ? box.querySelector('.ph-fallback') : null;
+    if (fb) { fb.hidden = false; fb.classList.add('on'); }
+  }
+  window.LegacyPhFail = phFail;
+
+  /* ── 사진 미리 받기 — 뽑기 결과가 정해지는 순간 전원의 실제 사진을 캐시에 올린다 ── */
+  var PH_PRE = {};
+  function phLoad(chain, i) {
+    if (!chain || i >= chain.length) return;
+    var src = chain[i];
+    if (!src || PH_PRE[src]) return;
+    PH_PRE[src] = 1;
+    var im = new Image();
+    im.onload = function () { try { if (im.decode) im.decode(); } catch (e) {} };
+    im.onerror = function () { phLoad(chain, i + 1); };
+    im.src = src;
+  }
+  function preloadPhoto(u, big) { if (u) phLoad(photoChain(u, big), 0); }
+  function preloadFigPhotos(arr, big) {
+    (arr || []).forEach(function (f) {
+      if (!f) return;
+      var u = photoSrc(f);
+      preloadPhoto(u, false);
+      if (big) preloadPhoto(u, true);
+    });
+  }
+
   function photoHtml(f, opts) {
     opts = opts || {};
     var alt = opts.alt || (f.name + ' 사진');
     var img = '', bg = '', pu = photoSrc(f);
-    var pth = pu ? (opts.big ? bigUrl(pu) : thumbUrl(pu)) : '';
     if (pu) {
-      /* 카드 썸네일이 실패하면 원본으로 한 번 더, 그것도 실패하면 초상화 그림을 남긴다 */
-      img = '<img class="ph-img" src="' + pth + '" alt="' + esc(alt) + '"' +
-        ' data-orig="' + esc(pu) + '"' +
+      var chain = photoChain(pu, !!opts.big);
+      var first = chain[0] || pu;
+      var attrs = '';
+      try { attrs = esc(JSON.stringify(chain)); } catch (e) { attrs = ''; }
+      img = '<img class="ph-img" src="' + esc(first) + '" alt="' + esc(alt) + '"' +
+        ' data-phs="' + attrs + '" data-pi="0"' +
         ' loading="' + (opts.eager ? 'eager' : 'lazy') + '" decoding="async"' +
-        ' onerror="if(this.dataset.fb){this.style.display=&#39;none&#39;}else{this.dataset.fb=1;this.src=this.dataset.orig;}">';
-      /* 배경 블리드는 큰 초상화에서만 — 카드에서는 같은 사진을 한 번 더 받고 블러까지 걸렸다 */
+        ' onerror="LegacyPhFail(this)">';
+      /* 배경 블러는 큰 초상화에서만 — 카드에서는 같은 사진을 한 번 더 받지 않는다 */
       if (opts.bg) bg = '<span class="ph-bg" aria-hidden="true" style="background-image:url(&quot;' + esc(opts.big ? bigUrl(pu) : thumbUrl(pu)) + '&quot;)"></span>';
     }
-    return '<span class="ph-svg">' + portraitSVG(f, opts.fit, alt) + '</span>' + bg + img;
+    /* 사진이 있으면 초상화 그림을 먼저 깔지 않는다 — 로딩 중에는 등급색 프레임만 보이고
+       (처음부터 실제 역사 사진) 사진이 끝내 실패했을 때만 그림이 드러난다. */
+    return '<span class="ph-svg ph-fallback"' + (pu ? ' hidden' : '') + '>' + portraitSVG(f, opts.fit, alt) + '</span>' + bg + img;
   }
 
   function rumorCards(f) {
@@ -14033,7 +14345,13 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── archive · 내가 배운 인물 ── */
   var arcQuery = '';
-  var arcLimit = 36;   /* 미학습 인물은 한 번에 36명씩 (453인 도감 성능) */
+  /* 1,000명 도감 모발 렉 대책 — 한 번에 40장만 DOM 에 올리고, 바닥에 닿으면 40장씩 더 그린다 */
+  var ARC_STEP = 40;
+  var ARC_ITEMS = [];
+  var ARC_SHOWN = 0;
+  var ARC_FNS = {};
+  var ARC_OBS = null;
+  var arcBusy = false;
   function figMatches(f, q) {
     if (!q) return true;
     var hay = (f.name + ' ' + (f.en || '') + ' ' + f.era + ' ' + f.birthplace + ' ' + (f.title || '') + ' ' + (f.flag || '')).toLowerCase();
@@ -14074,8 +14392,6 @@ function portraitSVG(fig, fit, alt) {
     var mLearned = learnedFigs.filter(byGrade);
     var mMet = metFigs.filter(byGrade);
     var mLockedAll = lockedFigs.filter(byGrade);
-    var mLocked = q ? mLockedAll : mLockedAll.slice(0, arcLimit);
-    var moreLocked = q ? 0 : mLockedAll.length - mLocked.length;
 
 
     var learnedCard = function (f) {
@@ -14091,8 +14407,6 @@ function portraitSVG(fig, fit, alt) {
         '<span class="body"><b>' + esc(f.name) + '</b><p>' + esc(f.title) + '</p>' + arcStatLine(f) +
         '<span class="when">' + (d ? d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate()) : '합성 재료 · 도감 유지') + (m.n > 1 ? ' · ' + m.n + '회' : '') + (S.ratings[f.id] ? '<span class="rt">★' + S.ratings[f.id] + '</span>' : '') + '</span>' + evo + '</span></button>';
     };
-    var learnedHtml = mLearned.map(learnedCard).join('');
-
     /* 카드로만 만난 인물 — 배운 인물 탭에는 절대 들어가지 않고 '미학습' 탭에만 보인다 */
     var metCard = function (f) {
       var gi = GRADE_INFO[f.grade] || GRADE_INFO.basic;
@@ -14120,8 +14434,6 @@ function portraitSVG(fig, fit, alt) {
         '<span class="ph"><span class="lock-ph"><span>?</span></span></span>' +
         '<span class="body"><b>???</b><p>아직 배우지 않은 인물</p><span class="when">LOCKED</span></span></div>';
     };
-    var lockedHtml = mLocked.map(lockCard).join('');
-    var metHtml = mMet.map(metCard).join('');
 
     var emptyAll = '<div class="arc-empty" style="grid-column:1/-1">아직 배운 인물이 없습니다.<br>오늘의 인물을 읽고 체크하면 이름과 한 줄 소개가 이곳에 남습니다.</div>';
     var gradeLabel = gradeFilter === 'all' ? '' : (((GRADE_INFO[gradeFilter] || {}).name || '') + ' 등급에서 ');
@@ -14132,28 +14444,33 @@ function portraitSVG(fig, fit, alt) {
       ? '<div class="arc-empty" style="grid-column:1/-1">🔍 검색 결과가 없습니다.<br>인물 이름·시대·나라로 다시 찾아보세요.</div>'
       : '<div class="arc-empty" style="grid-column:1/-1">' + gradeLabel + '미학습 인물이 없습니다.</div>';
 
-    var moreHtml = moreLocked > 0
-      ? '<button class="arc-card locked more" type="button" data-arclimit="1"><span class="body" style="text-align:center;padding:18px 8px">' +
-        '<b style="font-size:15px;color:#6f7885">+' + moreLocked + '</b><p>미학습 인물 더 보기</p></span></button>'
-      : '';
-    if (shelfView !== 'mine') {
+    var gridLive = arcGridOpen();
+    if (shelfView !== 'mine' && gridLive) {
       if (shelfView === 'locked') {
-        /* 미학습 탭: 카드로 만난 인물 + 아직 보지 못한 인물만 */
-        $('#arcGrid').innerHTML = ((mMet.length + mLocked.length) ? '' : emptyLocked) + metHtml + lockedHtml + moreHtml;
+        /* 미학습 탭: 카드로 만난 인물 + 아직 보지 못한 인물만 — 40장씩 그린다 */
+        arcPaintList(mMet, mLockedAll, emptyLocked, { met: metCard, lock: lockCard });
       } else {
         /* 배운 인물 탭: 직접 체크한 인물만 (미학습·미보유 인물은 절대 섞지 않는다) */
-        $('#arcGrid').innerHTML = (mLearned.length ? '' : emptyLearned) + learnedHtml;
+        arcPaintLearned(mLearned, emptyLearned, learnedCard);
       }
+    } else if (shelfView === 'mine') {
+      ARC_ITEMS = [];
+      arcStopObs();
     }
     var pageGrid = $('#pageArcGrid');
     if (pageGrid) {
       var moreLink = unseenTotal > 0
         ? '<button class="arc-more-link" type="button" data-arc-locked="1">아직 배우지 않은 인물 ' + unseenTotal + '명 둘러보기 →</button>'
         : '';
-      pageGrid.innerHTML = (learnedFigs.length ? '' : emptyAll) + learnedFigs.map(learnedCard).join('') + moreLink;
+      /* 첫 화면은 24장만 — 나머지는 도감 창에서 40장씩 이어 본다 (모바일 렉 방지) */
+      var pshown = learnedFigs.slice(0, 24);
+      var pMore = learnedFigs.length > pshown.length
+        ? '<button class="arc-more-link" type="button" data-arc-open="1">도감에서 전체 ' + learnedFigs.length + '명 보기 →</button>'
+        : '';
+      pageGrid.innerHTML = (learnedFigs.length ? '' : emptyAll) + pshown.map(learnedCard).join('') + pMore + moreLink;
     }
     $('#arcCount').textContent = (shelfView === 'locked'
-      ? '미학습 인물 ' + unseenTotal + ' / ' + N + (metFigs.length ? ' · 카드 보유 ' + metFigs.length : '') + (q ? ' · 🔍 "' + arcQuery + '" ' + (mMet.length + mLocked.length) + '명' : '')
+      ? '미학습 인물 ' + unseenTotal + ' / ' + N + (metFigs.length ? ' · 카드 보유 ' + metFigs.length : '') + (q ? ' · 🔍 "' + arcQuery + '" ' + (mMet.length + mLockedAll.length) + '명' : '')
       : '배운 인물 ' + learnedTotal + ' / ' + N + (q ? ' · 🔍 "' + arcQuery + '" ' + mLearned.length + '명' : ''));
     if ($('#pageArcCount')) $('#pageArcCount').textContent = '배운 인물 ' + learnedFigs.length + ' / ' + N;
     renderPageShelves();
@@ -14162,10 +14479,114 @@ function portraitSVG(fig, fit, alt) {
     $('#arcStreak').textContent = sk > 0 ? '연속 ' + sk + '일 기록 중' : '연속 기록 없음';
     $('#arcStreak').classList.toggle('gold', sk > 0);
     renderMyFigures();
+    if (typeof renderArcMile === 'function') renderArcMile();
   }
 
+  /* ── 도감 40장씩 그리기 ──
+     1,000명을 한 번에 DOM 에올리지 않는다. 처음 40장 + 화면에 닿을 만큼만 그리고,
+     바닥 감시(IntersectionObserver)로 40장씩 이어 그린다. 검색·등급 필터도 같은 길로 간다. */
+  function arcGridOpen() {
+    var m = document.getElementById('mArchive');
+    return !!(m && m.classList.contains('open'));
+  }
+  function arcSentinel() { return document.getElementById('arcSentinel'); }
+  function arcStopObs() {
+    if (ARC_OBS) { try { ARC_OBS.disconnect(); } catch (e) {} ARC_OBS = null; }
+  }
+  function arcCardHtmlOf(it) {
+    if (it.kind === 'met') return ARC_FNS.met ? ARC_FNS.met(it.f) : '';
+    if (it.kind === 'lock') return ARC_FNS.lock ? ARC_FNS.lock(it.f) : '';
+    return ARC_FNS.learn ? ARC_FNS.learn(it.f) : '';
+  }
+  function arcAppend() {
+    var grid = document.getElementById('arcGrid');
+    if (!grid) return;
+    var sen = arcSentinel();
+    if (!sen) {
+      sen = document.createElement('div');
+      sen.id = 'arcSentinel';
+      sen.className = 'arc-sentinel';
+      grid.appendChild(sen);
+    }
+    var end = Math.min(ARC_ITEMS.length, ARC_SHOWN + ARC_STEP);
+    var buf = '', i;
+    for (i = ARC_SHOWN; i < end; i++) buf += arcCardHtmlOf(ARC_ITEMS[i]);
+    ARC_SHOWN = end;
+    if (buf) sen.insertAdjacentHTML('beforebegin', buf);
+    if (ARC_SHOWN >= ARC_ITEMS.length) {
+      sen.hidden = true;
+      sen.innerHTML = '';
+      arcStopObs();
+    } else {
+      sen.hidden = false;
+      sen.innerHTML = '<span class="arc-sen-t">' + ARC_SHOWN + ' / ' + ARC_ITEMS.length + ' · 스크롤하면 더 불러옵니다</span>';
+      if (!ARC_OBS) arcWatch();
+    }
+  }
+  /* 화면(±500px)에 닿을 만큼 반복해서 채운다 — 첫 화면은 바로 차고, 나머지는 스크롤에 맡긴다 */
+  function arcFill() {
+    if (arcBusy) return;
+    arcBusy = true;
+    try {
+      for (var guard = 0; guard < 40; guard++) {
+        var sen = arcSentinel();
+        if (!sen || sen.hidden || ARC_SHOWN >= ARC_ITEMS.length) break;
+        var r = sen.getBoundingClientRect();
+        if (r.top > (window.innerHeight + 500)) break;
+        arcAppend();
+      }
+    } catch (e) {}
+    arcBusy = false;
+  }
+  function arcWatch() {
+    var sen = arcSentinel();
+    if (!sen || !window.IntersectionObserver) return;
+    arcStopObs();
+    try {
+      ARC_OBS = new IntersectionObserver(function (rows) {
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i].isIntersecting) { arcAppend(); arcFill(); break; }
+        }
+      }, { root: null, rootMargin: '600px 0px 600px 0px', threshold: 0 });
+      ARC_OBS.observe(sen);
+    } catch (e) { ARC_OBS = null; }
+  }
+  function arcPaintList(metArr, lockArr, emptyHtml, fns) {
+    var grid = document.getElementById('arcGrid');
+    if (!grid) return;
+    arcStopObs();
+    ARC_FNS = fns || {};
+    ARC_ITEMS = [];
+    var i;
+    for (i = 0; i < (metArr || []).length; i++) ARC_ITEMS.push({ kind: 'met', f: metArr[i] });
+    for (i = 0; i < (lockArr || []).length; i++) ARC_ITEMS.push({ kind: 'lock', f: lockArr[i] });
+    ARC_SHOWN = 0;
+    grid.innerHTML = ARC_ITEMS.length ? '' : (emptyHtml || '');
+    if (!ARC_ITEMS.length) return;
+    arcAppend();
+    arcFill();
+  }
+  /* '배운 인물' 탭용 — 학습 카드 목록을 같은 40장 방식으로 */
+  function arcPaintLearned(arr, emptyHtml, fn) {
+    var grid = document.getElementById('arcGrid');
+    if (!grid) return;
+    arcStopObs();
+    ARC_FNS = { learn: fn };
+    ARC_ITEMS = [];
+    for (var i = 0; i < (arr || []).length; i++) ARC_ITEMS.push({ kind: 'learn', f: arr[i] });
+    ARC_SHOWN = 0;
+    grid.innerHTML = ARC_ITEMS.length ? '' : (emptyHtml || '');
+    if (!ARC_ITEMS.length) return;
+    arcAppend();
+    arcFill();
+  }
+  /* 도감 창이 열린 뒤·스크롤할 때 40장을 이어서 채운다 */
+  document.addEventListener('scroll', function () {
+    if (ARC_ITEMS.length && ARC_SHOWN < ARC_ITEMS.length) arcFill();
+  }, true);
+
   /* ── 인물 — 뽑기 · 도감으로 얻은 모든 인물 (각 3줄 소개) ──
-     카드 보유(S.cards) · 학습(S.log) · 한 번이라도 얻었던 인물(S.dexSeen, 합성 재료로 0장이 된 경우)까지 모두 모은다. */
+     카드 보유(S.cards) · 학습(S.log) · 한 번이라도 얻었던 인물(S.dexSeen, 합성 재료로 0장이 된 경우까지 모두 모은다. */
   var MFS_STEP = 12;
   var mfsLimit = MFS_STEP;
   var mfsQuery = '';
@@ -14385,12 +14806,28 @@ function portraitSVG(fig, fit, alt) {
     openModal('#mReader');
   }
 
+  /* 성능 잠금 — 뽑기 연출·카드팩 창·도감 창이 덮고 있는 동안 뒤쪽 페이지는 그리지 않는다 */
+  function perfSync() {
+    var on = false;
+    try {
+      on = !!(document.querySelector('#pullFx.on') || document.querySelector('#mPack.open') || document.querySelector('#mArchive.open'));
+    } catch (e) { on = false; }
+    document.body.classList.toggle('perf-lock', on);
+  }
+
   /* ── modal helpers ── */
   function openModal(sel) {
     document.querySelectorAll('.modal.open').forEach(function (m) { m.classList.remove('open'); });
     $(sel).classList.add('open');
     document.body.style.overflow = 'hidden';
     dockSync();
+    /* 도감은 창이 실제로 열린 뒤에그린다 — 닫혀 있을 때 1,000장을 그리지 않는다 */
+    if (sel === '#mArchive') {
+      renderArchive();
+      arcFill();
+      if (typeof renderArcMile === 'function') renderArcMile();
+    }
+    if (typeof perfSync === 'function') perfSync();
   }
   /* 확률표·전용 아이템처럼 다른 창 위에 얹혀 열린 창을 닫으면 원래 창으로 돌아온다 */
   var CLOSE_BACK = null;
@@ -14527,6 +14964,8 @@ function portraitSVG(fig, fit, alt) {
   }
 
   function readAvatar() { try { return localStorage.getItem(AVA_KEY) || (VIP ? (localStorage.getItem('legacy.avatar') || '') : ''); } catch (e) { return ''; } }
+  /* 계정 모드 설명 — 프로필·계정 창에서 쓴다 */
+  function acctModeLabel() { return ACCOUNT === 'vip' ? '♾️ 무한 계정' : (ACCOUNT === 'fresh' ? '🌱 생처음 계정' : '👤 일반 계정'); }
   function userName() { return String(S.userName || '').trim(); }
   function userAge() { var a = parseInt(S.userAge, 10); return (isFinite(a) && a >= 1 && a <= 120) ? a : 0; }
   function paintAvatar() {
@@ -15612,13 +16051,15 @@ function portraitSVG(fig, fit, alt) {
   }
 
   function pcardHtml(r, i, seq) {
+    /* 순차 공개 카드는 화면에 바로 뜨므로 사진을 즉시 받는다 */
+    if (r && r.f) preloadPhoto(photoSrc(r.f), false);
     var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
     var rc = gradeRc(gi);
     var stars = starHtml(r.star);
     var label = r.isNew ? '✨ NEW · 처음 얻은 인물' : (r.ready ? '✨ 진화 가능 ' + r.frag + '/' + FRAG_PER_STAR : '+' + r.frag + ' / ' + FRAG_PER_STAR);
     return '<article class="pcard ' + gi.cls + (r.isNew ? ' new' : '') + (isMono(gi) ? ' mono' : '') + (seq ? ' sq-w' : '') + '" style="--rc:' + rc + ';' + (seq ? '' : ' animation-delay:' + (i * 0.09).toFixed(2) + 's') + '">' +
       '<span class="tagline">' + (r.isNew ? '✨ NEW' : gi.name) + '</span>' +
-      '<span class="ph">' + photoHtml(r.f, { fit: 'slice' }) + '</span>' +
+      '<span class="ph">' + photoHtml(r.f, { fit: 'slice', eager: true }) + '</span>' +
       '<span class="pbody"><b class="' + textClsOf(gi) + '">' + esc(r.f.name) + '</b>' +
       '<span class="starline">' + stars + '</span>' +
       '<span>' + esc(label) + '</span></span></article>';
@@ -16028,6 +16469,8 @@ function portraitSVG(fig, fit, alt) {
     pfPaintMute();
     void el.offsetWidth;
     el.classList.add('on');
+    /* 연출이 도는 동안 뒤쪽 페이지(1,000명 DOM)는 페인트를 멈춘다 */
+    if (typeof perfSync === 'function') perfSync();
 
     var machine = el.querySelector('.pf-machine');
     var burst = el.querySelector('.pf-burst');
@@ -16144,6 +16587,7 @@ function portraitSVG(fig, fit, alt) {
       pfReset();
       el.classList.remove('on');
       el.setAttribute('aria-hidden', 'true');
+      if (typeof perfSync === 'function') perfSync();
       setTimeout(function () {
         if (!el.classList.contains('on')) {
           el.hidden = true;
@@ -16151,6 +16595,7 @@ function portraitSVG(fig, fit, alt) {
           el.setAttribute('data-g', 'basic');
           el.style.setProperty('--pi', '0');
         }
+        if (typeof perfSync === 'function') perfSync();
       }, 240);
       var cb = PF_DONE; PF_DONE = null;
       if (cb) cb();
@@ -16527,6 +16972,7 @@ function portraitSVG(fig, fit, alt) {
     SQ.n = data.length;
     SQ.done = done || null;
     SQ.on = true;
+    preloadFigPhotos(data.map(function (r) { return r.f; }), false);
     wrap.innerHTML = data.map(function (r, i) { return pcardHtml(r, i, true); }).join('');
     SQ.cards = Array.prototype.slice.call(wrap.querySelectorAll('.pcard'));
     var mp = $('#mPack');
@@ -16596,9 +17042,11 @@ function portraitSVG(fig, fit, alt) {
         res[li] = pullOne(pickFromGrade('transcendent'));
       }
     }
+    /* 🖼️ 결과가 정해진 즉시 — 뽑힌 인원 전원의 실제 역사 사진을 미리 받아 둔다.
+       룬 코어를 누르는 동안(보통 2~5초) 캐시에 올라가므로 카드·NEW 창이 사진으로 바로 열린다. */
+    preloadFigPhotos(res.map(function (r) { return r.f; }), true);
     saveState();
     renderCollection(); renderGuess();
-
     var news = res.filter(function (r) { return r.isNew; }).length;
     var evos = res.filter(function (r) { return r.ready; });
     var bestR = res[0];
@@ -17624,6 +18072,7 @@ function portraitSVG(fig, fit, alt) {
   }
   function dockSync() {
     document.body.classList.toggle('dock-off', !!document.querySelector('.modal.open'));
+    if (typeof perfSync === 'function') perfSync();
   }
   function dockOpen(what) {
     try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
@@ -17703,7 +18152,6 @@ function portraitSVG(fig, fit, alt) {
   if ($('#arcSearch')) {
     $('#arcSearch').addEventListener('input', function () {
       arcQuery = this.value.trim();
-      arcLimit = 36;
       if ($('#arcSearchClear')) $('#arcSearchClear').hidden = !arcQuery;
       if (shelfView === 'mine') shelfView = 'all';
       renderArchive();
@@ -17744,17 +18192,17 @@ function portraitSVG(fig, fit, alt) {
       if (shelfView !== 'mine') renderArchive();
       return;
     }
-    if (e.target.closest('[data-arc-locked]')) {
-      shelfView = 'locked';
-      gradeFilter = 'all';
-      arcLimit = 36;
+    if (e.target.closest('[data-arc-open]')) {
+      shelfView = 'all';
       renderArchive();
       openModal('#mArchive');
       return;
     }
-    if (e.target.closest('[data-arclimit]')) {
-      arcLimit += 60;
+    if (e.target.closest('[data-arc-locked]')) {
+      shelfView = 'locked';
+      gradeFilter = 'all';
       renderArchive();
+      openModal('#mArchive');
       return;
     }
     var gf = e.target.closest('[data-gf]');
@@ -18245,31 +18693,45 @@ function portraitSVG(fig, fit, alt) {
     var base = location.origin + location.pathname;
     return {
       vip: base + '?vip=hs2026',
-      normal: base + '?mode=normal'
+      normal: base + '?mode=normal',
+      fresh: base + '?mode=fresh'
     };
+  }
+  function acctKind() {
+    if (ACCOUNT === 'vip') return 'vip';
+    if (ACCOUNT === 'fresh') return 'fresh';
+    return 'normal';
   }
   function paintAccount() {
     var chip = document.getElementById('acctChip');
-    if (!chip) return;
-    chip.removeAttribute('hidden');
-    chip.className = 'acct-chip ' + (infNow() ? 'vip' : 'normal');
-    chip.innerHTML = infNow() ? '♾️ 무한 계정' : '👤 일반 계정';
-    chip.title = infNow() ? '무한 계정 · 뽑기권·유물·레벨업·스킬 강화가 모두 무료' : '일반 계정 · 모든 재화가 정상 소모됩니다';
+    var kind = acctKind();
+    if (chip) {
+      chip.removeAttribute('hidden');
+      chip.className = 'acct-chip ' + kind;
+      chip.innerHTML = kind === 'vip' ? '♾️ 무한 계정' : (kind === 'fresh' ? '🌱 생처음 계정' : '👤 일반 계정');
+      chip.title = kind === 'vip' ? '무한 계정 · 뽑기권·유물·레벨업·스킬 강화가 모두 무료'
+        : (kind === 'fresh' ? '생처음 계정 · 뽑기권 무한 없이 0부터 시작하는 새 계정' : '일반 계정 · 모든 재화가 정상 소모됩니다');
+    }
     var box = document.getElementById('acctLinks');
     if (box) {
       var u = acctLinks();
       box.innerHTML =
-        '<a class="acct-card' + (infNow() ? ' on' : '') + '" href="' + esc(u.vip) + '">' +
+        '<a class="acct-card' + (kind === 'vip' ? ' on' : '') + '" href="' + esc(u.vip) + '">' +
         '<span class="ac-ic">♾️</span><b>무한 계정</b>' +
         '<span class="ac-d">뽑기권 · 유물 뽑기 · 레벨업 · 스킬 강화가 모두 <b>무료(∞)</b></span>' +
         '<code>' + esc(u.vip) + '</code>' +
-        (infNow() ? '<em class="ac-now">지금 사용 중</em>' : '<em class="ac-go">이 계정으로 전환 →</em>') + '</a>' +
-        '<a class="acct-card' + (infNow() ? '' : ' on') + '" href="' + esc(u.normal) + '">' +
+        (kind === 'vip' ? '<em class="ac-now">지금 사용 중</em>' : '<em class="ac-go">이 계정으로 전환 →</em>') + '</a>' +
+        '<a class="acct-card' + (kind === 'fresh' ? ' on' : '') + '" href="' + esc(u.fresh) + '">' +
+        '<span class="ac-ic">🌱</span><b>생처음 계정</b>' +
+        '<span class="ac-d">지금까지 만든 업데이트 전부 · <b>뽑기권 무한 없음</b> · 0명부터 새로 시작 <b>(저장 분리)</b></span>' +
+        '<code>' + esc(u.fresh) + '</code>' +
+        (kind === 'fresh' ? '<em class="ac-now">지금 사용 중</em>' : '<em class="ac-go">이 계정으로 전환 →</em>') + '</a>' +
+        '<a class="acct-card' + (kind === 'normal' ? ' on' : '') + '" href="' + esc(u.normal) + '">' +
         '<span class="ac-ic">👤</span><b>일반 계정</b>' +
         '<span class="ac-d">코인 · 뽑기권 · 보석을 실제로 쓰는 <b>정상 모드</b></span>' +
         '<code>' + esc(u.normal) + '</code>' +
-        (infNow() ? '<em class="ac-go">이 계정으로 전환 →</em>' : '<em class="ac-now">지금 사용 중</em>') + '</a>' +
-        '<p class="acct-note">두 계정은 <b>저장 공간이 분리</b>되어 같은 폰에서 오가도 기록이 섞이지 않습니다. 위 주소를 즐겨찾기에 저장해 두세요.</p>';
+        (kind === 'normal' ? '<em class="ac-now">지금 사용 중</em>' : '<em class="ac-go">이 계정으로 전환 →</em>') + '</a>' +
+        '<p class="acct-note">세 계정은 <b>저장 공간이 분리</b>되어 같은 폰에서 오가도 기록이 섞이지 않습니다. 위 주소를 즐겨찾기에 저장해 두세요.</p>';
     }
   }
   function openAcct() {
@@ -18303,6 +18765,628 @@ function portraitSVG(fig, fit, alt) {
   setTimeout(function () { paintAccount(); refreshAchBadge(); }, 0);
 
   /* <<EXT_APP:END>> */
+  /* <<EXT6_APP:START>> 자동 생성 — merge_ext.py 가 관리합니다 */
+  /* ══════════════════════════════════════════════════════════════
+     EXT6 · 🧭 역사 원정 파견 · 🏆 도감 수집 마일스톤 · 🏅 테마 컬렉션
+     merge_ext.py 가 app.js 의 IIFE 안(내보내기 직전)에 넣는다.
+     ══════════════════════════════════════════════════════════════ */
+
+  function x6n(v) { return Number(v || 0).toLocaleString(); }
+  function x6el(sel) { return document.querySelector(sel); }
+  function x6fig(id) { return byId(id); }
+
+  /* ─────────────────────────────────────────────
+     1) 🧭 역사 원정 파견 — 인물을 보내 두면 시간이 지나 보상이 쌓인다
+     ───────────────────────────────────────────── */
+  var EXP_TYPES = [
+    { k: 'scout', ic: '🧭', n: '빠른 정찰', min: 1, coins: 400, gems: 0, xp: 120, d: '주변 지형과 적의 움직임을 살핀다' },
+    { k: 'relic', ic: '🏺', n: '유물 탐색', min: 5, coins: 1500, gems: 1, xp: 600, d: '잊힌 유물을 캐내 온다' },
+    { k: 'grand', ic: '🐎', n: '대원정', min: 15, coins: 4000, gems: 3, xp: 2000, d: '먼 땅까지 다녀온다' }
+  ];
+  var EXP_SLOTS = 3;
+  var EXP_MAX_MEMBERS = 3;
+  var EXP_PICK_STEP = 36;
+  var expPick = null;
+  var expPickLimit = EXP_PICK_STEP;
+  var expTimer = null;
+
+  function expType(k) {
+    for (var i = 0; i < EXP_TYPES.length; i++) if (EXP_TYPES[i].k === k) return EXP_TYPES[i];
+    return EXP_TYPES[0];
+  }
+  function expStore() {
+    if (!S.exp || typeof S.exp !== 'object' || !Array.isArray(S.exp.runs)) S.exp = { runs: [] };
+    /* 배열을 새로 만들지 않고 그 자리에서 정리한다 (다른 곳에서 잡고 있는 참조가 끊기지 않게) */
+    var runs = S.exp.runs;
+    for (var i = runs.length - 1; i >= 0; i--) {
+      var r = runs[i];
+      if (!(r && expType(r.t) && r.ids && r.ids.length)) runs.splice(i, 1);
+    }
+    return S.exp;
+  }
+  function expNowMs() { return Date.now(); }
+  function expReward(typeKey, n) {
+    var t = expType(typeKey);
+    var m = Math.max(1, Math.min(EXP_MAX_MEMBERS, n || 1));
+    var mult = 1 + 0.2 * (m - 1);
+    return {
+      coins: Math.round(t.coins * mult / 10) * 10,
+      gems: t.gems + (m > 1 ? 1 : 0),
+      xp: Math.round(t.xp * mult)
+    };
+  }
+  function expRunOfSlot(slot) {
+    var runs = expStore().runs, i;
+    for (i = 0; i < runs.length; i++) if (runs[i].s === slot) return runs[i];
+    return null;
+  }
+  function expBusy() {
+    var map = {}, runs = expStore().runs, i, j;
+    for (i = 0; i < runs.length; i++) {
+      for (j = 0; j < runs[i].ids.length; j++) map[runs[i].ids[j]] = 1;
+    }
+    return map;
+  }
+  function expReadyRuns() {
+    var out = [], runs = expStore().runs, now = expNowMs(), i;
+    for (i = 0; i < runs.length; i++) if (runs[i].end <= now) out.push(i);
+    return out;
+  }
+  function expFmt(ms) {
+    if (ms < 0) ms = 0;
+    var s = Math.floor(ms / 1000);
+    var m = Math.floor(s / 60);
+    s = s % 60;
+    return (m < 10 ? '0' + m : '' + m) + ':' + (s < 10 ? '0' + s : '' + s);
+  }
+  function expMemHtml(ids) {
+    var h = '';
+    for (var i = 0; i < ids.length; i++) {
+      var f = x6fig(ids[i]);
+      if (!f) continue;
+      h += '<span class="exp-m" title="' + esc(f.name) + '">' +
+        '<span class="exp-mp">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
+        '<em>' + esc(f.name) + '</em></span>';
+    }
+    return h;
+  }
+  function expSlotHtml(slot) {
+    var run = expRunOfSlot(slot);
+    if (!run) {
+      var ch = '';
+      for (var i = 0; i < EXP_TYPES.length; i++) {
+        var t = EXP_TYPES[i];
+        ch += '<button type="button" class="exp-ch" data-expstart="' + slot + ':' + t.k + '">' +
+          '<span class="ech-ic">' + t.ic + '</span>' +
+          '<b>' + t.n + '</b><em>' + t.min + '분</em>' +
+          '<span class="ech-rew">🪙 ' + x6n(t.coins) + (t.gems ? ' · 💎 ' + t.gems : '') + '</span>' +
+          '</button>';
+      }
+      return '<article class="exp-slot empty">' +
+        '<div class="exp-s-top"><span class="exp-ic">➕</span><b>빈 원정 슬롯 ' + (slot + 1) + '</b>' +
+        '<em class="exp-note">인물 최대 3명 파견</em></div>' +
+        '<div class="exp-choices">' + ch + '</div></article>';
+    }
+    var type = expType(run.t);
+    var now = expNowMs();
+    var ready = run.end <= now;
+    var pct = Math.min(100, Math.max(0, (now - run.start) / Math.max(1, run.end - run.start) * 100));
+    var rw = expReward(run.t, run.ids.length);
+    var idx = expStore().runs.indexOf(run);
+    return '<article class="exp-slot run' + (ready ? ' ready' : '') + '">' +
+      '<div class="exp-s-top"><span class="exp-ic">' + type.ic + '</span><b>' + type.n + '</b>' +
+      '<em class="exp-cd"' + (ready ? ' hidden' : '') + ' data-expcd="' + idx + '">' + expFmt(run.end - now) + '</em>' +
+      (ready ? '<em class="exp-done">완료!</em>' : '') + '</div>' +
+      '<div class="exp-mem">' + expMemHtml(run.ids) + '</div>' +
+      '<div class="exp-bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+      '<div class="exp-foot"><span class="exp-rew">🪙 ' + x6n(rw.coins) + ' · 💎 ' + rw.gems + ' · XP ' + x6n(rw.xp) + '</span>' +
+      (ready
+        ? '<button type="button" class="exp-claim" data-expclaim="' + idx + '">🎁 보상 받기</button>'
+        : '<span class="exp-wait">' + type.min + '분 원정 중</span>') +
+      '</div></article>';
+  }
+  function expSumHtml() {
+    var runs = expStore().runs;
+    var busy = 0, i;
+    for (i = 0; i < runs.length; i++) busy += runs[i].ids.length;
+    var ready = expReadyRuns().length;
+    return '<div class="exp-sum-i"><span>파견 중</span><b>' + runs.length + ' / ' + EXP_SLOTS + '</b></div>' +
+      '<div class="exp-sum-i"><span>나간 인물</span><b>' + busy + '명</b></div>' +
+      '<div class="exp-sum-i"><span>받을 보상</span><b class="' + (ready ? 'hot' : '') + '">' + ready + '개</b></div>' +
+      '<div class="exp-sum-i"><span>보유 인물</span><b>' + ownedN() + ' / ' + N + '</b></div>';
+  }
+  function expRender() {
+    var slots = document.getElementById('expSlots');
+    if (!slots) return;
+    var h = '';
+    for (var i = 0; i < EXP_SLOTS; i++) h += expSlotHtml(i);
+    slots.innerHTML = h;
+    var sum = document.getElementById('expSum');
+    if (sum) sum.innerHTML = expSumHtml();
+    refreshExpBadge();
+  }
+  /* 1초마다 남은 시간만 고쳐 쓴다 — 전체를 다시 그리지 않는다 */
+  function expTick() {
+    var runs = expStore().runs;
+    var els = document.querySelectorAll('[data-expcd]');
+    for (var i = 0; i < els.length; i++) {
+      var idx = parseInt(els[i].getAttribute('data-expcd'), 10);
+      var r = runs[idx];
+      if (!r) continue;
+      var left = r.end - expNowMs();
+      els[i].textContent = expFmt(left);
+      if (left <= 0) { expRender(); return; }
+    }
+    var bars = document.querySelectorAll('.exp-slot.run .exp-bar i');
+    for (i = 0; i < bars.length && i < runs.length; i++) {
+      var rr = runs[i];
+      var p = Math.min(100, Math.max(0, (expNowMs() - rr.start) / Math.max(1, rr.end - rr.start) * 100));
+      bars[i].style.width = p.toFixed(1) + '%';
+    }
+  }
+  function expEnsureTimer() {
+    if (expTimer) return;
+    expTimer = setInterval(function () {
+      if (!x6el('#mExp.open')) { clearInterval(expTimer); expTimer = null; return; }
+      expTick();
+    }, 1000);
+  }
+
+  /* ── 파견 인물 고르기 ── */
+  function expOwnedSorted() {
+    var m = myFigMap().set;
+    var busy = expBusy();
+    var all = FIGURES.filter(function (f) { return m[f.id] && !busy[f.id]; });
+    all.sort(function (a, b) {
+      var ra = GRADE_RANK[a.grade] || 0, rb = GRADE_RANK[b.grade] || 0;
+      if (ra !== rb) return rb - ra;
+      var sa = (S.cards[a.id] || {}).star || 0, sb = (S.cards[b.id] || {}).star || 0;
+      if (sa !== sb) return sb - sa;
+      return String(a.name).localeCompare(String(b.name), 'ko');
+    });
+    return all;
+  }
+  function expPickRender() {
+    var box = document.getElementById('expPickGrid');
+    if (!box || !expPick) return;
+    var t = expType(expPick.type);
+    var pool = expOwnedSorted();
+    var shown = pool.slice(0, expPickLimit);
+    var h = '';
+    for (var i = 0; i < shown.length; i++) {
+      var f = shown[i];
+      var on = expPick.ids.indexOf(f.id) >= 0;
+      h += '<button type="button" class="exp-pc' + (on ? ' on' : '') + '" data-exppick="' + f.id + '">' +
+        '<span class="exp-pcp">' + photoHtml(f, { fit: 'slice' }) + '</span>' +
+        '<em>' + esc(f.name) + '</em>' +
+        '<span class="exp-chk">' + (on ? '✓' : '') + '</span></button>';
+    }
+    if (!pool.length) h = '<div class="exp-empty">파견할 수 있는 인물이 없습니다 · 뽑기나 오늘의 인물로 인물을 모아 보세요.</div>';
+    else if (pool.length > shown.length) {
+      h += '<button type="button" class="exp-more" data-expmore="1">' + Math.min(EXP_PICK_STEP, pool.length - shown.length) + '명 더 보기 · 남은 ' + (pool.length - shown.length) + '명</button>';
+    }
+    box.innerHTML = h;
+    var ttl = document.getElementById('expPickTitle');
+    if (ttl) ttl.innerHTML = t.ic + ' ' + t.n + ' · ' + t.min + '분';
+    var sub = document.getElementById('expPickSub');
+    if (sub) {
+      sub.innerHTML = '인물을 <b>1~3명</b> 고르세요 · 인물이 많을수록 보상이 커집니다 (1명 +0% · 2명 +20% · 3명 +40%)';
+    }
+    var go = document.getElementById('expGo');
+    if (go) {
+      go.textContent = '🧭 파견 (' + expPick.ids.length + ' / ' + EXP_MAX_MEMBERS + ')';
+      go.disabled = expPick.ids.length < 1;
+      go.className = 'exp-go' + (expPick.ids.length >= 1 ? ' on' : '');
+    }
+  }
+  function expOpenPick(slot, type) {
+    expPick = { slot: slot, type: type, ids: [] };
+    expPickLimit = EXP_PICK_STEP;
+    var s = document.getElementById('expSlots');
+    var p = document.getElementById('expPickWrap');
+    if (s) s.hidden = true;
+    if (p) p.hidden = false;
+    expPickRender();
+  }
+  function expClosePick() {
+    expPick = null;
+    var s = document.getElementById('expSlots');
+    var p = document.getElementById('expPickWrap');
+    if (s) s.hidden = false;
+    if (p) p.hidden = true;
+    expRender();
+  }
+  function expToggle(id) {
+    if (!expPick) return;
+    var i = expPick.ids.indexOf(id);
+    if (i >= 0) expPick.ids.splice(i, 1);
+    else {
+      if (expPick.ids.length >= EXP_MAX_MEMBERS) {
+        toast('최대 <b>' + EXP_MAX_MEMBERS + '명</b>까지 파견할 수 있습니다');
+        return;
+      }
+      expPick.ids.push(id);
+    }
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+    expPickRender();
+  }
+  function expStart() {
+    if (!expPick) return;
+    var runs = expStore().runs;
+    if (expRunOfSlot(expPick.slot)) { toast('이 슬롯은 이미 원정 중입니다'); expClosePick(); return; }
+    if (!expPick.ids.length) { toast('인물을 1명 이상 고르세요'); return; }
+    var t = expType(expPick.type);
+    var now = expNowMs();
+    runs.push({ s: expPick.slot, t: t.k, ids: expPick.ids.slice(), start: now, end: now + t.min * 60000 });
+    saveState();
+    toast('🧭 <b>' + t.n + '</b> 파견 · ' + t.min + '분 뒤 보상이 도착합니다');
+    expClosePick();
+    expEnsureTimer();
+    refreshExpBadge();
+  }
+  function expClaim(idx) {
+    var runs = expStore().runs;
+    var r = runs[idx];
+    if (!r) { expRender(); return; }
+    if (r.end > expNowMs()) { toast('아직 원정 중입니다 · ' + expFmt(r.end - expNowMs()) + ' 남음'); return; }
+    var rw = expReward(r.t, r.ids.length);
+    S.coins = (S.coins || 0) + rw.coins;
+    S.gems = (S.gems || 0) + rw.gems;
+    S.xp = (S.xp || 0) + rw.xp;
+    runs.splice(idx, 1);
+    saveState();
+    renderCollection();
+    expRender();
+    if (typeof refreshPackBal === 'function') refreshPackBal();
+    toast('🎁 원정 완료 · 🪙 +' + x6n(rw.coins) + (rw.gems ? ' · 💎 +' + rw.gems : '') + ' · XP +' + x6n(rw.xp));
+    confetti();
+  }
+  function expOpen() {
+    expStore();
+    expPick = null;
+    var s = document.getElementById('expSlots');
+    var p = document.getElementById('expPickWrap');
+    if (s) s.hidden = false;
+    if (p) p.hidden = true;
+    expRender();
+    openModal('#mExp');
+    expEnsureTimer();
+  }
+  function refreshExpBadge() {
+    var n = expReadyRuns().length;
+    var b = document.getElementById('sdExpBadge');
+    if (!b) return;
+    if (n > 0) { b.removeAttribute('hidden'); b.textContent = n; }
+    else { b.setAttribute('hidden', ''); b.textContent = '0'; }
+  }
+
+  /* ─────────────────────────────────────────────
+     2) 🏆 도감 수집 마일스톤 — 50·100·200·300·500·750·1,000명
+     ───────────────────────────────────────────── */
+  /* 부팅 시점(renderArchive)에도 바로 쓸 수 있도록 함수로 둔다 — var 초기화보다 먼저 불릴 수 있다 */
+  function mileList() {
+    return [
+      { n: 50, coins: 2000, tickets: 2 },
+      { n: 100, coins: 5000, gems: 3 },
+      { n: 200, coins: 10000, tickets: 5 },
+      { n: 300, coins: 15000, gems: 10 },
+      { n: 500, coins: 30000, gems: 20, tickets: 10 },
+      { n: 750, coins: 50000, gems: 30, tickets: 5 },
+      { n: 1000, coins: 100000, gems: 100, tickets: 30 }
+    ];
+  }
+  function mileClaimed(n) { return !!(S.mile && S.mile[n]); }
+  function mileReadyN() {
+    var MILE = mileList();
+    var own = ownedN(), k = 0;
+    for (var i = 0; i < MILE.length; i++) if (own >= MILE[i].n && !mileClaimed(MILE[i].n)) k++;
+    return k;
+  }
+  function mileRewTxt(m) {
+    var b = ['🪙 ' + x6n(m.coins)];
+    if (m.gems) b.push('💎 ' + m.gems);
+    if (m.tickets) b.push('🎟️ ' + m.tickets);
+    return b.join(' · ');
+  }
+  function renderArcMile() {
+    var box = document.getElementById('arcMile');
+    if (!box) return;
+    var MILE = mileList();
+    var own = ownedN();
+    var prev = 0, next = null, i;
+    for (i = 0; i < MILE.length; i++) {
+      if (own >= MILE[i].n) prev = MILE[i].n;
+      else if (!next) next = MILE[i];
+    }
+    var pct = next ? (own - prev) / Math.max(1, next.n - prev) * 100 : 100;
+    var chips = '';
+    for (i = 0; i < MILE.length; i++) {
+      var m = MILE[i];
+      var done = own >= m.n;
+      var claimed = mileClaimed(m.n);
+      var cls = 'mile-chip' + (done ? ' done' : '') + (claimed ? ' claimed' : '') + (done && !claimed ? ' ready' : '') + (next && next.n === m.n ? ' now' : '');
+      if (done && !claimed) {
+        chips += '<button type="button" class="' + cls + '" data-mileclaim="' + m.n + '" title="' + mileRewTxt(m) + '">' +
+          '<b>' + m.n + '명</b><em>🎁 받기</em></button>';
+      } else {
+        chips += '<span class="' + cls + '" title="' + mileRewTxt(m) + '"><b>' + m.n + '명</b><em>' +
+          (claimed ? '수령 완료' : mileRewTxt(m)) + '</em></span>';
+      }
+    }
+    box.innerHTML =
+      '<div class="mile-top"><span class="mile-k">🏆 수집 마일스톤</span>' +
+      '<b class="mile-own">' + x6n(own) + ' / ' + N + '</b>' +
+      '<span class="mile-next">' + (next ? '다음 ' + next.n + '명까지 ' + (next.n - own) + '명' : '모든 마일스톤 달성!') + '</span></div>' +
+      '<div class="mile-bar"><i style="width:' + pct.toFixed(1) + '%"></i></div>' +
+      '<div class="mile-chips">' + chips + '</div>';
+  }
+  function claimMile(n) {
+    var MILE = mileList();
+    var m = null, i;
+    for (i = 0; i < MILE.length; i++) if (MILE[i].n === n) m = MILE[i];
+    if (!m) return;
+    if (mileClaimed(n)) { toast('이미 받은 보상입니다'); return; }
+    if (ownedN() < n) { toast('아직 ' + n + '명을 모으지 못했습니다 · ' + ownedN() + ' / ' + n); return; }
+    if (!S.mile || typeof S.mile !== 'object') S.mile = {};
+    S.mile[n] = todayK;
+    S.coins = (S.coins || 0) + (m.coins || 0);
+    S.gems = (S.gems || 0) + (m.gems || 0);
+    S.tickets = (S.tickets || 0) + (m.tickets || 0);
+    saveState();
+    renderCollection();
+    if (typeof refreshPackBal === 'function') refreshPackBal();
+    renderArcMile();
+    toast('🏆 <b>' + n + '명 달성 보상</b> · ' + mileRewTxt(m));
+    confetti();
+  }
+
+  /* ─────────────────────────────────────────────
+     3) 🏅 테마 컬렉션 — 분야별 인물을 다 모으면 뽑기권·코인
+     ───────────────────────────────────────────── */
+  var JOSEON27 = ['yi-seonggye', 'jeongjong', 'taejong', 'sejong', 'munjong', 'danjong', 'sejo', 'yejong',
+    'seongjong', 'yeonsangun', 'jungjong', 'injong', 'myeongjong', 'seonjo', 'gwanghaegun', 'injo',
+    'hyojong', 'hyeonjong', 'sukjong', 'gyeongjong', 'yeongjo', 'jeongjo', 'sunjo', 'heonjong',
+    'cheoljong', 'gojong', 'sunjong'];
+  var SET_REW = {
+    football: { tickets: 10 },
+    joseon: { coins: 30000 },
+    marvel: { tickets: 10 },
+    sports: { coins: 12000, tickets: 5 },
+    music: { coins: 10000, gems: 10 },
+    art: { coins: 12000, gems: 12 },
+    film: { coins: 10000, tickets: 5 },
+    book: { coins: 20000, gems: 15 },
+    science: { coins: 40000, gems: 30, tickets: 10 },
+    king: { coins: 35000, gems: 25 },
+    war: { coins: 18000, tickets: 8 },
+    free: { coins: 18000, gems: 15 },
+    mind: { coins: 20000, gems: 15 },
+    game: { coins: 8000, tickets: 5 },
+    biz: { coins: 12000, gems: 10 },
+    explore: { coins: 10000, gems: 10 }
+  };
+  var SET_META = {
+    football: { n: '축구선수 올스타', ic: '⚽', d: '축구 레전드 전원' },
+    joseon: { n: '조선 27대 임금', ic: '👑', d: '태조부터 순종까지' },
+    marvel: { n: '마블 군단', ic: '🕷️', d: '마블 히어로·빌런 전원' },
+    sports: { n: '스포츠 스타', ic: '🏅', d: '육상·격투·구기 전설' },
+    music: { n: '음악 레전드', ic: '🎵', d: '작곡가부터 팝스타까지' },
+    art: { n: '미술·음악', ic: '🎨', d: '화가·조각가·예술가' },
+    film: { n: '영화·연기·방송', ic: '🎬', d: '스크린의 얼굴들' },
+    book: { n: '문학·기록', ic: '📚', d: '시인·소설가·기록자' },
+    science: { n: '과학자', ic: '🔬', d: '과학·의학·발명' },
+    king: { n: '왕·군주', ic: '👑', d: '세계의 통치자' },
+    war: { n: '장군·정복자', ic: '⚔️', d: '전장을 바꾼 지휘관' },
+    free: { n: '독립·민권', ic: '🇰🇷', d: '독립운동·민권운동' },
+    mind: { n: '사상·철학·종교', ic: '🕯️', d: '생각으로 세상을 바꾼 사람' },
+    game: { n: '프로게이머·게임', ic: '🎮', d: '게임·크리에이터' },
+    biz: { n: '글로벌 기업가', ic: '🏢', d: '회사를 세운 사람들' },
+    explore: { n: '탐험·항해·우주', ic: '🧭', d: '미지로 떠난 사람' }
+  };
+  var SET_ORDER = ['football', 'joseon', 'marvel', 'sports', 'music', 'art', 'film', 'book',
+    'science', 'king', 'war', 'free', 'mind', 'game', 'biz', 'explore'];
+  var SETS_CACHE = null;
+  function setsBuild() {
+    if (SETS_CACHE) return SETS_CACHE;
+    var map = (typeof SYNERGY_MAP !== 'undefined' && SYNERGY_MAP) ? SYNERGY_MAP : {};
+    var groups = (typeof SYNERGY_GROUPS !== 'undefined' && SYNERGY_GROUPS) ? SYNERGY_GROUPS : [];
+    var byKey = {}, i, j, id;
+    for (i = 0; i < groups.length; i++) {
+      var g = groups[i];
+      byKey[g.k] = { k: g.k, ic: g.i || '🏅', n: g.n || g.k, c: g.c || '#c8a86a', d: '', ids: [] };
+    }
+    for (i = 0; i < FIGURES.length; i++) {
+      var f = FIGURES[i];
+      var gs = map[f.id] || [];
+      for (j = 0; j < gs.length; j++) {
+        if (byKey[gs[j]]) byKey[gs[j]].ids.push(f.id);
+      }
+    }
+    /* 조선 27대 임금 — 따로 묶는다 */
+    var jo = [];
+    for (i = 0; i < JOSEON27.length; i++) { id = JOSEON27[i]; if (byId(id)) jo.push(id); }
+    byKey.joseon = { k: 'joseon', ic: '👑', n: '조선 27대 임금', c: '#d9b45c', d: '태조부터 순종까지', ids: jo };
+    var out = [], order = SET_ORDER.slice();
+    for (i = 0; i < groups.length; i++) if (order.indexOf(groups[i].k) < 0) order.push(groups[i].k);
+    for (i = 0; i < order.length; i++) {
+      var s = byKey[order[i]];
+      if (!s || !s.ids.length) continue;
+      var meta = SET_META[s.k] || {};
+      out.push({
+        k: s.k,
+        ic: meta.ic || s.ic,
+        n: meta.n || s.n,
+        c: s.c,
+        d: meta.d || s.d || '',
+        ids: s.ids,
+        rew: SET_REW[s.k] || { coins: Math.round(s.ids.length * 200 / 100) * 100 }
+      });
+    }
+    SETS_CACHE = out;
+    return out;
+  }
+  function setClaimed(k) { return !!(S.sets && S.sets[k]); }
+  function setPct(s) {
+    var m = myFigMap().set, n = 0;
+    for (var i = 0; i < s.ids.length; i++) if (m[s.ids[i]]) n++;
+    return { own: n, total: s.ids.length, pct: s.ids.length ? n / s.ids.length * 100 : 0 };
+  }
+  function setReadyN() {
+    var sets = setsBuild(), m = myFigMap().set, k = 0;
+    for (var i = 0; i < sets.length; i++) {
+      var s = sets[i];
+      if (setClaimed(s.k)) continue;
+      var ok = true;
+      for (var j = 0; j < s.ids.length; j++) if (!m[s.ids[j]]) { ok = false; break; }
+      if (ok) k++;
+    }
+    return k;
+  }
+  function setRewTxt(r) {
+    var b = [];
+    if (r.coins) b.push('🪙 ' + x6n(r.coins));
+    if (r.gems) b.push('💎 ' + r.gems);
+    if (r.tickets) b.push('🎟️ ' + r.tickets);
+    return b.join(' · ');
+  }
+  function setRowHtml(s, m) {
+    var st = setPct(s);
+    var done = st.own >= st.total;
+    var claimed = setClaimed(s.k);
+    var miss = [];
+    for (var i = 0; i < s.ids.length && miss.length < 4; i++) {
+      if (!m[s.ids[i]]) { var f = x6fig(s.ids[i]); if (f) miss.push(f.name); }
+    }
+    var left = st.total - st.own;
+    var act = claimed
+      ? '<span class="set-got">✔ 수령 완료</span>'
+      : (done
+        ? '<button type="button" class="set-claim" data-setclaim="' + s.k + '">🎁 보상 받기</button>'
+        : '<span class="set-wait">' + st.own + ' / ' + st.total + '</span>');
+    return '<article class="set-row' + (done ? ' done' : '') + (claimed ? ' claimed' : '') + '" style="--rc:' + (s.c || '#c8a86a') + '">' +
+      '<div class="set-top"><span class="set-ic">' + s.ic + '</span>' +
+      '<div class="set-t"><b>' + esc(s.n) + '</b><em>' + esc(s.d) + '</em></div>' +
+      '<span class="set-pct">' + Math.round(st.pct) + '%</span></div>' +
+      '<div class="set-bar"><i style="width:' + st.pct.toFixed(1) + '%"></i></div>' +
+      '<div class="set-bot"><span class="set-rew">' + setRewTxt(s.rew) + '</span>' + act + '</div>' +
+      (left ? '<div class="set-miss">남은 인물 · ' + esc(miss.join(', ')) + (left > miss.length ? ' 외 ' + (left - miss.length) + '명' : '') + '</div>' : '') +
+      '</article>';
+  }
+  function renderSets() {
+    var list = document.getElementById('setList');
+    if (!list) return;
+    var sets = setsBuild(), m = myFigMap().set;
+    var rows = sets.map(function (s) {
+      var st = setPct(s);
+      var done = st.own >= st.total && st.total > 0;
+      var claimed = setClaimed(s.k);
+      var rank = claimed ? 2 : (done ? 0 : 1);
+      return { s: s, rank: rank, pct: st.pct, own: st.own, total: st.total };
+    });
+    rows.sort(function (a, b) {
+      if (a.rank !== b.rank) return a.rank - b.rank;
+      if (a.rank === 1) return b.pct - a.pct;
+      return a.total - b.total;
+    });
+    list.innerHTML = rows.map(function (r) { return setRowHtml(r.s, m); }).join('');
+    var sum = document.getElementById('setSum');
+    if (sum) {
+      var ready = setReadyN();
+      var complete = 0;
+      for (var i = 0; i < sets.length; i++) if (rows[i].rank !== 1) complete++;
+      sum.innerHTML = '<div class="set-sum-i"><span>세트</span><b>' + sets.length + '개</b></div>' +
+        '<div class="set-sum-i"><span>완성</span><b>' + rows.filter(function (r) { return r.rank !== 1; }).length + ' / ' + sets.length + '</b></div>' +
+        '<div class="set-sum-i"><span>받을 보상</span><b class="' + (ready ? 'hot' : '') + '">' + ready + '개</b></div>' +
+        '<div class="set-sum-i"><span>보유 인물</span><b>' + ownedN() + ' / ' + N + '</b></div>';
+    }
+    refreshSetBadge();
+  }
+  function claimSet(k) {
+    var sets = setsBuild(), s = null, i;
+    for (i = 0; i < sets.length; i++) if (sets[i].k === k) s = sets[i];
+    if (!s) return;
+    if (setClaimed(k)) { toast('이미 받은 보상입니다'); return; }
+    var st = setPct(s);
+    if (st.own < st.total) { toast('아직 세트가 완성되지 않았습니다 · ' + st.own + ' / ' + st.total); return; }
+    if (!S.sets || typeof S.sets !== 'object') S.sets = {};
+    S.sets[k] = todayK;
+    S.coins = (S.coins || 0) + (s.rew.coins || 0);
+    S.gems = (S.gems || 0) + (s.rew.gems || 0);
+    S.tickets = (S.tickets || 0) + (s.rew.tickets || 0);
+    saveState();
+    renderCollection();
+    if (typeof refreshPackBal === 'function') refreshPackBal();
+    renderSets();
+    toast('🏅 <b>' + esc(s.n) + '</b> 완성 · ' + setRewTxt(s.rew));
+    confetti();
+  }
+  function openSets() {
+    renderSets();
+    openModal('#mSet');
+  }
+  function refreshSetBadge() {
+    var n = setReadyN();
+    var b = document.getElementById('sdSetBadge');
+    if (!b) return;
+    if (n > 0) { b.removeAttribute('hidden'); b.textContent = n; }
+    else { b.setAttribute('hidden', ''); b.textContent = '0'; }
+  }
+
+  /* ── 연결 ── */
+  function bindExt6() {
+    var b1 = document.getElementById('sdExp');
+    if (b1) b1.addEventListener('click', function (e) { e.preventDefault(); expOpen(); });
+    var b2 = document.getElementById('sdSet');
+    if (b2) b2.addEventListener('click', function (e) { e.preventDefault(); openSets(); });
+    var b3 = document.getElementById('expBack');
+    if (b3) b3.addEventListener('click', function (e) { e.preventDefault(); expClosePick(); });
+    var b4 = document.getElementById('expGo');
+    if (b4) b4.addEventListener('click', function (e) { e.preventDefault(); expStart(); });
+    var b5 = document.getElementById('setHelp');
+    if (b5) b5.addEventListener('click', function () { toast('분야별 인물을 <b>전부</b> 모으면 보상을 한 번 받을 수 있습니다'); });
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var st = t.closest('[data-expstart]');
+      if (st) {
+        var v = String(st.getAttribute('data-expstart')).split(':');
+        expOpenPick(parseInt(v[0], 10) || 0, v[1] || 'scout');
+        return;
+      }
+      var pk = t.closest('[data-exppick]');
+      if (pk) { expToggle(pk.getAttribute('data-exppick')); return; }
+      var em = t.closest('[data-expmore]');
+      if (em) { expPickLimit += EXP_PICK_STEP; expPickRender(); return; }
+      var ec = t.closest('[data-expclaim]');
+      if (ec) { expClaim(parseInt(ec.getAttribute('data-expclaim'), 10)); return; }
+      var mc = t.closest('[data-mileclaim]');
+      if (mc) { claimMile(parseInt(mc.getAttribute('data-mileclaim'), 10)); return; }
+      var sc = t.closest('[data-setclaim]');
+      if (sc) { claimSet(sc.getAttribute('data-setclaim')); return; }
+    });
+  }
+  bindExt6();
+
+  /* 완료된 원정을 앱에 다시 들어왔을 때 알려 준다 */
+  function expNotify() {
+    var n = expReadyRuns().length;
+    if (n > 0) {
+      setTimeout(function () {
+        toast('🧭 <b>원정 완료</b> · 받을 보상 <b>' + n + '개</b> — 오른쪽 <b>🧭 원정</b>에서 수령하세요');
+      }, 1200);
+    }
+  }
+  setTimeout(function () {
+    expStore();
+    refreshExpBadge();
+    refreshSetBadge();
+    renderArcMile();
+    expNotify();
+  }, 0);
+  /* 앱을 켜 둔 채 시간이 지나도 원정 완료 배지가 뜨게 한다 */
+  setInterval(function () { refreshExpBadge(); refreshSetBadge(); }, 20000);
+
+  /* <<EXT6_APP:END>> */
   window.LegacyItems = {
     list: ITEMS,
     bonus: itemBonus,
