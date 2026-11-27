@@ -14810,7 +14810,7 @@ function portraitSVG(fig, fit, alt) {
   function perfSync() {
     var on = false;
     try {
-      on = !!(document.querySelector('#pullFx.on') || document.querySelector('#mPack.open') || document.querySelector('#mArchive.open'));
+      on = !!(document.querySelector('#pullFx.on') || document.querySelector('#mPack.open') || document.querySelector('#mArchive.open') || document.querySelector('#mBattle.open'));
     } catch (e) { on = false; }
     document.body.classList.toggle('perf-lock', on);
   }
