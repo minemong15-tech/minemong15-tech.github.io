@@ -36,6 +36,7 @@
     <button data-act="shot1">📸 초월 터치 정지</button>
     <button data-act="shot2">📸 초월 카드 정지</button>
     <button data-act="seqshot">📸 초월 카드(타이머 고정)</button>
+    <button data-act="solo">🌟 초월 1장 캡처</button>
     <button data-act="resume">▶ 재생</button>
     <div id="out"></div>
   </div>
@@ -278,6 +279,43 @@
         ' · plaque=' + (q('#seqPlaque') && q('#seqPlaque').className) +
         ' · count=' + (q('#seqCount') && q('#seqCount').textContent) +
         ' · plaqueTxt="' + txt(q('#seqPlaqueTxt')) + '"');
+    },
+    /* 1장만 뽑아 초월(중복) 카드에서 흐름을 고정 — 캡처용 */
+    solo: async function () {
+      var cards = {};
+      try { (W().FIGURES || []).forEach(function (f) { if (f.grade === 'transcendent') cards[f.id] = { n: 1, frag: 0 }; }); } catch (e) {}
+      var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [], cards: cards };
+      W().localStorage.setItem('legacy.vip.state.v1', JSON.stringify(st));
+      fr.src = '/legacy/?vip=hs2026&v=f2036&qa=' + Date.now() + 's';
+      await sleep(2600);
+      var b = q('#sdPack'); if (b) b.click(); else if (q('#pkOpen')) q('#pkOpen').click();
+      await sleep(400);
+      var w = W();
+      if (!w.__origST) {
+        w.__origST = w.setTimeout;
+        w.setTimeout = function (fn, ms) {
+          var a = [].slice.call(arguments, 2), r = w.__qaRanges || [];
+          for (var i = 0; i < r.length; i++) { if (ms >= r[i][0] && ms <= r[i][1]) return 0; }
+          return w.__origST.apply(w, [fn, ms].concat(a));
+        };
+      }
+      w.__qaRanges = [[400, 960]];   /* 카드 자동 진행 차단 */
+      var p1 = q('#pull1');
+      if (!p1) { log('pull1 없음'); return; }
+      p1.click();
+      await sleep(320);
+      log('1뽑기 · ' + JSON.stringify(pfSnap()));
+      for (var i = 0; i < 9; i++) { tapFx(); await sleep(160); if (pfSnap().tr) break; }
+      log('터치 후 · ' + JSON.stringify(pfSnap()));
+      await sleep(320);
+      tapFx();
+      await sleep(1200);
+      var trc = q('#reveal .pcard.tr');
+      dSeek(D(), '.seqtrans *', 250);
+      dSeek(D(), '#reveal .pcard.tr', 190);
+      log('solo · tr=' + !!trc + ' · seqTrans=' + (q('#seqTrans') && q('#seqTrans').className) +
+        ' · plaque=' + (q('#seqPlaque') && q('#seqPlaque').className) +
+        ' · plaqueTxt="' + txt(q('#seqPlaqueTxt')) + '" · count=' + (q('#seqCount') && q('#seqCount').textContent));
     },
   };
 
