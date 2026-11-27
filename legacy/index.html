@@ -496,6 +496,15 @@
   .btn-pack.ticket{background:linear-gradient(180deg,#3aa87a,#1f6b4d); color:#f2fff8;
     border:1px solid rgba(120,240,190,.5); box-shadow:0 0 26px -8px rgba(46,224,148,.9)}
   .btn-pack.ticket:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
+  .btn-pack:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
+  /* 뽑기권·코인 뽑기 — 1회 / 5회 / 10회를 한 줄 3열로 (모바일 390px에서도 깨지지 않게) */
+  .pk-pullset{display:flex; flex-direction:column; gap:6px; min-width:0}
+  .pk-pullset-t{display:flex; align-items:center; gap:7px; font-size:9.5px; font-weight:700; letter-spacing:.14em; color:var(--muted2); line-height:1.3}
+  .pk-pullset-t::after{content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(200,168,106,.32),transparent)}
+  .pk-pull-row{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; min-width:0}
+  .pk-left .pk-pull-row .btn-pack{width:100%; min-width:0; padding:11px 5px; border-radius:11px;
+    font-size:12px; line-height:1.15; letter-spacing:0; white-space:nowrap; text-align:center}
+  .pk-left .pk-pull-row .btn-pack small{font-size:9px; letter-spacing:.01em; margin-top:3px; white-space:nowrap}
   .pk-hint{margin:2px 0 0; font-size:9.5px; line-height:1.5; color:var(--muted2)}
   .pk-hint b{color:var(--gold-hi)}
   .pk-left .reveal{grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px; margin-top:6px}
@@ -2815,6 +2824,9 @@
     .reveal{grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:9px}
     /* 뽑기 결과 5장이 한 화면에 다 보이도록 3열 배치 */
     .modal .pk-left .reveal{grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px}
+    .pk-left .pk-pull-row{gap:6px}
+    .pk-left .pk-pull-row .btn-pack{padding:9px 3px; font-size:11px}
+    .pk-left .pk-pull-row .btn-pack small{font-size:8.5px}
     .pk-left .pcard .pbody{padding:6px 6px 8px}
     .pk-left .pcard .pbody b{font-size:10px}
     .pk-left .pcard .pbody span{font-size:7.5px}
@@ -6221,17 +6233,29 @@
         <div class="pity" id="pity">
           <div class="pity-h"><span>🖤🤍 초월 천장</span><b id="pityNum">0 / 50</b></div>
           <div class="pity-bar"><i id="pityBar" style="width:0%"></i></div>
-          <div class="pity-note" id="pityNote">50회 뽑기 안에 초월 1장 확정 · 1회 +1 · 5회 +5</div>
+          <div class="pity-note" id="pityNote">50회 뽑기 안에 초월 1장 확정 · 1회 +1 · 5회 +5 · 10회 +10</div>
         </div>
         <div class="pack-bal">
           <div><span>보유 코인</span><b id="pkCoins">0</b></div>
           <div><span>뽑기권</span><b id="pkTickets">0</b></div>
           <div><span>최고 등급</span><b id="pkBest">★0</b></div>
         </div>
-        <button class="btn-pack ticket" id="pullTicket" type="button">🎟️ 뽑기권으로 뽑기<small>보유 0장 · 1장 사용</small></button>
-        <button class="btn-pack ticket" id="pullTicket5" type="button" hidden>🎟️ 뽑기권 5회 <b>(∞)</b><small>무한 모드 · 5명</small></button>
-        <button class="btn-pack" id="pull1" type="button">1회 뽑기<small>100 코인</small></button>
-        <button class="btn-pack" id="pull5" type="button">5회 뽑기<small>450 코인 · 5명</small></button>
+        <div class="pk-pullset">
+          <span class="pk-pullset-t">🎟️ 뽑기권</span>
+          <div class="pk-pull-row">
+            <button class="btn-pack ticket" id="pullTicket" type="button" aria-label="뽑기권 1회 뽑기">1회<small>1장 사용</small></button>
+            <button class="btn-pack ticket" id="pullTicket5" type="button" aria-label="뽑기권 5회 뽑기">5회<small>5장 사용</small></button>
+            <button class="btn-pack ticket" id="pullTicket10" type="button" aria-label="뽑기권 10회 뽑기">10회<small>10장 사용</small></button>
+          </div>
+        </div>
+        <div class="pk-pullset">
+          <span class="pk-pullset-t">🪙 코인</span>
+          <div class="pk-pull-row">
+            <button class="btn-pack" id="pull1" type="button">1회<small>100 코인</small></button>
+            <button class="btn-pack" id="pull5" type="button">5회<small>450 코인</small></button>
+            <button class="btn-pack" id="pull10" type="button">10회<small>900 코인</small></button>
+          </div>
+        </div>
         <button class="btn-pack fuse" id="pkFuse" type="button">🔥 초월 합성 <small>초월 2명 → 불멸 소환</small></button>
         <button class="btn-pack ghost" id="pullMuseum" type="button">🏛️ 박물관 보기</button>
         <p class="pk-hint">뽑기권은 <b>📩 우편함</b>과 <b>🎟️ 코드</b> 입력으로 받을 수 있습니다.</p>
@@ -16407,7 +16431,7 @@ function portraitSVG(fig, fit, alt) {
     if ($('#pityNote')) {
       $('#pityNote').textContent = pity >= 49
         ? '다음 뽑기에서 초월 확정! (게이지 0으로 리셋)'
-        : (PULL_CEIL - pity) + '회 더 뽑으면 초월 1장 확정 · 1회 +1 · 5회 +5';
+        : (PULL_CEIL - pity) + '회 더 뽑으면 초월 1장 확정 · 1회 +1 · 5회 +5 · 10회 +10';
     }
     if ($('#pkTickets')) $('#pkTickets').textContent = S.infTickets ? '∞' : (S.tickets || 0);
     if ($('#pkBest')) $('#pkBest').textContent = '★' + bestStar();
@@ -16417,21 +16441,26 @@ function portraitSVG(fig, fit, alt) {
         var gi = GRADE_INFO[x.g];
         var nm = x.g === 'transcendent' ? '<b class="mono-text">초월</b>' : gi.name;
         return nm + ' ' + x.p + '%';
-      }).join(' · ') + '<br>1회·5회 모두 이 확률표대로 <b>한 장씩 독립적으로</b> 뽑습니다.';
+      }).join(' · ') + '<br>1회·5회·10회 모두 이 확률표대로 <b>한 장씩 독립적으로</b> 뽑습니다.';
     }
-    var pt = $('#pullTicket');
-    if (pt) {
-      var n = S.tickets || 0;
-      pt.disabled = !S.infTickets && n < 1;
-      pt.innerHTML = S.infTickets
-        ? '🎟️ 뽑기권으로 뽑기<small>♾️ 무한 · 차감 없음</small>'
-        : '🎟️ 뽑기권으로 뽑기<small>보유 ' + n + '장 · 1장 사용</small>';
-    }
-    var p5 = $('#pullTicket5');
-    if (p5) {
-      if (S.infTickets) p5.removeAttribute('hidden');
-      else p5.setAttribute('hidden', '');
-    }
+    /* 🎟️ 뽑기권 1·5·10회 — 보유 장수에 따라 개별로 열리고 잠긴다 */
+    var have = S.tickets || 0;
+    [$('#pullTicket'), $('#pullTicket5'), $('#pullTicket10')].forEach(function (el, k) {
+      if (!el) return;
+      var need = [1, 5, 10][k];
+      var ok = S.infTickets || have >= need;
+      el.disabled = !ok;
+      el.innerHTML = need + '회<small>' +
+        (S.infTickets ? '∞ 무한' : (ok ? need + '장 사용' : '보유 ' + have + '장')) + '</small>';
+    });
+    /* 🪙 코인 1·5·10회 — 5회 이상은 1회당 90 코인 */
+    [[$('#pull1'), 1, PACK_COST], [$('#pull5'), 5, PACK5_COST], [$('#pull10'), 10, PACK5_COST * 2]]
+      .forEach(function (x) {
+        if (!x[0]) return;
+        var coinOk = (S.coins || 0) >= x[2];
+        x[0].disabled = !coinOk;
+        x[0].innerHTML = x[1] + '회<small>' + (coinOk ? x[2] + ' 코인' : '코인 부족') + '</small>';
+      });
     dockPaint();
   }
 
@@ -17288,7 +17317,8 @@ function portraitSVG(fig, fit, alt) {
       }
       if (!S.infTickets) S.tickets -= count;
     } else {
-      var cost = count >= 5 ? PACK5_COST : PACK_COST;
+      /* 1회 100 · 5회 450 · 10회 900 (5회 이상은 1회당 90 코인) */
+      var cost = count >= 5 ? (PACK5_COST / 5) * count : PACK_COST * count;
       if (S.coins < cost) {
         if (m) {
           m.className = 'pack-msg';
@@ -17301,11 +17331,11 @@ function portraitSVG(fig, fit, alt) {
     var hadFive = hasFive();
     var res = [], i;
     for (i = 0; i < count; i++) res.push(pullOne());
-    /* 🖤🤍 초월 천장 — 50회마다 초월 1장 확정 */
+    /* 🖤🤍 초월 천장 — 50회마다 초월 1장 확정 (10회 뽑기로 50을 넘겨도 남은 횟수는 이월) */
     var ceilingHit = false;
     S.pity = (S.pity || 0) + count;
-    if (S.pity >= PULL_CEIL) {
-      S.pity = 0;
+    while (S.pity >= PULL_CEIL) {
+      S.pity -= PULL_CEIL;
       ceilingHit = true;
       var li = 0;
       for (i = 1; i < res.length; i++) {
@@ -18399,9 +18429,11 @@ function portraitSVG(fig, fit, alt) {
   $('#museumBtn').addEventListener('click', function () { renderMuseum(); openModal('#mMuseum'); });
   $('#pullTicket').addEventListener('click', function () { pullPack(1, true); });
   if ($('#pullTicket5')) $('#pullTicket5').addEventListener('click', function () { pullPack(5, true); });
+  if ($('#pullTicket10')) $('#pullTicket10').addEventListener('click', function () { pullPack(10, true); });
   if ($('#summon')) $('#summon').addEventListener('click', endSummon);
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
+  if ($('#pull10')) $('#pull10').addEventListener('click', function () { pullPack(10); });
   /* ⚔️ 전용 아이템 뽑기 */
   if ($('#packRelicBtn')) $('#packRelicBtn').addEventListener('click', function () { openRelic('#mPack'); });
   if ($('#itemsRelicBtn')) $('#itemsRelicBtn').addEventListener('click', function () { openRelic('#mItems'); });
