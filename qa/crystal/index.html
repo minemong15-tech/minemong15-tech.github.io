@@ -14,10 +14,11 @@
   <div id="qaNote">LEGACY · 모바일 390×844 · 리로드 <span id="qaV">…</span></div>
   <div id="qaBar">
     <button id="qaHold" type="button">최종 파편 정지</button>
-    <button id="qaTop" type="button">레전더리 6단계</button>
+    <button id="qaTop" type="button">레전더리 시작</button>
+    <button id="qaMax" type="button">레전더리 7단계</button>
     <button id="qaClear" type="button">정리</button>
   </div>
-  <iframe id="fr" title="LEGACY mobile" src="../../legacy/index.html?vip=hs2026&amp;v=q4"></iframe>
+  <iframe id="fr" title="LEGACY mobile" src="../../legacy/index.html?vip=hs2026&amp;v=q5"></iframe>
 </div>
 <script>
 (function () {
@@ -129,6 +130,19 @@
   document.getElementById('qaTop').onclick = function () {
     QA.clear();
     QA.win().LegacyPullFx({ f: { grade: 'legendary' } }, null);
+  };
+  /* 검사용: 레전더리 목표까지 자동으로 승격시켜 두는 버튼 */
+  document.getElementById('qaMax').onclick = function () {
+    QA.clear();
+    var w = QA.win();
+    w.LegacyPullFx({ f: { grade: 'legendary' } }, null);
+    var n = 0;
+    var t = setInterval(function () {
+      var el = QA.doc().getElementById('pullFx');
+      if (!el || el.hidden || n >= 6) { clearInterval(t); return; }
+      el.dispatchEvent(new w.PointerEvent('pointerdown', { bubbles: true, cancelable: true, pointerType: 'touch' }));
+      n++;
+    }, 220);
   };
 
   QA.state = function () {
