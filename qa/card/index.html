@@ -12,5 +12,9 @@
   <div id="qaNote">LEGACY · 모바일 390×844 · 리로드 <span id="qaV">…</span></div>
   <iframe id="fr" title="LEGACY mobile" src="../../legacy/index.html?vip=hs2026&amp;v=f2037"></iframe>
 </div>
-<script>document.getElementById('qaV').textContent = new Date().toISOString().slice(11,19);</script>
+<script>
+  var v = new Date().toISOString().slice(11,19).replace(/:/g,'');
+  document.getElementById('qaV').textContent = v;
+  document.getElementById('fr').src = '../../legacy/index.html?vip=hs2026&v=f2037&r=' + v;
+</script>
 </body></html>
