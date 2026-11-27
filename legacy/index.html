@@ -19386,6 +19386,12 @@ function portraitSVG(fig, fit, alt) {
     refreshSetBadge();
     renderArcMile();
     expNotify();
+    /* 첫 화면이 다 그려진 뒤, 카드팩 쇼케이스에 뜰 사진을 조용히 미리 받아 둔다 */
+    setTimeout(function () {
+      if (typeof packShowPool === 'function' && typeof preloadFigPhotos === 'function') {
+        preloadFigPhotos(packShowPool().slice(0, 4), false);
+      }
+    }, 2500);
   }, 0);
   /* 앱을 켜 둔 채 시간이 지나도 원정 완료 배지가 뜨게 한다 */
   setInterval(function () { refreshExpBadge(); refreshSetBadge(); }, 20000);
