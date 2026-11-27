@@ -121,6 +121,25 @@
     d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = at == null ? 300 : at; } catch (e) {} });
     return QA.state();
   };
+  /* 실제 뽑기 오버레이를 끝까지 탭하고, 카드 순차 공개에서 초월 이펙트가 뜨는 순간을 잰다 */
+  QA.drivePull = async function (max) {
+    var e = el(), n = 0;
+    while (e && !e.hidden && n < (max || 30)) { tapFx(); n++; await QA.wait(130); }
+    await QA.wait(300);
+    return { taps: n, hidden: e ? e.hidden : null, snd: snap() };
+  };
+  QA.watchSeq = async function (ms) {
+    var d = QA.doc(), t0 = performance.now(), first = null, maxCards = 0;
+    while (performance.now() - t0 < (ms || 6000)) {
+      var t = d.getElementById('seqTrans');
+      if (t && t.classList.contains('on') && first === null) first = Math.round(performance.now() - t0);
+      var c = d.querySelectorAll('.pcard.sq-in').length;
+      if (c > maxCards) maxCards = c;
+      await QA.wait(16);
+    }
+    var tr = d.querySelector('.pcard.sq-in.tr');
+    return { seqTransAt: first, cards: maxCards, trCard: !!tr, errs: QA.errs.slice(0, 6) };
+  };
   QA.clear = function () {
     var d = QA.doc();
     d.getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
