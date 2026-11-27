@@ -16167,6 +16167,8 @@ function portraitSVG(fig, fit, alt) {
 
   function openPackModal() {
     refreshPackBal();
+    /* 쇼케이스에 곧 뜰 인물 사진을 미리 받아 둔다 (첫 프레임부터 실제 사진) */
+    preloadFigPhotos(packShowPool().slice(0, 4), false);
     startPackRotate();
     openModal('#mPack');
   }
