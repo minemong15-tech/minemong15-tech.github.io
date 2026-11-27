@@ -6,11 +6,18 @@
   .wrap{padding:8px}
   #fr{display:block;width:390px;height:844px;border:1px solid #333;border-radius:14px;background:#000}
   #qaNote{color:#8f9aa8;margin:4px 0 6px}
+  #qaBar{position:fixed;left:8px;bottom:6px;display:flex;gap:6px;z-index:5}
+  #qaBar button{padding:6px 10px;border-radius:8px;border:1px solid #3a3f4a;background:#161a20;color:#e6dcc2;font:12px/1 inherit}
 </style></head>
 <body>
 <div class="wrap">
   <div id="qaNote">LEGACY · 모바일 390×844 · 리로드 <span id="qaV">…</span></div>
-  <iframe id="fr" title="LEGACY mobile" src="../../legacy/index.html?vip=hs2026&amp;v=q2"></iframe>
+  <div id="qaBar">
+    <button id="qaHold" type="button">최종 파편 정지</button>
+    <button id="qaTop" type="button">레전더리 6단계</button>
+    <button id="qaClear" type="button">정리</button>
+  </div>
+  <iframe id="fr" title="LEGACY mobile" src="../../legacy/index.html?vip=hs2026&amp;v=q3"></iframe>
 </div>
 <script>
 (function () {
@@ -96,6 +103,34 @@
     var after = snap();
     return { overlayShown: vis, taps: res.taps, hidden: res.hidden, after: after, errs: QA.errs.slice(0, 8) };
   };
+  /* 파편 순간을 멈춰 두는 검사용 — 애니메이션을 320ms에 고정한다 */
+  QA.holdFinal = function () {
+    var d = QA.doc(), el = d.getElementById('pullFx');
+    el.hidden = false;
+    el.removeAttribute('aria-hidden');
+    el.className = 'pullfx on pf-final';
+    el.setAttribute('data-g', 'legendary');
+    el.style.setProperty('--pi', '1');
+    el.style.setProperty('--s0', '1.42');
+    var gn = el.querySelector('.pf-gn');
+    if (gn) { gn.textContent = '레전더리!!!!'; gn.className = 'pf-gn rainbow-text'; }
+    setTimeout(function () {
+      d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = 320; } catch (e) {} });
+    }, 80);
+  };
+  QA.clear = function () {
+    var d = QA.doc(), el = d.getElementById('pullFx');
+    d.getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
+    el.hidden = true;
+    el.className = 'pullfx';
+  };
+  document.getElementById('qaHold').onclick = QA.holdFinal;
+  document.getElementById('qaClear').onclick = QA.clear;
+  document.getElementById('qaTop').onclick = function () {
+    QA.clear();
+    QA.win().LegacyPullFx({ f: { grade: 'legendary' } }, null);
+  };
+
   QA.state = function () {
     var el = QA.doc().getElementById('pullFx');
     var s = el ? el.querySelector('.pf-crystal') : null;

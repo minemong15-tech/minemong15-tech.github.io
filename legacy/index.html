@@ -15543,7 +15543,7 @@ function portraitSVG(fig, fit, alt) {
     openModal('#mPack');
   }
 
-  /* ── 냥코식 뽑기 캡슐 연출 · 최고 등급까지 8단계 승격 ──
+  /* ── 룬 코어 크리스탈 뽑기 연출 · 최고 등급까지 8단계 승격 ──
      기본(회색)부터 뽑힌 가장 높은 등급까지 한 단계씩 쿵! 쿵! 색·빛·배지가 바뀌며 올라간다.
      화면 아무 곳이나 탭하면 즉시 결과로 스킵. */
   var GRADE_LADDER = ['basic', 'rare', 'special', 'heroic', 'mythic', 'legend', 'legendary', 'transcendent'];
@@ -15644,7 +15644,7 @@ function portraitSVG(fig, fit, alt) {
     } catch (e) {}
   }
 
-  /* 캡슐이 부서지며 카드가 나오는 짧은 파열음 — 등급 확정음과 겹치지 않게 짧게
+  /* 크리스탈이 부서지며 카드가 나오는 짧은 파열음 — 등급 확정음과 겹치지 않게 짧게
      (유리 파열 노이즈 + 낮은 타격 + 한 줄 반짝임) */
   function pfCrackSound() {
     if (pfSoundOff()) return;
@@ -16024,8 +16024,8 @@ function portraitSVG(fig, fit, alt) {
     }
 
     applyStep(0);
-    if (target > 0) hint('👆 <b>캡슐을 계속 눌러서 승격!</b>');
-    else hint('👆 <b>캡슐을 눌러서 열기!</b> 화면을 터치하세요');
+    if (target > 0) hint('👆 <b>룬 코어를 계속 눌러서 승격!</b>');
+    else hint('👆 <b>룬 코어를 눌러서 열기!</b> 화면을 터치하세요');
 
     function chromeHit(t) { return !!(t && t.closest && t.closest('.pf-mute, .pf-skip')); }
     function onTap(e) {
