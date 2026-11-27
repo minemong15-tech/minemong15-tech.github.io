@@ -1793,6 +1793,16 @@
   .br-sub{font-size:11.5px; color:#9a9384; margin:6px 0 0}
   .br-stars{font-size:22px; letter-spacing:.16em; color:#f6e6bd; margin-top:12px; text-shadow:0 0 20px rgba(246,230,189,.6)}
   .br-stars i{font-style:normal; color:#3a4048; text-shadow:none}
+  /* 🎟️ 스테이지 클리어 뽑기권 획득 배너 */
+  .br-tgain{display:flex; align-items:center; justify-content:center; gap:7px; flex-wrap:wrap; margin-top:13px; padding:9px 12px;
+    border:1px solid rgba(246,214,120,.55); border-radius:12px; font-size:11.5px; letter-spacing:.02em; color:#f7eedb;
+    background:linear-gradient(135deg, rgba(246,214,120,.20), rgba(246,214,120,.05));
+    box-shadow:0 0 0 1px rgba(246,214,120,.08) inset, 0 0 22px rgba(246,214,120,.18)}
+  .br-tgain b{ font-family:var(--serif); font-size:15px; color:#ffe9a8; text-shadow:0 0 14px rgba(255,233,168,.55) }
+  .br-tbonus{ font-size:9.5px; color:#c9bb95; border-left:1px solid rgba(246,214,120,.3); padding-left:8px }
+  .br-rewards .ticket{ border-color:rgba(246,214,120,.5); background:rgba(246,214,120,.08) }
+  .br-rewards .ticket span{ color:#e3cf9c }
+  .br-rewards .ticket b{ color:#ffe9a8 }
   .br-rewards{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:16px}
   .br-rewards div{border:1px solid var(--line2); border-radius:10px; padding:9px 6px; background:rgba(255,255,255,.02)}
   .br-rewards span{display:block; font-size:8px; letter-spacing:.1em; color:var(--muted2)}
@@ -7365,6 +7375,11 @@ function portraitSVG(fig, fit, alt) {
   'use strict';
 
   var ULT_HITS = 10, FRAG_PER_STAR = 5, MAX_STAR = 5;
+  /* 스테이지(캠페인·무한의 탑·보스 레이드)를 클리어할 때마다 주는 뽑기권 */
+  var CLEAR_TICKETS = 10;        /* 캠페인(전장) 클리어 */
+  var TOWER_TICKETS = 5;         /* 무한의 탑 층 클리어 */
+  var TOWER_COINS = 100;         /* 무한의 탑 층 클리어 코인 */
+  var BOSS_TICKETS = 25;         /* 보스 레이드 격파 */
   var CTX = null, S = null;
 
   /* ── 36인 고유 능력 3종 ──
@@ -9258,13 +9273,14 @@ function portraitSVG(fig, fit, alt) {
     b.towerStars[floor] = Math.max(b.towerStars[floor] || 0, stars);
     var isBest = floor > (b.towerBest || 0);
     if (isBest) b.towerBest = floor;
-    var coins = 220 + floor * 90;
+    var coins = TOWER_COINS;
     var gems = 2 + Math.floor(floor / 5);
-    var tickets = (floor % 5 === 0) ? 1 : 0;
+    var bonusTickets = (floor % 5 === 0) ? 1 : 0;
     S.coins += coins;
     S.gems = (S.gems || 0) + gems;
     S.xp += 120 + floor * 40;
-    if (tickets) S.tickets = (S.tickets || 0) + tickets;
+    /* 🎟️ 층 클리어 보상 — 클리어할 때마다 코인 +100 · 뽑기권 +5장 (5층 보스는 +1 보너스) */
+    S.tickets = (S.tickets || 0) + TOWER_TICKETS + bonusTickets;
     var itemDrop = tryItemDrop();
     saveAll();
     if (CTX.refreshCoins) CTX.refreshCoins();
@@ -9277,10 +9293,10 @@ function portraitSVG(fig, fit, alt) {
       '<span class="br-k">FLOOR ' + floor + ' CLEAR</span>' +
       '<h3>' + floor + '층 돌파' + (isBest ? ' · 최고 기록!' : '') + '</h3>' +
       '<p class="br-sub">🗼 무한의 탑 · ' + (floor % 5 === 0 ? '보스 격파' : '웨이브 격파') + ' · ★' + stars + '</p>' +
+      '<div class="br-tgain">🎟️ 뽑기권 <b>+' + TOWER_TICKETS + '</b> 획득 · 🪙 코인 <b>+' + TOWER_COINS + '</b> 획득' + (bonusTickets ? '<span class="br-tbonus">5층 보스 보너스 +' + bonusTickets + '</span>' : '') + '</div>' +
       '<div class="br-rewards">' +
       '<div><span>🪙 코인</span><b>+' + coins + '</b></div>' +
       '<div><span>💎 보석</span><b>+' + gems + '</b></div>' +
-      '<div><span>🎟️ 뽑기권</span><b>+' + tickets + '</b></div>' +
       (itemDrop ? '<div><span>⚔️ 전용 아이템</span><b>' + esc(itemDrop.it.n) + '</b></div>' : '') + '</div>' +
       mvpHtml() +
       '<div class="br-acts"><button type="button" class="bgo" data-tower-start="' + (floor + 1) + '">' + (floor + 1) + '층 도전 →</button>' +
@@ -10341,6 +10357,8 @@ function portraitSVG(fig, fit, alt) {
     };
     S.coins += coins;
     S.xp += xp;
+    /* 🎟️ 스테이지 클리어 보상 — 클리어할 때마다 뽑기권 +10장 */
+    S.tickets = (S.tickets || 0) + CLEAR_TICKETS;
     var gotFig = CTX.figures[Math.floor(Math.random() * CTX.figures.length)];
     if (!S.cards[gotFig.id]) S.cards[gotFig.id] = { n: 0, star: 0 };
     S.cards[gotFig.id].n++;
@@ -10372,6 +10390,7 @@ function portraitSVG(fig, fit, alt) {
       '<h3>' + esc(stage.era) + ' 정복 완료</h3>' +
       '<p class="br-sub">' + stage.flag + ' ' + esc(stage.name) + ' 함락 · ' + D.ico + ' ' + D.n + ' (보상 ×' + D.rew + ')</p>' +
       '<div class="br-stars">' + '★'.repeat(stars) + '<i>' + '★'.repeat(3 - stars) + '</i></div>' +
+      '<div class="br-tgain">🎟️ 뽑기권 <b>+' + CLEAR_TICKETS + '</b> 획득</div>' +
       '<div class="br-rewards">' +
       '<div><span>🪙 코인</span><b>+' + coins + '</b></div>' +
       '<div><span>XP</span><b>+' + xp + '</b></div>' +
@@ -10733,10 +10752,17 @@ function portraitSVG(fig, fit, alt) {
   }
 
   /* ── 보스/친구 유닛용 스탯 계산 (저장 상태와 무관하게 카드 값으로) ── */
+  /* 등급 배율 — 기본 < 희귀 < 영웅 < 신화 < 모멘 < 페이드 < 전설 < 리젠 < 초월 < 불멸
+     등급이 한 단계 오를 때마다 HP +22% · ATK +19% — 상위 등급이 하위 등급에 밀리는 역전이 없다 */
+  var GRADE_HP_MUL = [1, 1.22, 1.49, 1.82, 2.22, 2.71, 3.30, 4.03, 4.91, 6.00];
+  var GRADE_ATK_MUL = [1, 1.19, 1.42, 1.69, 2.01, 2.39, 2.85, 3.39, 4.03, 4.80];
   function statBase(f, star, lv, itemPct) {
     var g = gradeIdx(f);
+    if (g < 0 || g >= GRADE_HP_MUL.length) g = 0;
     star = star || 0; lv = lv || 1;
-    var hp = 540 + g * 92 + star * 62, atk = 54 + g * 11 + star * 7;
+    var starMul = 1 + 0.14 * star;
+    var hp = Math.round(520 * GRADE_HP_MUL[g] * starMul);
+    var atk = Math.round(52 * GRADE_ATK_MUL[g] * starMul);
     if ((f.grade || 'basic') === 'immortal') { hp = Math.round(hp * 1.35); atk = Math.round(atk * 1.3); }
     if (f.id === 'ronaldo') { hp = Math.round(hp * 1.5); atk = Math.round(atk * 1.6); }
     if (f.id === 'ronaldo-2014') { hp = Math.round(hp * 1.6); atk = Math.round(atk * 1.8); }
@@ -11148,8 +11174,11 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── 보스 상세 · 덱 편성 ── */
   function bossStage(x) {
-    var hp = Math.round(1100 * Math.pow(1.096, x.no - 1));
-    var atk = Math.round(90 * Math.pow(1.058, x.no - 1));
+    /* 🐉 보스 레이드 난이도 상향 — 단계가 오를수록 배율도 더 커진다 (HP 2.4~3.4배 · ATK 1.7~2.3배) */
+    var hpMul = 2.4 + 0.02 * (x.no - 1);
+    var atkMul = 1.7 + 0.012 * (x.no - 1);
+    var hp = Math.round(1100 * Math.pow(1.096, x.no - 1) * hpMul);
+    var atk = Math.round(90 * Math.pow(1.058, x.no - 1) * atkMul);
     var ids = bossWeakIds(x), wm = {};
     ids.forEach(function (id) { wm[id] = 1; });
     var ms = x.minions || ['수문장', '경비병', '추종자'];
@@ -11328,7 +11357,8 @@ function portraitSVG(fig, fit, alt) {
     S.coins = (S.coins || 0) + coins;
     S.xp = (S.xp || 0) + xp;
     S.gems = (S.gems || 0) + gems;
-    if (tickets) S.tickets = (S.tickets || 0) + tickets;
+    /* 🎟️ 보스 격파 보상 — 격파할 때마다 뽑기권 +25장 (첫 격파 이정표는 추가 지급) */
+    S.tickets = (S.tickets || 0) + BOSS_TICKETS + tickets;
     var itemDrop = tryItemDrop();
     saveAll();
     if (CTX.refreshCoins) CTX.refreshCoins();
@@ -11342,11 +11372,11 @@ function portraitSVG(fig, fit, alt) {
       '<span class="br-k">BOSS RAID ' + pad2(no) + ' CLEAR</span>' +
       '<h3>' + esc(x ? x.n : stage.name) + ' 격파' + (first ? ' · 첫 정복!' : '') + '</h3>' +
       '<p class="br-sub">🐉 ' + esc(stage.name) + ' · ⚡ 약점 ' + esc(stage.weakClass) + ' · ★' + stars + '</p>' +
+      '<div class="br-tgain">🎟️ 뽑기권 <b>+' + BOSS_TICKETS + '</b> 획득' + (tickets ? '<span class="br-tbonus">첫 격파 보너스 +' + tickets + '</span>' : '') + '</div>' +
       '<div class="br-rewards">' +
       '<div><span>🪙 코인</span><b>+' + coins.toLocaleString() + '</b></div>' +
       '<div><span>💎 보석</span><b>+' + gems + '</b></div>' +
       '<div><span>XP</span><b>+' + xp + '</b></div>' +
-      (tickets ? '<div><span>🎟️ 뽑기권</span><b>+' + tickets + '</b></div>' : '') +
       (itemDrop ? '<div><span>⚔️ 전용 아이템</span><b>' + esc(itemDrop.it.n) + '</b></div>' : '') + '</div>' +
       mvpHtml() +
       '<div class="br-acts">' +
