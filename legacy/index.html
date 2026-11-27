@@ -1191,7 +1191,10 @@
   .pullfx[data-g="mythic"]{--gc:#ef4444}      /* 신화 · 선명한 빨강 */
   .pullfx[data-g="legend"]{--gc:#facc15}      /* 전설 · 선명한 노랑/골드 (유저 지정) */
   .pullfx[data-g="legendary"]{--gc:#f97316}   /* 레전더리 · 강렬한 주황 불꽃 */
-  .pullfx[data-g="transcendent"]{--gc:#f0abfc}/* 초월 · 무지개 프리즘(빛무리) */
+  .pullfx[data-g="momen"]{--gc:#06b6d4}       /* 모멘 · 선명한 시안/청록 */
+  .pullfx[data-g="fade"]{--gc:#ec4899}        /* 페이드 · 네온 핑크/마젠타 */
+  .pullfx[data-g="regen"]{--gc:#f97316}       /* 리젠 · 불꽃 주황 */
+  .pullfx[data-g="transcendent"]{--gc:#ffffff}/* 초월 · 흑백 음양 */
   .pullfx .pf-bg{position:absolute; inset:0; background:radial-gradient(circle at 50% 46%, #13243c 0%, #0a1220 44%, #04060a 80%);
     opacity:0; transition:opacity .18s}
   .pullfx.on .pf-bg{opacity:1}
@@ -5322,6 +5325,9 @@
   }
   /* <<EXT5_CSS:END>> */
   /* <<V2_CSS:START>> */
+  .pullfx[data-g="regen"] .cr-edge{background:conic-gradient(from 200deg,#f97316,#facc15 30%,#f97316 62%,#facc15 88%,#f97316 100%)}
+  .pullfx[data-g="fade"] .cr-glow{background:radial-gradient(circle at 50% 56%, #fff 0%, #f9a8d4 18%, #ec4899 44%, rgba(0,0,0,0) 78%)}
+  .pullfx[data-g="momen"] .cr-glow{background:radial-gradient(circle at 50% 56%, #fff 0%, #67e8f9 18%, #06b6d4 44%, rgba(0,0,0,0) 78%)}
   /* ══════ 9단계 등급 색 · 초월 음양(陰陽) · 도감 스탯 (v2) ══════ */
   :root{
     --g-basic:#cbd5e1; --g-rare:#22c55e; --g-heroic:#a855f7; --g-mythic:#ef4444;
