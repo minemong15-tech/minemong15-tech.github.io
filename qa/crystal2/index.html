@@ -165,7 +165,7 @@
     });
     obs.observe(d.body, { subtree: true, attributes: true, childList: true, attributeFilter: ['class'] });
     w.LegacyReveal([{ f: f, isNew: false }], function () {});
-    await QA.wait(hold ? 220 : 1200);
+    await QA.wait(hold ? 430 : 1200);
     if (hold) d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = at == null ? 260 : at; } catch (e) {} });
     obs.disconnect();
     return { name: f && f.name, grade: f && f.grade, cardAt: cardAt, seqTransAt: fxAt, errs: QA.errs.slice(0, 6) };
