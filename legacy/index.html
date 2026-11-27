@@ -1189,11 +1189,11 @@
   .bmap-title b.off{font-family:inherit; font-size:10px; color:#6f7787}
   .actrl.spd{min-width:56px}
 
-  /* ── 냥코식 뽑기 캡슐 연출 · 최고 등급까지 8단계 승격 ── */
+  /* ── 룬 코어 크리스탈 뽑기 연출 · 최고 등급까지 8단계 승격 ── */
   .pullfx{position:fixed; inset:0; z-index:220; display:block; cursor:pointer; overflow:hidden;
-    -webkit-tap-highlight-color:transparent; --gc:#9ca3af; --pi:0; --s0:1; --shk:2px}
+    -webkit-tap-highlight-color:transparent; --gc:#9ed8ff; --pi:0; --s0:1; --shk:2px}
   .pullfx[hidden]{display:none}
-  .pullfx[data-g="basic"]{--gc:#9ca3af}
+  .pullfx[data-g="basic"]{--gc:#9ed8ff}
   .pullfx[data-g="rare"]{--gc:#3b82f6}
   .pullfx[data-g="special"]{--gc:#22c55e}
   .pullfx[data-g="heroic"]{--gc:#a855f7}
@@ -1201,7 +1201,7 @@
   .pullfx[data-g="legend"]{--gc:#eab308}
   .pullfx[data-g="legendary"]{--gc:#ffe9a8}
   .pullfx[data-g="transcendent"]{--gc:#ffffff}
-  .pullfx .pf-bg{position:absolute; inset:0; background:radial-gradient(circle at 50% 46%, #2a1f12 0%, #120e08 42%, #050406 78%);
+  .pullfx .pf-bg{position:absolute; inset:0; background:radial-gradient(circle at 50% 46%, #13243c 0%, #0a1220 44%, #04060a 80%);
     opacity:0; transition:opacity .18s}
   .pullfx.on .pf-bg{opacity:1}
   .pullfx[data-g="transcendent"] .pf-bg{background:radial-gradient(circle at 50% 46%, #2b2b30 0%, #0c0c0f 44%, #000 80%)}
@@ -1214,27 +1214,63 @@
   .pullfx[data-g="transcendent"] .pf-aura{opacity:calc(var(--pi) * .92);
     background:radial-gradient(circle at 50% 47%, #fff 0%, #b9bec8 30%, #23252b 58%, rgba(0,0,0,0) 78%)}
   .pf-stage{position:absolute; inset:0}
-  .pf-machine{position:absolute; left:50%; top:50%; width:min(38vmin,190px); height:min(52vmin,260px);
+  .pf-machine{position:absolute; left:50%; top:50%; width:min(46vmin,214px); height:min(58vmin,282px);
     transform:translate(-50%,-50%) scale(var(--s0)); will-change:transform;
     filter:drop-shadow(0 0 calc(3px + var(--pi) * 44px) var(--gc))}
-  .pf-cap{position:absolute; inset:0; border-radius:50% / 46%; overflow:hidden;
+
+  /* ── 룬 코어 크리스탈 — 각진 다면체 보석 + 둘러싼 회전 룬 링(마법진) ──
+     기본은 은빛/아이스 블루, 단계마다 등급색이 코어에 차오르고 균열이 번진다. */
+  .pf-rune{position:absolute; left:50%; top:50%; width:min(70vmin,340px); height:min(70vmin,340px);
+    transform:translate(-50%,-50%); pointer-events:none; color:rgba(176,228,255,.72);
+    opacity:calc(.34 + var(--pi) * .6); transition:opacity .2s}
+  .pf-rune svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
+    filter:drop-shadow(0 0 6px rgba(150,220,255,.45)) drop-shadow(0 0 16px var(--gc))}
+  .pf-rune .rn-a{animation:pfRuneA 26s linear infinite}
+  .pf-rune .rn-b{animation:pfRuneB 15s linear infinite}
+  .pf-rune .rn-g{animation:pfRuneA 40s linear infinite reverse}
+  .pf-crystal{position:absolute; inset:5% 2% 3%; pointer-events:none; transform-origin:50% 64%;
+    animation:pfFloat 4.2s ease-in-out infinite}
+  .pf-crystal > i{position:absolute; display:block}
+  .cr-glow{inset:-16%; border-radius:50%;
+    background:radial-gradient(circle at 50% 56%, var(--gc) 0%, rgba(0,0,0,0) 62%);
+    opacity:calc(.1 + var(--pi) * .52); mix-blend-mode:screen; filter:blur(7px)}
+  .cr-edge{inset:0; clip-path:polygon(50% 0%,78% 11%,100% 43%,86% 84%,50% 100%,14% 84%,0% 43%,22% 11%);
+    background:linear-gradient(150deg,#ffffff 0%,#d8f2ff 32%,#8ccbee 60%,#3f7fa8 100%);
+    opacity:calc(.5 + var(--pi) * .5); filter:blur(.4px)}
+  .cr-body{inset:2px; clip-path:polygon(50% 0%,78% 11%,100% 43%,86% 84%,50% 100%,14% 84%,0% 43%,22% 11%);
     background:
-      radial-gradient(circle at 34% 24%, #fff6d4 0%, #ffe9a8 18%, #e8bf6a 46%, #a97c2f 78%, #6b4a17 100%);
-    box-shadow:0 24px 60px -18px rgba(255,206,120,.55), inset 0 -18px 34px -12px rgba(60,32,0,.6),
-      inset 0 14px 24px -10px rgba(255,250,220,.65)}
-  .pullfx[data-g="transcendent"] .pf-cap{background:radial-gradient(circle at 34% 24%, #fff 0%, #eee 16%, #9a9a9a 46%, #2a2a2a 78%, #000 100%)}
-  .pf-cap .pf-band{position:absolute; left:0; right:0; top:44%; height:12%;
-    background:linear-gradient(180deg, rgba(90,58,14,.75), rgba(255,236,180,.55), rgba(90,58,14,.75));
-    opacity:.85}
-  .pf-cap .pf-shine{position:absolute; left:14%; top:10%; width:26%; height:34%; border-radius:50%;
-    background:radial-gradient(circle, rgba(255,255,255,.92), rgba(255,255,255,0) 70%); filter:blur(1px)}
-  /* 단계마다 캡슐에 스며드는 등급 색 · 테두리 발광 */
-  .pf-cap .pf-tint{position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
-    background:radial-gradient(circle at 50% 42%, var(--gc) 0%, rgba(0,0,0,0) 74%);
-    opacity:calc(.1 + var(--pi) * .66); mix-blend-mode:screen; transition:opacity .2s, background .2s}
-  .pf-cap .pf-edge{position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-    border:3px solid var(--gc); opacity:calc(.24 + var(--pi) * .76);
-    box-shadow:inset 0 0 calc(9px + var(--pi) * 42px) var(--gc); transition:opacity .2s, box-shadow .2s}
+      linear-gradient(102deg, rgba(255,255,255,.44) 0%, rgba(255,255,255,.16) 41.6%, rgba(255,255,255,0) 42%,
+        rgba(10,26,44,.18) 42.4%, rgba(8,18,32,.34) 100%),
+      linear-gradient(152deg, rgba(255,255,255,.97) 0%, rgba(230,248,255,.86) 15%, rgba(158,212,244,.66) 38%,
+        rgba(58,108,156,.74) 66%, rgba(16,30,50,.94) 100%);
+    box-shadow:inset 0 0 30px rgba(214,246,255,.45)}
+  .cr-facet{inset:2px; clip-path:polygon(50% 0%,61% 32%,50% 100%,39% 32%);
+    background:linear-gradient(200deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.2) 52%, rgba(255,255,255,0) 100%);
+    opacity:.72; mix-blend-mode:screen}
+  .cr-core{left:29%; right:29%; top:33%; bottom:23%; border-radius:50%;
+    background:radial-gradient(circle, #ffffff 0%, var(--gc) 44%, rgba(0,0,0,0) 80%);
+    opacity:calc(.34 + var(--pi) * .62); mix-blend-mode:screen; filter:blur(2px);
+    animation:pfCorePulse 2.6s ease-in-out infinite}
+  .cr-crack{left:50%; top:16%; width:2px; height:36%; margin-left:-1px; border-radius:2px;
+    transform-origin:50% 100%;
+    background:linear-gradient(180deg, rgba(255,255,255,0), #ffffff 24%, var(--gc) 76%, rgba(255,255,255,0));
+    filter:drop-shadow(0 0 5px #e2f8ff) drop-shadow(0 0 11px var(--gc)); transition:opacity .2s}
+  .cr-crack.c1{transform:rotate(-26deg); opacity:clamp(0, calc((var(--pi) - .08) * 3.4), .92)}
+  .cr-crack.c2{transform:rotate(41deg) translateY(11%); opacity:clamp(0, calc((var(--pi) - .34) * 3.4), .92)}
+  .cr-crack.c3{transform:rotate(-79deg) translateY(3%); opacity:clamp(0, calc((var(--pi) - .6) * 3.4), .95)}
+  .pf-shards{position:absolute; inset:0; pointer-events:none}
+  .pf-shards i{position:absolute; left:50%; top:50%; width:11px; height:17px; margin:-9px 0 0 -5.5px;
+    clip-path:polygon(50% 0%,100% 64%,16% 100%); opacity:0;
+    background:linear-gradient(160deg, #ffffff 0%, #d6f1ff 38%, var(--gc) 100%);
+    filter:drop-shadow(0 0 7px rgba(206,242,255,.85))}
+  .pf-shards i:nth-child(1){--sa:8deg; --sd:0s}
+  .pf-shards i:nth-child(2){--sa:52deg; --sd:.02s}
+  .pf-shards i:nth-child(3){--sa:96deg; --sd:.04s}
+  .pf-shards i:nth-child(4){--sa:138deg; --sd:.01s}
+  .pf-shards i:nth-child(5){--sa:184deg; --sd:.05s}
+  .pf-shards i:nth-child(6){--sa:228deg; --sd:.03s}
+  .pf-shards i:nth-child(7){--sa:272deg; --sd:.06s}
+  .pf-shards i:nth-child(8){--sa:314deg; --sd:.02s}
   .pf-ring{position:absolute; left:50%; top:50%; border-radius:50%; border:2px solid var(--gc);
     transform:translate(-50%,-50%); opacity:0}
   .pf-ring.r1{width:56%; height:24%}
@@ -1296,6 +1332,9 @@
   .pf-skip:active{transform:scale(.94); background:rgba(0,0,0,.75)}
   .pullfx.pf-final{cursor:default}
   .pullfx.pf-final .pf-machine{animation:pfFinalZoom .58s cubic-bezier(.2,.9,.3,1.2) both}
+  .pullfx.pf-final .pf-crystal{animation:pfShatter .5s cubic-bezier(.2,.85,.3,1) both}
+  .pullfx.pf-final .pf-shards i{animation:pfShard .82s cubic-bezier(.15,.72,.3,1) both; animation-delay:var(--sd, 0s)}
+  .pullfx.pf-final .pf-rune{opacity:0; transition:opacity .3s}
   .pullfx.pf-final .pf-burst{animation:pfFinalBurst .68s cubic-bezier(.15,.7,.3,1) both}
   .pullfx.pf-final .pf-flash{animation:pfFinalFlash .44s ease-out both}
   .pullfx.pf-final .pf-beams{opacity:1; animation:pfSpin 1.8s linear infinite}
@@ -1328,6 +1367,15 @@
   @keyframes pfBurst{0%{opacity:.2; transform:scale(.12)} 26%{opacity:1} 100%{opacity:0; transform:scale(2.6)}}
   @keyframes pfFlash{0%{opacity:0} 30%{opacity:.92} 100%{opacity:0}}
   @keyframes pfSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @keyframes pfRuneA{to{transform:rotate(360deg)}}
+  @keyframes pfRuneB{to{transform:rotate(-360deg)}}
+  @keyframes pfFloat{0%,100%{transform:translateY(0) rotate(-.6deg)} 50%{transform:translateY(-3.4%) rotate(.8deg)}}
+  @keyframes pfCorePulse{0%,100%{opacity:calc(.3 + var(--pi) * .5); transform:scale(.93)}
+    50%{opacity:calc(.46 + var(--pi) * .54); transform:scale(1.07)}}
+  @keyframes pfShatter{0%{transform:scale(1); opacity:1} 30%{transform:scale(1.09); opacity:1}
+    58%{transform:scale(1.2); opacity:.6} 100%{transform:scale(1.46); opacity:0}}
+  @keyframes pfShard{0%{opacity:0; transform:rotate(var(--sa)) translateY(0) scale(.45)}
+    14%{opacity:1} 100%{opacity:0; transform:rotate(calc(var(--sa) + 72deg)) translateY(-150px) scale(.92)}}
   @keyframes pfRing{0%{opacity:.5; transform:translate(-50%,-50%) scale(.68)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.78)}}
 
   /* ── 🃏 뽑기 결과 카드 순차 공개 ── */
@@ -6102,7 +6150,7 @@
   <div class="sm-tip">클릭하면 넘어갑니다</div>
 </div>
 
-<!-- 냥코식 뽑기 캡슐 연출 · 최고 등급까지 8단계 승격 -->
+<!-- 룬 코어 크리스탈 뽑기 · 최고 등급까지 8단계 승격 -->
 <!-- 유물 상자 오픈 연출 — 쿵! 번쩍! · 탭하면 스킵 -->
 <div class="relicfx" id="relicFx" hidden aria-hidden="true">
   <div class="rf-bg"></div>
@@ -6130,7 +6178,43 @@
   <div class="pf-aura"></div>
   <div class="pf-stage">
     <div class="pf-machine">
-      <span class="pf-cap"><i class="pf-band"></i><i class="pf-shine"></i><i class="pf-tint"></i><i class="pf-edge"></i></span>
+      <!-- 둘러싼 회전 룬 링(마법진) -->
+      <span class="pf-rune" aria-hidden="true">
+        <svg class="rn-a" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="5 10" opacity=".55"/>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width=".7" opacity=".3"/>
+        </svg>
+        <svg class="rn-b" viewBox="0 0 200 200" aria-hidden="true">
+          <path d="M100 5 A95 95 0 0 1 195 100" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          <path d="M100 195 A95 95 0 0 1 5 100" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          <circle cx="100" cy="100" r="76" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 13" opacity=".5"/>
+        </svg>
+        <svg class="rn-g" viewBox="0 0 200 200" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none">
+            <g transform="rotate(0 100 100)"><path d="M100 8v13M100 12l-6-4M100 12l6-4"/></g>
+            <g transform="rotate(45 100 100)"><path d="M100 8v13M100 21l-5-6M100 21l5-6"/></g>
+            <g transform="rotate(90 100 100)"><path d="M100 8v13M100 8l-5 5M100 16l5 5"/></g>
+            <g transform="rotate(135 100 100)"><path d="M96 8l8 13M104 8l-8 13"/></g>
+            <g transform="rotate(180 100 100)"><path d="M100 8v13M100 14l6 7M100 14l-6 7"/></g>
+            <g transform="rotate(225 100 100)"><path d="M100 8v6l6 7M100 14l-6 7"/></g>
+            <g transform="rotate(270 100 100)"><path d="M97 8v13M97 8l6 4M97 21l6-4"/></g>
+            <g transform="rotate(315 100 100)"><path d="M100 8v13M100 12l6-4M100 17l-6-3"/></g>
+          </g>
+        </svg>
+      </span>
+      <!-- 다면체 크리스탈 본체 + 코어 + 균열 -->
+      <span class="pf-crystal">
+        <i class="cr-glow"></i>
+        <i class="cr-edge"></i>
+        <i class="cr-body"></i>
+        <i class="cr-facet"></i>
+        <i class="cr-core"></i>
+        <i class="cr-crack c1"></i>
+        <i class="cr-crack c2"></i>
+        <i class="cr-crack c3"></i>
+      </span>
+      <!-- 마지막 팡! — 부서져 날아가는 파편 -->
+      <span class="pf-shards"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
       <span class="pf-ring r1"></span>
       <span class="pf-ring r2"></span>
       <span class="pf-ring r3"></span>
@@ -15471,6 +15555,10 @@ function portraitSVG(fig, fit, alt) {
   var PF_TONE = [261.63, 329.63, 392.00, 466.16, 523.25, 659.25, 783.99, 987.77];
   var PF_TIMERS = [], PULLFX_T = null, PF_FIN = true, PF_DONE = null;
   var PF_IDX = 0, PF_TARGET = 0, PF_READY = false, PF_OPENING = false, PF_TAP_AT = 0;
+  /* 등급 확정음은 한 번의 뽑기 연출에서 딱 1회만 — 목표 단계 도달과 팡! 오픈에서 겹치지 않게 */
+  var PF_GRADE_SOUND = false;   /* 등급(빰!) 소리가 이미 울렸는지 */
+  var PF_SND_COUNT = { step: 0, burst: 0, trans: 0, crack: 0 };   /* 중복 검증용 계수 */
+  window.LegacyPullSnd = PF_SND_COUNT;   /* 연출음 호출 계수 — 중복 검사용 */
   var PF_MUTE_KEY = 'legacy.sfx.mute';
 
   function pfSoundOff() { try { return localStorage.getItem(PF_MUTE_KEY) === '1'; } catch (e) { return false; } }
@@ -15552,6 +15640,31 @@ function portraitSVG(fig, fit, alt) {
       g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
       src.connect(bp); bp.connect(g); g.connect(dest);
       src.start(t); src.stop(t + dur + 0.03);
+    } catch (e) {}
+  }
+
+  /* 캡슐이 부서지며 카드가 나오는 짧은 파열음 — 등급 확정음과 겹치지 않게 짧게
+     (유리 파열 노이즈 + 낮은 타격 + 한 줄 반짝임) */
+  function pfCrackSound() {
+    if (pfSoundOff()) return;
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    try {
+      PF_SND_COUNT.crack++;
+      var t0 = ctx.currentTime + 0.002;
+      var ms = ctx.createGain(); ms.gain.value = 0.8; ms.connect(ctx.destination);
+      var n = Math.max(1, Math.floor(ctx.sampleRate * 0.17)), buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0), i;
+      for (i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3.4);
+      var src = ctx.createBufferSource(); src.buffer = buf;
+      var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.setValueAtTime(2600, t0); hp.Q.value = 0.9;
+      var g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.42, t0 + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.19);
+      src.connect(hp); hp.connect(g); g.connect(ms);
+      src.start(t0); src.stop(t0 + 0.21);
+      pfTone(ctx, ms, { type: 'sine', f: 190, to: 58, slide: 0.16, t: t0, dur: 0.24, peak: 0.13 });
+      pfTone(ctx, ms, { type: 'sine', f: 1568, t: t0 + 0.03, dur: 0.3, peak: 0.026, hp: 1700, pan: 0.3 });
     } catch (e) {}
   }
 
@@ -15666,7 +15779,8 @@ function portraitSVG(fig, fit, alt) {
         pfTone(ctx, bus, { type: 'sine', f: f * 10.1, t: t0 + 0.36, dur: 1.0, peak: 0.007, hp: 3200, pan: -0.4 });
       }
 
-      if (last) pfFinalBurst(ctx, bus, t0, tier, f);
+      PF_SND_COUNT.step++;
+      if (last) { PF_SND_COUNT.burst++; pfFinalBurst(ctx, bus, t0, tier, f); }
     } catch (e) {}
   }
 
@@ -15695,7 +15809,7 @@ function portraitSVG(fig, fit, alt) {
     f.classList.remove('pf-final', 'pf-tr');
     var tr = f.querySelector('.pf-trans');
     if (tr) tr.className = 'pf-trans';
-    PF_IDX = 0; PF_READY = false; PF_OPENING = false;
+    PF_IDX = 0; PF_READY = false; PF_OPENING = false; PF_GRADE_SOUND = false;
     var gn = $('#pfGradeName');
     if (gn) { gn.className = 'pf-gn'; gn.textContent = ''; }
     var gk = $('#pfGradeKicker');
@@ -15781,6 +15895,7 @@ function portraitSVG(fig, fit, alt) {
           o.connect(g); g.connect(ctx.destination);
           o.start(st); o.stop(st + 1.14);
         });
+        PF_SND_COUNT.trans++;
         var bo = ctx.createOscillator(), bg = ctx.createGain();
         bo.type = 'sine';
         bo.frequency.setValueAtTime(110, t0 + 0.18);
@@ -15797,6 +15912,9 @@ function portraitSVG(fig, fit, alt) {
     function applyStep(idx) {
       var g = GRADE_LADDER[idx];
       var t = idx / (GRADE_LADDER.length - 1);
+      /* 등급이 드러나는 단계(=목표)에서만 최종 화음을 울린다 · 같은 연출에서 두 번 울리지 않게 잠근다 */
+      var fanfare = (idx === PF_TARGET) && !PF_GRADE_SOUND;
+      if (fanfare) PF_GRADE_SOUND = true;
       el.setAttribute('data-g', g);
       el.style.setProperty('--pi', t.toFixed(3));
       el.style.setProperty('--s0', (1 + idx * 0.055).toFixed(3));
@@ -15820,13 +15938,13 @@ function portraitSVG(fig, fit, alt) {
       }
       if (isTr) {
         pfTransFx();
-        pfTransSound();
-        pfStepSound(idx, false);
+        /* 초월 확정음은 이 한 번뿐 — 오픈에서 다시 울리지 않는다 */
+        if (fanfare) pfTransSound();
         return;
       }
       if (burst) pfKick(burst, 'pf-b');
       if (idx >= 2 && flash) pfKick(flash, 'pf-f');
-      pfStepSound(idx, idx === target);
+      pfStepSound(idx, fanfare);
     }
 
     function finish() {
@@ -15859,15 +15977,15 @@ function portraitSVG(fig, fit, alt) {
       el.style.setProperty('--s0', (1 + top * 0.055).toFixed(3));
       if (machine) pfKick(machine, 'pf-k');
       if (GRADE_LADDER[top] === 'transcendent') {
-        /* 초월 오픈도 글자 없이 이펙트만 */
+        /* 초월 오픈도 글자 없이 이펙트만 · 소리는 확정 때 이미 울렀으니 부서지는 소리만 */
         if (gn) { gn.textContent = ''; gn.className = 'pf-gn'; }
         hint('');
         pfTransFx();
-        pfTransSound();
+        pfCrackSound();
       } else {
         if (burst) pfKick(burst, 'pf-b');
         if (flash) pfKick(flash, 'pf-f');
-        pfStepSound(top, true);
+        pfCrackSound();
         buzz([26, 45, 110]);
         hint('✨ <b>결과 확인!</b>');
       }
