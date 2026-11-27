@@ -93,7 +93,8 @@
     skipfx: async function () {
       var sk = q('#pfSkip'); if (sk) sk.click();
       await sleep(950);
-      log('skip → reveal cards=' + D().querySelectorAll('#reveal .pcard').length + ' · bar=' + (q('#seqBar') && !q('#seqBar').hidden));
+      ranges([[400, 960]]);
+      log('skip → reveal cards=' + D().querySelectorAll('#reveal .pcard').length + ' · bar=' + (q('#seqBar') && !q('#seqBar').hidden) + ' · gap hold on');
     },
     holdgap: function () { ranges([[400, 960]]); log('gap timers blocked'); },
     tap: function () {
