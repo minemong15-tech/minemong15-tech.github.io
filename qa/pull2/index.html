@@ -31,7 +31,7 @@
     <button data-act="resume">▶ 재생</button>
     <button data-act="state">상태</button>
     <button data-act="txt">화면 문구 수집</button>
-    <button data-act="trans">🌟 초월 강제(천장 49)</button>
+    <button data-act="flow">🔄 초월 준비(재로딩·5회)</button>
     <button data-act="transrun">🌟 초월 풀 시나리오</button>
     <button data-act="shot1">📸 초월 터치 정지</button>
     <button data-act="shot2">📸 초월 카드 정지</button>
@@ -160,6 +160,20 @@
       log('PF :: ' + JSON.stringify(s));
       var all = D().body.innerText.replace(/\s+/g, ' ');
       log('화면에 "남음" 포함: ' + /남음/.test(all) + ' / "/ 8" 포함: ' + /\/\s*8/.test(all));
+    },
+    /* 초월 준비 — 천장까지 1회 남기고 새로 열어 5회 뽑기까지 */
+    flow: async function () {
+      var st = { v: 1, userName: '테스터', userAge: 20, pity: 49, att: [], log: [] };
+      W().localStorage.setItem('legacy.vip.state.v1', JSON.stringify(st));
+      fr.src = '/legacy/?vip=hs2026&v=f2036&qa=' + Date.now() + 'f';
+      await sleep(2400);
+      log('reload · err=' + errN);
+      var b = q('#sdPack'); if (b) b.click(); else if (q('#pkOpen')) q('#pkOpen').click();
+      await sleep(350);
+      var p5 = q('#pull5'); if (!p5) { log('pull5 없음'); return; }
+      p5.click();
+      await sleep(280);
+      log('pull5 · ' + JSON.stringify(pfSnap()));
     },
     transrun: async function () {
       log('=== 초월 풀 시나리오 ===');
