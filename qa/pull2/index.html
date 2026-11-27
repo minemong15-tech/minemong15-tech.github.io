@@ -299,7 +299,7 @@
           return w.__origST.apply(w, [fn, ms].concat(a));
         };
       }
-      w.__qaRanges = [[400, 960]];   /* 카드 자동 진행 차단 */
+      w.__qaRanges = [];   /* 개방 — 팡 타이머(560ms)는 지나가야 함 */
       var p1 = q('#pull1');
       if (!p1) { log('pull1 없음'); return; }
       p1.click();
@@ -307,9 +307,11 @@
       log('1뽑기 · ' + JSON.stringify(pfSnap()));
       for (var i = 0; i < 9; i++) { tapFx(); await sleep(160); if (pfSnap().tr) break; }
       log('터치 후 · ' + JSON.stringify(pfSnap()));
-      await sleep(320);
+      await sleep(300);
       tapFx();
-      await sleep(1200);
+      /* 팡(560ms) 지난 뒤 · 카드 공개 직전에 자동 진행 타이머(760ms)만 차단 */
+      setTimeout(function () { w.__qaRanges = [[600, 900]]; }, 700);
+      await sleep(1900);
       var trc = q('#reveal .pcard.tr');
       dSeek(D(), '.seqtrans *', 250);
       dSeek(D(), '#reveal .pcard.tr', 190);
