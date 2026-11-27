@@ -1018,53 +1018,6 @@
   .r-feats span{font-size:10.5px; color:var(--muted2); display:block; margin-top:3px; line-height:1.5}
 
 
-  /* ───── ⚔️ 전투하기 · 진입 배너 ───── */
-  .warcta{
-    position:relative; overflow:hidden; margin-top:22px; padding:30px 32px;
-    border:1px solid rgba(200,168,106,.28);
-    background:
-      radial-gradient(700px 280px at 88% 10%, rgba(200,168,106,.16), transparent 65%),
-      radial-gradient(560px 300px at 8% 110%, rgba(120,60,60,.22), transparent 60%),
-      linear-gradient(150deg,#12100d 0%, #0d1017 55%, #0a0c11 100%);
-    display:grid; grid-template-columns:minmax(0,1fr) 240px; gap:26px; align-items:center;
-  }
-  .wcta-glow{position:absolute; inset:-40%; background:conic-gradient(from 0deg, transparent, rgba(200,168,106,.14), transparent 40%); animation:wspin 18s linear infinite; pointer-events:none}
-  @keyframes wspin{to{transform:rotate(360deg)}}
-  .wcta-in{position:relative; z-index:2; order:1}
-  .warcta h2{
-    font-family:var(--serif); font-size:clamp(23px,3.4vw,33px); font-weight:600; letter-spacing:.01em;
-    margin:10px 0 0; color:#f7eedb; text-shadow:0 0 34px rgba(200,168,106,.35);
-  }
-  .warcta p{margin:12px 0 0; font-size:12.5px; line-height:1.75; color:#a9a396; max-width:640px; word-break:keep-all}
-  .warcta p b{color:var(--gold-hi); font-weight:600}
-  .wcta-stats{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap}
-  .wcta-stats div{
-    border:1px solid var(--line2); border-radius:11px; padding:8px 14px; min-width:92px;
-    background:rgba(255,255,255,.02);
-  }
-  .wcta-stats b{display:block; font-family:var(--serif); font-size:16px; color:var(--gold-hi); font-variant-numeric:tabular-nums; letter-spacing:.02em}
-  .wcta-stats span{display:block; font-size:8.5px; letter-spacing:.12em; color:var(--muted2); margin-top:3px}
-  .wcta-foot{display:flex; align-items:center; gap:14px; margin-top:20px; flex-wrap:wrap}
-  .wcta-btn{
-    border:1px solid rgba(200,168,106,.55); border-radius:12px; cursor:pointer;
-    padding:13px 26px; font-size:14px; font-weight:600; letter-spacing:.03em; color:#140f07;
-    background:linear-gradient(120deg,#f6e6bd,#c8a86a 55%,#8d7648);
-    box-shadow:0 14px 30px -14px rgba(200,168,106,.8), inset 0 1px 0 rgba(255,255,255,.5);
-    display:inline-flex; align-items:center; gap:8px; transition:transform .18s, box-shadow .18s;
-  }
-  .wcta-btn:hover{transform:translateY(-2px); box-shadow:0 18px 36px -14px rgba(200,168,106,.95)}
-  .wcta-btn span{font-size:15px}
-  .wcta-next{font-size:10.5px; letter-spacing:.05em; color:#8c8779}
-  .wcta-art{position:relative; order:2; width:100%; aspect-ratio:1/1; max-width:230px; justify-self:end; margin-right:6px}
-  .wswords{width:100%; height:100%; animation:wfloat 6s ease-in-out infinite}
-  @keyframes wfloat{0%,100%{transform:translateY(-4px) rotate(-2deg)}50%{transform:translateY(6px) rotate(2deg)}}
-  .wchip{
-    position:absolute; font-size:8.5px; letter-spacing:.1em; padding:4px 8px; border-radius:999px;
-    border:1px solid rgba(200,168,106,.35); color:#d8c69c; background:rgba(10,12,16,.72);
-    white-space:nowrap;
-  }
-  .wchip.c1{left:-6px; top:16%} .wchip.c2{right:-8px; top:32%}
-  .wchip.c3{left:2%; bottom:16%} .wchip.c4{right:-4%; bottom:8%}
 
   /* ───── battle modal shell ───── */
   .modal.battle{padding:12px}
@@ -1376,6 +1329,90 @@
   @keyframes pfSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
   @keyframes pfRing{0%{opacity:.5; transform:translate(-50%,-50%) scale(.68)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.78)}}
 
+  /* ── 🃏 뽑기 결과 카드 순차 공개 ── */
+  .pcard.sq-w{animation:none; opacity:0; transform:translateY(12px) scale(.9)}
+  .pcard.sq-in{animation:sqPop .46s cubic-bezier(.2,1.05,.35,1) both}
+  .pcard.sq-in.sq-fast{animation-duration:.24s}
+  .pcard::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 32%, var(--rc,#9ca3af) 0%, rgba(0,0,0,0) 66%); mix-blend-mode:screen}
+  .pcard.sq-in::after{animation:sqSheen .72s ease-out both}
+  .pcard.sq-in.hi{box-shadow:0 0 0 2px var(--rc), 0 0 34px -4px var(--rc)}
+  @keyframes sqPop{0%{opacity:0; transform:translateY(16px) scale(.8) rotate(-3deg)}
+    58%{opacity:1; transform:translateY(-3px) scale(1.05) rotate(.6deg)} 100%{opacity:1; transform:none}}
+  @keyframes sqSheen{0%{opacity:0} 26%{opacity:.6} 100%{opacity:0}}
+
+  .seqbar{position:fixed; right:12px; bottom:calc(14px + env(safe-area-inset-bottom, 0px)); z-index:216;
+    display:flex; align-items:center; gap:8px; padding:7px 8px 7px 13px; border-radius:999px;
+    border:1px solid rgba(246,230,189,.32); background:rgba(6,8,12,.88); color:#f6e6bd;
+    font-size:11px; letter-spacing:.04em; box-shadow:0 14px 34px -16px #000; -webkit-tap-highlight-color:transparent}
+  .seqbar[hidden]{display:none}
+  .seqbar .sq-n{font-variant-numeric:tabular-nums; letter-spacing:.12em; color:#ffeec2}
+  .seqbar .sq-all{border:1px solid rgba(246,230,189,.4); border-radius:999px; padding:6px 11px; cursor:pointer;
+    font-family:inherit; font-size:10.5px; color:#f6e6bd; background:rgba(255,255,255,.06)}
+  .seqbar .sq-all:active{transform:scale(.95)}
+
+  .seqplaque{position:fixed; left:0; right:0; top:26%; z-index:211; text-align:center; pointer-events:none; opacity:0}
+  .seqplaque b{display:inline-block; font-family:var(--serif); font-size:clamp(30px,10vw,58px); letter-spacing:.06em;
+    color:#fff; text-shadow:0 0 22px var(--gc,#fff), 0 0 60px rgba(255,214,130,.85)}
+  .seqplaque b.mono{color:#fff}
+  .seqplaque b.rb{background:linear-gradient(100deg,#fff,#ffd166,#7bf1a8,#7ad7ff,#b78aff,#fff);
+    -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:none;
+    filter:drop-shadow(0 0 18px rgba(255,255,255,.85))}
+  .seqplaque.on{animation:sqPlaque 1s cubic-bezier(.2,.9,.2,1) both}
+  @keyframes sqPlaque{0%{opacity:0; transform:scale(.35)} 22%{opacity:1; transform:scale(1.22)}
+    42%{transform:scale(.98)} 74%{opacity:1; transform:scale(1.02)} 100%{opacity:0; transform:scale(1.12)}}
+
+  .seqflash{position:fixed; inset:0; z-index:210; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 46%, var(--gc,#fff) 0%, rgba(0,0,0,0) 62%)}
+  .seqflash.on{animation:sqFlash .7s ease-out both}
+  @keyframes sqFlash{0%{opacity:0} 14%{opacity:.5} 100%{opacity:0}}
+
+  /* ── NEW · 화면을 꽉 채우는 신규 인물 연출 ── */
+  .newfx{position:fixed; inset:0; z-index:214; overflow:hidden; background:#05060a; opacity:0;
+    pointer-events:none; -webkit-tap-highlight-color:transparent; --nc:#9ca3af}
+  .newfx[hidden]{display:none}
+  .newfx.on{opacity:1; pointer-events:auto; animation:nfIn .3s cubic-bezier(.2,.9,.2,1) both}
+  .newfx.out{opacity:0; transition:opacity .2s}
+  .newfx .nf-bg{position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 30%, var(--nc) 0%, rgba(0,0,0,0) 58%),
+      linear-gradient(180deg, #0a0b10 0%, #05060a 70%, #000 100%)}
+  .newfx .nf-rays{position:absolute; left:50%; top:34%; width:150vmax; height:150vmax;
+    margin:-75vmax 0 0 -75vmax; opacity:.45;
+    background:conic-gradient(from 0deg, rgba(255,255,255,.18) 0deg, rgba(0,0,0,0) 26deg,
+      rgba(255,255,255,.13) 52deg, rgba(0,0,0,0) 78deg, rgba(255,255,255,.18) 104deg,
+      rgba(0,0,0,0) 130deg, rgba(255,255,255,.12) 156deg, rgba(0,0,0,0) 182deg,
+      rgba(255,255,255,.18) 208deg, rgba(0,0,0,0) 234deg, rgba(255,255,255,.13) 260deg,
+      rgba(0,0,0,0) 286deg, rgba(255,255,255,.18) 312deg, rgba(0,0,0,0) 338deg);
+    animation:nfSpin 16s linear infinite; will-change:transform}
+  .newfx .nf-art{position:absolute; left:0; right:0; top:0; height:64%; overflow:hidden;
+    animation:nfArt .72s cubic-bezier(.2,.9,.2,1) both}
+  .newfx .nf-art .ph-svg,.newfx .nf-art .ph-img{position:absolute; inset:0; width:100%; height:100%}
+  .newfx .nf-art .ph-img{object-fit:cover; object-position:50% 24%}
+  .newfx .nf-scrim{position:absolute; left:0; right:0; bottom:0; height:54%;
+    background:linear-gradient(180deg, rgba(5,6,10,0) 0%, rgba(5,6,10,.74) 54%, #05060a 100%)}
+  .newfx .nf-copy{position:absolute; left:0; right:0; bottom:calc(5% + env(safe-area-inset-bottom, 0px));
+    display:block; text-align:center; padding:0 18px; animation:nfCopy .5s .12s cubic-bezier(.2,.9,.2,1) both}
+  .newfx .nf-new{display:block; font-family:var(--serif); font-size:clamp(34px,13vw,64px); line-height:1;
+    letter-spacing:.06em; color:#fff; text-shadow:0 0 26px var(--nc), 0 0 68px rgba(255,255,255,.55)}
+  .newfx .nf-k{display:block; margin-top:8px; font-style:normal; font-size:11.5px; letter-spacing:.34em; color:#e8dcc0}
+  .newfx .nf-name{display:block; margin-top:6px; font-family:var(--serif); font-size:clamp(24px,8.4vw,40px);
+    color:#fff; letter-spacing:.02em; word-break:keep-all}
+  .newfx .nf-grade{display:inline-block; margin-top:10px; padding:4px 14px; border-radius:999px;
+    font-size:10.5px; letter-spacing:.2em; color:#0a0c10; background:var(--nc);
+    border:1px solid rgba(255,255,255,.35)}
+  .newfx .nf-grade.mono{background:#fff; color:#050507}
+  .newfx .nf-grade.rb{background:linear-gradient(100deg,#ffd166,#7bf1a8,#7ad7ff,#b78aff); color:#050507}
+  .newfx .nf-tip{display:block; margin-top:12px; font-style:normal; font-size:9.5px; letter-spacing:.24em;
+    color:rgba(246,230,189,.6)}
+  @keyframes nfIn{0%{opacity:0; transform:scale(1.06)} 100%{opacity:1; transform:none}}
+  @keyframes nfArt{0%{opacity:0; transform:scale(1.14)} 100%{opacity:1; transform:none}}
+  @keyframes nfCopy{0%{opacity:0; transform:translateY(18px)} 100%{opacity:1; transform:none}}
+  @keyframes nfSpin{to{transform:rotate(360deg)}}
+
+  /* 순차 공개 중에는 닫기·다른 뽑기를 잠근다 (결과를 놓치지 않게) */
+  .modal.seq-lock .close{pointer-events:none; opacity:.28}
+  .modal.seq-lock .btn-pack,.modal.seq-lock .rate-btn,.modal.seq-lock .relic-entry{pointer-events:none; opacity:.5}
+
   /* ── 초월 천장 게이지 ── */
   .pity{border:1px solid rgba(246,230,189,.32); border-radius:14px; padding:10px 12px;
     background:linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.35)); position:relative; overflow:hidden}
@@ -1563,8 +1600,6 @@
   .br-acts{display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap}
 
   @media (max-width:900px){
-    .warcta{grid-template-columns:1fr; padding:24px 20px}
-    .wcta-art{display:none}
     .bmap{grid-template-columns:repeat(2,minmax(0,1fr))}
     .bdeck-wrap{grid-template-columns:1fr}
     .bcards{max-height:none; grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -5353,39 +5388,6 @@
   </button>
 
 
-  <section class="card warcta" id="warCta" aria-labelledby="warTitle">
-    <div class="wcta-glow"></div>
-    <div class="wcta-art" aria-hidden="true">
-      <svg viewBox="0 0 200 200" class="wswords">
-        <defs>
-          <linearGradient id="wg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e6bd"/><stop offset="1" stop-color="#8d7648"/></linearGradient>
-          <linearGradient id="wg2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe7f2"/><stop offset="1" stop-color="#6b7a90"/></linearGradient>
-        </defs>
-        <g stroke="url(#wg1)" stroke-width="7" stroke-linecap="round" fill="none">
-          <path d="M46 154 L132 44"/><path d="M60 168 L146 58"/>
-        </g>
-        <g stroke="url(#wg2)" stroke-width="6" stroke-linecap="round" fill="none">
-          <path d="M154 154 L68 44"/><path d="M140 168 L54 58"/>
-        </g>
-      </svg>
-      <span class="wchip c1">기원전</span><span class="wchip c2">로마</span>
-      <span class="wchip c3">조선</span><span class="wchip c4">21세기</span>
-    </div>
-    <div class="wcta-in">
-      <span class="kicker">NEW MODE · HISTORY WAR</span>
-      <h2 id="warTitle">⚔️ 전투하기 — 역사 전쟁</h2>
-      <p>기원전 고조선부터 21세기 우주 시대까지, 여덟 시대의 나라와 싸운다. 내가 얻은 인물 <b>최대 6명</b>으로 덱을 짜고, 인물마다 <b>3개의 고유 능력</b>과 <b>10타 궁극기</b>를 터뜨려라.</p>
-      <div class="wcta-stats">
-        <div><b id="warCleared">0 / 8</b><span>정복한 시대</span></div>
-        <div><b id="warDeck">0 / 6</b><span>출격 덱</span></div>
-        <div><b id="warStars">0 / 24</b><span>별</span></div>
-      </div>
-      <div class="wcta-foot">
-        <button class="wcta-btn" id="warEnter" type="button">전투 시작 <span>→</span></button>
-        <span class="wcta-next" id="warNext">다음 전장 · 기원전 고조선 &amp; 고대 그리스</span>
-      </div>
-    </div>
-  </section>
 
   <footer class="ft">
     <div class="links">
@@ -5779,7 +5781,7 @@
     </div>
     <div class="rate-table" id="rateTable"></div>
     <ul class="rate-notes">
-      <li><b>5회 뽑기 보장</b> — 5회 뽑기에서는 <b>전설 이상</b> 1장이 반드시 나옵니다.</li>
+      <li><b>뽑기 방식</b> — 1회·5회 모두 등급 확률표대로 한 장씩 <b>독립적으로</b> 뽑습니다. (5회 상위 등급 보강 없음)</li>
       <li><b>50회 초월 천장</b> — 초월이 나오지 않으면 50회째 뽑기에서 <b>초월 1장</b>이 확정됩니다. (뽑기 1회 +1 · 5회 +5)</li>
       <li><b>불멸 합성 5%</b> — 불멸은 카드팩에 나오지 않습니다. 초월 2명을 합성하면 5% 확률로 불멸 1명이 강림합니다.</li>
     </ul>
@@ -6016,6 +6018,27 @@
 
 <div id="fx"></div>
 <div class="toast" id="toast"></div>
+
+<!-- 🃏 뽑기 결과 순차 공개 · 신규 풀스크린 연출 -->
+<div class="seqbar" id="seqBar" hidden>
+  <span class="sq-n" id="seqCount">0 / 0</span>
+  <button class="sq-all" id="seqAll" type="button">⏭️ 전부 보기</button>
+</div>
+<div class="seqplaque" id="seqPlaque" aria-hidden="true"><b id="seqPlaqueTxt"></b></div>
+<div class="seqflash" id="seqFlash" aria-hidden="true"></div>
+<div class="newfx" id="newFx" hidden aria-hidden="true">
+  <span class="nf-bg"></span>
+  <span class="nf-rays"></span>
+  <span class="nf-art" id="nfArt"></span>
+  <span class="nf-scrim"></span>
+  <span class="nf-copy">
+    <b class="nf-new">NEW!</b>
+    <i class="nf-k">새로운 인물 획득</i>
+    <strong class="nf-name" id="nfName"></strong>
+    <span class="nf-grade" id="nfGrade"></span>
+    <em class="nf-tip" id="nfTip">터치하면 이어집니다</em>
+  </span>
+</div>
 
 <!-- ⚡ 사이드 퀵 독 — 오른쪽에 붙은 작은 아이콘 바 -->
 <div class="side-dock" id="sideDock" role="toolbar" aria-label="빠른 메뉴" aria-orientation="vertical">
@@ -13953,6 +13976,8 @@ function portraitSVG(fig, fit, alt) {
   /* 확률표·전용 아이템처럼 다른 창 위에 얹혀 열린 창을 닫으면 원래 창으로 돌아온다 */
   var CLOSE_BACK = null;
   function closeModals() {
+    /* 카드 순차 공개 중에는 닫기를 잠근다 — 결과를 놓치지 않게 */
+    if (SQ && SQ.on) return;
     var back = CLOSE_BACK;
     CLOSE_BACK = null;
     stopSpeak();
@@ -13986,7 +14011,6 @@ function portraitSVG(fig, fit, alt) {
     { g: 'heroic', p: 7 }, { g: 'mythic', p: 5 }, { g: 'legend', p: 5 },
     { g: 'legendary', p: 0.5 }, { g: 'transcendent', p: 0.1 }
   ];
-  var PULL5_FLOOR = 5; /* 5회 뽑기: 전설(GRADE_RANK 5) 이상 1장 보장 */
   /* 초월 천장 — 50회 뽑기마다 초월 1장 확정 */
   var PULL_CEIL = 50;
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
@@ -15159,9 +15183,6 @@ function portraitSVG(fig, fit, alt) {
     return rows[rows.length - 1].g;
   }
   function pullFigure(rows) { return pickFromGrade(rollGrade(rows)); }
-  function floorRows() {
-    return PULL_RATES.filter(function (x) { return (GRADE_RANK[x.g] || 0) >= PULL5_FLOOR; });
-  }
   /* 보장 승격: 방금 뽑힌 카드 한 장을 되돌리고 상위 등급으로 다시 뽑는다 */
   function unpullOne(r) {
     var c = S.cards[r.f.id];
@@ -15170,12 +15191,12 @@ function portraitSVG(fig, fit, alt) {
     if (c.n <= 0) delete S.cards[r.f.id];
   }
 
-  function pcardHtml(r, i) {
+  function pcardHtml(r, i, seq) {
     var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
     var rc = gradeRc(gi);
     var stars = starHtml(r.star);
     var label = r.isNew ? '✨ NEW · 처음 얻은 인물' : (r.ready ? '✨ 진화 가능 ' + r.frag + '/' + FRAG_PER_STAR : '+' + r.frag + ' / ' + FRAG_PER_STAR);
-    return '<article class="pcard ' + gi.cls + (r.isNew ? ' new' : '') + (isMono(gi) ? ' mono' : '') + '" style="--rc:' + rc + '; animation-delay:' + (i * 0.09).toFixed(2) + 's">' +
+    return '<article class="pcard ' + gi.cls + (r.isNew ? ' new' : '') + (isMono(gi) ? ' mono' : '') + (seq ? ' sq-w' : '') + '" style="--rc:' + rc + ';' + (seq ? '' : ' animation-delay:' + (i * 0.09).toFixed(2) + 's') + '">' +
       '<span class="tagline">' + (r.isNew ? '✨ NEW' : gi.name) + '</span>' +
       '<span class="ph">' + photoHtml(r.f, { fit: 'slice' }) + '</span>' +
       '<span class="pbody"><b class="' + textClsOf(gi) + '">' + esc(r.f.name) + '</b>' +
@@ -15263,7 +15284,7 @@ function portraitSVG(fig, fit, alt) {
         var gi = GRADE_INFO[x.g];
         var nm = x.g === 'transcendent' ? '<b class="mono-text">초월</b>' : gi.name;
         return nm + ' ' + x.p + '%';
-      }).join(' · ') + '<br>5회 뽑기는 <b>전설 이상 1장</b>을 보장합니다.';
+      }).join(' · ') + '<br>1회·5회 모두 이 확률표대로 <b>한 장씩 독립적으로</b> 뽑습니다.';
     }
     var pt = $('#pullTicket');
     if (pt) {
@@ -15566,6 +15587,274 @@ function portraitSVG(fig, fit, alt) {
     }
   }
 
+  /* ─────────────────────────────────────────────
+     🃏 결과 카드 순차 공개 — 팡! 이후 왼쪽 위부터 한 장씩
+     · 카드마다 뒤집힘(팝) + 테두리 빛 + 등급색 광택 + 등급별 소리
+     · 전설 이상은 화면 섬광 + 등급 명패 확대
+     · 처음 얻은 인물(NEW)은 화면을 꽉 채우는 전용 연출
+     · 터치 = 다음 카드 즉시 / ⏭️ 전부 보기 = 남은 카드 한 번에
+     · 전부 공개된 뒤에야 확인·닫기·결과 요약이 열린다
+     ───────────────────────────────────────────── */
+  var SQ = {
+    on: false, ended: false, idx: -1, n: 0, cards: [], data: [],
+    t: null, newT: null, newOpen: false, tapAt: 0, done: null
+  };
+  var SQ_POP = 460;       /* 카드 한 장이 완전히 열리는 시간 */
+  var SQ_NEW_MS = 1450;   /* 신규 풀스크린 유지 시간 */
+  var SQ_LEGEND_MIN = 5;  /* GRADE_RANK 5(전설) 이상이면 화면 강조 */
+
+  function sqEl(id) { return document.getElementById(id); }
+  function sqIsLegend(grade) { return (GRADE_RANK[grade] || 0) >= SQ_LEGEND_MIN; }
+  function sqGap(grade) {
+    var r = GRADE_RANK[grade] || 0;
+    if (r >= 6) return 760;
+    if (r >= 5) return 660;
+    if (r >= 3) return 560;
+    return 470;
+  }
+  function sqCount(n) {
+    var c = sqEl('seqCount');
+    if (c) c.textContent = n + ' / ' + SQ.n;
+  }
+
+  /* 카드 한 장 소리 — 낮은 등급은 짧은 틱, 높을수록 화음이 붙는다 */
+  function sqCardSound(grade) {
+    if (pfSoundOff()) return;
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    var r = GRADE_RANK[grade] || 0;
+    try {
+      var t0 = ctx.currentTime;
+      var base = 300 + r * 46;
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = r >= 5 ? 'triangle' : 'sine';
+      o.frequency.setValueAtTime(base, t0);
+      o.frequency.exponentialRampToValueAtTime(base * (r >= 5 ? 1.5 : 1.12), t0 + 0.1);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.022 + r * 0.006, t0 + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + (r >= 5 ? 0.5 : 0.22));
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0); o.stop(t0 + 0.55);
+      if (r >= 5) {
+        [0, 4, 7].forEach(function (semi, k) {
+          var oo = ctx.createOscillator(), gg = ctx.createGain();
+          var st = t0 + 0.06 + k * 0.05;
+          oo.type = 'triangle';
+          oo.frequency.setValueAtTime(base * Math.pow(2, semi / 12) * 2, st);
+          gg.gain.setValueAtTime(0.0001, st);
+          gg.gain.exponentialRampToValueAtTime(0.045, st + 0.02);
+          gg.gain.exponentialRampToValueAtTime(0.0001, st + 0.7);
+          oo.connect(gg); gg.connect(ctx.destination);
+          oo.start(st); oo.stop(st + 0.74);
+        });
+      }
+    } catch (e) {}
+  }
+
+  /* 신규 등장 소리 — 올라가는 아르페지오 + 반짝임 */
+  function sqNewSound(gi) {
+    if (pfSoundOff()) return;
+    var ctx = audioCtxGet();
+    if (!ctx) return;
+    try {
+      var t0 = ctx.currentTime;
+      [523.25, 659.25, 783.99, 1046.5].forEach(function (fr, k) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        var st = t0 + k * 0.075;
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(fr, st);
+        g.gain.setValueAtTime(0.0001, st);
+        g.gain.exponentialRampToValueAtTime(0.055, st + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, st + 0.62);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(st); o.stop(st + 0.66);
+      });
+      var b = ctx.createOscillator(), bg = ctx.createGain();
+      b.type = 'sine';
+      b.frequency.setValueAtTime(150, t0);
+      b.frequency.exponentialRampToValueAtTime(48, t0 + 0.5);
+      bg.gain.setValueAtTime(0.0001, t0);
+      bg.gain.exponentialRampToValueAtTime(0.1, t0 + 0.03);
+      bg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.6);
+      b.connect(bg); bg.connect(ctx.destination);
+      b.start(t0); b.stop(t0 + 0.64);
+    } catch (e) {}
+  }
+
+  function sqHideChrome() {
+    var bar = sqEl('seqBar');
+    if (bar) bar.hidden = true;
+    var pl = sqEl('seqPlaque');
+    if (pl) pl.className = 'seqplaque';
+    var fl = sqEl('seqFlash');
+    if (fl) fl.className = 'seqflash';
+    var fx = sqEl('newFx');
+    if (fx) { fx.className = 'newfx'; fx.hidden = true; }
+    var mp = $('#mPack');
+    if (mp) { mp.classList.remove('seq-lock'); mp.onpointerdown = null; }
+  }
+
+  function sqReset() {
+    if (SQ.t) { clearTimeout(SQ.t); SQ.t = null; }
+    if (SQ.newT) { clearTimeout(SQ.newT); SQ.newT = null; }
+    SQ.on = false; SQ.ended = false; SQ.idx = -1; SQ.n = 0;
+    SQ.cards = []; SQ.data = []; SQ.newOpen = false; SQ.done = null;
+    sqHideChrome();
+  }
+
+  /* 전설 이상 — 화면 섬광 + 등급 명패 확대 + 진동 */
+  function sqLegendFx(r) {
+    var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    var pl = sqEl('seqPlaque'), tx = sqEl('seqPlaqueTxt'), fl = sqEl('seqFlash');
+    if (pl && tx) {
+      tx.textContent = gi.name;
+      tx.className = (isMono(gi) ? 'mono' : (gi.color === 'rainbow' ? 'rb' : ''));
+      pl.style.setProperty('--gc', gradeRc(gi));
+      void pl.offsetWidth;
+      pl.className = 'seqplaque on';
+    }
+    if (fl) {
+      fl.style.setProperty('--gc', gradeRc(gi));
+      fl.className = 'seqflash';
+      void fl.offsetWidth;
+      fl.className = 'seqflash on';
+    }
+    try { if (navigator.vibrate) navigator.vibrate(sqIsLegend(r.f.grade) && (GRADE_RANK[r.f.grade] || 0) >= 7 ? [30, 40, 30, 60, 40] : [20, 40, 20]); } catch (e) {}
+  }
+
+  /* 처음 얻은 인물 — 화면을 꽉 채우는 연출 */
+  function sqOpenNew(r, i) {
+    var fx = sqEl('newFx');
+    if (!fx) { sqAdvance(i); return; }
+    var gi = GRADE_INFO[r.f.grade] || GRADE_INFO.basic;
+    fx.style.setProperty('--nc', gradeRc(gi));
+    var art = sqEl('nfArt');
+    if (art) art.innerHTML = photoHtml(r.f, { fit: 'slice', eager: true, big: true, alt: r.f.name });
+    var nm = sqEl('nfName');
+    if (nm) nm.textContent = r.f.name;
+    var gd = sqEl('nfGrade');
+    if (gd) {
+      gd.textContent = gi.name;
+      gd.className = 'nf-grade' + (gi.color === 'rainbow' ? ' rb' : '') + (isMono(gi) ? ' mono' : '');
+    }
+    fx.className = 'newfx on' + (isMono(gi) ? ' mono' : '') + (gi.color === 'rainbow' ? ' rb' : '');
+    fx.hidden = false;
+    SQ.newOpen = true;
+    sqNewSound(gi);
+    try { if (navigator.vibrate) navigator.vibrate([18, 36, 24]); } catch (e) {}
+    if (SQ.newT) clearTimeout(SQ.newT);
+    SQ.newT = setTimeout(function () { sqCloseNew(false); }, SQ_NEW_MS);
+  }
+
+  function sqCloseNew(tapped) {
+    if (SQ.newT) { clearTimeout(SQ.newT); SQ.newT = null; }
+    if (!SQ.newOpen) return;
+    SQ.newOpen = false;
+    var fx = sqEl('newFx');
+    if (fx) {
+      fx.classList.remove('on');
+      fx.classList.add('out');
+      setTimeout(function () {
+        if (!SQ.newOpen) { fx.className = 'newfx'; fx.hidden = true; }
+      }, 200);
+    }
+    if (SQ.on) sqAdvance(SQ.idx);
+  }
+
+  function sqAdvance(i) {
+    if (!SQ.on) return;
+    if (i >= SQ.n - 1) { sqFinish(); return; }
+    if (SQ.t) clearTimeout(SQ.t);
+    SQ.t = setTimeout(function () { sqStep(i + 1); }, 40);
+  }
+
+  function sqStep(i) {
+    if (!SQ.on) return;
+    if (SQ.t) { clearTimeout(SQ.t); SQ.t = null; }
+    var card = SQ.cards[i], r = SQ.data[i];
+    if (!card || !r) { sqFinish(); return; }
+    SQ.idx = i;
+    card.classList.add('sq-in');
+    if (sqIsLegend(r.f.grade)) { card.classList.add('hi'); sqLegendFx(r); }
+    sqCardSound(r.f.grade);
+    sqCount(i + 1);
+    var wait = sqGap(r.f.grade);
+    var isNew = !!r.isNew;
+    SQ.t = setTimeout(function () {
+      if (!SQ.on) return;
+      if (isNew) sqOpenNew(r, i);
+      else sqAdvance(i);
+    }, wait);
+  }
+
+  function sqSkipAll() {
+    if (!SQ.on) return;
+    if (SQ.t) { clearTimeout(SQ.t); SQ.t = null; }
+    if (SQ.newT) { clearTimeout(SQ.newT); SQ.newT = null; }
+    SQ.newOpen = false;
+    var fx = sqEl('newFx');
+    if (fx) { fx.className = 'newfx'; fx.hidden = true; }
+    for (var i = 0; i < SQ.cards.length; i++) {
+      if (!SQ.cards[i].classList.contains('sq-in')) {
+        SQ.cards[i].style.animationDelay = (i * 0.05).toFixed(2) + 's';
+        SQ.cards[i].classList.add('sq-in', 'sq-fast');
+      }
+    }
+    SQ.idx = SQ.n - 1;
+    sqCount(SQ.n);
+    sqFinish();
+  }
+
+  function sqFinish() {
+    if (!SQ.on) return;
+    SQ.on = false;
+    SQ.ended = true;
+    if (SQ.t) { clearTimeout(SQ.t); SQ.t = null; }
+    if (SQ.newT) { clearTimeout(SQ.newT); SQ.newT = null; }
+    SQ.newOpen = false;
+    sqHideChrome();
+    var cb = SQ.done; SQ.done = null;
+    if (cb) cb();
+  }
+
+  function sqTap(e) {
+    if (!SQ.on) return;
+    var now = Date.now();
+    if (now - SQ.tapAt < 150) return;
+    SQ.tapAt = now;
+    if (SQ.newOpen) { sqCloseNew(true); return; }
+    if (SQ.idx >= SQ.n - 1) return;
+    if (SQ.t) { clearTimeout(SQ.t); SQ.t = null; }
+    sqStep(SQ.idx + 1);
+  }
+
+  function sqStart(data, done) {
+    var wrap = $('#reveal');
+    if (!wrap || !data || !data.length) { if (done) done(); return; }
+    sqReset();
+    SQ.data = data;
+    SQ.n = data.length;
+    SQ.done = done || null;
+    SQ.on = true;
+    wrap.innerHTML = data.map(function (r, i) { return pcardHtml(r, i, true); }).join('');
+    SQ.cards = Array.prototype.slice.call(wrap.querySelectorAll('.pcard'));
+    var mp = $('#mPack');
+    if (mp) { mp.classList.add('seq-lock'); mp.onpointerdown = sqTap; }
+    var bar = sqEl('seqBar');
+    if (bar) bar.hidden = false;
+    sqCount(0);
+    setTimeout(function () {
+      try { wrap.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { try { wrap.scrollIntoView(); } catch (e2) {} }
+    }, 30);
+    var all = sqEl('seqAll');
+    if (all) all.onclick = function (e) { e.preventDefault(); e.stopPropagation(); sqSkipAll(); };
+    var fx = sqEl('newFx');
+    if (fx) fx.onpointerdown = function (e) { e.preventDefault(); e.stopPropagation(); sqTap(e); };
+    SQ.t = setTimeout(function () { sqStep(0); }, 300);
+  }
+
+  window.LegacyReveal = sqStart;
+
   function pullPack(count, useTicket) {
     var m = $('#packMsg');
     if (useTicket) {
@@ -15591,18 +15880,6 @@ function portraitSVG(fig, fit, alt) {
     var hadFive = hasFive();
     var res = [], i;
     for (i = 0; i < count; i++) res.push(pullOne());
-    /* 5회 뽑기 보장 — 전설 이상이 하나도 없으면 가장 낮은 한 장을 승격 */
-    if (count >= 5) {
-      var top = 0, wi = 0;
-      for (i = 0; i < res.length; i++) top = Math.max(top, GRADE_RANK[res[i].f.grade] || 0);
-      if (top < PULL5_FLOOR) {
-        for (i = 1; i < res.length; i++) {
-          if ((GRADE_RANK[res[i].f.grade] || 0) < (GRADE_RANK[res[wi].f.grade] || 0)) wi = i;
-        }
-        unpullOne(res[wi]);
-        res[wi] = pullOne(pullFigure(floorRows()));
-      }
-    }
     /* 🖤🤍 초월 천장 — 50회마다 초월 1장 확정 */
     var ceilingHit = false;
     S.pity = (S.pity || 0) + count;
@@ -15643,29 +15920,30 @@ function portraitSVG(fig, fit, alt) {
     refreshPackBal();
 
     playPullFx(bestR, function () {
-      $('#reveal').innerHTML = dres.map(pcardHtml).join('');
-      showPulled(bestR.f);
-      confetti(monoBest);
-      if (ceilingHit) {
-        toast('🖤🤍 <b>초월 천장</b> · 50회를 채워 <b>초월</b> 등급을 확정 획득했습니다');
-      }
-      if (monoBest && smF) {
-        setTimeout(function () { summonFig(smF); }, 240);
-        setTimeout(function () { toast('🖤🤍 <b>초월</b> · <b>' + esc(smF.name) + '</b> 소환!'); }, 2700);
-      }
-      if (evos.length) {
-        if (m) {
-          m.className = 'pack-msg ok';
-          m.textContent = '✨ 진화 준비 완료 · ' + evos.map(function (e) { return e.f.name + ' (' + e.frag + '/5)'; }).join(' · ') + ' — 도감에서 진화하세요';
+      sqStart(dres, function () {
+        showPulled(bestR.f);
+        confetti(monoBest);
+        if (ceilingHit) {
+          toast('🖤🤍 <b>초월 천장</b> · 50회를 채워 <b>초월</b> 등급을 확정 획득했습니다');
         }
-      } else if (news) {
-        if (m) { m.className = 'pack-msg ok'; m.textContent = '✨ 새 카드 ' + news + '장을 얻었습니다 · 맨 위에 정렬했습니다.'; }
-      } else {
-        if (m) { m.className = 'pack-msg'; m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.'; }
-      }
-      if (!hadFive && hasFive()) {
-        setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 900);
-      }
+        if (monoBest && smF) {
+          setTimeout(function () { summonFig(smF); }, 240);
+          setTimeout(function () { toast('🖤🤍 <b>초월</b> · <b>' + esc(smF.name) + '</b> 소환!'); }, 2700);
+        }
+        if (evos.length) {
+          if (m) {
+            m.className = 'pack-msg ok';
+            m.textContent = '✨ 진화 준비 완료 · ' + evos.map(function (e) { return e.f.name + ' (' + e.frag + '/5)'; }).join(' · ') + ' — 도감에서 진화하세요';
+          }
+        } else if (news) {
+          if (m) { m.className = 'pack-msg ok'; m.textContent = '✨ 새 카드 ' + news + '장을 얻었습니다 · 맨 위에 정렬했습니다.'; }
+        } else {
+          if (m) { m.className = 'pack-msg'; m.textContent = '중복 카드가 조각으로 쌓였습니다 · 5개를 모으면 진화합니다.'; }
+        }
+        if (!hadFive && hasFive()) {
+          setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 900);
+        }
+      });
     });
   }
 

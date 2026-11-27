@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>LEGACY 뽑기 순차 공개 QA · 390×844</title>
+<style>
+  html,body{margin:0;background:#0b0b0d;color:#d8d2c4;font:13px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+  .wrap{display:flex;gap:16px;padding:12px}
+  #fr{width:390px;height:844px;border:1px solid #333;border-radius:14px;background:#000;flex:0 0 auto}
+  #panel{width:520px;padding-top:4px}
+  #panel b{color:#f0d9a4}
+  #qaErr{font-size:16px;color:#7ee787;margin:6px 0}
+  #qaErr.bad{color:#ff7b72}
+  #qaMsgs{font-size:11px;color:#ffa198;word-break:break-all;max-height:120px;overflow:auto;margin-bottom:10px}
+  button{margin:3px 4px 3px 0;padding:7px 11px;border-radius:8px;border:1px solid #3a3f4a;background:#161a20;color:#e6dcc2;font:12px/1 inherit;cursor:pointer}
+  button:hover{background:#1f2530}
+  #out{margin-top:10px;font-size:11.5px;line-height:1.6;color:#9fd2ff;white-space:pre-wrap;max-height:420px;overflow:auto}
+</style></head>
+<body>
+<div class="wrap">
+  <iframe id="fr" src="/legacy/?vip=hs2026&amp;v=f2035&amp;qa=seq1" title="LEGACY mobile"></iframe>
+  <div id="panel">
+    <div><b>viewport</b> <span id="qaSize">…</span></div>
+    <div id="qaErr">errors: 0</div>
+    <div id="qaMsgs"></div>
+    <button data-act="open">1 뽑기 열기</button>
+    <button data-act="pull5">2 5회 뽑기</button>
+    <button data-act="skipfx">3 팡까지</button>
+    <button data-act="holdgap">4 카드 간격 멈춤</button>
+    <button data-act="tap">5 다음 카드</button>
+    <button data-act="all">6 전부 보기</button>
+    <button data-act="holdfx">7 신규연출 멈춤</button>
+    <button data-act="state">상태</button>
+    <button data-act="batch">5회 ×12 자동(보장 확인)</button>
+    <div id="out"></div>
+  </div>
+</div>
+<script>
+(function () {
+  var fr = document.getElementById('fr');
+  var errN = 0, msgs = [];
+  var out = document.getElementById('out');
+  function log(s) { out.textContent += s + '\n'; }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function upd() {
+    var e = document.getElementById('qaErr');
+    e.textContent = 'errors: ' + errN + (errN ? ' (bad)' : '');
+    e.className = errN ? 'bad' : '';
+    document.getElementById('qaMsgs').textContent = msgs.slice(-6).join(' || ');
+  }
+  fr.addEventListener('load', function () {
+    try {
+      var w = fr.contentWindow;
+      document.getElementById('qaSize').textContent = w.innerWidth + 'x' + w.innerHeight + ' dpr' + w.devicePixelRatio;
+      w.addEventListener('error', function (ev) {
+        errN++; msgs.push((ev.message || 'error') + ' @' + String(ev.filename || '').split('/').pop() + ':' + ev.lineno); upd();
+      });
+      w.addEventListener('unhandledrejection', function (ev) {
+        errN++; msgs.push('promise:' + ((ev.reason && ev.reason.message) || ev.reason)); upd();
+      });
+      var ce = w.console.error;
+      w.console.error = function () { errN++; msgs.push('console.error: ' + Array.prototype.join.call(arguments, ' ')); upd(); if (ce) ce.apply(w.console, arguments); };
+      upd();
+    } catch (e) { msgs.push('hook failed: ' + e.message); upd(); }
+  });
+
+  function W() { return fr.contentWindow; }
+  function D() { return fr.contentWindow.document; }
+  function q(sel) { return D().querySelector(sel); }
+
+  /* 타이머 구간 차단 — 카드 간격(0.4~0.95s)이나 신규연출 자동닫기(1.2~1.8s)를 멈춰 화면을 잡는다 */
+  function patch() {
+    var w = W();
+    if (w.__origST) return;
+    w.__origST = w.setTimeout;
+    w.__qaRanges = [];
+    w.setTimeout = function (fn, ms) {
+      var a = [].slice.call(arguments, 2), r = w.__qaRanges || [];
+      for (var i = 0; i < r.length; i++) { if (ms >= r[i][0] && ms <= r[i][1]) return 0; }
+      return w.__origST.apply(w, [fn, ms].concat(a));
+    };
+  }
+  function ranges(list) { var w = W(); patch(); w.__qaRanges = list; }
+
+  var acts = {
+    open: function () {
+      var b = q('#sdPack'); if (b) b.click(); else q('#pkOpen') && q('#pkOpen').click();
+      log('open pack modal');
+    },
+    pull5: async function () {
+      var b = q('#pull5'); if (b) b.click();
+      await sleep(250);
+      log('pull5 clicked · fx=' + (q('#pullFx') && !q('#pullFx').hidden));
+    },
+    skipfx: async function () {
+      var sk = q('#pfSkip'); if (sk) sk.click();
+      await sleep(950);
+      log('skip → reveal cards=' + D().querySelectorAll('#reveal .pcard').length + ' · bar=' + (q('#seqBar') && !q('#seqBar').hidden));
+    },
+    holdgap: function () { ranges([[400, 960]]); log('gap timers blocked'); },
+    tap: function () {
+      var el = q('#reveal .pcard');
+      var mp = q('#mPack');
+      mp.dispatchEvent(new W().PointerEvent('pointerdown', { bubbles: true }));
+      log('tap · counter=' + (q('#seqCount') && q('#seqCount').textContent) +
+        ' · shown=' + D().querySelectorAll('#reveal .pcard.sq-in').length);
+    },
+    all: function () { var b = q('#seqAll'); if (b) b.click(); log('skip all clicked'); },
+    holdfx: function () { ranges([[1150, 1900]]); log('new-fx auto-close blocked'); },
+    state: function () {
+      var cards = D().querySelectorAll('#reveal .pcard');
+      log('counter=' + (q('#seqCount') ? q('#seqCount').textContent : '-') +
+        ' · shown=' + D().querySelectorAll('#reveal .pcard.sq-in').length + '/' + cards.length +
+        ' · newfx=' + (q('#newFx') && !q('#newFx').hidden) +
+        ' · lock=' + (q('#mPack') && q('#mPack').classList.contains('seq-lock')));
+    },
+    batch: async function () {
+      log('batch start');
+      var rows = [];
+      for (var i = 0; i < 12; i++) {
+        ranges([]);
+        q('#pull5').click();
+        await sleep(300);
+        var sk = q('#pfSkip'); if (sk) sk.click();
+        await sleep(1200);
+        var all = q('#seqAll'); if (all) all.click();
+        await sleep(450);
+        var cs = [].slice.call(D().querySelectorAll('#reveal .pcard'));
+        rows.push(cs.map(function (c) { var m = c.className.match(/r-[a-z]+/); return m ? m[0] : '?'; }));
+      }
+      var noTop = 0;
+      rows.forEach(function (r, i) {
+        var top = r.some(function (x) { return x === 'r-legend' || x === 'r-legendary' || x === 'r-transcendent'; });
+        if (!top) noTop++;
+        log((i + 1) + '회차: ' + r.join(',') + (top ? '' : '   ← 전설 이상 없음'));
+      });
+      log('전설 이상 없는 5회 뽑기: ' + noTop + ' / ' + rows.length);
+    }
+  };
+
+  document.querySelectorAll('button[data-act]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = acts[b.getAttribute('data-act')];
+      if (f) { try { f(); } catch (e) { log('ERR ' + e.message); } }
+    });
+  });
+  window.__qa = { acts: acts, log: log };
+})();
+</script>
+</body></html>

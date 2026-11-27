@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>LEGACY 전투 중복 확인 QA · 390×844 / 844×390</title>
+<style>
+  html,body{margin:0;background:#0b0b0d;color:#d8d2c4;font:13px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}
+  .wrap{display:flex;gap:14px;padding:12px;align-items:flex-start}
+  iframe{border:1px solid #333;border-radius:12px;background:#000;flex:0 0 auto}
+  #p1{width:390px;height:844px}
+  #p2{width:844px;height:390px}
+  #panel{width:460px}
+  #panel b{color:#f0d9a4}
+  #qaErr{font-size:15px;color:#7ee787;margin:6px 0}
+  #qaErr.bad{color:#ff7b72}
+  #qaMsgs{font-size:11px;color:#ffa198;max-height:90px;overflow:auto;margin-bottom:8px;word-break:break-all}
+  button{margin:3px 4px 3px 0;padding:7px 11px;border-radius:8px;border:1px solid #3a3f4a;background:#161a20;color:#e6dcc2;font:12px/1 inherit;cursor:pointer}
+  #out{margin-top:8px;font-size:11.5px;line-height:1.6;color:#9fd2ff;white-space:pre-wrap;max-height:520px;overflow:auto}
+</style></head>
+<body>
+<div class="wrap">
+  <div>
+    <iframe id="p1" src="/legacy/?vip=hs2026&amp;v=f2035&amp;qa=battle1" title="portrait"></iframe>
+  </div>
+  <div>
+    <iframe id="p2" src="/legacy/?vip=hs2026&amp;v=f2035&amp;qa=battle2" title="landscape"></iframe>
+    <div id="panel" style="margin-top:10px">
+      <div><b>portrait</b> <span id="sz1">…</span> · <b>landscape</b> <span id="sz2">…</span></div>
+      <div id="qaErr">errors: 0</div>
+      <div id="qaMsgs"></div>
+      <button data-act="open">전투 열기(오른쪽 독)</button>
+      <button data-act="stage">전투 시작</button>
+      <button data-act="dup">중복 확인 검사</button>
+      <button data-act="state">상태</button>
+      <div id="out"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var f1 = document.getElementById('p1'), f2 = document.getElementById('p2');
+  var errN = 0, msgs = [];
+  var out = document.getElementById('out');
+  function log(s) { out.textContent += s + '\n'; }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function upd() {
+    var e = document.getElementById('qaErr');
+    e.textContent = 'errors: ' + errN + (errN ? ' (bad)' : '');
+    e.className = errN ? 'bad' : '';
+    document.getElementById('qaMsgs').textContent = msgs.slice(-5).join(' || ');
+  }
+  function hook(fr, tag) {
+    fr.addEventListener('load', function () {
+      try {
+        var w = fr.contentWindow;
+        w.addEventListener('error', function (ev) { errN++; msgs.push(tag + ':' + (ev.message || 'error') + ':' + ev.lineno); upd(); });
+        w.addEventListener('unhandledrejection', function (ev) { errN++; msgs.push(tag + ':promise:' + ((ev.reason && ev.reason.message) || ev.reason)); upd(); });
+        var ce = w.console.error;
+        w.console.error = function () { errN++; msgs.push(tag + ':console.error:' + Array.prototype.join.call(arguments, ' ')); upd(); if (ce) ce.apply(w.console, arguments); };
+        upd();
+        var i = tag === 'portrait' ? 1 : 2;
+        document.getElementById('sz' + i).textContent = w.innerWidth + 'x' + w.innerHeight;
+      } catch (e) { msgs.push(tag + ':hook failed ' + e.message); upd(); }
+    });
+  }
+  hook(f1, 'portrait');
+  hook(f2, 'landscape');
+
+  var acts = {
+    open: async function () {
+      [f1, f2].forEach(function (fr) { var b = fr.contentWindow.document.querySelector('#sdBattle'); if (b) b.click(); });
+      await sleep(600);
+      log('dock battle clicked');
+    },
+    stage: async function () {
+      for (var k = 0; k < 2; k++) {
+        var fr = k === 0 ? f1 : f2, w = fr.contentWindow, d = w.document;
+        if (!w.LegacyBattle) { log('no LegacyBattle'); continue; }
+        w.LegacyBattle.open();
+        await sleep(500);
+        var card = d.querySelector('#bView [data-stage]');
+        if (card) card.click();
+        await sleep(500);
+        var go = d.querySelector('#bView [data-start]');
+        if (go) go.click();
+        await sleep(700);
+        log((k ? 'landscape' : 'portrait') + ' 샌드박스전투 시작 · arena=' + !!d.querySelector('#arena'));
+      }
+    },
+    dup: function () {
+      [f1, f2].forEach(function (fr, i) {
+        var w = fr.contentWindow, d = w.document, tag = i ? 'landscape' : 'portrait';
+        var any = [].filter.call(d.querySelectorAll('*'), function (el) { return !el.children.length && /전투\s*확인/.test(el.textContent); });
+        log(tag + ' · 하단/문서 내 "전투 확인" 텍스트: ' + any.length +
+          ' · 하단 전투 CTA 섹션(#warCta): ' + !!d.querySelector('#warCta') +
+          ' · 오른쪽 독 전투 버튼(#sdBattle): ' + !!d.querySelector('#sdBattle'));
+      });
+    },
+    state: function () {
+      [f1, f2].forEach(function (fr, i) {
+        var w = fr.contentWindow, d = w.document, tag = i ? 'landscape' : 'portrait';
+        var dock = d.querySelector('#bSkill');
+        var r = dock ? dock.getBoundingClientRect() : null;
+        log(tag + ' · 뷰포트 ' + w.innerWidth + 'x' + w.innerHeight +
+          ' · arena=' + !!d.querySelector('#arena') +
+          ' · 하단 독 top=' + (r ? Math.round(r.top) : '-') + ' bottom=' + (r ? Math.round(r.bottom) : '-') +
+          ' · 결과화면=' + /VICTORY|DEFEAT|패배|승리|정복 완료/.test(d.body.innerText));
+      });
+    }
+  };
+  document.querySelectorAll('button[data-act]').forEach(function (b) {
+    b.addEventListener('click', function () { var f = acts[b.getAttribute('data-act')]; if (f) { try { f(); } catch (e) { log('ERR ' + e.message); } } });
+  });
+})();
+</script>
+</body></html>
