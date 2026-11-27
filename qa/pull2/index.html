@@ -35,6 +35,7 @@
     <button data-act="transrun">🌟 초월 풀 시나리오</button>
     <button data-act="shot1">📸 초월 터치 정지</button>
     <button data-act="shot2">📸 초월 카드 정지</button>
+    <button data-act="seqshot">📸 초월 카드(타이머 고정)</button>
     <button data-act="resume">▶ 재생</button>
     <div id="out"></div>
   </div>
@@ -86,6 +87,14 @@
   function tapFx() {
     var el = q('#pullFx');
     el.dispatchEvent(new (W().PointerEvent)('pointerdown', { bubbles: true, cancelable: true }));
+  }
+  function dSeek(doc, sel, t) {
+    var n = 0;
+    doc.querySelectorAll(sel).forEach(function (e) {
+      if (!e.getAnimations) return;
+      e.getAnimations().forEach(function (a) { try { a.currentTime = t; a.pause(); n++; } catch (err) {} });
+    });
+    return n;
   }
 
   var acts = {
@@ -237,6 +246,34 @@
         ' · seqTrans=' + (q('#seqTrans') && q('#seqTrans').className) +
         ' · plaque=' + (q('#seqPlaque') && q('#seqPlaque').className) +
         ' · count=' + (q('#seqCount') && q('#seqCount').textContent));
+    },
+    /* 초월 카드 등장 — 그 순간 타이머를 막고 애니를 250ms로 고정 */
+    seqshot: async function () {
+      D().getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
+      await sleep(280);
+      tapFx();
+      var found = false;
+      for (var k = 0; k < 140; k++) {
+        if (q('#reveal .pcard.tr')) { found = true; break; }
+        await sleep(40);
+      }
+      var w = W();
+      if (!w.__origST) {
+        w.__origST = w.setTimeout;
+        w.setTimeout = function (fn, ms) {
+          var a = [].slice.call(arguments, 2), r = w.__qaRanges || [];
+          for (var i = 0; i < r.length; i++) { if (ms >= r[i][0] && ms <= r[i][1]) return 0; }
+          return w.__origST.apply(w, [fn, ms].concat(a));
+        };
+      }
+      w.__qaRanges = [[0, 600000]];
+      dSeek(D(), '.seqtrans *', 250);
+      dSeek(D(), '#reveal .pcard.tr', 190);
+      log('seqshot · tr=' + found +
+        ' · seqTrans=' + (q('#seqTrans') && q('#seqTrans').className) +
+        ' · plaque=' + (q('#seqPlaque') && q('#seqPlaque').className) +
+        ' · count=' + (q('#seqCount') && q('#seqCount').textContent) +
+        ' · plaqueTxt="' + txt(q('#seqPlaqueTxt')) + '"');
     },
   };
 
