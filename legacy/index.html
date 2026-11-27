@@ -5415,6 +5415,30 @@
   .pcard.r-transcendent .tagline{background:#ffffff; color:#09090d; border-color:#09090d}
   @keyframes yinSpin{to{transform:rotate(360deg)}}
   @keyframes yinSpinSlow{from{filter:brightness(1)}to{filter:brightness(1.04)}}
+
+  /* ── 초월 이펙트 흑백 음양 오버라이드 (무지개 제거) ── */
+  .pullfx.pf-tr .pt-rays{background:conic-gradient(from 0deg,
+      rgba(255,255,255,.95) 0deg 6deg, rgba(0,0,0,0) 6deg 12deg,
+      rgba(9,9,13,.95) 12deg 18deg, rgba(0,0,0,0) 18deg 24deg,
+      rgba(255,255,255,.95) 24deg 30deg, rgba(0,0,0,0) 30deg 36deg,
+      rgba(9,9,13,.95) 36deg 42deg, rgba(0,0,0,0) 42deg 48deg,
+      rgba(255,255,255,.95) 48deg 54deg, rgba(0,0,0,0) 54deg 60deg)}
+  .pf-trans .pt-ring{box-shadow:0 0 16px rgba(255,255,255,.9), 0 0 34px rgba(9,9,13,.95), inset 0 0 18px rgba(255,255,255,.55)}
+  .pf-trans .pt-ring.b{border-color:rgba(255,255,255,.95)}
+  .pf-trans .pt-ring.c{border-color:rgba(9,9,13,.98)}
+  .pf-trans .pt-sparks i:nth-child(odd){--pc:#ffffff}
+  .pf-trans .pt-sparks i:nth-child(even){--pc:#09090d}
+  .pullfx.pf-tr .pf-bg{background:radial-gradient(circle at 50% 46%, #2a2a2e 0%, #0d0d10 44%, #000 80%)}
+  .seqtrans .st-flash{background:radial-gradient(circle at 50% 42%, #fff 0%, rgba(255,255,255,.62) 18%,
+      rgba(9,9,13,.6) 40%, rgba(9,9,13,.24) 62%, rgba(0,0,0,0) 80%)}
+  .seqtrans .st-halo{background:conic-gradient(from 0deg,#ffffff 0 25%,#09090d 25% 50%,#ffffff 50% 75%,#09090d 75% 100%)}
+  .seqtrans .st-ring{box-shadow:0 0 18px rgba(255,255,255,.9), 0 0 40px rgba(9,9,13,.95)}
+  .seqtrans .st-ring.b{border-color:rgba(9,9,13,.98)}
+  .seqtrans .st-sparks i:nth-child(odd){--pc:#ffffff}
+  .seqtrans .st-sparks i:nth-child(even){--pc:#09090d}
+  .pcard.sq-in.tr{box-shadow:0 0 0 2px #fff, 0 0 0 4px #09090d, 0 0 30px -2px rgba(255,255,255,.95)}
+  .pcard.sq-in.tr::after{background:conic-gradient(from 0deg,rgba(255,255,255,.65) 0 25%,
+      rgba(9,9,13,.9) 25% 50%,rgba(255,255,255,.65) 50% 75%,rgba(9,9,13,.9) 75% 100%)}
   /* <<V2_CSS:END>> */
 </style>
 </head>
