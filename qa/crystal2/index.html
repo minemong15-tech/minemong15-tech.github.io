@@ -151,6 +151,25 @@
     };
     return { factor: k };
   };
+  /* 초월 카드 순차 공개 — 카드 등장 시각과 무지개 초월 이펙트 시작 시각을 같은 프레임에서 잰다 */
+  QA.revealTrans = async function (hold, at) {
+    var w = QA.win(), d = QA.doc();
+    var figs = (w.FIGURES || []).filter(function (f) { return f.grade === 'transcendent'; });
+    var f = figs[0];
+    var t0 = performance.now(), cardAt = null, fxAt = null;
+    var obs = new w.MutationObserver(function () {
+      var tr = d.querySelector('.pcard.sq-in.tr');
+      if (tr && cardAt === null) cardAt = Math.round(performance.now() - t0);
+      var st = d.getElementById('seqTrans');
+      if (st && st.classList.contains('on') && fxAt === null) fxAt = Math.round(performance.now() - t0);
+    });
+    obs.observe(d.body, { subtree: true, attributes: true, childList: true, attributeFilter: ['class'] });
+    w.LegacyReveal([{ f: f, isNew: false }], function () {});
+    await QA.wait(hold ? 220 : 1200);
+    if (hold) d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = at == null ? 260 : at; } catch (e) {} });
+    obs.disconnect();
+    return { name: f && f.name, grade: f && f.grade, cardAt: cardAt, seqTransAt: fxAt, errs: QA.errs.slice(0, 6) };
+  };
   QA.clear = function () {
     var d = QA.doc();
     d.getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
