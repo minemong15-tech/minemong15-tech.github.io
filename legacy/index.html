@@ -16108,6 +16108,8 @@ function portraitSVG(fig, fit, alt) {
     if (!pool.length) return;
     var step = function () {
       renderPackShow(pool[PK_ROT_IDX % pool.length], 'PICK UP');
+      /* 다음에 돌아올 인물의 사진을 미리 받아 둔다 — 쇼케이스가 빈 프레임 없이 넘어간다 */
+      for (var k = 1; k <= 2; k++) preloadPhoto(photoSrc(pool[(PK_ROT_IDX + k) % pool.length]), false);
       PK_ROT_IDX++;
     };
     step();
