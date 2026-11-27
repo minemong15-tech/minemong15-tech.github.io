@@ -23,6 +23,7 @@
     <div id="qaMsgs"></div>
     <button data-act="open">1 뽑기 열기</button>
     <button data-act="pull5">2 5회 뽑기</button>
+    <button data-act="skipfx2">3b 팡까지(신규연출 유지)</button>
     <button data-act="skipfx">3 팡까지</button>
     <button data-act="holdgap">4 카드 간격 멈춤</button>
     <button data-act="tap">5 다음 카드</button>
@@ -96,6 +97,12 @@
       log('skip → reveal cards=' + D().querySelectorAll('#reveal .pcard').length + ' · bar=' + (q('#seqBar') && !q('#seqBar').hidden) + ' · gap hold on');
     },
     holdgap: function () { ranges([[400, 960]]); log('gap timers blocked'); },
+    skipfx2: async function () {
+      var sk = q('#pfSkip'); if (sk) sk.click();
+      await sleep(950);
+      ranges([[1150, 1900]]);
+      log('skip → 신규연출 자동닫기만 차단 (카드 간격은 정상 진행)');
+    },
     tap: function () {
       var el = q('#reveal .pcard');
       var mp = q('#mPack');
