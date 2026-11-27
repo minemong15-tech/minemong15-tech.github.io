@@ -9,7 +9,7 @@
   #out{white-space:pre-wrap;font:11px/1.45 ui-monospace,monospace;color:#9fd2ff}
 </style></head>
 <body>
-<iframe id="fr" title="LEGACY mobile 390x844" src="../../legacy/index.html?vip=hs2026&amp;v=f2039"></iframe>
+<iframe id="fr" scrolling="no" title="LEGACY mobile 390x844" src="../../legacy/index.html?vip=hs2026&amp;v=f2039"></iframe>
 <div id="bar">
   <div>390×844 · <span id="qaV">…</span></div>
   <button id="bRare">rare (초록) 1단계에서 정지</button>
@@ -17,6 +17,7 @@
   <button id="bTrans">transcendent 자동오픈 측정</button>
   <button id="bAll">8등급 색·소리 전수</button>
   <button id="bClear">정리</button>
+  <button id="bHoldTrans">초월 연출 순간 고정</button>
   <div id="out">ready</div>
 </div>
 <script>
@@ -96,6 +97,30 @@
     }
     return { grades: res, errs: QA.errs.slice(0, 8) };
   };
+  /* 프레임을 잡아 두는 촬영용 — 앱의 JS 타이머만 8배 늦춰 초월 연출 순간을 유지한다 */
+  QA.holdTrans = async function () {
+    var w = QA.win(), d = QA.doc();
+    QA.clear();
+    var origST = w.setTimeout;
+    w.setTimeout = function (fn, ms) {
+      var rest = [].slice.call(arguments, 2);
+      return origST.apply(w, [fn, (ms || 0) * 8].concat(rest));
+    };
+    QA.win().LegacyPullFx({ f: { grade: 'transcendent' } }, function () {});
+    await QA.wait(260);
+    for (var i = 0; i < 7; i++) { tapFx(); await QA.wait(150); }
+    await QA.wait(120);
+    d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = 340; } catch (e) {} });
+    w.setTimeout = origST;
+    return QA.state();
+  };
+  QA.holdGrade = async function (grade, taps, at) {
+    QA.clear();
+    await QA.reach(grade, taps, 60);
+    var d = QA.doc();
+    d.getAnimations().forEach(function (a) { try { a.pause(); a.currentTime = at == null ? 300 : at; } catch (e) {} });
+    return QA.state();
+  };
   QA.clear = function () {
     var d = QA.doc();
     d.getAnimations().forEach(function (a) { try { a.play(); } catch (e) {} });
@@ -105,6 +130,7 @@
   document.getElementById('bLegend').onclick = function () { QA.reach('legend', 5).then(log); };
   document.getElementById('bTrans').onclick = function () { QA.transAuto().then(log); };
   document.getElementById('bAll').onclick = function () { QA.runAll().then(log); };
+  document.getElementById('bHoldTrans').onclick = function () { QA.holdTrans().then(log); };
   document.getElementById('bClear').onclick = function () { QA.clear(); log('cleared'); };
 })();
 </script>
