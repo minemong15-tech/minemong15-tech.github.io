@@ -3117,7 +3117,7 @@
   .fu-note{font-size:10.5px; color:#6f7787; text-align:center; margin:2px 0 0}
   /* ⚡ 합성 성공 확률 5% 경고 — 실패하면 재료가 사라진다 */
   .fu-risk{
-    display:flex; align-items:center; justify-content:center; gap:6px; text-align:center;
+    display:block; text-align:center;
     padding:11px 12px; border-radius:12px; font-size:12px; font-weight:700; letter-spacing:.01em;
     color:#ffe3b0; border:1px solid rgba(255,122,24,.75);
     background:linear-gradient(100deg, rgba(255,59,48,.28), rgba(255,140,20,.16));
@@ -6066,11 +6066,11 @@
   }
   @media (max-width:1240px){ main{ padding-left:96px } }
   @media (max-width:640px){
-    .hof-dock{ left:calc(6px + env(safe-area-inset-left,0px)); padding:5px 4px; border-radius:13px }
-    .hof-dock-btn{ width:38px; min-height:54px; border-radius:10px }
+    .hof-dock{ left:calc(5px + env(safe-area-inset-left,0px)); padding:3px; border-radius:12px }
+    .hof-dock-btn{ width:36px; min-height:52px; border-radius:9px }
     .hof-dock-ic{ font-size:16px }
     .hof-dock-lb{ font-size:6.5px }
-    main{ padding-left:50px }
+    main{ padding-left:56px }
   }
   @media (orientation: landscape) and (max-height: 560px){
     .hof-dock{ left:calc(6px + env(safe-area-inset-left,0px)); padding:3px; border-radius:12px }
@@ -15428,7 +15428,7 @@ function portraitSVG(fig, fit, alt) {
     var l2 = (f.feats && f.feats[0])
       ? '<em>' + esc(f.feats[0].t) + '</em>' + esc(f.feats[0].d)
       : esc(f.quote || '');
-    return '<button class="mfs-card" type="button" data-mfig="' + f.id + '" style="--rc:' + rc + '" aria-label="' + esc(f.name) + ' 더 자세히 보기">' +
+    return '<button class="mfs-card ' + gi.cls + '" type="button" data-mfig="' + f.id + '" style="--rc:' + rc + '" aria-label="' + esc(f.name) + ' 더 자세히 보기">' +
       '<span class="mfs-ph">' + photoHtml(f, { fit: 'slice', alt: f.name + ' 사진' }) + '</span>' +
       '<span class="mfs-body">' +
         '<span class="mfs-top"><b class="mfs-name">' + esc(f.name) + '</b>' +
@@ -21172,6 +21172,35 @@ function portraitSVG(fig, fit, alt) {
   setTimeout(rkPaintHub, 1800);
 
   /* <<EXT7_APP:END>> */
+  /* 🏛️ 명예의 전당 · 👑 오버로드 · QA용 읽기 핸들 (검증 스크립트가 쓴다) */
+  window.LegacyHall = {
+    need: HOF_NEED, cost: HOF_COST, open: openHall, unlocked: hofUnlocked, immCount: hofImmCount,
+    pool: function () { return hallPool().map(function (f) { return { id: f.id, name: f.name, owned: cardCount(f.id) }; }); },
+    recruit: hallRecruit, render: renderHall, dock: paintHofDock,
+    free: function () { return S.hofFree || 0; }
+  };
+  window.LegacyFuse = {
+    open: openFusion, tab: function () { return FUSE_TAB; }, setTab: setFuseTab,
+    slots: FUSE3, slots2: FUSE_SLOT, rate3: OVL_RATE, rate2: FUSE_RATE,
+    render3: renderOvFusion, run3: doOverlordFusion, run: doFusion,
+    overlords: function () { return overlordPool().map(function (f) { return f.id; }); },
+    immortals: function () { return immortalPool().map(function (f) { return f.id; }); }
+  };
+  window.LegacyQA = {
+    account: ACCOUNT,
+    count: function (g) { return FIGURES.filter(function (f) { return f.grade === g; }).length; },
+    owned: function (g) { return FIGURES.filter(function (f) { return f.grade === g && cardCount(f.id) > 0; }).length; },
+    cards: function () { return Object.keys(S.cards).length; },
+    lvRange: function () { var v = Object.keys(S.figLv || {}).map(function (k) { return S.figLv[k]; }); return [Math.min.apply(null, v), Math.max.apply(null, v), v.length]; },
+    skillRange: function () { var v = Object.keys(S.skillLv || {}).map(function (k) { return S.skillLv[k]; }); return [Math.min.apply(null, v), Math.max.apply(null, v), v.length]; },
+    immTotal: function () { return FIGURES.filter(function (f) { return f.grade === 'immortal'; }).reduce(function (a, f) { return a + cardCount(f.id); }, 0); },
+    rates: function () {
+      var sum = function (rows) { return rows.reduce(function (a, x) { return a + x.p; }, 0); };
+      return { gen: sum(PULL_RATES), prem: sum(PREMIUM_RATES), relic: sum(RELIC_RATES) };
+    },
+    fusions: function () { return (S.fusions || []).slice(-4); },
+    power: function (id) { try { return window.LegacyBattle.statsOf(id).power; } catch (e) { return null; } }
+  };
   window.LegacyItems = {
     list: ITEMS,
     bonus: itemBonus,
