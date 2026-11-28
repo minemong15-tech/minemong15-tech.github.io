@@ -495,6 +495,28 @@
   .btn-pack.ticket{background:linear-gradient(180deg,#3aa87a,#1f6b4d); color:#f2fff8;
     border:1px solid rgba(120,240,190,.5); box-shadow:0 0 26px -8px rgba(46,224,148,.9)}
   .btn-pack.ticket:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
+  /* 👑 프리미엄 고확률 뽑기 — 황금 버튼 */
+  .btn-pack.prem{background:linear-gradient(180deg,#f8e7b0,#cf9c33); color:#2b1b02;
+    border:1px solid rgba(255,244,206,.9); box-shadow:0 0 28px -9px rgba(255,214,120,.95)}
+  .btn-pack.prem small{color:#4a3208; opacity:.9; font-weight:600}
+  .btn-pack.prem:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
+  .pk-pullset.premium .pk-pullset-t{color:#f6e3ad}
+  .pk-pullset.premium .pk-pullset-t::after{background:linear-gradient(90deg,rgba(246,214,120,.6),transparent)}
+  /* 🔁 연속 뽑기 */
+  .pk-auto{display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:2px}
+  .pk-auto-toggle{flex:1 1 60%; min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding:10px 12px; border-radius:11px; border:1px dashed rgba(200,168,106,.5); background:rgba(255,255,255,.03);
+    color:#e9e2d2; font-size:11.5px; font-weight:700; letter-spacing:.02em; cursor:pointer}
+  .pk-auto-toggle small{font-size:9px; opacity:.7; font-weight:600}
+  .pk-auto-toggle.on{border-style:solid; border-color:#8ef0c0; color:#eafff4;
+    background:linear-gradient(180deg,rgba(58,168,122,.4),rgba(31,107,77,.32)); box-shadow:0 0 24px -10px rgba(46,224,148,.95)}
+  .pk-auto-stop{flex:0 0 auto; padding:10px 14px; border-radius:11px; border:1px solid rgba(255,120,120,.6);
+    background:rgba(120,20,20,.32); color:#ffd9d9; font-size:11.5px; font-weight:700; cursor:pointer}
+  .pk-auto-stat{flex:1 1 100%; margin:0; font-size:9.5px; line-height:1.55; color:var(--muted2)}
+  .pk-auto-stat b{color:#fff; font-family:var(--serif); font-size:11px}
+  .ag{display:inline-flex; align-items:center; gap:3px; font-style:normal; font-size:9px; margin:4px 4px 0 0;
+    padding:2px 7px; border-radius:999px; background:rgba(255,255,255,.05); border:1px solid currentColor; opacity:.95}
+  .ag b{font-family:var(--serif); font-size:10px; color:#fff}
   .btn-pack:disabled{opacity:.45; filter:grayscale(.4); cursor:not-allowed; transform:none}
   /* 뽑기권·코인 뽑기 — 1회 / 5회 / 10회를 한 줄 3열로 (모바일 390px에서도 깨지지 않게) */
   .pk-pullset{display:flex; flex-direction:column; gap:6px; min-width:0}
@@ -2388,6 +2410,8 @@
   .gfchip.gf-transcendent.on{background:#ffffff; color:#050507}
   .pk-rates{margin:2px 0 0; font-size:9px; line-height:1.6; color:#6f7787; letter-spacing:.01em}
   .pk-rates b{color:#cfd4dd; font-weight:600}
+  .pk-rates .pr-lead{color:#f6e3ad; letter-spacing:.04em} 
+  .pk-rates .pr-lead.prem{color:#ffe6a3}
 
   /* ═════════ 전투 점령 지도 (전투 화면 맨 위 · 가로 전체) ═════════ */
   .field{padding:14px 14px 18px}
@@ -3663,7 +3687,11 @@
   }
   .rate-btn:hover{background:rgba(200,168,106,.22)}
   .pk-rate-row .pk-rates{margin:0; flex:1; min-width:0}
-  .rate-table{display:flex; flex-direction:column; gap:7px}
+  .rate-table{display:flex; flex-direction:column; gap:14px}
+  .rate-sec{display:flex; flex-direction:column; gap:7px}
+  .rate-h{display:flex; align-items:baseline; gap:8px; margin:0; font-family:var(--serif); font-size:13px; color:#f6e3ad; letter-spacing:.02em}
+  .rate-h small{font-family:var(--sans,inherit); font-size:9px; font-weight:600; letter-spacing:.02em; color:var(--muted2)}
+  .rate-sec.prem .rate-h{color:#ffe6a3}
   .rate-row{
     display:grid; grid-template-columns:126px minmax(0,1fr) 62px; align-items:center; gap:10px;
     padding:8px 11px; border-radius:11px; border:1px solid var(--line2); background:rgba(255,255,255,.018);
@@ -6262,6 +6290,14 @@
             <button class="btn-pack ticket" id="pullTicket10" type="button" aria-label="뽑기권 10회 뽑기">10회<small>10장 사용</small></button>
           </div>
         </div>
+        <div class="pk-pullset premium">
+          <span class="pk-pullset-t">👑 프리미엄 고확률</span>
+          <div class="pk-pull-row">
+            <button class="btn-pack prem" id="pullPrem" type="button" aria-label="프리미엄 고확률 1회 뽑기">1회<small>🎟️10</small></button>
+            <button class="btn-pack prem" id="pullPrem5" type="button" aria-label="프리미엄 고확률 5회 뽑기">5회<small>🎟️50</small></button>
+            <button class="btn-pack prem" id="pullPrem10" type="button" aria-label="프리미엄 고확률 10회 뽑기">10회<small>🎟️100</small></button>
+          </div>
+        </div>
         <div class="pk-pullset">
           <span class="pk-pullset-t">🪙 코인</span>
           <div class="pk-pull-row">
@@ -6269,6 +6305,11 @@
             <button class="btn-pack" id="pull5" type="button">5회<small>450 코인</small></button>
             <button class="btn-pack" id="pull10" type="button">10회<small>900 코인</small></button>
           </div>
+        </div>
+        <div class="pk-auto" id="pkAuto">
+          <button class="pk-auto-toggle" id="autoToggle" type="button" aria-pressed="false">🔁 연속 뽑기 <small>꺼짐</small></button>
+          <button class="pk-auto-stop" id="autoStop" type="button" hidden>⏹️ 정지</button>
+          <p class="pk-auto-stat" id="autoStat">켜 두고 뽑기 버튼을 누르면 룬 문양 대기 없이 결과를 빠르게 넘기며 계속 뽑습니다 · ⏹️ 정지 또는 재화가 떨어질 때까지.</p>
         </div>
         <button class="btn-pack fuse" id="pkFuse" type="button">🔥 초월 합성 <small>초월 2명 → 불멸 소환</small></button>
         <button class="btn-pack ghost" id="pullMuseum" type="button">🏛️ 박물관 보기</button>
@@ -6588,15 +6629,16 @@
       <div>
         <span class="kicker">DROP RATE</span>
         <h2 id="rtTitle">📊 카드팩 확률표</h2>
-        <p>카드팩 1회 · 5회 뽑기의 등급별 등장 확률입니다. 9개 등급의 합은 100%입니다.</p>
+        <p>일반 뽑기와 프리미엄 고확률 뽑기의 등급별 등장 확률입니다. 각각 9개 등급의 합은 100%입니다.</p>
       </div>
       <button class="close" type="button" data-close aria-label="닫기">✕</button>
     </div>
     <div class="rate-table" id="rateTable"></div>
     <ul class="rate-notes">
-      <li><b>뽑기 방식</b> — 1회·5회 모두 등급 확률표대로 한 장씩 <b>독립적으로</b> 뽑습니다. (5회 상위 등급 보강 없음)</li>
-      <li><b>50회 초월 천장</b> — 초월이 나오지 않으면 50회째 뽑기에서 <b>초월 1장</b>이 확정됩니다. (뽑기 1회 +1 · 5회 +5)</li>
-      <li><b>불멸 합성 5%</b> — 불멸은 카드팩에 나오지 않습니다. 초월 2명을 합성하면 5% 확률로 불멸 1명이 강림합니다.</li>
+      <li><b>뽑기 방식</b> — 1회·5회·10회 모두 등급 확률표대로 한 장씩 <b>독립적으로</b> 뽑습니다.</li>
+      <li><b>👑 프리미엄 고확률</b> — 1회 🎟️10 · 5회 🎟️50 · 10회 🎟️100. 기본 등급이 나오지 않고 신화·모멘·페이드·전설·리젠·초월이 대폭 늘었습니다.</li>
+      <li><b>50회 초월 천장</b> — 초월이 나오지 않으면 50회째 뽑기에서 <b>초월 1장</b>이 확정됩니다. 일반·프리미엄 뽑기가 같은 카운터를 함께 채웁니다. (1회 +1 · 5회 +5 · 10회 +10)</li>
+      <li><b>불멸 합성 5%</b> — 불멸은 어느 카드팩에도 나오지 않습니다. 초월 2명을 합성하면 5% 확률로 불멸 1명이 강림합니다.</li>
     </ul>
   </div>
 </div>
@@ -15245,6 +15287,7 @@ function portraitSVG(fig, fit, alt) {
 
   /* ── modal helpers ── */
   function openModal(sel) {
+    if ((AUTO.on || AUTO.busy) && sel !== '#mPack') autoStop('');
     document.querySelectorAll('.modal.open').forEach(function (m) { m.classList.remove('open'); });
     $(sel).classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -15262,6 +15305,7 @@ function portraitSVG(fig, fit, alt) {
   function closeModals() {
     /* 카드 순차 공개 중에는 닫기를 잠근다 — 결과를 놓치지 않게 */
     if (SQ && SQ.on) return;
+    if ((AUTO.on || AUTO.busy) && CLOSE_BACK !== '#mPack') autoStop('');
     var back = CLOSE_BACK;
     CLOSE_BACK = null;
     stopSpeak();
@@ -15297,6 +15341,20 @@ function portraitSVG(fig, fit, alt) {
   ];
   /* 초월 천장 — 50회 뽑기마다 초월 1장 확정 */
   var PULL_CEIL = 50;
+  /* 👑 프리미엄 고확률 뽑기 확률(%) — 합 정확히 100 · 기본 0%
+     희귀 6 · 영웅 18 · 신화 22 · 모멘 20 · 페이드 14 · 전설 11 · 리젠 7 · 초월 2
+     같은 10장을 써도 일반 뽑기보다 상위 등급이 훨씬 자주 나온다. */
+  var PREMIUM_RATES = [
+    { g: 'basic', p: 0 }, { g: 'rare', p: 6 }, { g: 'heroic', p: 18 },
+    { g: 'mythic', p: 22 }, { g: 'momen', p: 20 }, { g: 'fade', p: 14 },
+    { g: 'legend', p: 11 }, { g: 'regen', p: 7 }, { g: 'transcendent', p: 2 }
+  ];
+  /* 프리미엄 1회 비용 — 뽑기권 10장 (5회 50 · 10회 100) */
+  var PREM_COST = 10;
+  /* 🔁 연속 뽑기 — 같은 뽑기를 ⏹️ 정지 또는 재화가 떨어질 때까지 자동 반복 */
+  var AUTO = { on: false, busy: false, n: 0, sums: {}, fresh: 0, t: null, gap: 360 };
+  window.LegacyAuto = AUTO;   /* 자동 연속 뽑기 상태 — 검증용 */
+  var AUTO_ORDER = ['transcendent', 'regen', 'legend', 'fade', 'momen', 'mythic', 'heroic', 'rare', 'basic'];
   var COIN_CHECK = 300, XP_CHECK = 100, COIN_GUESS = 500;
 
   function cardOf(id) { return S.cards[id] || null; }
@@ -15807,26 +15865,40 @@ function portraitSVG(fig, fit, alt) {
   }
 
   /* ── 📊 확률표 ── */
-  function renderRates() {
-    var tb = $('#rateTable');
-    if (!tb) return;
+  /* 📊 확률표 — 일반 뽑기 · 프리미엄 고확률 뽑기를 나란히 */
+  function rateRowsHtml(rows) {
     var max = 0;
-    PULL_RATES.forEach(function (x) { max = Math.max(max, x.p); });
-    var rows = PULL_RATES.map(function (x) {
-      var gi = GRADE_INFO[x.g];
+    rows.forEach(function (x) { max = Math.max(max, x.p); });
+    return rows.map(function (x) {
+      var gi = GRADE_INFO[x.g] || GRADE_INFO.basic;
       var rc = gradeRc(gi);
-      var w = Math.max(2, Math.round(x.p / max * 100));
+      var w = x.p > 0 ? Math.max(2, Math.round(x.p / max * 100)) : 0;
       return '<div class="rate-row" style="--rc:' + rc + '">' +
         '<span class="rr-g"><i></i>' + gi.name + ' <small style="opacity:.55;font-size:8px">' + gi.en + '</small></span>' +
         '<span class="rr-bar"><i style="width:' + w + '%"></i></span>' +
         '<span class="rr-p">' + x.p + '%</span></div>';
     }).join('');
+  }
+  function renderRates() {
+    var tb = $('#rateTable');
+    if (!tb) return;
     var imm = GRADE_INFO.immortal;
-    rows += '<div class="rate-row top" style="--rc:' + gradeRc(imm) + '">' +
+    var immRow = '<div class="rate-row top" style="--rc:' + gradeRc(imm) + '">' +
       '<span class="rr-g"><i></i>' + imm.name + ' <small style="opacity:.55;font-size:8px">FUSION</small></span>' +
       '<span class="rr-bar"><i style="width:12%"></i></span>' +
       '<span class="rr-p">합성 5%</span></div>';
-    tb.innerHTML = rows;
+    tb.innerHTML =
+      '<div class="rate-sec">' +
+        '<h3 class="rate-h">🎟️ 일반 뽑기 <small>뽑기권 1·5·10장 · 코인 1·5·10회</small></h3>' +
+        rateRowsHtml(PULL_RATES) +
+      '</div>' +
+      '<div class="rate-sec prem">' +
+        '<h3 class="rate-h">👑 프리미엄 고확률 뽑기 <small>뽑기권 10·50·100장</small></h3>' +
+        rateRowsHtml(PREMIUM_RATES) +
+      '</div>' +
+      '<div class="rate-sec">' +
+        '<h3 class="rate-h">🔥 합성 전용 <small>카드팩에는 나오지 않습니다</small></h3>' + immRow +
+      '</div>';
   }
   function openRates() {
     if ($('#mPack') && $('#mPack').classList.contains('open')) CLOSE_BACK = '#mPack';
@@ -16432,8 +16504,8 @@ function portraitSVG(fig, fit, alt) {
   window.LegacySummon = summonFig;
   window.LegacyPullFx = playPullFx;
 
-  function pullOne(forced) {
-    var f = forced || pullFigure();
+  function pullOne(forced, rows) {
+    var f = forced || pullFigure(rows);
     var c = S.cards[f.id];
     var isNew = !c;
     if (!c) { c = S.cards[f.id] = { n: 0, star: 0 }; }
@@ -16571,11 +16643,17 @@ function portraitSVG(fig, fit, alt) {
     if ($('#pkBest')) $('#pkBest').textContent = '★' + bestStar();
     var rt = $('#pkRates');
     if (rt) {
-      rt.innerHTML = PULL_RATES.map(function (x) {
-        var gi = GRADE_INFO[x.g];
-        var nm = x.g === 'transcendent' ? '<b class="mono-text">초월</b>' : gi.name;
-        return nm + ' ' + x.p + '%';
-      }).join(' · ') + '<br>1회·5회·10회 모두 이 확률표대로 <b>한 장씩 독립적으로</b> 뽑습니다.';
+      var line = function (rows) {
+        return rows.map(function (x) {
+          var gi = GRADE_INFO[x.g];
+          var nm = x.g === 'transcendent' ? '<b class="mono-text">초월</b>' : gi.name;
+          return nm + ' ' + x.p + '%';
+        }).join(' · ');
+      };
+      rt.innerHTML =
+        '<b class="pr-lead prem">👑 프리미엄</b> ' + line(PREMIUM_RATES) +
+        '<br><b class="pr-lead">🎟️ 일반</b> ' + line(PULL_RATES) +
+        '<br>1회·5회·10회 모두 그 표대로 <b>한 장씩 독립적으로</b> 뽑습니다 · 프리미엄은 기본 등급이 나오지 않습니다.';
     }
     /* 🎟️ 뽑기권 1·5·10회 — 보유 장수에 따라 개별로 열리고 잠긴다 */
     var have = S.tickets || 0;
@@ -16583,18 +16661,28 @@ function portraitSVG(fig, fit, alt) {
       if (!el) return;
       var need = [1, 5, 10][k];
       var ok = S.infTickets || have >= need;
-      el.disabled = !ok;
+      el.disabled = !ok || AUTO.busy;
       el.innerHTML = need + '회<small>' +
         (S.infTickets ? '∞ 무한' : (ok ? need + '장 사용' : '보유 ' + have + '장')) + '</small>';
+    });
+    /* 👑 프리미엄 고확률 — 1회 🎟️10 · 5회 🎟️50 · 10회 🎟️100 */
+    [[$('#pullPrem'), 1], [$('#pullPrem5'), 5], [$('#pullPrem10'), 10]].forEach(function (x) {
+      if (!x[0]) return;
+      var cnt = x[1], need = cnt * PREM_COST;
+      var okP = S.infTickets || have >= need;
+      x[0].disabled = !okP || AUTO.busy;
+      x[0].innerHTML = cnt + '회<small>' +
+        (S.infTickets ? '∞ 무한' : (okP ? '🎟️' + need + '장' : '보유 ' + have + '장')) + '</small>';
     });
     /* 🪙 코인 1·5·10회 — 5회 이상은 1회당 90 코인 */
     [[$('#pull1'), 1, PACK_COST], [$('#pull5'), 5, PACK5_COST], [$('#pull10'), 10, PACK5_COST * 2]]
       .forEach(function (x) {
         if (!x[0]) return;
         var coinOk = (S.coins || 0) >= x[2];
-        x[0].disabled = !coinOk;
+        x[0].disabled = !coinOk || AUTO.busy;
         x[0].innerHTML = x[1] + '회<small>' + (coinOk ? x[2] + ' 코인' : '코인 부족') + '</small>';
       });
+    autoPaint();
     dockPaint();
   }
 
@@ -17437,21 +17525,130 @@ function portraitSVG(fig, fit, alt) {
 
   window.LegacyReveal = sqStart;
 
-  function pullPack(count, useTicket) {
+  /* ─────────────────────────────────────────────
+     🔁 연속 뽑기 — 켜 둔 뽑기(일반·프리미엄·코인)를 룬 문양 터치 대기 없이
+     빠르게 넘기며 ⏹️ 정지 또는 재화가 떨어질 때까지 스스로 반복한다.
+     ───────────────────────────────────────────── */
+  function autoPaint() {
+    var bt = $('#autoToggle');
+    if (bt) {
+      bt.classList.toggle('on', !!AUTO.on);
+      bt.setAttribute('aria-pressed', AUTO.on ? 'true' : 'false');
+      bt.innerHTML = '🔁 연속 뽑기 <small>' + (AUTO.busy ? '진행 중' : (AUTO.on ? '켜짐' : '꺼짐')) + '</small>';
+    }
+    var st = $('#autoStop');
+    if (st) st.hidden = !(AUTO.on || AUTO.busy);
+    var sm = $('#autoStat');
+    if (!sm) return;
+    if (!AUTO.n) {
+      sm.innerHTML = '켜 두고 뽑기 버튼을 누르면 룬 문양 대기 없이 결과를 빠르게 넘기며 계속 뽑습니다 · ⏹️ 정지 또는 재화가 떨어질 때까지.';
+      return;
+    }
+    var chips = AUTO_ORDER.map(function (g) {
+      var n = AUTO.sums[g] || 0;
+      if (!n) return '';
+      var gi = GRADE_INFO[g];
+      return '<i class="ag" style="color:' + gradeRc(gi) + '">' + gi.name + ' <b>' + n + '</b></i>';
+    }).join('');
+    sm.innerHTML = '<b>' + AUTO.n + '회</b> 진행' + (AUTO.fresh ? ' · ✨NEW ' + AUTO.fresh : '') +
+      (AUTO.busy ? ' · 진행 중' : ' · 정지') + '<br>' + (chips || '아직 상위 등급이 나오지 않았습니다');
+  }
+  function autoReset() {
+    AUTO.n = 0; AUTO.sums = {}; AUTO.fresh = 0;
+  }
+  /* 이 재화로 이 뽑기를 한 번 더 할 수 있는가 */
+  function canPayPull(count, kind) {
+    if (kind === 'coin') {
+      var cost = count >= 5 ? (PACK5_COST / 5) * count : PACK_COST * count;
+      return (S.coins || 0) >= cost;
+    }
+    var need = kind === 'premium' ? count * PREM_COST : count;
+    return !!S.infTickets || (S.tickets || 0) >= need;
+  }
+  function autoStop(reason) {
+    if (AUTO.t) { clearTimeout(AUTO.t); AUTO.t = null; }
+    var was = AUTO.on || AUTO.busy;
+    AUTO.on = false; AUTO.busy = false;
+    if (!was) { autoPaint(); return; }
+    var openPack = !!($('#mPack') && $('#mPack').classList.contains('open'));
+    if (openPack) {
+      refreshPackBal();
+      /* 마지막 결과를 잠간 보여준 뒤 쇼케이스 회전을 다시 켠다 */
+      setTimeout(function () {
+        if (AUTO.busy) return;
+        if ($('#mPack') && $('#mPack').classList.contains('open')) startPackRotate();
+      }, 6000);
+    }
+    renderCollection(); renderGuess();
+    autoPaint();
     var m = $('#packMsg');
+    if (m && openPack) {
+      m.className = 'pack-msg';
+      m.textContent = reason || ('⏹️ 연속 뽑기 정지 · ' + AUTO.n + '회 완료');
+    }
+  }
+  /* 연속 뽑기 한 배치 — 룬 문양 없이 카드만 바로 펼치고 다음 배치를 예약한다 */
+  function autoBatch(count, kind, dres, bestR, ceilingHit, news, hadFive) {
+    AUTO.n += count;
+    AUTO.fresh += news || 0;
+    dres.forEach(function (r) { AUTO.sums[r.f.grade] = (AUTO.sums[r.f.grade] || 0) + 1; });
+    var wrap = $('#reveal');
+    if (wrap) wrap.innerHTML = dres.map(function (r, i) { return pcardHtml(r, i, false); }).join('');
+    if (bestR) renderPackShow(bestR.f, 'AUTO ' + AUTO.n + '회');
+    var m = $('#packMsg');
+    if (m && bestR) {
+      var bgi = GRADE_INFO[bestR.f.grade] || GRADE_INFO.basic;
+      m.className = 'pack-msg ok';
+      m.textContent = '🔁 ' + AUTO.n + '회째 · 이번 최고 ' + bgi.name + ' — ' + bestR.f.name + (news ? ' · 새 카드 ' + news + '장' : '');
+    }
+    if (ceilingHit) toast('🖤🤍 <b>초월 천장</b> · 50회를 채워 <b>초월</b>을 확정 획득했습니다');
+    if (!hadFive && hasFive()) {
+      setTimeout(function () { toast('🏛️ <b>★5 달성</b> · 나만의 박물관이 열렸습니다'); }, 700);
+    }
+    renderTopCur();
+    autoPaint();
+    if (AUTO.t) clearTimeout(AUTO.t);
+    AUTO.t = setTimeout(function () {
+      AUTO.t = null;
+      if (!AUTO.on || !AUTO.busy) return;
+      if (!canPayPull(count, kind)) {
+        autoStop('재화가 떨어져 연속 뽑기를 멈췄습니다 · ' + AUTO.n + '회 완료');
+        return;
+      }
+      pullPack(count, kind !== 'coin', kind, true);
+    }, AUTO.gap);
+  }
+
+  function pullPack(count, useTicket, kind, fromAuto) {
+    kind = kind || (useTicket ? 'ticket' : 'coin');
+    var isPrem = kind === 'premium';
+    var rates = isPrem ? PREMIUM_RATES : PULL_RATES;
+    var bill = isPrem ? count * PREM_COST : count;
+    var m = $('#packMsg');
+    if (AUTO.busy && !fromAuto) return;   /* 연속 진행 중 — 버튼 연타 무시 */
     if (useTicket) {
-      if (!S.infTickets && (S.tickets || 0) < count) {
+      if (!S.infTickets && (S.tickets || 0) < bill) {
+        if (AUTO.busy) {
+          autoStop('뽑기권이 부족해 연속 뽑기를 멈췄습니다 · ' + (S.tickets || 0) + '장');
+          return;
+        }
         if (m) {
           m.className = 'pack-msg';
-          m.textContent = '뽑기권이 부족합니다 · 📩 우편함과 🎟️ 코드 입력으로 받아보세요.';
+          m.textContent = isPrem
+            ? '뽑기권이 부족합니다 · 👑 프리미엄 ' + count + '회는 🎟️' + bill + '장 필요 · 보유 ' + (S.tickets || 0) + '장'
+            : '뽑기권이 부족합니다 · 📩 우편함과 🎟️ 코드 입력으로 받아보세요.';
         }
         return;
       }
-      if (!S.infTickets) S.tickets -= count;
+      if (!S.infTickets) S.tickets -= bill;
     } else {
       /* 1회 100 · 5회 450 · 10회 900 (5회 이상은 1회당 90 코인) */
       var cost = count >= 5 ? (PACK5_COST / 5) * count : PACK_COST * count;
       if (S.coins < cost) {
+        if (AUTO.busy) {
+          autoStop('코인이 떨어져 연속 뽑기를 멈췄습니다 · ' + AUTO.n + '회 완료');
+          return;
+        }
         if (m) {
           m.className = 'pack-msg';
           m.textContent = '코인이 부족합니다 · 매일 체크(+' + COIN_CHECK + ')와 이름 맞추기(+' + COIN_GUESS + ')로 모아보세요.';
@@ -17460,9 +17657,11 @@ function portraitSVG(fig, fit, alt) {
       }
       S.coins -= cost;
     }
+    /* 연속 뽑기 시작 — 룬 문양 연출 없이 바로 진행 */
+    if (AUTO.on && !fromAuto) { AUTO.busy = true; stopPackRotate(); }
     var hadFive = hasFive();
     var res = [], i;
-    for (i = 0; i < count; i++) res.push(pullOne());
+    for (i = 0; i < count; i++) res.push(pullOne(null, rates));
     /* 🖤🤍 초월 천장 — 50회마다 초월 1장 확정 (10회 뽑기로 50을 넘겨도 남은 횟수는 이월) */
     var ceilingHit = false;
     S.pity = (S.pity || 0) + count;
@@ -17480,9 +17679,9 @@ function portraitSVG(fig, fit, alt) {
     }
     /* 🖼️ 결과가 정해진 즉시 — 뽑힌 인원 전원의 실제 역사 사진을 미리 받아 둔다.
        룬 코어를 누르는 동안(보통 2~5초) 캐시에 올라가므로 카드·NEW 창이 사진으로 바로 열린다. */
-    preloadFigPhotos(res.map(function (r) { return r.f; }), true);
+    preloadFigPhotos(res.map(function (r) { return r.f; }), !AUTO.busy);
     saveState();
-    renderCollection(); renderGuess();
+    if (!AUTO.busy) { renderCollection(); renderGuess(); }
     var news = res.filter(function (r) { return r.isNew; }).length;
     var evos = res.filter(function (r) { return r.ready; });
     var bestR = res[0];
@@ -17503,6 +17702,12 @@ function portraitSVG(fig, fit, alt) {
       return (GRADE_RANK[b.f.grade] || 0) - (GRADE_RANK[a.f.grade] || 0);
     });
     refreshPackBal();
+
+    /* 🔁 연속 뽑기 — 연출 대기 없이 카드만 펼치고 다음 회차를 예약한다 */
+    if (AUTO.on || AUTO.busy) {
+      autoBatch(count, kind, dres, bestR, ceilingHit, news, hadFive);
+      return;
+    }
 
     playPullFx(bestR, function () {
       sqStart(dres, function () {
@@ -18562,6 +18767,28 @@ function portraitSVG(fig, fit, alt) {
   $('#pullTicket').addEventListener('click', function () { pullPack(1, true); });
   if ($('#pullTicket5')) $('#pullTicket5').addEventListener('click', function () { pullPack(5, true); });
   if ($('#pullTicket10')) $('#pullTicket10').addEventListener('click', function () { pullPack(10, true); });
+  /* 👑 프리미엄 고확률 뽑기 — 뽑기권 10 · 50 · 100장 */
+  if ($('#pullPrem')) $('#pullPrem').addEventListener('click', function () { pullPack(1, true, 'premium'); });
+  if ($('#pullPrem5')) $('#pullPrem5').addEventListener('click', function () { pullPack(5, true, 'premium'); });
+  if ($('#pullPrem10')) $('#pullPrem10').addEventListener('click', function () { pullPack(10, true, 'premium'); });
+  /* 🔁 연속 뽑기 토글 · ⏹️ 정지 */
+  if ($('#autoToggle')) $('#autoToggle').addEventListener('click', function () {
+    if (AUTO.busy) { autoStop('⏹️ 연속 뽑기 정지 · ' + AUTO.n + '회 완료'); return; }
+    AUTO.on = !AUTO.on;
+    if (AUTO.on) autoReset();
+    autoPaint();
+    refreshPackBal();
+    var m = $('#packMsg');
+    if (m) {
+      m.className = 'pack-msg';
+      m.textContent = AUTO.on
+        ? '🔁 연속 뽑기 켜짐 · 이제 뽑기 버튼을 누르면 ⏹️ 정지까지 같은 뽑기를 계속합니다.'
+        : '연속 뽑기 꺼짐 · 뽑기 버튼마다 룬 문양을 누르는 방식으로 돌아갑니다.';
+    }
+  });
+  if ($('#autoStop')) $('#autoStop').addEventListener('click', function () {
+    autoStop('⏹️ 연속 뽑기 정지 · ' + AUTO.n + '회 완료');
+  });
   if ($('#summon')) $('#summon').addEventListener('click', endSummon);
   $('#pull1').addEventListener('click', function () { pullPack(1); });
   $('#pull5').addEventListener('click', function () { pullPack(5); });
