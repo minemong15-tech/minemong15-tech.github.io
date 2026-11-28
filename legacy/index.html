@@ -6055,6 +6055,11 @@
   .rate-row.edn{ --rc:#6ee7a8 }
   .rate-row.edn .rr-p{ font-weight:800 }
 
+  /* 에덴처럼 스탯이 다섯 자리가 되어도 카드에서 잘리지 않게 (.arc-card .body b 의 말줄임 해제) */
+  .arc-card .body .arc-stat b{ white-space:nowrap; overflow:visible; text-overflow:clip }
+  .arc-stat{ gap:5px }
+  .arc-stat b{ padding:2px 5px; font-size:10.5px; letter-spacing:0 }
+
   /* 합성 탭 — 3개 · 에덴 탭은 한 줄 전체 */
   .fu-tabs{ flex-wrap:wrap }
   .fu-tab[data-futab="edn"]{ flex:1 1 100% }
