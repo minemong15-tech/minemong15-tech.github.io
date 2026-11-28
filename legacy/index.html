@@ -6059,6 +6059,11 @@
   .arc-card .body .arc-stat b{ white-space:nowrap; overflow:visible; text-overflow:clip }
   .arc-stat{ gap:5px }
   .arc-stat b{ padding:2px 5px; font-size:10.5px; letter-spacing:0 }
+  /* '토르 (아스가르드의 천둥신)' 처럼 긴 이름은 두 줄로 다 보여 준다 */
+  .arc-card.r-eden .body > b, .mfs-card.r-eden .mfs-name{
+    white-space:normal; overflow:visible; text-overflow:clip;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-height:1.3
+  }
 
   /* 합성 탭 — 3개 · 에덴 탭은 한 줄 전체 */
   .fu-tabs{ flex-wrap:wrap }
